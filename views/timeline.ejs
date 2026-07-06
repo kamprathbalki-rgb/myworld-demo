@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Buyer Timeline</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Buyer Timeline</h1>
+
+<h2><%= buyer.name %></h2>
+
+<h3>Shortlisted Properties</h3>
+
+<table border="1">
+<tr>
+<th>Property</th>
+<th>Price</th>
+</tr>
+
+<% shortlists.forEach(function(s){ %>
+
+<tr>
+<td><%= s.propertyId.title %></td>
+<td><%= s.propertyId.price %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+
+<h3>Site Visits</h3>
+
+<table border="1">
+<tr>
+<th>Property</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+
+<% visits.forEach(function(v){ %>
+
+<tr>
+<td><%= v.propertyId.title %></td>
+<td><%= v.scheduledVisitDate %></td>
+<td><%= v.status %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

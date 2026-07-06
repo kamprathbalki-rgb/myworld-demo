@@ -1,0 +1,23 @@
+/dashboard/demand-prediction
+Chart 1 becomes:
+2 BHK
+3 BHK
+Villa
+Plot
+Office
+
+Chart 2 becomes:
+0-50 Lakhs
+50-100 Lakhs
+1-2 Cr
+2 Cr+
+based on actual buyer demand.
+
+/dashboard/intelligence
+
+/dashboard/hot-locations
+
+/dashboard/investment-opportunities
+
+
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Deal Probability Predictor</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f4f6f9;
+}
+
+.card{
+padding:25px;
+background:white;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 class="my-4">Property Deal Probability Predictor</h2>
+
+<div class="card">
+
+<form method="POST" action="/dashboard/deal-predictor">
+
+<label>Select Property</label>
+
+<select name="propertyId" class="form-control mb-3">
+
+<% properties.forEach(function(p){ %>
+
+<option value="<%= p._id %>"><%= p.title %></option>
+
+<% }) %>
+
+</select>
+
+<button class="btn btn-primary">
+Predict Deal Probability
+</button>
+
+</form>
+
+<% if(typeof result !== 'undefined'){ %>
+
+<hr>
+
+<h4><%= result.title %></h4>
+
+<p>Visits: <%= result.visits %></p>
+
+<p>Deals Closed: <%= result.deals %></p>
+
+<h3 class="text-success">
+Deal Probability: <%= result.probability %> %
+</h3>
+
+<% } %>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

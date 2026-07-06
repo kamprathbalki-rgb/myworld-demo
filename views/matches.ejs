@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<style>
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+</style>
+
+<title>Property Matches</title>
+
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Top Property Matches</h1>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr>
+<td><b>Buyer</b></td>
+<td><%= buyer.name %></td>
+
+<td><b>Budget</b></td>
+<td>
+<%= buyer.minBudget %> -
+<%= buyer.maxBudget %>
+</td>
+
+<td><b>Flat Type</b></td>
+<td><%= buyer.requiredFlatType %></td>
+
+<td><b>Area</b></td>
+<td>
+<%= buyer.minArea %> -
+<%= buyer.maxArea %>
+</td>
+</tr>
+
+<tr>
+<td><b>Location</b></td>
+<td><%= buyer.primaryLocation || '' %></td>
+
+<td><b>Possession</b></td>
+<td colspan="5">
+<%= buyer.requiredPossession ? buyer.requiredPossession.join(', ') : '' %>
+</td>
+</tr>
+
+</table>
+
+<br><br>
+<br><br>
+
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+<th>Project Name</th>
+<th>Builder Name</th>
+<th>Property Location</th>
+<th>Matched Flat Type</th>
+<th>Carpet Area</th>
+<th>Quoted Price</th>
+<th>Closing Price</th>
+<th>Score</th>
+<th>Percentage</th>
+<th>Grade</th>
+<th>Project Visit Tracking</th>
+</tr>
+
+<% matches.forEach(function(m){ %>
+
+<%
+const maxScore = 140;
+
+const percentage = Math.round((m.score / maxScore) * 100);
+
+let grade = 'Weak Match';
+
+if (m.score >= 100) {
+    grade = 'Excellent Match';
+}
+else if (m.score >= 70) {
+    grade = 'Strong Match';
+}
+else if (m.score >= 40) {
+    grade = 'Moderate Match';
+}
+%>
+
+<tr>
+
+<td>
+<%= m.property.projectName || '' %>
+</td>
+
+<td>
+<%= m.property.builderName || '' %>
+</td>
+
+<td>
+<%= m.property.propertyLocation || '' %>
+</td>
+
+<td>
+<%= m.property.propertyMode === 'SINGLE'
+? m.property.singleFlatType
+: (m.matchedConfig ? m.matchedConfig.flatType : '') %>
+</td>
+
+<td>
+<%= m.property.propertyMode === 'SINGLE'
+? m.property.singleCarpetArea
+: (m.matchedConfig ? m.matchedConfig.carpetArea : '') %>
+</td>
+
+<td>
+<%= m.property.propertyMode === 'SINGLE'
+? m.property.singleQuotedPrice
+: (m.matchedConfig ? m.matchedConfig.quotedPrice : '') %>
+</td>
+
+<td>
+<%= m.property.propertyMode === 'SINGLE'
+? m.property.singleClosingPrice
+: (m.matchedConfig ? m.matchedConfig.closingPrice : '') %>
+</td>
+
+<td>
+<%= m.score %> / 140
+</td>
+
+<td>
+<%= percentage %>%
+</td>
+
+<td>
+<%= grade %>
+</td>
+
+<td>
+
+<form method="POST" action="/buyer/project-visit/<%= buyer._id %>/<%= m.property._id %>">
+
+<%
+const existingVisit = visits.find(v =>
+    String(v.propertyId) === String(m.property._id)
+)
+%>
+
+<select name="visitType" required>
+
+<option value="">Select</option>
+
+<option
+value="First Visit"
+<%= existingVisit && existingVisit.visitType === 'First Visit' ? 'selected' : '' %>
+>
+First Visit
+</option>
+
+<option
+value="Revisit"
+<%= existingVisit && existingVisit.visitType === 'Revisit' ? 'selected' : '' %>
+>
+Revisit
+</option>
+
+<option
+value="Rejected"
+<%= existingVisit && existingVisit.visitType === 'Rejected' ? 'selected' : '' %>
+>
+Rejected
+</option>
+
+<option
+value="Shortlisted"
+<%= existingVisit && existingVisit.visitType === 'Shortlisted' ? 'selected' : '' %>
+>
+Shortlisted
+</option>
+
+<option
+value="Negotiation"
+<%= existingVisit && existingVisit.visitType === 'Negotiation' ? 'selected' : '' %>
+>
+Negotiation
+</option>
+
+</select>
+
+<br><br>
+
+<input
+type="text"
+name="remarks"
+placeholder="Remarks"
+>
+
+<br><br>
+
+<button type="submit">
+Save Visit
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+
+<h2>Match Score Logic</h2>
+
+<p><strong>Maximum Match Score:</strong> 140</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr>
+<td>Price</td>
+<td>20</td>
+
+<td>Flat Type</td>
+<td>20</td>
+
+<td>Area</td>
+<td>20</td>
+
+<td>Possession</td>
+<td>15</td>
+
+<td>Distance</td>
+<td>15</td>
+</tr>
+
+<tr>
+<td>Location</td>
+<td>20</td>
+
+<td>Pincode</td>
+<td>15</td>
+
+<td>Division</td>
+<td>10</td>
+
+<td>District</td>
+<td>5</td>
+
+<td>Total</td>
+<td>140</td>
+</tr>
+
+</table>
+
+<p><strong>Grade Score Meaning:</strong></p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr>
+<td>100+</td>
+<td>Excellent Match</td>
+
+<td>70-99</td>
+<td>Strong Match</td>
+
+<td>40-69</td>
+<td>Moderate Match</td>
+
+<td>Below 40</td>
+<td>Weak Match</td>
+</tr>
+
+</table>
+
+
+<script>
+
+document.addEventListener('copy', function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener('cut', function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener('selectstart', function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener('dragstart', function (e) {
+    e.preventDefault();
+});
+
+</script>
+
+</html>

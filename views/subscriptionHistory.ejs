@@ -1,0 +1,57 @@
+<h1>Subscription History</h1>
+
+<a href="/saas/dashboard">
+Back
+</a>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+
+<th>Company</th>
+<th>Action</th>
+<th>Months</th>
+<th>Old Expiry</th>
+<th>New Expiry</th>
+<th>Performed By</th>
+<th>Date</th>
+
+</tr>
+
+<% history.forEach(function(h){ %>
+
+<tr>
+
+<td><%= h.tenantName %></td>
+
+<td><%= h.action %></td>
+
+<td><%= h.months || '' %></td>
+
+<td>
+<%= h.oldExpiryDate
+? h.oldExpiryDate.toLocaleDateString()
+: ''
+%>
+</td>
+
+<td>
+<%= h.newExpiryDate
+? h.newExpiryDate.toLocaleDateString()
+: ''
+%>
+</td>
+
+<td><%= h.performedBy %></td>
+
+<td>
+<%= h.createdAt.toLocaleString() %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Register Company</title>
+</head>
+
+<body>
+
+<h2>Register Company</h2>
+
+<form method="POST" action="/register-company">
+
+<label>Company Name</label>
+<br>
+<input type="text" name="name" required>
+<br><br>
+
+<label>Email</label>
+<br>
+<input type="email" name="email" required>
+<br><br>
+
+<label>State</label>
+<br>
+
+<select
+    name="stateName"
+    id="stateName"
+    required
+>
+
+<option value="">
+Select State
+</option>
+
+<% states.forEach(function(s){ %>
+
+<option value="<%= s.state %>">
+<%= s.state %>
+</option>
+
+<% }) %>
+
+</select>
+
+<br><br>
+
+<label>Primary District</label>
+<br>
+
+<select
+    name="primaryDistrict"
+    id="primaryDistrict"
+    required
+>
+
+<option value="">
+Select District
+</option>
+
+</select>
+
+<br><br>
+
+<label>Subscription Period</label>
+<br>
+
+<select
+    name="subscriptionMonths"
+    required
+>
+
+<option value="3">
+3 Months
+</option>
+
+<option value="6">
+6 Months
+</option>
+
+<option value="12" selected>
+12 Months
+</option>
+
+<option value="24">
+24 Months
+</option>
+
+<option value="36">
+36 Months
+</option>
+
+<option value="60">
+60 Months
+</option>
+
+</select>
+
+<br><br>
+
+
+<h3>Admin User</h3>
+
+<label>Admin Name</label>
+<br>
+<input
+    type="text"
+    name="adminName"
+    required
+>
+<br><br>
+
+<label>Admin Email</label>
+<br>
+<input
+    type="email"
+    name="adminEmail"
+    required
+>
+<br><br>
+
+<label>Password</label>
+<br>
+<input
+    type="password"
+    name="password"
+    required
+>
+
+<br><br>
+
+<button type="submit">Register</button>
+
+</form>
+
+</body>
+
+<script>
+
+const states =
+<%- JSON.stringify(states) %>
+
+document
+.getElementById('stateName')
+.addEventListener('change', function(){
+
+const stateName = this.value
+
+const districtDropdown =
+document.getElementById(
+    'primaryDistrict'
+)
+
+districtDropdown.innerHTML =
+'<option value="">Select District</option>'
+
+const selectedState =
+states.find(
+s => s.state === stateName
+)
+
+if(!selectedState) return
+
+selectedState.districts.forEach(
+district => {
+
+const option =
+document.createElement('option')
+
+option.value = district
+
+option.textContent = district
+
+districtDropdown.appendChild(option)
+
+})
+
+})
+
+</script>
+
+</html>

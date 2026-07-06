@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sales Funnel</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f9;
+}
+
+.container{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+.card{
+padding:20px;
+border-radius:10px;
+color:white;
+width:180px;
+text-align:center;
+font-size:18px;
+}
+
+.newlead{background:#3498db;}
+.contacted{background:#9b59b6;}
+.visit{background:#f39c12;}
+.negotiation{background:#e67e22;}
+.closed{background:#2ecc71;}
+.lost{background:#e74c3c;}
+
+.count{
+font-size:28px;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Sales Funnel Dashboard</h1>
+
+<div class="container">
+
+<% 
+let data = {}
+
+funnel.forEach(function(f){
+data[f._id] = f.count
+})
+%>
+
+<div class="card newlead">
+New Lead
+<div class="count"><%= data["New Lead"] || 0 %></div>
+</div>
+
+<div class="card contacted">
+Contacted
+<div class="count"><%= data["Contacted"] || 0 %></div>
+</div>
+
+<div class="card visit">
+Site Visit
+<div class="count"><%= data["Site Visit"] || 0 %></div>
+</div>
+
+<div class="card negotiation">
+Negotiation
+<div class="count"><%= data["Negotiation"] || 0 %></div>
+</div>
+
+<div class="card closed">
+Deal Closed
+<div class="count"><%= data["Deal Closed"] || 0 %></div>
+</div>
+
+<div class="card lost">
+Lost
+<div class="count"><%= data["Lost"] || 0 %></div>
+</div>
+
+</div>
+
+</body>
+</html>

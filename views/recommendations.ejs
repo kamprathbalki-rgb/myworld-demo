@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Recommendations</title>
+</head>
+
+<body>
+
+<h1>Recommended Properties</h1>
+
+<table border="1">
+
+<tr>
+<th>Property</th>
+<th>Price</th>
+<th>Score</th>
+</tr>
+
+<% recs.forEach(function(r){ %>
+
+<tr>
+<td><%= r.propertyId.title %></td>
+<td><%= r.propertyId.price %></td>
+<td><%= r.score %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

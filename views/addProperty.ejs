@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Project</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<h1>Add Project</h1>
+
+<form method="POST" action="/property/save">
+
+<h3>Property Type</h3>
+
+<label>
+<input type="radio"
+       name="propertyMode"
+       value="PROJECT"
+       checked
+       onclick="showPropertyMode('PROJECT')">
+Builder Project
+</label>
+
+<label>
+<input type="radio"
+       name="propertyMode"
+       value="SINGLE"
+       onclick="showPropertyMode('SINGLE')">
+Single Property
+</label>
+
+<hr>
+
+<hr>
+
+<label>Owner Name</label>
+<input type="text" name="ownerName">
+
+<br><br>
+
+<label>Owner Mobile</label>
+<input type="text" name="ownerMobile">
+
+<br><br>
+
+<h3>Single Property</h3>
+
+<label>Property Category</label>
+
+<select name="singlePropertyType">
+
+<option>Apartment</option>
+<option>Villa</option>
+<option>Plot</option>
+<option>Office</option>
+<option>Showroom</option>
+<option>Retail</option>
+<option>Shop</option>
+
+</select>
+
+<br><br>
+
+<label>Property Name</label>
+<input type="text" name="singlePropertyName">
+
+<br><br>
+
+<label>Price</label>
+<input type="number" name="singlePropertyPrice">
+
+<br><br>
+
+<label>Area</label>
+<input type="number" name="singlePropertyArea">
+
+<br><br>
+
+<label>Flat Type</label>
+
+<select name="singleFlatType">
+    <option>Studio</option>
+    <option>1 RK</option>
+    <option>1 BHK</option>
+    <option>1.5 BHK</option>
+    <option>2 BHK</option>
+    <option>2.5 BHK</option>
+    <option>3 BHK</option>
+    <option>3.5 BHK</option>
+    <option>4 BHK</option>
+    <option>4.5 BHK</option>
+    <option>5 BHK</option>
+    <option>5+ BHK</option>
+    <option>Villa</option>
+    <option>Plot</option>
+    <option>Office</option>
+    <option>Showroom</option>
+    <option>Retail</option>
+    <option>Shop</option>
+</select>
+
+<br><br>
+
+<label>Carpet Area</label>
+<input type="number" name="singleCarpetArea">
+
+<br><br>
+
+<label>Quoted Price</label>
+<input type="number" name="singleQuotedPrice">
+
+<br><br>
+
+<label>Closing Price</label>
+<input type="number" name="singleClosingPrice">
+</div>
+</div>
+
+<h2>Basic Project Information</h2>
+
+<label>Project Name</label>
+<input type="text" name="projectName"><br><br>
+
+<label>Builder Name</label>
+<input type="text" name="builderName"><br><br>
+
+<label>Project Type</label><br>
+
+<input type="checkbox" name="projectType" value="Residential">
+<label>Residential</label><br>
+
+<input type="checkbox" name="projectType" value="Commercial">
+<label>Commercial</label><br>
+
+<input type="checkbox" name="projectType" value="Mixed Use">
+<label>Mixed Use</label><br><br>
+
+<label>Property Type</label><br>
+
+<input type="checkbox" name="propertyType" value="Apartment">
+<label>Apartment</label><br>
+
+<input type="checkbox" name="propertyType" value="Villa">
+<label>Villa</label><br>
+
+<input type="checkbox" name="propertyType" value="Plot">
+<label>Plot</label><br>
+
+<input type="checkbox" name="propertyType" value="Office">
+<label>Office</label><br>
+
+<input type="checkbox" name="propertyType" value="Showroom">
+<label>Showroom</label><br>
+
+<input type="checkbox" name="propertyType" value="Retail">
+<label>Retail</label><br>
+
+<input type="checkbox" name="propertyType" value="Shop">
+<label>Shop</label><br><br>
+
+<label>Project Status</label>
+<select name="projectStatus">
+    <option value="">Select</option>
+    <option>New Launch</option>
+    <option>Under Construction</option>
+    <option>Ready Possession</option>
+    <option>Resale</option>
+</select><br><br>
+
+<label>RERA Approved</label>
+<select name="reraApproved">
+    <option value="">Select</option>
+    <option>Yes</option>
+    <option>No</option>
+</select><br><br>
+
+<hr>
+
+<h2>Location Details</h2>
+
+<label>City</label>
+<input type="text" name="city"><br><br>
+
+<label>Direction</label>
+<select name="direction">
+    <option value="">Select</option>
+    <option>East</option>
+    <option>West</option>
+    <option>North</option>
+    <option>South</option>
+    <option>Central</option>
+</select><br><br>
+
+<label>Property Location</label>
+
+<select name="propertyLocation" required>
+    <option value="">Select Location</option>
+
+    <% locations.forEach(function(location){ %>
+        <option value="<%= location.officeName %>">
+            <%= location.officeName %>
+        </option>
+    <% }) %>
+
+</select><br><br>
+
+<label>Location Landmark</label>
+<input type="text" name="locationLandmark"><br><br>
+
+<label>Google Pin</label>
+<input type="text" name="googlePin"><br><br>
+
+<label>Longitude</label>
+<input type="text" name="lng"><br><br>
+
+<label>Latitude</label>
+<input type="text" name="lat"><br><br>
+
+<hr>
+
+<h2>Tower Details</h2>
+
+<label>Number of Towers</label>
+<input type="number" name="numberOfTowers"><br><br>
+
+<label>Tower Name</label>
+<input type="text" name="towerName"><br><br>
+
+<label>Number of Floors</label>
+<input type="number" name="numberOfFloors"><br><br>
+
+<label>Tower Status</label>
+<select name="towerStatus">
+    <option value="">Select</option>
+    <option>Under Construction</option>
+    <option>Ready Possession</option>
+    <option>Sold Out</option>
+</select><br><br>
+
+<label>Inventory Status</label>
+<select name="inventoryStatus">
+    <option value="">Select</option>
+    <option>Available</option>
+    <option>Limited Availability</option>
+    <option>Sold Out</option>
+</select><br><br>
+
+<label>Possession Month</label>
+<input type="text" name="possessionMonth"><br><br>
+
+<label>Possession Year</label>
+<input type="number" name="possessionYear"><br><br>
+
+<hr>
+
+<div id="configurationSection">
+
+<h2>Configurations</h2>
+
+<button type="button" onclick="showTab('apartmentTab')">
+Apartment (BHK)
+</button>
+
+<button type="button" onclick="showTab('otherTab')">
+Villa / Plot / Office / Showroom / Retail / Shop
+</button>
+
+<hr>
+
+<!-- TAB 1 -->
+
+<div id="apartmentTab">
+
+<h3>Apartment Configurations</h3>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+    <th>Flat Type</th>
+    <th>Carpet Area</th>
+    <th>Quoted Price</th>
+    <th>Closing Price</th>
+    <th>Available Units</th>
+</tr>
+
+<tr>
+    <td>Studio</td>
+    <td><input type="number" name="carpetArea_studio"></td>
+    <td><input type="number" name="quotedPrice_studio"></td>
+    <td><input type="number" name="closingPrice_studio"></td>
+    <td><input type="number" name="availableUnits_studio"></td>
+</tr>
+
+
+<tr>
+    <td>1 RK</td>
+    <td><input type="number" name="carpetArea_1RK"></td>
+    <td><input type="number" name="quotedPrice_1RK"></td>
+    <td><input type="number" name="closingPrice_1RK"></td>
+    <td><input type="number" name="availableUnits_1RK"></td>
+</tr>
+
+
+<tr>
+    <td>1 BHK</td>
+    <td><input type="number" name="carpetArea_1BHK"></td>
+    <td><input type="number" name="quotedPrice_1BHK"></td>
+    <td><input type="number" name="closingPrice_1BHK"></td>
+    <td><input type="number" name="availableUnits_1BHK"></td>
+</tr>
+
+
+<tr>
+    <td>1.5 BHK</td>
+    <td><input type="number" name="carpetArea_1_5BHK"></td>
+    <td><input type="number" name="quotedPrice_1_5BHK"></td>
+    <td><input type="number" name="closingPrice_1_5BHK"></td>
+    <td><input type="number" name="availableUnits_1_5BHK"></td>
+</tr>
+
+<tr>
+    <td>2 BHK</td>
+    <td><input type="number" name="carpetArea_2BHK"></td>
+    <td><input type="number" name="quotedPrice_2BHK"></td>
+    <td><input type="number" name="closingPrice_2BHK"></td>
+    <td><input type="number" name="availableUnits_2BHK"></td>
+</tr>
+
+<tr>
+    <td>2.5 BHK</td>
+    <td><input type="number" name="carpetArea_2_5BHK"></td>
+    <td><input type="number" name="quotedPrice_2_5BHK"></td>
+    <td><input type="number" name="closingPrice_2_5BHK"></td>
+    <td><input type="number" name="availableUnits_2_5BHK"></td>
+</tr>
+
+<tr>
+    <td>3 BHK</td>
+    <td><input type="number" name="carpetArea_3BHK"></td>
+    <td><input type="number" name="quotedPrice_3BHK"></td>
+    <td><input type="number" name="closingPrice_3BHK"></td>
+    <td><input type="number" name="availableUnits_3BHK"></td>
+</tr>
+
+<tr>
+    <td>3.5 BHK</td>
+    <td><input type="number" name="carpetArea_3_5BHK"></td>
+    <td><input type="number" name="quotedPrice_3_5BHK"></td>
+    <td><input type="number" name="closingPrice_3_5BHK"></td>
+    <td><input type="number" name="availableUnits_3_5BHK"></td>
+</tr>
+
+<tr>
+    <td>4 BHK</td>
+    <td><input type="number" name="carpetArea_4BHK"></td>
+    <td><input type="number" name="quotedPrice_4BHK"></td>
+    <td><input type="number" name="closingPrice_4BHK"></td>
+    <td><input type="number" name="availableUnits_4BHK"></td>
+</tr>
+
+<tr>
+    <td>4.5 BHK</td>
+    <td><input type="number" name="carpetArea_4_5BHK"></td>
+    <td><input type="number" name="quotedPrice_4_5BHK"></td>
+    <td><input type="number" name="closingPrice_4_5BHK"></td>
+    <td><input type="number" name="availableUnits_4_5BHK"></td>
+</tr>
+
+<tr>
+    <td>5 BHK</td>
+    <td><input type="number" name="carpetArea_5BHK"></td>
+    <td><input type="number" name="quotedPrice_5BHK"></td>
+    <td><input type="number" name="closingPrice_5BHK"></td>
+    <td><input type="number" name="availableUnits_5BHK"></td>
+</tr>
+
+<tr>
+    <td>5+ BHK</td>
+    <td><input type="number" name="carpetArea_5PlusBHK"></td>
+    <td><input type="number" name="quotedPrice_5PlusBHK"></td>
+    <td><input type="number" name="closingPrice_5PlusBHK"></td>
+    <td><input type="number" name="availableUnits_5PlusBHK"></td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- TAB 2 -->
+
+<div id="otherTab" style="display:none;">
+
+<h3>Villa / Plot / Commercial Configurations</h3>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+    <th>Type</th>
+    <th>Area</th>
+    <th>Quoted Price</th>
+    <th>Closing Price</th>
+    <th>Available Units</th>
+</tr>
+
+<tr>
+    <td>Villa</td>
+    <td><input type="number" name="carpetArea_villa"></td>
+    <td><input type="number" name="quotedPrice_villa"></td>
+    <td><input type="number" name="closingPrice_villa"></td>
+    <td><input type="number" name="availableUnits_villa"></td>
+</tr>
+
+<tr>
+    <td>Plot</td>
+    <td><input type="number" name="carpetArea_plot"></td>
+    <td><input type="number" name="quotedPrice_plot"></td>
+    <td><input type="number" name="closingPrice_plot"></td>
+    <td><input type="number" name="availableUnits_plot"></td>
+</tr>
+
+<tr>
+    <td>Office</td>
+    <td><input type="number" name="carpetArea_office"></td>
+    <td><input type="number" name="quotedPrice_office"></td>
+    <td><input type="number" name="closingPrice_office"></td>
+    <td><input type="number" name="availableUnits_office"></td>
+</tr>
+
+<tr>
+    <td>Showroom</td>
+    <td><input type="number" name="carpetArea_showroom"></td>
+    <td><input type="number" name="quotedPrice_showroom"></td>
+    <td><input type="number" name="closingPrice_showroom"></td>
+    <td><input type="number" name="availableUnits_showroom"></td>
+</tr>
+
+<tr>
+    <td>Retail</td>
+    <td><input type="number" name="carpetArea_retail"></td>
+    <td><input type="number" name="quotedPrice_retail"></td>
+    <td><input type="number" name="closingPrice_retail"></td>
+    <td><input type="number" name="availableUnits_retail"></td>
+</tr>
+
+<tr>
+    <td>Shop</td>
+    <td><input type="number" name="carpetArea_shop"></td>
+    <td><input type="number" name="quotedPrice_shop"></td>
+    <td><input type="number" name="closingPrice_shop"></td>
+    <td><input type="number" name="availableUnits_shop"></td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<h2>Sales Details</h2>
+
+<label>Parking Type</label><br>
+
+<input type="checkbox" name="parkingType" value="Open">
+<label>Open</label><br>
+
+<input type="checkbox" name="parkingType" value="Covered">
+<label>Covered</label><br>
+
+<input type="checkbox" name="parkingType" value="Basement">
+<label>Basement</label><br>
+
+<input type="checkbox" name="parkingType" value="Podium">
+<label>Podium</label><br>
+
+<input type="checkbox" name="parkingType" value="Stilt">
+<label>Stilt</label><br><br>
+
+<label>Furnished Status</label>
+<select name="furnishedStatus">
+    <option value="">Select</option>
+    <option>Unfurnished</option>
+    <option>Semi-Furnished</option>
+    <option>Fully Furnished</option>
+</select><br><br>
+
+<label>Possession Status</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Immediate">
+<label>Immediate</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Ready Possession">
+<label>Ready Possession</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Under Construction">
+<label>Under Construction</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Possession Soon">
+<label>Possession Soon</label><br><br>
+
+<hr>
+
+<h2>Highlights</h2>
+
+<label>Amenities</label><br>
+<textarea name="amenities" rows="4" cols="50"></textarea><br><br>
+
+<label>USP</label><br>
+<textarea name="usp" rows="4" cols="50"></textarea><br><br>
+
+<label>Notes</label><br>
+<textarea name="notes" rows="4" cols="50"></textarea><br><br>
+
+<button type="submit">Save Project</button>
+
+</form>
+
+<script>
+function showTab(tabId) {
+    document.getElementById('apartmentTab').style.display = 'none';
+    document.getElementById('otherTab').style.display = 'none';
+    document.getElementById(tabId).style.display = 'block';
+}
+</script>
+
+<script>
+
+function showPropertyMode(id){
+
+    if(id === 'PROJECT'){
+        document.getElementById('singleSection').style.display = 'none'
+        document.getElementById('configurationSection').style.display = 'block'
+    }
+
+    if(id === 'SINGLE'){
+        document.getElementById('singleSection').style.display = 'block'
+        document.getElementById('configurationSection').style.display = 'none'
+    }
+
+}
+
+</script>
+</body>
+</html>

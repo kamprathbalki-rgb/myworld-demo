@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Similar Properties</title>
+</head>
+
+<body>
+
+<h1>Similar Properties</h1>
+
+<table border="1">
+
+<tr>
+<th>Title</th>
+<th>Price</th>
+<th>Bedrooms</th>
+<th>Area</th>
+<th>City</th>
+</tr>
+
+<% properties.forEach(function(p){ %>
+
+<tr>
+<td><%= p.title %></td>
+<td><%= p.price %></td>
+<td><%= p.bedrooms %></td>
+<td><%= p.area %></td>
+<td><%= p.city %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Location Price Trends</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f4f6f9;
+}
+
+.card{
+padding:20px;
+background:white;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 class="my-4">Location Price Trend Prediction</h2>
+
+<div class="card">
+
+<canvas id="trendChart"></canvas>
+
+</div>
+
+</div>
+
+<script>
+
+const labels = <%- JSON.stringify(trends.map(t=>t._id.month)) %>
+const data = <%- JSON.stringify(trends.map(t=>Math.round(t.avgPrice))) %>
+
+new Chart(document.getElementById('trendChart'),{
+
+type:'line',
+
+data:{
+labels:labels,
+datasets:[{
+label:'Average Property Price',
+data:data,
+fill:false,
+tension:0.3
+}]
+}
+
+})
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Today's Follow Ups</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<h1>Today's Follow Ups</h1>
+
+<table border="1">
+
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+
+<% buyers.forEach(function(b){ %>
+
+<tr>
+<td><%= b.name %></td>
+<td><%= b.phone %></td>
+<td><%= b.status %></td>
+<td><%= b.followUpNotes %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

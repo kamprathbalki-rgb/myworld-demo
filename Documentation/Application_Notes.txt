@@ -1,0 +1,263 @@
+D:\MyWorld>
+mongosh
+show dbs
+use myworld
+
+D:\MyWorld>
+node app.js
+
+myworld> show collections
+
+myworld> db.users.find().pretty()
+
+http://localhost:7000/login
+kbalki2k15@gmail.com
+Admin@123
+To Register New Company (Company Name; Email-ID) (Ticket_Plan, Ticket_Plan@plan.com)
+Name-Name, name@name.com, name, company@mail.com, admin
+
+http://localhost:7000/saas/dashboard
+register-company, logout
+
+Kambrath
+kamprathbalki@gmail.com
+kambrath@123
+Admin
+
+http://localhost:7000/executive/login
+executive@mail.com
+executive
+
+http://localhost:7000/dashboard/main
+
+
+what are his links? What can he view and what must he input
+
+1️⃣ SaaS Platform Admin (You)
+
+Purpose: Manage companies using the CRM. - /register-company
+
+Open - http://localhost:7000/register-company
+
+Enter :-
+Company Name
+Company Email
+
+System generates Tenant ID
+
+Share this Tenant ID with that company.
+
+What he can view - Currently only: - Company registrations
+
+2️⃣ Company Platform Admin
+
+Purpose: Run the CRM for their company.
+
+Step-1 Register Admin User - /register
+
+Enter :-
+Name
+Email
+Password
+Role = admin
+Tenant ID (given by SaaS admin)
+
+Step-2 Login - /login
+
+Step-3 Main links after login
+/dashboard/main
+/dashboard/admin-dashboard
+/dashboard/analytics
+/dashboard/intelligence
+
+What Company Admin can do
+Manage Properties :-
+/property/add
+/property/page
+/property/list
+/property/map-view
+
+Input:-
+Title
+Property Type
+Price
+Bedrooms
+Area
+Location
+
+Manage Buyers:-
+/buyer/add
+/buyer/page
+/buyer/list
+
+Input:-
+Name
+Phone
+Budget
+Bedrooms
+Preferred location
+Radius
+
+View Matches:-
+/buyer/matches/:buyerId
+/buyer/smart-recommendations/:buyerId
+
+Analytics:-
+/dashboard/analytics
+/dashboard/hot-locations
+/dashboard/investment-opportunities
+/dashboard/price-trend
+/dashboard/intelligence
+
+AI Tools
+/dashboard/price-estimator
+/dashboard/deal-predictor
+
+
+3️⃣ Company Executive
+
+Purpose: Handle leads and property visits.
+
+Register - /register
+
+Input:-
+Name
+Email
+Password
+Role = executive
+Tenant ID
+
+Login - /login
+
+Redirects to - /dashboard/executive-page
+
+Executive Links
+/buyer/page
+/property/page
+/visit/list
+
+Executive Actions
+
+Schedule Visit - /visit/schedule
+
+Input:
+Property
+Buyer
+Visit date
+
+Close Deal - /visit/close/:visitId
+
+Track performance - /dashboard/executive-performance
+
+Shows:
+Visits
+Deals
+Conversion %
+
+4️⃣ Customer (Buyer)
+
+Customer is entered by company - /buyer/add
+
+Customer data includes:-
+Name
+Phone
+Budget
+Bedrooms
+Preferred location
+Search radius
+
+What customer data can show internally
+
+Matches /buyer/matches/:buyerId
+
+AI recommendations /buyer/smart-recommendations/:buyerId
+
+Timeline /buyer/timeline/:buyerId
+
+Shortlist /buyer/shortlist/:buyerId
+
+Final Structure
+
+SaaS Admin-
+Register companies
+
+Company Admin-
+Manage properties
+Manage buyers
+View analytics
+
+Executive-
+Handle buyers
+Schedule visits
+Close deals
+
+Customer-
+View matched properties
+Visit properties
+Buy property
+
+If you want, I can also show one extremely important SaaS feature you are still missing:
+
+Company-level access control
+
+Without it, one company admin could see another company's data.
+
+
+
+http://localhost:7000/buyer/add
+http://localhost:7000/buyer/add
+http://localhost:7000/buyer/list
+http://localhost:7000/buyer/matches/69b0dbb4143ddc417adb19a0
+http://localhost:7000/buyer/page
+http://localhost:7000/buyer/recommendations/69b0dbb4143ddc417adb19a0
+http://localhost:7000/buyer/shortlist/69b0dbb4143ddc417adb19a0
+http://localhost:7000/buyer/smart-recommendations/69b0dbb4143ddc417adb19a0
+http://localhost:7000/buyer/timeline/69b0dbb4143ddc417adb19a0
+http://localhost:7000/dashboard
+http://localhost:7000/dashboard/admin-dashboard
+http://localhost:7000/dashboard/analytics
+http://localhost:7000/dashboard/conversion-metrics
+http://localhost:7000/dashboard/deal-predictor
+http://localhost:7000/dashboard/demand-heatmap
+http://localhost:7000/dashboard/demand-prediction
+http://localhost:7000/dashboard/executive
+http://localhost:7000/dashboard/executive-page
+http://localhost:7000/dashboard/executive-performance
+http://localhost:7000/dashboard/followups
+http://localhost:7000/dashboard/hot-locations
+http://localhost:7000/dashboard/intelligence
+http://localhost:7000/dashboard/investment-opportunities
+http://localhost:7000/dashboard/main
+http://localhost:7000/dashboard/match-config
+http://localhost:7000/dashboard/price-estimator
+http://localhost:7000/dashboard/price-trend
+http://localhost:7000/dashboard/revenue-dashboard
+http://localhost:7000/dashboard/sales-funnel
+http://localhost:7000/dashboard/summary
+http://localhost:7000/login
+http://localhost:7000/logout
+http://localhost:7000/match/685ab234234234
+http://localhost:7000/match/69b0dbb4143ddc417adb19a0
+http://localhost:7000/property/add
+http://localhost:7000/property/buyer-map
+http://localhost:7000/property/buyer-map/69b0dbb4143ddc417adb19a0
+http://localhost:7000/property/compare
+http://localhost:7000/property/delete/69b0e9714158d091c47f698d
+http://localhost:7000/property/generate-recommendations
+http://localhost:7000/property/list
+http://localhost:7000/property/map
+http://localhost:7000/property/map-radius/73.8567/18.5204/1000
+http://localhost:7000/property/map-view
+http://localhost:7000/property/nearby/73.8567/18.5204/1000
+http://localhost:7000/property/page
+http://localhost:7000/property/search?bedrooms=3
+http://localhost:7000/property/search?city=Pune
+http://localhost:7000/property/search?minPrice=7000000&maxPrice=9000000
+http://localhost:7000/property/search?minPrice=7000000&maxPrice=9000000&bedrooms=3&city=Pune
+http://localhost:7000/property/similar/69b0da763d0a23c9c4dafa8b
+http://localhost:7000/property/update/69b0e9714158d091c47f698d
+http://localhost:7000/register
+http://localhost:7000/register-company
+http://localhost:7000/visit/close/69b0e430ee6df79f328ff164
+http://localhost:7000/visit/list
+http://localhost:7000/visit/schedule

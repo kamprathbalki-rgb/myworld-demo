@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Executives</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/executive/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Executive List</h1>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+<th>Name</th>
+<th>Mobile</th>
+<th>Email</th>
+<th>Assigned Locations</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+
+<% executives.forEach(function(e){ %>
+
+<tr>
+
+<td><%= e.name || '' %></td>
+
+<td><%= e.mobile || '' %></td>
+
+<td><%= e.email || '' %></td>
+
+<td>
+<%= e.assignedLocations && e.assignedLocations.length
+? e.assignedLocations.join(', ')
+: '' %>
+</td>
+
+<td>
+<%= e.isActive ? 'Active' : 'Inactive' %>
+</td>
+
+<td>
+
+<a href="/executive/edit/<%= e._id %>">Edit</a>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+<br><br>
+
+<a href="/executive/add">Add Executive</a>
+
+</body>
+</html>

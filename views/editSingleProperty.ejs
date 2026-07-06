@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Single Property</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+<a href="/dashboard">Home</a>
+
+<h1>Edit Single Property</h1>
+
+<form
+    method="POST"
+    action="/property/update/<%= property._id %>"
+    enctype="multipart/form-data">
+
+<input type="hidden"
+       name="propertyMode"
+       value="SINGLE">
+
+<% if(property.coverPhoto){ %>
+
+<label>Current Cover Photo</label>
+<br>
+
+<img
+    src="/uploads/properties/<%= property.coverPhoto %>"
+    width="150">
+
+<br><br>
+
+<% } %>
+
+<label>Replace Cover Photo</label>
+
+<input
+    type="file"
+    name="coverPhoto"
+    accept="image/*">
+
+<br><br>
+
+
+<label>Property Name</label>
+<input type="text" name="projectName"
+value="<%= property.projectName || '' %>">
+
+<br><br>
+
+<label>Builder / Society / Source</label>
+<input type="text"
+       name="builderName"
+       value="<%= property.builderName || '' %>">
+
+<br><br>
+
+<br><br>
+
+<label>Owner Name</label>
+<input type="text"
+       name="ownerName"
+       value="<%= property.ownerName || '' %>">
+
+<br><br>
+
+<label>Owner Mobile</label>
+<input type="text"
+       name="ownerMobile"
+       value="<%= property.ownerMobile || '' %>">
+
+<br><br>
+
+<br><br>
+
+
+<label>City</label>
+<input type="text"
+       name="city"
+       value="<%= property.city || '' %>">
+
+<br><br>
+
+<label>Project Status</label>
+
+<select name="projectStatus">
+    <option value="">Select</option>
+    <option <%= property.projectStatus==='New Launch' ? 'selected' : '' %>>New Launch</option>
+    <option <%= property.projectStatus==='Under Construction' ? 'selected' : '' %>>Under Construction</option>
+    <option <%= property.projectStatus==='Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
+    <option <%= property.projectStatus==='Resale' ? 'selected' : '' %>>Resale</option>
+</select>
+
+<br><br>
+
+<label>Property Type</label>
+
+<select name="propertyType">
+    <option <%= property.propertyType && property.propertyType.includes('Apartment') ? 'selected' : '' %>>Apartment</option>
+    <option <%= property.propertyType && property.propertyType.includes('Villa') ? 'selected' : '' %>>Villa</option>
+    <option <%= property.propertyType && property.propertyType.includes('Plot') ? 'selected' : '' %>>Plot</option>
+    <option <%= property.propertyType && property.propertyType.includes('Office') ? 'selected' : '' %>>Office</option>
+    <option <%= property.propertyType && property.propertyType.includes('Showroom') ? 'selected' : '' %>>Showroom</option>
+    <option <%= property.propertyType && property.propertyType.includes('Retail') ? 'selected' : '' %>>Retail</option>
+    <option <%= property.propertyType && property.propertyType.includes('Shop') ? 'selected' : '' %>>Shop</option>
+</select>
+
+<br><br>
+
+<label>RERA Approved</label>
+
+<select name="reraApproved">
+    <option value="">Select</option>
+    <option <%= property.reraApproved==='Yes' ? 'selected' : '' %>>Yes</option>
+    <option <%= property.reraApproved==='No' ? 'selected' : '' %>>No</option>
+</select>
+
+<br><br>
+
+<label>Number of Buildings / Towers</label>
+<input type="number"
+       name="numberOfTowers"
+       value="<%= property.numberOfTowers || '' %>">
+
+<br><br>
+
+
+<label>Flat Type</label>
+
+<select name="singleFlatType">
+    <option <%= property.singleFlatType==='Studio' ? 'selected' : '' %>>Studio</option>
+    <option <%= property.singleFlatType==='1 RK' ? 'selected' : '' %>>1 RK</option>
+    <option <%= property.singleFlatType==='1 BHK' ? 'selected' : '' %>>1 BHK</option>
+    <option <%= property.singleFlatType==='1.5 BHK' ? 'selected' : '' %>>1.5 BHK</option>
+    <option <%= property.singleFlatType==='2 BHK' ? 'selected' : '' %>>2 BHK</option>
+    <option <%= property.singleFlatType==='2.5 BHK' ? 'selected' : '' %>>2.5 BHK</option>
+    <option <%= property.singleFlatType==='3 BHK' ? 'selected' : '' %>>3 BHK</option>
+    <option <%= property.singleFlatType==='3.5 BHK' ? 'selected' : '' %>>3.5 BHK</option>
+    <option <%= property.singleFlatType==='4 BHK' ? 'selected' : '' %>>4 BHK</option>
+    <option <%= property.singleFlatType==='4.5 BHK' ? 'selected' : '' %>>4.5 BHK</option>
+    <option <%= property.singleFlatType==='5 BHK' ? 'selected' : '' %>>5 BHK</option>
+    <option <%= property.singleFlatType==='5+ BHK' ? 'selected' : '' %>>5+ BHK</option>
+    <option <%= property.singleFlatType==='Villa' ? 'selected' : '' %>>Villa</option>
+    <option <%= property.singleFlatType==='Plot' ? 'selected' : '' %>>Plot</option>
+    <option <%= property.singleFlatType==='Office' ? 'selected' : '' %>>Office</option>
+    <option <%= property.singleFlatType==='Showroom' ? 'selected' : '' %>>Showroom</option>
+    <option <%= property.singleFlatType==='Retail' ? 'selected' : '' %>>Retail</option>
+    <option <%= property.singleFlatType==='Shop' ? 'selected' : '' %>>Shop</option>
+</select>
+
+<br><br>
+
+<br><br>
+
+<label>Carpet Area</label>
+<input type="number"
+       name="singleCarpetArea"
+       value="<%= property.singleCarpetArea || '' %>">
+
+<br><br>
+
+<label>Quoted Price</label>
+<input type="number"
+       name="singleQuotedPrice"
+       value="<%= property.singleQuotedPrice || '' %>">
+
+<br><br>
+
+<label>Closing Price</label>
+<input type="number"
+       name="singleClosingPrice"
+       value="<%= property.singleClosingPrice || '' %>">
+
+<br><br>
+
+<br><br>
+
+<label>Property Location</label>
+
+<select name="propertyLocation">
+
+<% locations.forEach(function(location){ %>
+
+<option
+value="<%= location.officeName %>"
+<%= property.propertyLocation === location.officeName ? 'selected' : '' %>>
+<%= location.officeName %>
+</option>
+
+<% }) %>
+
+</select>
+
+<br><br>
+
+<br><br>
+
+<label>Google Pin</label>
+<input type="text"
+       name="googlePin"
+       value="<%= property.googlePin || '' %>">
+
+<br><br>
+
+<label>Longitude</label>
+<input type="text"
+       name="lng"
+       value="<%= property.location && property.location.coordinates ? property.location.coordinates[0] : '' %>">
+
+<br><br>
+
+<label>Latitude</label>
+<input type="text"
+       name="lat"
+       value="<%= property.location && property.location.coordinates ? property.location.coordinates[1] : '' %>">
+
+<br><br>
+<br><br>
+
+
+<label>Parking Type</label>
+
+<select name="parkingType">
+    <option value="">Select</option>
+    <option <%= property.parkingType==='Open' ? 'selected' : '' %>>Open</option>
+    <option <%= property.parkingType==='Covered' ? 'selected' : '' %>>Covered</option>
+    <option <%= property.parkingType==='Basement' ? 'selected' : '' %>>Basement</option>
+    <option <%= property.parkingType==='Podium' ? 'selected' : '' %>>Podium</option>
+    <option <%= property.parkingType==='Stilt' ? 'selected' : '' %>>Stilt</option>
+</select>
+
+<br><br>
+
+<label>Furnished Status</label>
+
+<select name="furnishedStatus">
+<option <%= property.furnishedStatus==='Unfurnished' ? 'selected' : '' %>>Unfurnished</option>
+<option <%= property.furnishedStatus==='Semi-Furnished' ? 'selected' : '' %>>Semi-Furnished</option>
+<option <%= property.furnishedStatus==='Fully Furnished' ? 'selected' : '' %>>Fully Furnished</option>
+</select>
+
+<br><br>
+
+<label>Possession Status</label>
+
+<select name="possessionStatus">
+    <option value="">Select</option>
+    <option <%= property.possessionStatus==='Immediate' ? 'selected' : '' %>>Immediate</option>
+    <option <%= property.possessionStatus==='Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
+    <option <%= property.possessionStatus==='Under Construction' ? 'selected' : '' %>>Under Construction</option>
+    <option <%= property.possessionStatus==='Possession Soon' ? 'selected' : '' %>>Possession Soon</option>
+</select>
+
+<br><br>
+
+<label>Amenities</label><br>
+<textarea name="amenities"><%= property.amenities ? property.amenities.join(', ') : '' %></textarea>
+
+<br><br>
+
+<label>USP</label><br>
+<textarea name="usp"><%= property.usp || '' %></textarea>
+
+<br><br>
+
+<label>Notes</label><br>
+<textarea name="notes"><%= property.notes || '' %></textarea>
+
+<br><br>
+
+<button type="submit">
+Update Property
+</button>
+
+</form>
+
+</body>
+</html>

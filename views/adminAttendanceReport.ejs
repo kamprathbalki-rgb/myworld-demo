@@ -1,0 +1,57 @@
+<h2>Admin Attendance Report</h2>
+
+<a href="/dashboard">Back</a> |
+<a href="/logout">Logout</a>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Date</th>
+<th>Executive</th>
+<th>Login</th>
+<th>Logout</th>
+<th>Tea-1 Out</th>
+<th>Tea-1 In</th>
+<th>Lunch Out</th>
+<th>Lunch In</th>
+<th>Tea-2 Out</th>
+<th>Tea-2 In</th>
+<th>Site Out</th>
+<th>Site In</th>
+</tr>
+
+<% records.forEach(function(r){ %>
+
+<tr>
+<td><%= r.date || '' %></td>
+<td><%= r.executiveName || '' %></td>
+
+<td>
+<%= r.sessions && r.sessions.length > 0
+    ? r.sessions.map(s => s.login).join(', ')
+    : (r.loginTime || '') %>
+</td>
+
+<td>
+<%= r.sessions && r.sessions.length > 0
+    ? r.sessions.map(s => s.logout).join(', ')
+    : (r.logoutTime || '') %>
+</td>
+
+<td><%= r.morningTeaOut ? r.morningTeaOut.join(', ') : '' %></td>
+<td><%= r.morningTeaIn ? r.morningTeaIn.join(', ') : '' %></td>
+
+<td><%= r.lunchOut ? r.lunchOut.join(', ') : '' %></td>
+<td><%= r.lunchIn ? r.lunchIn.join(', ') : '' %></td>
+
+<td><%= r.eveningTeaOut ? r.eveningTeaOut.join(', ') : '' %></td>
+<td><%= r.eveningTeaIn ? r.eveningTeaIn.join(', ') : '' %></td>
+
+<td><%= r.siteVisitOut ? r.siteVisitOut.join(', ') : '' %></td>
+<td><%= r.siteVisitIn ? r.siteVisitIn.join(', ') : '' %></td>
+</tr>
+<% }) %>
+
+</table>

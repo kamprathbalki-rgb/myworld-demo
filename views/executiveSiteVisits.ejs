@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Today's Site Visits</title>
+
+<style>
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:10px;
+text-align:left;
+}
+
+th{
+background:#f5f5f5;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="/executive/dashboard">Dashboard</a>
+
+<hr>
+
+<h1>Today's Site Visits</h1>
+
+<table>
+
+<tr>
+<th>Buyer</th>
+<th>Phone</th>
+<th>Project</th>
+<th>Visit Date</th>
+<th>Executive</th>
+<th>Visit Type</th>
+<th>Status</th>
+</tr>
+
+<% visits.forEach(function(v){ %>
+
+<tr>
+
+<td>
+<%= v.buyerId ? v.buyerId.name : '' %>
+</td>
+
+<td>
+<%= v.buyerId && v.buyerId.phone
+? v.buyerId.phone.slice(0,2) + 'XXXX' + v.buyerId.phone.slice(-4)
+: '' %>
+</td>
+
+<td>
+<%= v.projectName || '' %>
+</td>
+
+<td>
+<%= v.scheduledVisitDate
+? new Date(v.scheduledVisitDate).toLocaleString('en-IN')
+: '' %>
+</td>
+
+<td>
+<%= v.executiveName || '' %>
+</td>
+
+<td>
+<%= v.visitType || '' %>
+</td>
+
+<td>
+<%= v.buyerId
+? (v.buyerId.status || 'New Lead')
+: '' %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

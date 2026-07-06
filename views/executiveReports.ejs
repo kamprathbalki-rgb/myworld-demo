@@ -1,0 +1,91 @@
+<h2>Reports</h2>
+
+<a href="/executive/dashboard">Back</a> |
+<a href="/executive/logout">Logout</a>
+
+<hr>
+
+<h3>Today Attendance</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Login</th>
+<th>Logout</th>
+<th>Tea-1 Out</th>
+<th>Tea-1 In</th>
+<th>Lunch Out</th>
+<th>Lunch In</th>
+<th>Meeting Out</th>
+<th>Meeting In</th>
+<th>Site Out</th>
+<th>Site In</th></tr>
+
+<tr>
+
+<td>
+<%= attendance?.loginTimes
+    ? attendance.loginTimes.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance?.logoutTimes
+    ? attendance.logoutTimes.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.teaOut
+    ? attendance.teaOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.teaIn
+    ? attendance.teaIn.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.lunchOut
+    ? attendance.lunchOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.lunchIn
+    ? attendance.lunchIn.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.meetingOut
+    ? attendance.meetingOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.meetingIn
+    ? attendance.meetingIn.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.siteVisitOut
+    ? attendance.siteVisitOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= attendance && attendance.siteVisitIn
+    ? attendance.siteVisitIn.join(', ')
+    : '' %>
+</td>
+
+</tr>
+</table>
+
+<br>
+
+<a href="/executive/attendance-report">Full Attendance Report</a>

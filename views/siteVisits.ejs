@@ -1,0 +1,41 @@
+<h1>Today's Site Visits</h1>
+
+<table border="1">
+
+<tr>
+<th>Buyer</th>
+<th>Project</th>
+<th>Visit Date</th>
+<th>Executive</th>
+<th>Status</th>
+</tr>
+
+<% visits.forEach(function(v){ %>
+
+<tr>
+
+<td>
+<%= v.buyerId ? v.buyerId.name : '' %>
+</td>
+
+<td>
+<%= v.projectName %>
+</td>
+
+<td>
+<%= new Date(v.scheduledVisitDate).toLocaleString('en-IN') %>
+</td>
+
+<td>
+<%= v.executiveName %>
+</td>
+
+<td>
+<%= v.visitType %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>

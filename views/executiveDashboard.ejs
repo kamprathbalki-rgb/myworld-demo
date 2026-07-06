@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Executive Dashboard</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<h1>Sales Executive Dashboard</h1>
+
+<table border="1">
+
+<tr>
+<th>Executive</th>
+<th>Total Visits</th>
+<th>Deals Closed</th>
+</tr>
+
+<% data.forEach(function(d){ %>
+
+<tr>
+<td><%= d._id %></td>
+<td><%= d.totalVisits %></td>
+<td><%= d.dealsClosed %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

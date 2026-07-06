@@ -1,0 +1,37 @@
+Name,Type,ISO,Vehicle code,Zone,Capital,Largest city,Statehood,Population (2011),Area (km2),Official languages,Additional official languages
+Andhra Pradesh,State,IN-AP,AP,Southern,Amaravati,Visakhapatnam,01-11-1956,49506799,162975,Telugu,Urdu
+Arunachal Pradesh,State,IN-AR,AR,North-Eastern,Itanagar,Itanagar,20-02-1987,1383727,83743,English,—
+Assam,State,IN-AS,AS,North-Eastern,Dispur,Guwahati,26-01-1950,31205576,78438,"Assamese, Boro","Bengali, Meitei"
+Bihar,State,IN-BR,BR,Eastern,Patna,Patna,26-01-1950,104099452,94163,Hindi,Urdu
+Chhattisgarh,State,IN-CG,CG,Central,Raipur,Raipur,01-11-2000,25545198,135194,Hindi,Chhattisgarhi
+Goa,State,IN-GA,GA,Western,Panaji,Vasco da Gama,30-05-1987,1458545,3702,Konkani,Marathi
+Gujarat,State,IN-GJ,GJ,Western,Gandhinagar,Ahmedabad,01-05-1960,60439692,196024,Gujarati,Hindi
+Haryana,State,IN-HR,HR,Northern,Chandigarh,Faridabad,01-11-1966,25351462,44212,Hindi,Punjabi
+Himachal Pradesh,State,IN-HP,HP,Northern,Shimla (Summer) Dharamshala (Winter),Shimla,25-01-1971,6864602,55673,Hindi,Sanskrit
+Jharkhand,State,IN-JH,JH,Eastern,Ranchi,Jamshedpur,15-11-2000,32988134,79714,Hindi,"Angika, Bengali, Bhojpuri, Bhumij, Ho, Kharia, Khortha, Kurmali, Kurukh, Magahi, Maithili, Mundari, Nagpuri, Odia, Santali, Urdu"
+Karnataka,State,IN-KA,KA,Southern,Bengaluru,Bengaluru,01-11-1956,61095297,191791,Kannada,—
+Kerala,State,IN-KL,KL,Southern,Thiruvananthapuram,Thiruvananthapuram,01-11-1956,33406061,38863,Malayalam,English
+Madhya Pradesh,State,IN-MP,MP,Central,Bhopal,Indore,01-11-1956,72626809,308252,Hindi,—
+Maharashtra,State,IN-MH,MH,Western,Mumbai (Summer) Nagpur (Winter),Mumbai,01-05-1960,112374333,307713,Marathi,—
+Manipur,State,IN-MN,MN,North-Eastern,Imphal,Imphal,21-01-1972,2855794,22327,Meitei,English
+Meghalaya,State,IN-ML,ML,North-Eastern,Shillong,Shillong,21-01-1972,2966889,22429,English,—
+Mizoram,State,IN-MZ,MZ,North-Eastern,Aizawl,Aizawl,20-02-1987,1097206,21081,"Mizo, English",—
+Nagaland,State,IN-NL,NL,North-Eastern,Kohima,Dimapur,01-12-1963,1978502,16579,English,—
+Odisha,State,IN-OD,OD,Eastern,Bhubaneswar,Bhubaneswar,26-01-1950,41974218,155707,Odia,—
+Punjab,State,IN-PB,PB,Northern,Chandigarh,Ludhiana,01-11-1966,27743338,50362,Punjabi,—
+Rajasthan,State,IN-RJ,RJ,Northern,Jaipur,Jaipur,26-01-1950,68548437,342239,Hindi,English
+Sikkim,State,IN-SK,SK,North-Eastern,Gangtok,Gangtok,16-05-1975,610577,7096,"Nepali, Sikkimese, Lepcha, English","Gurung, Limbu, Magar, Mukhia, Newari, Rai, Sherpa, Tamang"
+Tamil Nadu,State,IN-TN,TN,Southern,Chennai,Chennai,01-11-1956,72147030,130058,Tamil,English
+Telangana,State,IN-TS,TG,Southern,Hyderabad,Hyderabad,02-06-2014,35193978,112077,Telugu,Urdu
+Tripura,State,IN-TR,TR,North-Eastern,Agartala,Agartala,21-01-1972,3673917,10491,"Bengali, English, Kokborok",—
+Uttar Pradesh,State,IN-UP,UP,Central,Lucknow,Lucknow,26-01-1950,199812341,240928,Hindi,Urdu
+Uttarakhand,State,IN-UK,UK,Central,Bhararisain (Summer) Dehradun (Winter),Dehradun,09-11-2000,10086292,53483,Hindi,Sanskrit
+West Bengal,State,IN-WB,WB,Eastern,Kolkata,Kolkata,26-01-1950,91276115,88752,"Bengali, English","Nepali, Hindi, Odia, Punjabi, Santali, Telugu, Urdu, Kamatapuri, Rajbanshi, Kurmali, Kurukh"
+Andaman and Nicobar Islands,Union Territory,IN-AN,AN,Southern,Port Blair,Port Blair,01-11-1956,380581,8249,"Hindi, English",—
+Chandigarh,Union Territory,IN-CH,CH,Northern,Chandigarh,Chandigarh,01-11-1966,1055450,114,"Hindi, English",—
+Dadra and Nagar Haveli and Daman and Diu,Union Territory,IN-DH,DD,Western,Daman,Silvassa,26-01-2020,587106,603,"Hindi, English",Gujarati
+Delhi,Union Territory,IN-DL,DL,Northern,New Delhi,Delhi,01-11-1956,16787941,1484,"Hindi, English","Urdu, Punjabi"
+Jammu and Kashmir,Union Territory,IN-JK,JK,Northern,Srinagar (Summer) Jammu (Winter),Srinagar,31-10-2019,12258433,42241,"Dogri, English, Hindi, Kashmiri, Urdu",—
+Ladakh,Union Territory,IN-LA,LA,Northern,Leh (Summer) Kargil (Winter),Leh,31-10-2019,290492,59146,"Hindi, English",—
+Lakshadweep,Union Territory,IN-LD,LD,Southern,Kavaratti,Kavaratti,01-11-1956,64473,32,English,Malayalam
+Puducherry,Union Territory,IN-PY,PY,Southern,Pondicherry,Pondicherry,16-08-1962,1247953,479,"Tamil, Telugu, Malayalam","English, French"

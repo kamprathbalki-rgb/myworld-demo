@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    margin:15px;
+    max-width:700px;
+}
+
+.section{
+    background:#f8f8f8;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:8px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:12px;
+    box-sizing:border-box;
+    font-size:16px;
+}
+
+textarea{
+    min-height:80px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+}
+
+h2{
+    margin-top:0;
+}
+
+</style>
+
+
+<title>Add Single Property</title>
+
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+<a href="/dashboard">Home</a>
+
+<h1>Add Single Property</h1>
+
+<form
+    method="POST"
+    action="/property/save"
+    enctype="multipart/form-data">
+
+<% if(error){ %>
+
+<div style="
+background:#ffe5e5;
+color:red;
+padding:10px;
+margin-bottom:15px;
+border:1px solid red;
+border-radius:5px;
+">
+<%= error %>
+</div>
+
+<% } %>
+
+<input type="hidden"
+       name="propertyMode"
+       value="SINGLE">
+
+<div style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<h2 style="margin-top:0;">
+Owner Details
+</h2>
+
+<label>Owner Name</label>
+<input type="text" name="ownerName" required>
+
+<label>Owner Mobile</label>
+
+<input
+    type="tel"
+    name="ownerMobile"
+    pattern="[0-9]{10}"
+    maxlength="10"
+    minlength="10"
+    placeholder="10 digit mobile number"
+    required>
+
+</div>
+
+
+<div style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<h2 style="margin-top:0;">
+Pricing
+</h2>
+
+<label>Carpet Area (Sq Ft)</label>
+
+<input
+    type="number"
+    step="1"
+    name="singleCarpetArea"
+    required
+    placeholder="e.g. 850">
+
+<label>Builder / Owner Asking Price (Lakhs)</label>
+<input
+    type="number"
+    step="0.01"
+    name="askingPrice"
+    required>
+
+<label>Expected Closing Price (Lakhs)</label>
+<input
+    type="number"
+    step="0.01"
+    name="expectedClosingPrice">
+
+</div>
+
+<div style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<h2 style="margin-top:0;">
+Property Details
+</h2>
+
+<label>Property Status</label>
+
+<select name="propertyStatus">
+    <option value="Available" selected>
+        Available
+    </option>
+    <option value="Blocked">
+        Blocked
+    </option>
+    <option value="Sold">
+        Sold
+    </option>
+</select>
+
+<label>Floor Number</label>
+<input
+    type="number"
+    name="floorNumber"
+    min="0">
+
+<label>Total Floors</label>
+<input
+    type="number"
+    name="totalFloors"
+    min="1">
+
+<label>Facing</label>
+
+<select name="facing">
+
+    <option value="">
+        Select Facing
+    </option>
+
+    <option>East</option>
+    <option>West</option>
+    <option>North</option>
+    <option>South</option>
+
+    <option>North-East</option>
+    <option>North-West</option>
+    <option>South-East</option>
+    <option>South-West</option>
+
+</select>
+
+<label>Lift Available</label>
+
+<select name="liftAvailable">
+
+    <option value="">
+        Select
+    </option>
+
+    <option value="Yes">
+        Yes
+    </option>
+
+    <option value="No">
+        No
+    </option>
+
+</select>
+
+<label>Property Age (Years)</label>
+
+<input
+    type="number"
+    name="propertyAge"
+    min="0"
+    placeholder="e.g. 5">
+
+<label>Property Status</label>
+
+<select name="propertyStatus">
+
+    <option value="Available">
+        Available
+    </option>
+
+    <option value="Token Received">
+        Token Received
+    </option>
+
+    <option value="Agreement Done">
+        Agreement Done
+    </option>
+
+    <option value="Sold">
+        Sold
+    </option>
+
+</select>
+
+<br><br>
+
+<label>Furnished Status</label>
+
+<select name="furnishedStatus">
+<option>Unfurnished</option>
+<option>Semi-Furnished</option>
+<option>Fully Furnished</option>
+</select>
+
+<br><br>
+
+<label>Possession Status</label>
+
+<select name="possessionStatus">
+    <option value="">Select</option>
+    <option>Immediate</option>
+    <option>Ready Possession</option>
+    <option>Under Construction</option>
+    <option>Possession Soon</option>
+</select>
+
+<label>Parking Type</label>
+
+<select name="parkingType">
+    <option value="">Select</option>
+    <option>Open</option>
+    <option>Covered</option>
+    <option>Basement</option>
+    <option>Podium</option>
+    <option>Stilt</option>
+</select>
+
+</div>
+
+<div style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<h2 style="margin-top:0;">
+Property Basics
+</h2>
+
+<label>Property Name</label>
+<input
+    type="text"
+    name="projectName"
+    required>
+
+<label>Builder / Society / Source</label>
+
+<input type="text" name="builderName">
+
+<label>Location</label>
+
+<select name="propertyLocation" required>
+
+<option value="">
+Select Location
+</option>
+
+<% locations.forEach(function(location){ %>
+
+<option value="<%= location.officeName %>">
+    <%= location.officeName %>
+    (
+    <%= location.district %>
+    )
+</option>
+
+<% }) %>
+
+</select>
+
+<label>Project Status</label>
+
+<select name="projectStatus">
+    <option value="">Select</option>
+    <option>New Launch</option>
+    <option>Under Construction</option>
+    <option>Ready Possession</option>
+    <option>Resale</option>
+</select>
+
+<label>Property Type</label>
+
+<select name="propertyType" required>
+    <option>Apartment</option>
+    <option>Villa</option>
+    <option>Plot</option>
+    <option>Office</option>
+    <option>Showroom</option>
+    <option>Retail</option>
+    <option>Shop</option>
+</select>
+
+<label>RERA Approved</label>
+
+<select name="reraApproved">
+    <option value="">Select</option>
+    <option>Yes</option>
+    <option>No</option>
+</select>
+
+<label>Number of Buildings / Towers</label>
+
+<input type="number" name="numberOfTowers">
+
+<label>Flat Type</label>
+
+<select name="singleFlatType" required>
+    <option>Studio</option>
+    <option>1 RK</option>
+    <option>1 BHK</option>
+    <option>1.5 BHK</option>
+    <option>2 BHK</option>
+    <option>2.5 BHK</option>
+    <option>3 BHK</option>
+    <option>3.5 BHK</option>
+    <option>4 BHK</option>
+    <option>4.5 BHK</option>
+    <option>5 BHK</option>
+    <option>5+ BHK</option>
+    <option>Villa</option>
+    <option>Plot</option>
+    <option>Office</option>
+    <option>Showroom</option>
+    <option>Retail</option>
+    <option>Shop</option>
+</select>
+
+<label>Cover Photo</label>
+
+<input
+    type="file"
+    name="coverPhoto"
+    accept="image/*">
+
+
+</div>
+
+
+
+<br><br>
+
+<details style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<summary style="
+font-weight:bold;
+cursor:pointer;
+">
+Advanced Location Details
+</summary>
+
+<br>
+
+<label>Google Pin</label>
+<input type="text" name="googlePin">
+
+<label>Longitude</label>
+<input type="text" name="lng">
+
+<label>Latitude</label>
+<input type="text" name="lat">
+
+</details>
+
+<br><br>
+
+<div style="
+background:#f8f8f8;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+">
+
+<h2 style="margin-top:0;">
+Marketing Notes
+</h2>
+
+<label>Amenities</label>
+<textarea name="amenities"></textarea>
+
+<label>USP</label>
+<textarea name="usp"></textarea>
+
+<label>Notes</label>
+<textarea name="notes"></textarea>
+
+</div>
+
+<br><br>
+
+<button type="submit">
+Save Single Property
+</button>
+
+</form>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<h1>SaaS Admin Dashboard</h1>
+
+<p>
+<a href="/register-company">Register Company</a> |
+
+<a href="/saas/subscription-history">
+Subscription History
+</a>
+
+|
+
+<a href="/logout">Logout</a>
+</p>
+
+
+<h2>Subscription Summary</h2>
+
+<p>
+Total Companies:
+<%= totalCompanies %>
+</p>
+
+<p>
+Active Companies:
+<%= activeCompanies %>
+</p>
+
+<p>
+Inactive Companies:
+<%= inactiveCompanies %>
+</p>
+
+<hr>
+
+
+
+<hr>
+
+<h2>Registered Companies</h2>
+
+
+<h2>Expiring Within 30 Days</h2>
+
+<ul>
+
+<% expiringSoon.forEach(function(t){ %>
+
+<li>
+
+<%= t.name %>
+
+-
+
+Expires On
+
+<%= t.subscriptionEndDate.toLocaleDateString() %>
+
+</li>
+
+<% }) %>
+
+</ul>
+
+<h2>Expired Companies</h2>
+
+<ul>
+
+<% expiredCompanies.forEach(function(t){ %>
+
+<li>
+
+<%= t.name %>
+
+</li>
+
+<% }) %>
+
+</ul>
+
+<hr>
+
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Company</th>
+<th>Company Email</th>
+<th>Admin Name</th>
+<th>Admin Email</th>
+<th>State</th>
+<th>Primary District</th>
+<th>Subscription</th>
+<th>Expiry Date</th>
+<th>Status</th>
+<th>Days Left</th>
+<th>Created</th>
+<th>Actions</th>
+</tr>
+
+<% tenants.forEach(function(t){ %>
+
+<tr>
+
+<td><%= t.name %></td>
+
+<td><%= t.email %></td>
+
+<td>
+<%= t.adminName || '' %>
+</td>
+
+<td>
+<%= t.adminEmail || '' %>
+</td>
+
+<td><%= t.stateName || '' %></td>
+
+<td><%= t.primaryDistrict || '' %></td>
+
+<td>
+<%= t.subscriptionMonths || 0 %> Months
+</td>
+
+<td>
+<%= t.subscriptionEndDate
+? t.subscriptionEndDate.toLocaleDateString()
+: ''
+%>
+</td>
+
+<td>
+
+<%
+let daysRemaining = 0
+
+if(t.subscriptionEndDate){
+
+daysRemaining =
+Math.ceil(
+(
+t.subscriptionEndDate -
+new Date()
+) /
+(1000 * 60 * 60 * 24)
+)
+
+}
+%>
+
+<% if(!t.isActive){ %>
+
+⚫ Disabled
+
+<% } else if(daysRemaining <= 0){ %>
+
+❌ Expired
+
+<% } else if(daysRemaining <= 7){ %>
+
+🔴 Expires Soon
+
+<% } else if(daysRemaining <= 30){ %>
+
+🟠 Renewal Due
+
+<% } else { %>
+
+🟢 Active
+
+<% } %>
+
+</td>
+
+<td>
+<%= daysRemaining %>
+</td>
+
+<td>
+<%= t.createdAt
+? t.createdAt.toLocaleDateString()
+: ''
+%>
+</td>
+
+<td>
+
+<a href="/saas/company/<%= t._id %>">
+Edit
+</a>
+
+|
+
+<a href="/saas/company/<%= t._id %>/disable">
+Disable
+</a>
+
+|
+
+<a href="/saas/company/<%= t._id %>/enable">
+Enable
+</a>
+
+|
+
+<a href="/saas/company/<%= t._id %>/renew/12">
+Renew 12M
+</a>
+
+|
+
+<a href="/saas/company/<%= t._id %>/renew/24">
+Renew 24M
+</a>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Executive Performance</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+}
+
+table{
+border-collapse:collapse;
+width:70%;
+background:white;
+}
+
+th,td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2c3e50;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Executive Performance Dashboard</h1>
+
+<table>
+
+<tr>
+<th>Executive</th>
+<th>Total Visits</th>
+<th>Deals Closed</th>
+<th>Conversion %</th>
+</tr>
+
+<% data.forEach(function(e){ %>
+
+<tr>
+<td><%= e.executive %></td>
+<td><%= e.visits %></td>
+<td><%= e.deals %></td>
+<td><%= e.conversion %>%</td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

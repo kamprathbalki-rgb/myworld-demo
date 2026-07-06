@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Project Details</title>
+</head>
+
+<body>
+
+<h1>Project Details</h1>
+
+<hr>
+
+<h2>Basic Information</h2>
+
+<p><b>Project Name:</b> <%= property.projectName || '' %></p>
+
+<p><b>Builder Name:</b> <%= property.builderName || '' %></p>
+
+<p><b>City:</b> <%= property.city || '' %></p>
+
+<p><b>Project Status:</b> <%= property.projectStatus || '' %></p>
+
+<p><b>Property Type:</b>
+<%= property.propertyType ? property.propertyType.join(', ') : '' %>
+</p>
+
+<p><b>RERA Approved:</b> <%= property.reraApproved || '' %></p>
+
+<p><b>No. of Towers:</b> <%= property.numberOfTowers || '' %></p>
+
+<hr>
+
+<h2>Location Details</h2>
+
+<p><b>Property Location:</b> <%= property.propertyLocation || '' %></p>
+
+<p><b>Division Name:</b> <%= property.divisionName || '' %></p>
+
+<p><b>Pincode:</b> <%= property.pincode || '' %></p>
+
+<p><b>District:</b> <%= property.district || '' %></p>
+
+<p><b>State:</b> <%= property.stateName || '' %></p>
+
+<p><b>Direction:</b> <%= property.direction || '' %></p>
+
+<p><b>Landmark:</b> <%= property.locationLandmark || '' %></p>
+
+<p><b>Google Pin:</b> <%= property.googlePin || '' %></p>
+
+<hr>
+
+<h2>Tower Details</h2>
+
+<% if (property.towers && property.towers.length > 0) { %>
+
+<table border="1" cellpadding="10" cellspacing="0">
+<tr>
+<th>Tower Name</th>
+<th>No. of Floors</th>
+<th>Tower Status</th>
+<th>Inventory Status</th>
+<th>Possession Month</th>
+<th>Possession Year</th>
+</tr>
+
+<% property.towers.forEach(function(t){ %>
+
+<tr>
+<td><%= t.towerName || '' %></td>
+<td><%= t.numberOfFloors || '' %></td>
+<td><%= t.towerStatus || '' %></td>
+<td><%= t.inventoryStatus || '' %></td>
+<td><%= t.possessionMonth || '' %></td>
+<td><%= t.possessionYear || '' %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+<% } %>
+
+<hr>
+
+<h2>Configurations</h2>
+
+<% if (property.configurations && property.configurations.length > 0) { %>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+<th>Type</th>
+<th>Area</th>
+<th>Quoted Price</th>
+<th>Closing Price</th>
+<th>Furnished Status</th>
+<th>Parking Type</th>
+<th>Possession Status</th>
+<th>Available Units</th>
+</tr>
+
+<% property.configurations.forEach(function(c){ %>
+
+<tr>
+<td><%= c.flatType || '' %></td>
+<td><%= c.carpetArea || '' %></td>
+<td><%= c.quotedPrice || '' %></td>
+<td><%= c.closingPrice || '' %></td>
+<td><%= c.furnishedStatus || '' %></td>
+
+<td>
+<%= c.parkingType ? c.parkingType.join(', ') : '' %>
+</td>
+
+<td>
+<%= c.possessionStatus ? c.possessionStatus.join(', ') : '' %>
+</td>
+
+<td><%= c.availableUnits || '' %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+<% } %>
+
+<hr>
+
+<h2>Highlights</h2>
+
+<p><b>Amenities:</b>
+<%= property.amenities ? property.amenities.join(', ') : '' %>
+</p>
+
+<p><b>USP:</b> <%= property.usp || '' %></p>
+
+<p><b>Notes:</b> <%= property.notes || '' %></p>
+
+<hr>
+
+<p>
+<a href="/property/page">← Back to Project List</a>
+</p>
+
+</body>
+</html>

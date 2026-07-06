@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Buyer</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Edit Buyer</h1>
+
+<form method="POST" action="/buyer/update/<%= buyer._id %>">
+
+<hr>
+
+<h2>Basic Buyer Details</h2>
+
+<label>Name</label>
+<input type="text" name="name" value="<%= buyer.name || '' %>"><br><br>
+
+<label>Phone</label>
+<input type="text" name="phone" value="<%= buyer.phone || '' %>"><br><br>
+
+<label>Email</label>
+<input type="text" name="email" value="<%= buyer.email || '' %>"><br><br>
+
+<hr>
+
+<h2>Budget & Requirement</h2>
+
+<label>Min Budget</label>
+<input type="number" name="minBudget" value="<%= buyer.minBudget || '' %>"><br><br>
+
+<label>Max Budget</label>
+<input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>"><br><br>
+
+<label>Required Possession</label><br>
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Immediate"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Immediate') ? 'checked' : '' %>
+>
+Immediate
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Ready Possession"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Ready Possession') ? 'checked' : '' %>
+>
+Ready Possession
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Under Construction"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Under Construction') ? 'checked' : '' %>
+>
+Under Construction
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Possession Soon"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Possession Soon') ? 'checked' : '' %>
+>
+Possession Soon
+
+<br><br>
+
+
+<button type="button" onclick="showBuyerTab('apartmentBuyerTab')">
+Apartment (BHK)
+</button>
+
+<button type="button" onclick="showBuyerTab('otherBuyerTab')">
+Villa / Plot / Office / Showroom / Retail / Shop
+</button>
+
+<br><br>
+
+<div id="apartmentBuyerTab">
+
+<h3>Apartment Requirement</h3>
+
+<label>Required Flat Type</label>
+<select name="apartmentFlatType">
+    <option value="">Select</option>
+    <option <%= buyer.requiredFlatType === 'Studio' ? 'selected' : '' %>>Studio</option>
+    <option <%= buyer.requiredFlatType === '1 RK' ? 'selected' : '' %>>1 RK</option>
+    <option <%= buyer.requiredFlatType === '1 BHK' ? 'selected' : '' %>>1 BHK</option>
+    <option <%= buyer.requiredFlatType === '1.5 BHK' ? 'selected' : '' %>>1.5 BHK</option>
+    <option <%= buyer.requiredFlatType === '2 BHK' ? 'selected' : '' %>>2 BHK</option>
+    <option <%= buyer.requiredFlatType === '2.5 BHK' ? 'selected' : '' %>>2.5 BHK</option>
+    <option <%= buyer.requiredFlatType === '3 BHK' ? 'selected' : '' %>>3 BHK</option>
+    <option <%= buyer.requiredFlatType === '3.5 BHK' ? 'selected' : '' %>>3.5 BHK</option>
+    <option <%= buyer.requiredFlatType === '4 BHK' ? 'selected' : '' %>>4 BHK</option>
+    <option <%= buyer.requiredFlatType === '4.5 BHK' ? 'selected' : '' %>>4.5 BHK</option>
+    <option <%= buyer.requiredFlatType === '5 BHK' ? 'selected' : '' %>>5 BHK</option>
+    <option <%= buyer.requiredFlatType === '5+ BHK' ? 'selected' : '' %>>5+ BHK</option>
+</select><br><br>
+
+<label>Min Carpet Area</label>
+<input type="number" name="apartmentMinArea" value="<%= buyer.minArea || '' %>"><br><br>
+
+<label>Max Carpet Area</label>
+<input type="number" name="apartmentMaxArea" value="<%= buyer.maxArea || '' %>"><br><br>
+
+</div>
+
+<div id="otherBuyerTab" style="display:none;">
+
+<h3>Villa / Plot / Commercial Requirement</h3>
+
+<label>Required Type</label>
+<select name="otherFlatType">
+    <option value="">Select</option>
+    <option <%= buyer.requiredFlatType === 'Villa' ? 'selected' : '' %>>Villa</option>
+    <option <%= buyer.requiredFlatType === 'Plot' ? 'selected' : '' %>>Plot</option>
+    <option <%= buyer.requiredFlatType === 'Office' ? 'selected' : '' %>>Office</option>
+    <option <%= buyer.requiredFlatType === 'Showroom' ? 'selected' : '' %>>Showroom</option>
+    <option <%= buyer.requiredFlatType === 'Retail' ? 'selected' : '' %>>Retail</option>
+    <option <%= buyer.requiredFlatType === 'Shop' ? 'selected' : '' %>>Shop</option>
+</select><br><br>
+
+<label>Min Area</label>
+<input type="number" name="otherMinArea" value="<%= buyer.minArea || '' %>"><br><br>
+
+<label>Max Area</label>
+<input type="number" name="otherMaxArea" value="<%= buyer.maxArea || '' %>"><br><br>
+
+</div>
+
+<hr>
+
+<h2>Location Preferences</h2>
+
+<label>1st Preference (Required)</label>
+
+<select name="preferredLocation1" required>
+    <option value="">Select Location</option>
+
+    <% locations.forEach(function(location){ %>
+        <option
+            value="<%= location.officeName %>"
+            <%= buyer.preferredLocations &&
+                buyer.preferredLocations[0] === location.officeName
+                ? 'selected'
+                : '' %>
+        >
+            <%= location.officeName %>
+            (
+            <%= location.divisionName %>,
+            <%= location.district %>
+            )
+        </option>
+    <% }) %>
+
+</select>
+
+<br><br>
+
+<label>2nd Preference (Optional)</label>
+
+<select name="preferredLocation2">
+    <option value="">Not Required</option>
+
+    <% locations.forEach(function(location){ %>
+        <option
+            value="<%= location.officeName %>"
+            <%= buyer.preferredLocations &&
+                buyer.preferredLocations[1] === location.officeName
+                ? 'selected'
+                : '' %>
+        >
+            <%= location.officeName %>
+            (
+            <%= location.divisionName %>,
+            <%= location.district %>
+            )
+        </option>
+    <% }) %>
+
+</select>
+
+<br><br>
+
+<label>3rd Preference (Optional)</label>
+
+<select name="preferredLocation3">
+    <option value="">Not Required</option>
+
+    <% locations.forEach(function(location){ %>
+        <option
+            value="<%= location.officeName %>"
+            <%= buyer.preferredLocations &&
+                buyer.preferredLocations[2] === location.officeName
+                ? 'selected'
+                : '' %>
+        >
+            <%= location.officeName %>
+            (
+            <%= location.divisionName %>,
+            <%= location.district %>
+            )
+        </option>
+    <% }) %>
+
+</select>
+
+<br><br>
+
+<hr>
+
+<h2>Geo Preference (Optional)</h2>
+
+<label>Longitude</label>
+<input type="text" name="lng" value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[0] : '' %>"><br><br>
+
+<label>Latitude</label>
+<input type="text" name="lat" value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[1] : '' %>"><br><br>
+
+<label>Radius (meters)</label>
+<input type="number" name="radius" value="<%= buyer.radius || '' %>"><br><br>
+
+<hr>
+
+<label>Status</label>
+<input type="text" name="status" value="<%= buyer.status || '' %>"><br><br>
+
+<label>Follow Up Notes</label><br>
+<textarea name="followUpNotes" rows="4" cols="50"><%= buyer.followUpNotes || '' %></textarea><br><br>
+
+<button type="submit">Update Buyer</button>
+
+</form>
+
+<br>
+
+<a href="/buyer/page">Back to Buyer List</a>
+
+<script>
+function showBuyerTab(tabId) {
+    document.getElementById('apartmentBuyerTab').style.display = 'none';
+    document.getElementById('otherBuyerTab').style.display = 'none';
+    document.getElementById(tabId).style.display = 'block';
+}
+</script>
+
+<script>
+
+function validateLocations() {
+
+    const p1 = document.querySelector('[name="preferredLocation1"]').value
+    const p2 = document.querySelector('[name="preferredLocation2"]').value
+    const p3 = document.querySelector('[name="preferredLocation3"]').value
+
+    const values = [p1, p2, p3].filter(v => v)
+
+    const unique = new Set(values)
+
+    if (values.length !== unique.size) {
+        alert('Please select different locations')
+        return false
+    }
+
+    return true
+}
+
+document.querySelector('form')
+.addEventListener('submit', function(e){
+
+    if (!validateLocations()) {
+        e.preventDefault()
+    }
+
+})
+
+</script>
+
+</body>
+</html>

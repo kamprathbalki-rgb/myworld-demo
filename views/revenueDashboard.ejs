@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Revenue Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+}
+
+.container{
+display:flex;
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+width:200px;
+text-align:center;
+box-shadow:0 2px 5px rgba(0,0,0,0.2);
+}
+
+.value{
+font-size:26px;
+font-weight:bold;
+margin-top:10px;
+}
+
+table{
+border-collapse:collapse;
+background:white;
+width:50%;
+}
+
+th,td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#34495e;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Revenue Dashboard</h1>
+
+<div class="container">
+
+<div class="card">
+Total Revenue
+<div class="value">₹ <%= totalRevenue %></div>
+</div>
+
+<div class="card">
+Average Deal Value
+<div class="value">₹ <%= avgDeal %></div>
+</div>
+
+</div>
+
+<h2>Revenue by Executive</h2>
+
+<table>
+
+<tr>
+<th>Executive</th>
+<th>Revenue</th>
+</tr>
+
+<% for(let e in execRevenue){ %>
+
+<tr>
+<td><%= e %></td>
+<td>₹ <%= execRevenue[e] %></td>
+</tr>
+
+<% } %>
+
+</table>
+
+</body>
+</html>

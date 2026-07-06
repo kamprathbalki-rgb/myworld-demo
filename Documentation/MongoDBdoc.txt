@@ -1,0 +1,47 @@
+myworld> db.tenants.deleteMany({})
+{ acknowledged: true, deletedCount: 8 }
+myworld> db.buyers.deleteMany({})
+{ acknowledged: true, deletedCount: 25 }
+myworld> db.executives.deleteMany({})
+{ acknowledged: true, deletedCount: 5 }
+myworld> db.properties.deleteMany({})
+{ acknowledged: true, deletedCount: 18 }
+myworld> db.visits.deleteMany({})
+{ acknowledged: true, deletedCount: 0 }
+myworld> db.subscriptionhistories.deleteMany({})
+{ acknowledged: true, deletedCount: 23 }
+myworld> db.executiveattendances.deleteMany({})
+{ acknowledged: true, deletedCount: 10 }
+myworld> db.users.find(
+... {
+...     role:"saasadmin"
+... }
+... )
+[
+  {
+    _id: ObjectId('69b4f916646da3dcbc63b112'),
+    name: 'SaaSAdmin',
+    email: 'kbalki2k15@gmail.com',
+    phone: '9503728537',
+    password: '$2b$10$OYAIUh0VBkxEE/9kgefZwul2d113WBhzBeDWbyfkLs9qQ7YUa7/rS',
+    role: 'saasadmin',
+    createdAt: ISODate('2026-03-14T05:58:46.414Z')
+  }
+]
+myworld> db.tenants.countDocuments()
+... db.users.countDocuments()
+... db.buyers.countDocuments()
+... db.executives.countDocuments()
+... db.properties.countDocuments()
+... db.visits.countDocuments()
+... db.subscriptionhistories.countDocuments()
+0
+myworld> db.users.countDocuments()
+6
+myworld> db.users.deleteMany(
+{
+    role:{
+        $ne:"saasadmin"
+    }
+}
+)

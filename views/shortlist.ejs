@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shortlisted Properties</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Shortlisted Properties</h1>
+
+<table border="1">
+
+<tr>
+<th>Property</th>
+<th>Price</th>
+<th>Bedrooms</th>
+<th>Area</th>
+</tr>
+
+<% list.forEach(function(s){ %>
+
+<tr>
+<td><%= s.propertyId.title %></td>
+<td><%= s.propertyId.price %></td>
+<td><%= s.propertyId.bedrooms %></td>
+<td><%= s.propertyId.area %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

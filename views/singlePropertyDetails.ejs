@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Single Property Details</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+<a href="/property/page">Property List</a>
+
+<h1>Single Property Details</h1>
+
+<% if(property.coverPhoto){ %>
+
+<hr>
+
+<a
+    href="/uploads/properties/<%= property.coverPhoto %>"
+    target="_blank">
+
+    <img
+        src="/uploads/properties/<%= property.coverPhoto %>"
+        width="300">
+
+</a>
+
+<hr>
+
+<% } %>
+
+<hr>
+
+<p><b>Property Name:</b> <%= property.projectName || '' %></p>
+
+<p><b>Builder / Society:</b> <%= property.builderName || '' %></p>
+
+<p><b>Owner Name:</b> <%= property.ownerName || '' %></p>
+
+<p><b>Owner Mobile:</b> <%= property.ownerMobile || '' %></p>
+
+<p><b>City:</b> <%= property.city || '' %></p>
+
+<p><b>Project Status:</b> <%= property.projectStatus || '' %></p>
+
+<p>
+    <b>Property Status:</b>
+    <%= property.propertyStatus || 'Available' %>
+</p>
+
+<% if(property.soldDate){ %>
+
+<p>
+    <b>Sold Date:</b>
+    <%= new Date(property.soldDate).toLocaleDateString() %>
+</p>
+
+<% } %>
+
+<p><b>Property Type:</b>
+<%= property.propertyType ? property.propertyType.join(', ') : '' %>
+</p>
+
+<p><b>Flat Type:</b> <%= property.singleFlatType || '' %></p>
+
+<p><b>Carpet Area:</b> <%= property.singleCarpetArea || '' %></p>
+
+<p><b>Quoted Price:</b> <%= property.singleQuotedPrice || '' %></p>
+
+<p><b>Closing Price:</b> <%= property.singleClosingPrice || '' %></p>
+
+<p><b>Property Location:</b> <%= property.propertyLocation || '' %></p>
+
+<p><b>Division:</b> <%= property.divisionName || '' %></p>
+
+<p><b>Pincode:</b> <%= property.pincode || '' %></p>
+
+<p><b>District:</b> <%= property.district || '' %></p>
+
+<p><b>State:</b> <%= property.stateName || '' %></p>
+
+<p><b>RERA Approved:</b> <%= property.reraApproved || '' %></p>
+
+<p><b>No. of Buildings/Towers:</b> <%= property.numberOfTowers || '' %></p>
+
+<p><b>Parking Type:</b> <%= property.parkingType || '' %></p>
+
+<p><b>Furnished Status:</b> <%= property.furnishedStatus || '' %></p>
+
+<p><b>Possession Status:</b> <%= property.possessionStatus || '' %></p>
+
+<p><b>Google Pin:</b> <%= property.googlePin || '' %></p>
+
+<p><b>USP:</b> <%= property.usp || '' %></p>
+
+<p><b>Notes:</b> <%= property.notes || '' %></p>
+
+<p><b>Amenities:</b>
+<%= property.amenities ? property.amenities.join(', ') : '' %>
+</p>
+
+</body>
+</html>

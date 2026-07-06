@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Property Map</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+#map{
+height:600px;
+width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Property Map</h1>
+
+<a href="/dashboard" style="
+display:inline-block;
+margin-bottom:15px;
+padding:8px 15px;
+background:#007bff;
+color:white;
+text-decoration:none;
+border-radius:5px;
+">
+← Back to Dashboard
+</a>
+
+<div style="margin-bottom:15px;">
+
+<span style="
+display:inline-block;
+width:12px;
+height:12px;
+background:blue;
+border-radius:50%;
+"></span>
+
+Property
+
+&nbsp;&nbsp;&nbsp;
+
+<span style="
+display:inline-block;
+width:12px;
+height:12px;
+background:green;
+border-radius:50%;
+"></span>
+
+Buyer
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+var map = L.map('map').setView([22.5937,78.9629],5)
+
+var bounds = []
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19
+}).addTo(map)
+
+fetch('/property/map')
+.then(res=>res.json())
+.then(data=>{
+
+data.forEach(p=>{
+
+var lat = p.location.coordinates[0]
+var lng = p.location.coordinates[1]
+
+if (
+    lat === 0 ||
+    lng === 0
+){
+    return
+}
+
+bounds.push([lat,lng])
+
+L.marker([lat,lng])
+.addTo(map)
+.bindPopup(
+"<b>" +
+(p.projectName || p.propertyLocation || 'Property') +
+"</b><br>" +
+"Location: " +
+(p.propertyLocation || '')
+)
+
+})
+
+})
+
+fetch('/buyer/map')
+.then(res=>res.json())
+.then(data=>{
+
+data.forEach(b=>{
+
+if (
+    !b.preferredLocation ||
+    !b.preferredLocation.coordinates ||
+    b.preferredLocation.coordinates.length < 2
+){
+    return
+}
+
+var lat = b.preferredLocation.coordinates[0]
+var lng = b.preferredLocation.coordinates[1]
+
+if (
+    lat === 0 ||
+    lng === 0
+){
+    return
+}
+
+bounds.push([lat,lng])
+
+L.circleMarker(
+    [lat,lng],
+    {
+        radius:8,
+        color:'green',
+        fillColor:'green',
+        fillOpacity:1
+    }
+)
+.addTo(map)
+.bindPopup(
+"<b>" + b.name + "</b><br>" +
+"Location: " + (b.primaryLocation || '') + "<br>" +
+"Budget: ₹" +
+(b.minBudget || 0) +
+" - ₹" +
+(b.maxBudget || 0) +
+" Lakhs"
+)
+
+})
+
+if (bounds.length > 0) {
+    map.fitBounds(bounds)
+}
+
+})
+
+
+</script>
+
+</body>
+</html>

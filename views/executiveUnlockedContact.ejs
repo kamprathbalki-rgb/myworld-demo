@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Unlocked Buyer Contact</title>
+</head>
+
+<body>
+
+<h1>Buyer Contact Unlocked</h1>
+
+<h2>Executive: <%= executiveName %></h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+<th>Buyer Name</th>
+<th>Mobile Number</th>
+<th>Email</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td><%= buyer.name || '' %></td>
+<td><%= buyer.phone || '' %></td>
+<td><%= buyer.email || '' %></td>
+<td><%= buyer.status || '' %></td>
+</tr>
+
+</table>
+
+<br><br>
+
+<p>
+This access has been logged for security monitoring.
+</p>
+
+<br><br>
+
+<a href="/executive/dashboard">
+Back to Dashboard
+</a>
+
+</body>
+</html>

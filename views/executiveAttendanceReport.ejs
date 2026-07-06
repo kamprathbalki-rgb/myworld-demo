@@ -1,0 +1,77 @@
+<h2>Executive Attendance Report</h2>
+
+<a href="/executive/dashboard">Back</a> |
+<a href="/executive/logout">Logout</a>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Date</th>
+<th>Executive</th>
+<th>Login</th>
+<th>Logout</th>
+<th>Tea Out</th>
+<th>Tea In</th>
+<th>Lunch Out</th>
+<th>Lunch In</th>
+<th>Meeting Out</th>
+<th>Meeting In</th>
+<th>Site Out</th>
+<th>Site In</th>
+</tr>
+
+<% records.forEach(function(r){ %>
+
+<tr>
+<td><%= r.date %></td>
+<td><%= r.executiveName %></td>
+
+<td>
+<%= r.loginTimes
+    ? r.loginTimes.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= r.logoutTimes
+    ? r.logoutTimes.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= r.teaOut
+    ? r.teaOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= r.teaIn
+    ? r.teaIn.join(', ')
+    : '' %>
+</td>
+
+<td><%= r.lunchOut || '' %></td>
+<td><%= r.lunchIn || '' %></td>
+
+<td>
+<%= r.meetingOut
+    ? r.meetingOut.join(', ')
+    : '' %>
+</td>
+
+<td>
+<%= r.meetingIn
+    ? r.meetingIn.join(', ')
+    : '' %>
+</td>
+
+<td><%= r.siteVisitOut || '' %></td>
+<td><%= r.siteVisitIn || '' %></td>
+
+</tr>
+
+<% }) %>
+
+</table>

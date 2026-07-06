@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Property</title>
+</head>
+
+<body>
+
+<h1>Edit Property</h1>
+
+<form
+    method="POST"
+    action="/property/update/<%= property._id %>"
+    enctype="multipart/form-data">
+
+<hr>
+
+<h2>Basic Project Information</h2>
+
+<label>Project Name</label>
+<input type="text" name="projectName" value="<%= property.projectName || '' %>"><br><br>
+
+<label>Builder Name</label>
+<input type="text" name="builderName" value="<%= property.builderName || '' %>"><br><br>
+
+<label>Project Type</label><br>
+
+<input type="checkbox" name="projectType" value="Residential"
+<%= property.projectType && property.projectType.includes('Residential') ? 'checked' : '' %>>
+<label>Residential</label><br>
+
+<input type="checkbox" name="projectType" value="Commercial"
+<%= property.projectType && property.projectType.includes('Commercial') ? 'checked' : '' %>>
+<label>Commercial</label><br>
+
+<input type="checkbox" name="projectType" value="Mixed Use"
+<%= property.projectType && property.projectType.includes('Mixed Use') ? 'checked' : '' %>>
+<label>Mixed Use</label><br><br>
+
+<label>Property Type</label><br>
+
+<input type="checkbox" name="propertyType" value="Apartment"
+<%= property.propertyType && property.propertyType.includes('Apartment') ? 'checked' : '' %>>
+<label>Apartment</label><br>
+
+<input type="checkbox" name="propertyType" value="Villa"
+<%= property.propertyType && property.propertyType.includes('Villa') ? 'checked' : '' %>>
+<label>Villa</label><br>
+
+<input type="checkbox" name="propertyType" value="Plot"
+<%= property.propertyType && property.propertyType.includes('Plot') ? 'checked' : '' %>>
+<label>Plot</label><br>
+
+<input type="checkbox" name="propertyType" value="Office"
+<%= property.propertyType && property.propertyType.includes('Office') ? 'checked' : '' %>>
+<label>Office</label><br>
+
+<input type="checkbox" name="propertyType" value="Showroom"
+<%= property.propertyType && property.propertyType.includes('Showroom') ? 'checked' : '' %>>
+<label>Showroom</label><br>
+
+<input type="checkbox" name="propertyType" value="Retail"
+<%= property.propertyType && property.propertyType.includes('Retail') ? 'checked' : '' %>>
+<label>Retail</label><br>
+
+<input type="checkbox" name="propertyType" value="Shop"
+<%= property.propertyType && property.propertyType.includes('Shop') ? 'checked' : '' %>>
+<label>Shop</label><br><br>
+
+<label>Project Status</label>
+<select name="projectStatus">
+    <option value="">Select</option>
+    <option <%= property.projectStatus === 'New Launch' ? 'selected' : '' %>>New Launch</option>
+    <option <%= property.projectStatus === 'Under Construction' ? 'selected' : '' %>>Under Construction</option>
+    <option <%= property.projectStatus === 'Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
+    <option <%= property.projectStatus === 'Resale' ? 'selected' : '' %>>Resale</option>
+</select><br><br>
+
+<label>RERA Approved</label>
+<select name="reraApproved">
+    <option value="">Select</option>
+    <option <%= property.reraApproved === 'Yes' ? 'selected' : '' %>>Yes</option>
+    <option <%= property.reraApproved === 'No' ? 'selected' : '' %>>No</option>
+</select><br><br>
+
+<hr>
+
+<h2>Location Details</h2>
+
+<% if(property.coverPhoto){ %>
+
+<label>Current Cover Photo</label>
+
+<br>
+
+<img
+    src="/uploads/properties/<%= property.coverPhoto %>"
+    width="150">
+
+<br><br>
+
+<% } %>
+
+<label>Replace Cover Photo</label>
+
+<input
+    type="file"
+    name="coverPhoto"
+    accept="image/*">
+
+
+<label>City</label>
+<input type="text" name="city" value="<%= property.city || '' %>"><br><br>
+
+<label>Direction</label>
+<select name="direction">
+    <option value="">Select</option>
+    <option <%= property.direction === 'East' ? 'selected' : '' %>>East</option>
+    <option <%= property.direction === 'West' ? 'selected' : '' %>>West</option>
+    <option <%= property.direction === 'North' ? 'selected' : '' %>>North</option>
+    <option <%= property.direction === 'South' ? 'selected' : '' %>>South</option>
+    <option <%= property.direction === 'Central' ? 'selected' : '' %>>Central</option>
+</select><br><br>
+
+<label>Property Location</label>
+<select name="propertyLocation" required>
+    <option value="">Select Location</option>
+
+    <% locations.forEach(function(location){ %>
+        <option value="<%= location.officeName %>"
+            <%= property.propertyLocation === location.officeName ? 'selected' : '' %>>
+            <%= location.officeName %>
+        </option>
+    <% }) %>
+
+</select><br><br>
+
+<label>Location Landmark</label>
+<input type="text" name="locationLandmark" value="<%= property.locationLandmark || '' %>"><br><br>
+
+<label>Google Pin</label>
+<input type="text" name="googlePin" value="<%= property.googlePin || '' %>"><br><br>
+
+<label>Longitude</label>
+<input type="text" name="lng" value="<%= property.location && property.location.coordinates ? property.location.coordinates[0] : '' %>"><br><br>
+
+<label>Latitude</label>
+<input type="text" name="lat" value="<%= property.location && property.location.coordinates ? property.location.coordinates[1] : '' %>"><br><br>
+
+<hr>
+
+<h2>Tower Details</h2>
+
+<label>Number of Towers</label>
+<input type="number" name="numberOfTowers" value="<%= property.numberOfTowers || '' %>"><br><br>
+
+<label>Tower Name</label>
+<input type="text" name="towerName" value="<%= property.towers && property.towers.length ? property.towers[0].towerName : '' %>"><br><br>
+
+<label>Number of Floors</label>
+<input type="number" name="numberOfFloors" value="<%= property.towers && property.towers.length ? property.towers[0].numberOfFloors : '' %>"><br><br>
+
+<label>Tower Status</label>
+<select name="towerStatus">
+    <option value="">Select</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Under Construction' ? 'selected' : '' %>>Under Construction</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Sold Out' ? 'selected' : '' %>>Sold Out</option>
+</select><br><br>
+
+<label>Inventory Status</label>
+<select name="inventoryStatus">
+    <option value="">Select</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Available' ? 'selected' : '' %>>Available</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Limited Availability' ? 'selected' : '' %>>Limited Availability</option>
+    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Sold Out' ? 'selected' : '' %>>Sold Out</option>
+</select><br><br>
+
+<label>Possession Month</label>
+<input type="text" name="possessionMonth" value="<%= property.towers && property.towers.length ? property.towers[0].possessionMonth : '' %>"><br><br>
+
+<label>Possession Year</label>
+<input type="number" name="possessionYear" value="<%= property.towers && property.towers.length ? property.towers[0].possessionYear : '' %>"><br><br>
+
+<hr>
+
+<h2>Configurations</h2>
+
+<button type="button" onclick="showTab('apartmentTab')">
+Apartment (BHK)
+</button>
+
+<button type="button" onclick="showTab('otherTab')">
+Villa / Plot / Office / Showroom / Retail / Shop
+</button>
+
+<hr>
+
+<div id="apartmentTab">
+
+<h3>Apartment Configurations</h3>
+
+<table border="1" cellpadding="10" cellspacing="0">
+<tr>
+<th>Flat Type</th>
+<th>Carpet Area</th>
+<th>Quoted Price</th>
+<th>Closing Price</th>
+<th>Available Units</th>
+</tr>
+
+<% const apartmentData = [
+['Studio','studio'],
+['1 RK','1RK'],
+['1 BHK','1BHK'],
+['1.5 BHK','1_5BHK'],
+['2 BHK','2BHK'],
+['2.5 BHK','2_5BHK'],
+['3 BHK','3BHK'],
+['3.5 BHK','3_5BHK'],
+['4 BHK','4BHK'],
+['4.5 BHK','4_5BHK'],
+['5 BHK','5BHK'],
+['5+ BHK','5PlusBHK']
+]; %>
+
+<% apartmentData.forEach(function(item){ 
+const label = item[0];
+const field = item[1];
+const config = property.configurations && property.configurations.find(c => c.flatType === label) || {};
+%>
+<tr>
+<td><%= label %></td>
+<td><input type="number" name="carpetArea_<%= field %>" value="<%= config.carpetArea || '' %>"></td>
+<td><input type="number" name="quotedPrice_<%= field %>" value="<%= config.quotedPrice || '' %>"></td>
+<td><input type="number" name="closingPrice_<%= field %>" value="<%= config.closingPrice || '' %>"></td>
+<td><input type="number" name="availableUnits_<%= field %>" value="<%= config.availableUnits || '' %>"></td>
+</tr>
+<% }) %>
+
+</table>
+
+</div>
+
+<div id="otherTab" style="display:none;">
+
+<h3>Villa / Plot / Commercial Configurations</h3>
+
+<table border="1" cellpadding="10" cellspacing="0">
+<tr>
+<th>Type</th>
+<th>Area</th>
+<th>Quoted Price</th>
+<th>Closing Price</th>
+<th>Available Units</th>
+</tr>
+
+<% const otherData = [
+['Villa','villa'],
+['Plot','plot'],
+['Office','office'],
+['Showroom','showroom'],
+['Retail','retail'],
+['Shop','shop']
+]; %>
+
+<% otherData.forEach(function(item){ 
+const label = item[0];
+const field = item[1];
+const config = property.configurations && property.configurations.find(c => c.flatType === label) || {};
+%>
+<tr>
+<td><%= label %></td>
+<td><input type="number" name="carpetArea_<%= field %>" value="<%= config.carpetArea || '' %>"></td>
+<td><input type="number" name="quotedPrice_<%= field %>" value="<%= config.quotedPrice || '' %>"></td>
+<td><input type="number" name="closingPrice_<%= field %>" value="<%= config.closingPrice || '' %>"></td>
+<td><input type="number" name="availableUnits_<%= field %>" value="<%= config.availableUnits || '' %>"></td>
+</tr>
+<% }) %>
+
+</table>
+
+</div>
+
+<hr>
+
+<%
+const firstConfig =
+    property.configurations &&
+    property.configurations.length
+        ? property.configurations[0]
+        : {};
+%>
+
+<h2>Sales Details</h2>
+
+<label>Parking Type</label><br>
+
+<input type="checkbox" name="parkingType" value="Open"
+<%= firstConfig.parkingType && firstConfig.parkingType.includes('Open') ? 'checked' : '' %>>
+<label>Open</label><br>
+
+<input type="checkbox" name="parkingType" value="Covered"
+<%= firstConfig.parkingType && firstConfig.parkingType.includes('Covered') ? 'checked' : '' %>>
+<label>Covered</label><br>
+
+<input type="checkbox" name="parkingType" value="Basement"
+<%= firstConfig.parkingType && firstConfig.parkingType.includes('Basement') ? 'checked' : '' %>>
+<label>Basement</label><br>
+
+<input type="checkbox" name="parkingType" value="Podium"
+<%= firstConfig.parkingType && firstConfig.parkingType.includes('Podium') ? 'checked' : '' %>>
+<label>Podium</label><br>
+
+<input type="checkbox" name="parkingType" value="Stilt"
+<%= firstConfig.parkingType && firstConfig.parkingType.includes('Stilt') ? 'checked' : '' %>>
+<label>Stilt</label><br><br>
+
+
+<label>Furnished Status</label>
+<select name="furnishedStatus">
+    <option value="">Select</option>
+    <option <%= firstConfig.furnishedStatus === 'Unfurnished' ? 'selected' : '' %>>
+        Unfurnished
+    </option>
+    <option <%= firstConfig.furnishedStatus === 'Semi-Furnished' ? 'selected' : '' %>>
+        Semi-Furnished
+    </option>
+    <option <%= firstConfig.furnishedStatus === 'Fully Furnished' ? 'selected' : '' %>>
+        Fully Furnished
+    </option>
+</select><br><br>
+
+
+<label>Possession Status</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Immediate"
+<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Immediate') ? 'checked' : '' %>>
+<label>Immediate</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Ready Possession"
+<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Ready Possession') ? 'checked' : '' %>>
+<label>Ready Possession</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Under Construction"
+<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Under Construction') ? 'checked' : '' %>>
+<label>Under Construction</label><br>
+
+<input type="checkbox" name="possessionStatus" value="Possession Soon"
+<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Possession Soon') ? 'checked' : '' %>>
+<label>Possession Soon</label><br><br>
+
+<hr>
+
+<h2>Highlights</h2>
+
+<label>Amenities</label><br>
+<textarea name="amenities" rows="4" cols="50"><%= property.amenities ? property.amenities.join(', ') : '' %></textarea><br><br>
+
+<label>USP</label><br>
+<textarea name="usp" rows="4" cols="50"><%= property.usp || '' %></textarea><br><br>
+
+<label>Notes</label><br>
+<textarea name="notes" rows="4" cols="50"><%= property.notes || '' %></textarea><br><br>
+
+<button type="submit">Update Property</button>
+
+</form>
+
+<script>
+function showTab(tabId) {
+    document.getElementById('apartmentTab').style.display = 'none';
+    document.getElementById('otherTab').style.display = 'none';
+    document.getElementById(tabId).style.display = 'block';
+}
+</script>
+
+</body>
+</html>
+

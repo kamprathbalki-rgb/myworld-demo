@@ -1,0 +1,60 @@
+Register
+
+aquadmin
+aquadmin@aquasmart.com
+aquadmin
+Admin
+
+db.tenants.find().pretty()
+
+myworld> db.tenants.find().pretty()
+[
+  {
+    _id: ObjectId('69b8e10efc5b5107bf550a41'),
+    name: 'auqasmart',
+    email: 'aquasmartfilters.99@gmail.com',
+    createdAt: ISODate('2026-03-17T05:05:18.499Z'),
+    __v: 0
+  },
+  {
+    _id: ObjectId('69b8eb6352a17a10fbb63cae'),
+    name: 'AquaSmart',
+    email: 'aquasmartfilters.99@gmail.com',
+    createdAt: ISODate('2026-03-17T05:49:23.452Z'),
+    __v: 0
+  }
+]
+
+db.tenants.find({}, {name:1, email:1}).pretty()
+
+db.tenants.deleteMany({})
+{ acknowledged: true, deletedCount: 2 }
+
+db.users.deleteMany({ role: { $ne: "saasadmin" } })
+{ acknowledged: true, deletedCount: 1 }
+
+SaaS-Admin Login - http://localhost:7000/login
+kbalki2k15@gmail.com
+MyWorld@123
+
+Register Company
+http://localhost:7000/register-company
+
+Company Name
+Aqua Smart Filters
+
+Email
+aquasmartfilters.99@gmail.com
+
+Company Registered
+Tenant ID: 69b8eff152a17a10fbb63cb4
+Use this Tenant ID when registering users.
+
+http://localhost:7000/register
+
+aquadmin
+aquadmin@aquasmart.com
+aquadmin
+Admin
+
+

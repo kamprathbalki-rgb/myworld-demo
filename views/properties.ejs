@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Project List</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a>
+
+<h1>Project List</h1>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr>
+    <th>Photo</th>
+    <th>Status</th>
+    <th>Project Name</th>
+    <th>Mode</th>
+    <th>Builder Name</th>
+    <th>City</th>
+    <th>₹/Sq Ft</th>
+    <th>Project Status</th>
+    <th>Property Type</th>
+    <th>Property Location</th>
+    <th>Division Name</th>
+    <th>Pincode</th>
+    <th>District</th>
+    <th>No. of Towers</th>
+    <th>RERA Approved</th>
+    <th>Configurations</th>
+    <th>View Details</th>
+    <th>Actions</th>
+</tr>
+
+<% properties.forEach(function(p){ %>
+
+<tr>
+
+<td>
+
+<% if(p.coverPhoto){ %>
+
+<a
+    href="/uploads/properties/<%= p.coverPhoto %>"
+    target="_blank">
+
+    <img
+        src="/uploads/properties/<%= p.coverPhoto %>"
+        width="80">
+
+</a>
+
+<% } else { %>
+
+No Photo
+
+<% } %>
+
+</td>
+
+<td>
+
+<% if(p.propertyStatus === 'Sold'){ %>
+
+    <span style="
+        color:red;
+        font-weight:bold;
+    ">
+        SOLD
+    </span>
+
+<% } else { %>
+
+    <%= p.propertyStatus || 'Available' %>
+
+<% } %>
+
+</td>
+
+    <td>
+        <%= p.projectName || '' %>
+    </td>
+
+    <td><%= p.propertyMode || '' %></td>
+
+    <td>
+        <%= p.builderName || '' %>
+    </td>
+
+    <td>
+        <%= p.city || '' %>
+    </td>
+
+    <td>
+
+<% if(p.propertyMode === 'SINGLE'){ %>
+
+    <%= p.askingPricePerSqFt || 0 %>
+
+<% } else { %>
+
+    <%= p.configurations &&
+        p.configurations.length
+            ? p.configurations[0].quotedPricePerSqFt
+            : 0 %>
+
+<% } %>
+
+</td>
+
+    <td>
+        <%= p.projectStatus || '' %>
+    </td>
+
+    <td>
+        <%= p.propertyType ? p.propertyType.join(', ') : '' %>
+    </td>
+
+    <td>
+        <%= p.propertyLocation || '' %>
+    </td>
+
+    <td>
+        <%= p.divisionName || '' %>
+    </td>
+
+    <td>
+        <%= p.pincode || '' %>
+    </td>
+
+    <td>
+        <%= p.district || '' %>
+    </td>
+
+    <td>
+        <%= p.numberOfTowers || '' %>
+    </td>
+
+    <td>
+        <%= p.reraApproved || '' %>
+    </td>
+
+    <td>
+        <% if (p.propertyMode === 'SINGLE') { %>
+
+    <b><%= p.singleFlatType || '' %></b><br>
+
+    Area:
+    <%= p.singleCarpetArea || '' %><br>
+
+    Quoted:
+    <%= p.singleQuotedPrice || '' %><br>
+
+    Closing:
+    <%= p.singleClosingPrice || '' %>
+
+<% } else if (p.configurations && p.configurations.length > 0) { %>
+
+            <% p.configurations.forEach(function(c){ %>
+
+                <div style="margin-bottom:10px;">
+
+                    <b><%= c.flatType %></b><br>
+
+                    Area:
+                    <%= c.carpetArea || '' %> Sq Ft<br>
+
+                    Quoted Price:
+                    <%= c.quotedPrice || '' %><br>
+
+                    Closing Price:
+                    <%= c.closingPrice || '' %><br>
+
+                    Available Units:
+                    <%= c.availableUnits || '' %>
+
+                </div>
+
+                <hr>
+
+            <% }) %>
+
+        <% } %>
+    </td>
+
+    <td>
+        <a href="/property/details/<%= p._id %>">
+            View Details
+        </a>
+    </td>
+
+<td>
+    <a href="/property/edit/<%= p._id %>">Edit</a>
+    |
+    <a href="/property/delete/<%= p._id %>">Delete</a>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

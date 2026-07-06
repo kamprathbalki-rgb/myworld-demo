@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Attendance Activity Log</title>
+</head>
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<h1>Attendance Activity Log</h1>
+
+<table border="1">
+
+<tr>
+<th>Time</th>
+<th>Activity</th>
+</tr>
+
+<% attendance.activityLog.forEach(function(log){ %>
+
+<tr>
+<td><%= log.time %></td>
+<td><%= log.type %></td>
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

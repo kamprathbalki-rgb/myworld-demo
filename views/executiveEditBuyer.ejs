@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Buyer Requirement</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/executive/dashboard">Home</a> |
+
+<a href="/executive/logout">Logout</a>
+
+<hr>
+
+<h1>Edit Buyer Requirement</h1>
+
+<form method="POST" action="/executive/buyer/update/<%= buyer._id %>">
+
+<label>Name</label>
+<input
+type="text"
+name="name"
+value="<%= buyer.name ? buyer.name.substring(0,1) + '*****' : '' %>"
+readonly
+>
+<br><br>
+
+<label>Phone</label>
+<input
+type="text"
+name="phone"
+value="<%= buyer.phone ? buyer.phone.slice(0,2) + 'XXXX' + buyer.phone.slice(-4) : '' %>"
+readonly
+>
+<br><br>
+
+<label>Minimum Budget</label>
+<input
+type="number"
+name="minBudget"
+value="<%= buyer.minBudget || '' %>"
+required
+>
+<br><br>
+
+<label>Maximum Budget</label>
+<input
+type="number"
+name="maxBudget"
+value="<%= buyer.maxBudget || '' %>"
+required
+>
+<br><br>
+
+<label>Required Possession</label><br>
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Immediate"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Immediate') ? 'checked' : '' %>
+>
+Immediate
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Ready Possession"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Ready Possession') ? 'checked' : '' %>
+>
+Ready Possession
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Under Construction"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Under Construction') ? 'checked' : '' %>
+>
+Under Construction
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Possession Soon"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Possession Soon') ? 'checked' : '' %>
+>
+Possession Soon
+
+<br><br>
+
+<label>Required Flat Type</label>
+
+<select name="requiredFlatType" required>
+
+<option value="">Select</option>
+
+<%
+const flatTypes = [
+'Studio',
+'1 RK',
+'1 BHK',
+'1.5 BHK',
+'2 BHK',
+'2.5 BHK',
+'3 BHK',
+'3.5 BHK',
+'4 BHK',
+'4.5 BHK',
+'5 BHK',
+'5+ BHK',
+'Villa',
+'Plot',
+'Office',
+'Showroom',
+'Retail',
+'Shop'
+]
+%>
+
+<% flatTypes.forEach(function(type){ %>
+
+<option
+value="<%= type %>"
+<%= buyer.requiredFlatType === type ? 'selected' : '' %>
+>
+<%= type %>
+</option>
+
+<% }) %>
+
+</select>
+
+<br><br>
+
+<label>Minimum Area</label>
+<input
+type="number"
+name="minArea"
+value="<%= buyer.minArea || '' %>"
+required
+>
+<br><br>
+
+<label>Maximum Area</label>
+<input
+type="number"
+name="maxArea"
+value="<%= buyer.maxArea || '' %>"
+required
+>
+<br><br>
+
+<label>Preferred Locations</label>
+<br><br>
+
+<select
+name="preferredLocations[]"
+multiple
+size="15"
+required
+>
+
+<% locations.forEach(function(location){ %>
+
+<option
+value="<%= location.officeName %>"
+<%= buyer.preferredLocations &&
+buyer.preferredLocations.includes(location.officeName)
+? 'selected'
+: '' %>
+>
+<%= location.officeName %>
+(
+<%= location.divisionName %>,
+<%= location.district %>
+)
+</option>
+
+<% }) %>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+Update Buyer Requirement
+</button>
+
+</form>
+
+<br><br>
+
+<a href="/executive/dashboard">
+Back to Dashboard
+</a>
+
+</body>
+</html>

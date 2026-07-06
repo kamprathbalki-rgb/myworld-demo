@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Today's Follow Ups</title>
+
+<style>
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:10px;
+text-align:left;
+}
+
+th{
+background:#f5f5f5;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="/executive/dashboard">Dashboard</a>
+
+<hr>
+
+<h1>Today's Follow Ups</h1>
+
+<table>
+
+<tr>
+<th>Buyer</th>
+<th>Phone</th>
+<th>Status</th>
+<th>Follow Up Date</th>
+<th>Notes</th>
+</tr>
+
+<% buyers.forEach(function(b){ %>
+
+<tr>
+
+<td>
+<%= b.name || '' %>
+</td>
+
+<td>
+<%= b.phone
+? b.phone.slice(0,2) + 'XXXX' + b.phone.slice(-4)
+: '' %>
+</td>
+
+<td>
+<%= b.status || 'New Lead' %>
+</td>
+
+<td>
+<%= b.nextFollowUp
+? new Date(b.nextFollowUp).toLocaleString('en-IN')
+: '' %>
+</td>
+
+<td>
+<%= b.followUpNotes || '' %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+
+</html>

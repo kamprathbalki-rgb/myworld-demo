@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Executive</title>
+</head>
+
+<body>
+
+<a href="javascript:history.back()">Back</a> |
+
+<a href="/dashboard">Home</a> |
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Add Executive</h1>
+
+<form method="POST" action="/executive/save">
+
+<% if(error){ %>
+<div style="
+background:#ffe5e5;
+color:red;
+padding:10px;
+margin-bottom:10px;
+border:1px solid red;">
+    <%= error %>
+</div>
+<% } %>
+
+<label>Name</label>
+<input type="text"
+       name="name"
+       value="<%= executive?.name || '' %>"
+       required>
+<br><br>
+
+<label>Mobile</label>
+<input type="text"
+       name="mobile"
+       value="<%= executive?.mobile || '' %>">
+<br><br>
+
+<input type="date"
+       name="dateOfJoining"
+       value="<%= executive?.dateOfJoining || '' %>">
+
+<br><br>
+
+<input type="date"
+       name="dateOfLeaving"
+       value="<%= executive?.dateOfLeaving || '' %>">
+
+<br><br>
+
+<label>Email</label>
+<input type="email"
+       name="email"
+       value="<%= executive?.email || '' %>">
+
+<br><br>
+
+<label>Password</label>
+<input type="text"
+       name="password"
+       value="<%= executive?.password || '' %>">
+<br><br>
+
+<label>Assign Multiple Locations</label>
+
+<br><br>
+
+<select name="assignedLocations" multiple size="10" required>
+
+<% locations.forEach(function(location){ %>
+
+<option
+    value="<%= location.officeName %>"
+    <%= (executive?.assignedLocations || [])
+        .includes(location.officeName)
+        ? 'selected'
+        : '' %>>
+    <%= location.officeName %>
+    (
+    <%= location.divisionName %>,
+    <%= location.district %>
+    )
+</option>
+
+<% }) %>
+
+</select>
+
+<br><br>
+
+<button type="submit">Save Executive</button>
+
+</form>
+
+</body>
+</html>

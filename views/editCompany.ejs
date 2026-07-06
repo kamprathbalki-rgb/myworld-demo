@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Edit Company</title>
+</head>
+
+<body>
+
+<h2>Edit Company</h2>
+
+<p>
+
+<a href="/saas/dashboard">
+Dashboard
+</a>
+
+|
+
+<a href="/saas/subscription-history">
+Subscription History
+</a>
+
+</p>
+
+<hr>
+
+<p>
+Subscription Start:
+<%= tenant.subscriptionStartDate
+? tenant.subscriptionStartDate.toLocaleDateString()
+: '' %>
+</p>
+
+<p>
+Subscription End:
+<%= tenant.subscriptionEndDate
+? tenant.subscriptionEndDate.toLocaleDateString()
+: '' %>
+</p>
+
+<p>
+Status:
+<%= tenant.isActive
+? 'Active'
+: 'Inactive' %>
+</p>
+
+<p>
+
+Days Remaining:
+
+<%= tenant.subscriptionEndDate
+? Math.max(
+0,
+Math.ceil(
+(
+tenant.subscriptionEndDate -
+new Date()
+) /
+(1000 * 60 * 60 * 24)
+)
+)
+: 0
+%>
+
+</p>
+
+<h3>Recent Subscription Activity</h3>
+
+<table border="1" cellpadding="5">
+
+<tr>
+<th>Action</th>
+<th>Date</th>
+<th>Months</th>
+</tr>
+
+<% history.forEach(function(h){ %>
+
+<tr>
+
+<td>
+<%= h.action %>
+</td>
+
+<td>
+<%= h.createdAt.toLocaleDateString() %>
+</td>
+
+<td>
+<%= h.months || '' %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+<br>
+
+<a href="/saas/dashboard">
+Back
+</a>
+
+<hr>
+
+<form
+method="POST"
+action="/saas/company/<%= tenant._id %>"
+>
+
+<label>Company Name</label>
+<br>
+<input
+type="text"
+name="name"
+value="<%= tenant.name %>"
+required
+>
+<br><br>
+
+<label>Email</label>
+<br>
+<input
+type="email"
+name="email"
+value="<%= tenant.email %>"
+required
+>
+<br><br>
+
+<label>State</label>
+<br>
+<input
+type="text"
+name="stateName"
+value="<%= tenant.stateName %>"
+required
+>
+<br><br>
+
+<label>Primary District</label>
+<br>
+
+<h3>Company Admin</h3>
+
+<label>Admin Name</label>
+<br>
+<input
+type="text"
+name="adminName"
+value="<%= tenant.adminName || '' %>"
+required
+>
+<br><br>
+
+<label>Admin Email</label>
+<br>
+<input
+type="email"
+value="<%= tenant.adminEmail || '' %>"
+required
+>
+<br><br>
+
+<input
+type="text"
+name="primaryDistrict"
+value="<%= tenant.primaryDistrict %>"
+required
+>
+<br><br>
+
+<label>Subscription Months</label>
+<br>
+<input
+type="number"
+name="subscriptionMonths"
+value="<%= tenant.subscriptionMonths %>"
+readonly
+>
+<br><br>
+
+<label>Status</label>
+<br>
+
+<select name="isActive">
+
+<option
+value="true"
+<%= tenant.isActive ? 'selected' : '' %>
+>
+Active
+</option>
+
+<option
+value="false"
+<%= !tenant.isActive ? 'selected' : '' %>
+>
+Inactive
+</option>
+
+</select>
+
+<br><br>
+
+<h3>Reset Admin Password</h3>
+
+<input
+type="password"
+name="newPassword"
+placeholder="New Password"
+>
+
+<br><br>
+
+
+<button type="submit">
+Update Company
+</button>
+
+
+<a href="/saas/dashboard">
+Cancel
+</a>
+
+</form>
+
+</body>
+</html>

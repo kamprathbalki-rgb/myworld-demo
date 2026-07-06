@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Executive Attendance</title>
+</head>
+
+<body>
+
+<a href="/dashboard/main">Home</a> |
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h1>Executive Attendance</h1>
+
+<table border="1" cellpadding="5">
+
+<tr>
+<th>Executive</th>
+<th>Date</th>
+<th>Login</th>
+<th>Logout</th>
+<th>Log</th>
+</tr>
+
+<% records.forEach(function(r){ %>
+
+<tr>
+
+<td><%= r.executiveName %></td>
+
+<td><%= r.date %></td>
+
+<td><%= r.loginTime || '' %></td>
+
+<td><%= r.logoutTime || '' %></td>
+
+<td>
+<a href="/attendance/log/<%= r._id %>">
+View Log
+</a>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

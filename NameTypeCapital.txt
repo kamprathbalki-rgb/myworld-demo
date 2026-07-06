@@ -1,0 +1,37 @@
+Name,Type,Capital
+Andhra Pradesh,State,Amaravati
+Arunachal Pradesh,State,Itanagar
+Assam,State,Dispur
+Bihar,State,Patna
+Chhattisgarh,State,Raipur
+Goa,State,Panaji
+Gujarat,State,Gandhinagar
+Haryana,State,Chandigarh
+Himachal Pradesh,State,Shimla
+Jharkhand,State,Ranchi
+Karnataka,State,Bengaluru
+Kerala,State,Thiruvananthapuram
+Madhya Pradesh,State,Bhopal
+Maharashtra,State,Mumbai
+Manipur,State,Imphal
+Meghalaya,State,Shillong
+Mizoram,State,Aizawl
+Nagaland,State,Kohima
+Odisha,State,Bhubaneswar
+Punjab,State,Chandigarh
+Rajasthan,State,Jaipur
+Sikkim,State,Gangtok
+Tamil Nadu,State,Chennai
+Telangana,State,Hyderabad
+Tripura,State,Agartala
+Uttar Pradesh,State,Lucknow
+Uttarakhand,State,Dehradun
+West Bengal,State,Kolkata
+Andaman and Nicobar Islands,Union Territory,Port Blair
+Chandigarh,Union Territory,Chandigarh
+Dadra and Nagar Haveli and Daman and Diu,Union Territory,Daman
+Delhi,Union Territory,New Delhi
+Jammu and Kashmir,Union Territory,Srinagar
+Ladakh,Union Territory,Leh
+Lakshadweep,Union Territory,Kavaratti
+Puducherry,Union Territory,Puducherry
