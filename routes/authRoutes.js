@@ -266,4 +266,15 @@ res.render(
 
 })
 
+router.get('/debug-users', async (req,res) => {
+
+const users = await User.find({}, {
+    email: 1,
+    role: 1
+})
+
+res.json(users)
+
+})
+
 module.exports = router
