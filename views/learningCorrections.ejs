@@ -1,0 +1,109 @@
+<a href="/saas/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+<br><br>
+
+<h1>AI Corrections</h1>
+
+<h2>Add Correction</h2>
+
+<form
+method="POST"
+action="/learning-correction/add"
+>
+
+<p>
+Original Message
+</p>
+
+<textarea
+name="originalMessage"
+rows="5"
+cols="100"
+></textarea>
+
+<p>
+AI Output JSON
+</p>
+
+<textarea
+name="aiOutput"
+rows="5"
+cols="100"
+>{}</textarea>
+
+<p>
+Corrected Output JSON
+</p>
+
+<textarea
+name="correctedOutput"
+rows="5"
+cols="100"
+>{}</textarea>
+
+<br><br>
+
+<button type="submit">
+Save Correction
+</button>
+
+</form>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Date</th>
+<th>Original Message</th>
+<th>AI Output</th>
+<th>Corrected Output</th>
+<th>Action</th>
+</tr>
+
+<% corrections.forEach(function(c){ %>
+
+<tr>
+
+<td>
+<%= c.createdAt %>
+</td>
+
+<td>
+<pre><%= c.originalMessage %></pre>
+</td>
+
+<td>
+<pre><%= JSON.stringify(c.aiOutput, null, 2) %></pre>
+</td>
+
+<td>
+<pre><%= JSON.stringify(c.correctedOutput, null, 2) %></pre>
+</td>
+
+<td>
+
+<a
+href="/learning-correction/edit/<%= c._id %>"
+onclick="return confirm('Edit this correction?')"
+>
+Edit
+</a>
+
+</td>
+
+
+
+</tr>
+
+<% }) %>
+
+</table>

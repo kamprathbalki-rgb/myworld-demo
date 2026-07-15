@@ -13,6 +13,12 @@ require('../models/SubscriptionHistory')
 
 const {sendEmail} = require('../utils/emailService')
 
+const Buyer = require('../models/Buyer')
+const Property = require('../models/Property')
+const Visit = require('../models/Visit')
+const WhatsappMessage = require('../models/WhatsappMessage')
+const TenantWhatsapp = require('../models/TenantWhatsapp')
+
 router.get(
 '/saas/dashboard',
 async (req,res)=>{
@@ -40,6 +46,50 @@ await Tenant.countDocuments({
 const totalCompanies =
 await Tenant.countDocuments()
 
+const totalBuyers =
+await Buyer.countDocuments()
+
+const totalProperties =
+await Property.countDocuments()
+
+const totalVisits =
+await Visit.countDocuments()
+
+const totalMessages =
+await WhatsappMessage.countDocuments()
+
+const whatsappConnected =
+await TenantWhatsapp.countDocuments({
+    isAuthenticated:true
+})
+
+const aiStats =
+await WhatsappMessage.aggregate([
+{
+    $match:{
+        "aiUsage.total_tokens":{
+            $exists:true
+        }
+    }
+},
+{
+    $group:{
+        _id:null,
+        requests:{
+            $sum:1
+        },
+        tokens:{
+            $sum:"$aiUsage.total_tokens"
+        }
+    }
+}
+])
+
+const aiRequests =
+aiStats[0]?.requests || 0
+
+const aiTokens =
+aiStats[0]?.tokens || 0
 
 const tenants =
 await Tenant.find()
@@ -104,10 +154,52 @@ tenants.filter(t =>
 
 )
 
+const aiTenantStats =
+await WhatsappMessage.aggregate([
+{
+    $match:{
+        "aiUsage.total_tokens":{
+            $exists:true
+        }
+    }
+},
+{
+    $group:{
+        _id:"$tenantId",
+        requests:{
+            $sum:1
+        },
+        tokens:{
+            $sum:"$aiUsage.total_tokens"
+        }
+    }
+}
+])
+
+for(const row of aiTenantStats){
+
+    const tenant =
+    await Tenant.findById(
+        row._id
+    )
+
+    row.tenantName =
+    tenant?.name || 'Unknown'
+
+}
+
 res.render(
     'saasDashboard',
     {
+        totalBuyers,
+totalProperties,
+totalVisits,
+totalMessages,
+whatsappConnected,
+aiRequests,
+aiTokens,
         tenants,
+aiTenantStats,
         expiringSoon,
         expiredCompanies,
         activeCompanies,

@@ -1,0 +1,99 @@
+1. Inventory Aging Report
+Property Added Date
+Days in Inventory
+0-30 Days
+31-60 Days
+60-90 Days
+90+ Days
+
+Helps identify dead inventory.
+
+2. Buyer Aging Report
+New Lead
+Contacted
+Negotiation
+
+Show:
+
+Days Since Last Activity
+
+Executives will immediately know which leads are being ignored.
+
+3. Executive Reassignment Engine
+
+Today:
+
+Buyer assigned to Executive A
+
+If:
+
+No activity for 7 days
+
+Admin can:
+
+Reassign automatically
+4. Duplicate Property Detection Dashboard
+
+You already block duplicates during upload.
+
+Add:
+
+Potential Duplicates
+
+based on:
+
+Owner Mobile
+Project Name
+Location
+
+Useful for large datasets.
+
+5. Buyer Requirement Heat Map
+
+Show:
+
+Wakad      42 buyers
+Baner      31 buyers
+Kothrud    12 buyers
+
+and
+
+2 BHK      65 buyers
+3 BHK      38 buyers
+
+This becomes valuable for builders and management.
+
+6. Executive Territory Dashboard
+
+For each executive:
+
+Assigned Locations
+Properties
+Buyers
+Matches
+Visits
+Closures
+
+Very useful once team size grows.
+
+7. Property Availability Audit
+
+Identify:
+
+Sold
+Token Received
+Available
+
+and flag properties not updated for:
+
+30+
+60+
+90+ days
+8. Builder Dashboard
+
+If builders will log in later:
+
+My Projects
+Buyer Interest
+Site Visits
+Closures

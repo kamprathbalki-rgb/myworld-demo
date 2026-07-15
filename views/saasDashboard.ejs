@@ -9,10 +9,34 @@ Subscription History
 
 |
 
+<a href="/keyword/add">
+Keyword Add
+</a>
+
+|
+
+<a href="/keyword/list">
+Keyword List
+</a>
+
+|
+
+<a href="/keyword/other-messages">
+Other Messages
+</a>
+
+|
+
+<a href="/learning-correction/list">
+AI Corrections
+</a>
+
+|
+
 <a href="/logout">Logout</a>
 </p>
 
-
+|
 <h2>Subscription Summary</h2>
 
 <p>
@@ -28,6 +52,42 @@ Active Companies:
 <p>
 Inactive Companies:
 <%= inactiveCompanies %>
+</p>
+
+
+<p>
+WhatsApp Connected:
+<%= whatsappConnected %>
+</p>
+
+<p>
+Total Buyers:
+<%= totalBuyers %>
+</p>
+
+<p>
+Total Properties:
+<%= totalProperties %>
+</p>
+
+<p>
+Total Visits:
+<%= totalVisits %>
+</p>
+
+<p>
+WhatsApp Messages:
+<%= totalMessages %>
+</p>
+
+<p>
+AI Requests:
+<%= aiRequests %>
+</p>
+
+<p>
+AI Tokens:
+<%= aiTokens %>
 </p>
 
 <hr>
@@ -76,6 +136,41 @@ Expires On
 <% }) %>
 
 </ul>
+
+<hr>
+
+
+<h2>AI Usage By Agency</h2>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Tenant</th>
+<th>Requests</th>
+<th>Tokens</th>
+</tr>
+
+<% aiTenantStats.forEach(function(t){ %>
+
+<tr>
+
+<td>
+<%= t.tenantName %>
+</td>
+
+<td>
+<%= t.requests %>
+</td>
+
+<td>
+<%= t.tokens %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
 
 <hr>
 

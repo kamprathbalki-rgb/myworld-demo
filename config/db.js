@@ -3,19 +3,19 @@ const mongoose = require('mongoose')
 const connectDB = async () => {
     try {
 
-        await mongoose.connect(
-    process.env.DB_URI,
-    {
-        dbName: 'myworld',
-        authSource: 'admin'
-    }
-)
+        const dbUri =
+            process.env.DB_URI_LOCAL ||
+            process.env.DB_URI
+
+        await mongoose.connect(dbUri, {
+            dbName: 'myworld',
+            authSource: 'admin'
+        })
 
         console.log("MongoDB Connected")
 
     } catch (error) {
 
-        console.error("DB_URI =", process.env.DB_URI_NEW)
         console.error("MongoDB Connection Error:", error)
 
         process.exit(1)

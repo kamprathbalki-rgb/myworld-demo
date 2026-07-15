@@ -1,30 +1,57 @@
 require('dotenv').config()
-
-require(
-'./utils/subscriptionReminderJob'
-)
+require('./utils/subscriptionReminderJob')
+require('./jobs/followupReminderJob');
+require('./jobs/siteVisitReminderJob');
+require('./jobs/dailySummaryJob');
+require('./jobs/overdueFollowupJob');
+require('./jobs/uncontactedLeadJob');
 
 const express = require('express')
 const connectDB = require('./config/db')
-
 const app = express()
-
 const session = require('express-session')
-
-const companyActiveGuard =
-require(
-'./middleware/companyActiveGuard'
-)
+const companyActiveGuard = require('./middleware/companyActiveGuard')
+const Tenant = require('./models/Tenant')
+const startWhatsapp = require('./services/startWhatsapp')
+const keywordRoutes = require('./routes/keywordRoutes')
+const tenantWhatsappRoutes = require('./routes/tenantWhatsappRoutes')
+const restoreSessions = require('./services/tenantWhatsapp/restoreSessions')
+const aiDashboardRoutes = require('./routes/adminAiDashboardRoutes');
+const whatsappDataRoutes = require('./routes/whatsappDataRoutes');
+const learningCorrectionRoutes = require('./routes/learningCorrectionRoutes');
 
 connectDB()
 
+if (
+    process.env.ENABLE_WHATSAPP === 'true'
+) {
+
+    setTimeout(async () => {
+
+        try {
+
+            await restoreSessions()
+
+            console.log(
+                'WHATSAPP SESSION RESTORE COMPLETE'
+            )
+
+        } catch (err) {
+
+            console.error(
+                'SESSION RESTORE ERROR:',
+                err
+            )
+
+        }
+
+    }, 5000)
+
+}
+
 app.use(express.json())
 app.use(express.urlencoded({ extended:true }))
-
-app.use(session({
-secret: process.env.SESSION_SECRET || 'myworldsecret',
-resave:false,
-saveUninitialized:false,
+app.use(session({secret: process.env.SESSION_SECRET || 'myworldsecret',resave:false,saveUninitialized:false,
 cookie:{ maxAge: 30 * 60 * 1000 }
 }))
 
@@ -53,51 +80,20 @@ app.use('/',authRoutes)
 app.use('/', saasRoutes)
 app.use('/', tenantRoutes)
 
-app.use(
-'/buyer',
-tenantGuard,
-companyActiveGuard,
-buyerRoutes
-)
-
-app.use(
-'/property',
-tenantGuard,
-companyActiveGuard,
-propertyRoutes
-)
-
-app.use(
-'/match',
-tenantGuard,
-companyActiveGuard,
-matchRoutes
-)
-
-app.use(
-'/visit',
-tenantGuard,
-companyActiveGuard,
-visitRoutes
-)
-
-app.use(
-'/dashboard',
-tenantGuard,
-companyActiveGuard,
-dashboardRoutes
-)
-
-app.use(
-'/executive',
-executiveRoutes
-)
-
-app.get('/', (req,res)=>{
-res.send("MyWorld Server Running")
-})
+app.use('/buyer',tenantGuard,companyActiveGuard,buyerRoutes)
+app.use('/property', tenantGuard, companyActiveGuard, propertyRoutes);
+app.use('/match', tenantGuard, companyActiveGuard, matchRoutes);
+app.use('/visit', tenantGuard, companyActiveGuard, visitRoutes);
+app.use('/dashboard', tenantGuard, companyActiveGuard, dashboardRoutes);
+app.use('/executive', executiveRoutes);
+app.use('/keyword', keywordRoutes);
+app.use('/tenant-whatsapp',tenantWhatsappRoutes)
+app.use(aiDashboardRoutes);
+app.use('/whatsapp-data',tenantGuard,companyActiveGuard,whatsappDataRoutes);
+app.use('/learning-correction',learningCorrectionRoutes);
 
 
+app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 app.get('/dashboard', async (req, res) => {
 
 const today = new Date()
@@ -168,7 +164,33 @@ const tokenProperties =
         propertyStatus: 'Token Received'
     })
 
+const Tenant = require('./models/Tenant')
+
+const tenant = await Tenant.findById(
+    req.session.tenantId
+)
+
+let daysRemaining = 0
+
+if (
+    tenant &&
+    tenant.subscriptionEndDate
+) {
+    daysRemaining = Math.max(
+        0,
+        Math.ceil(
+            (
+                new Date(tenant.subscriptionEndDate) -
+                new Date()
+            ) / (1000 * 60 * 60 * 24)
+        )
+    )
+}
+
+
 res.render('dashboard', {
+    tenant,
+    daysRemaining,
     properties,
     buyers,
     visits,
@@ -230,6 +252,17 @@ console.log("Lead route file loaded");
     res.send("Failure: Lead error")
   }
 })
+
+app.get(
+'/session-test',
+(req,res) => {
+
+    res.json({
+        user: req.session.user,
+        tenantId: req.session.tenantId
+    });
+
+});
 
 app.get('/attendance-report', async (req, res) => {
 

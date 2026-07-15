@@ -1,0 +1,18 @@
+<h1>Bulk Upload Properties</h1>
+
+<form
+    method="POST"
+    action="/property/bulk-upload"
+    enctype="multipart/form-data">
+
+    <input
+        type="file"
+        name="excelFile"
+        accept=".xlsx,.csv"
+        required>
+
+    <button type="submit">
+        Upload
+    </button>
+
+</form>

@@ -45,6 +45,39 @@
 <p><b>Project Status:</b> <%= property.projectStatus || '' %></p>
 
 <p>
+    <b>Transaction Type:</b>
+    <%= property.transactionType || 'SALE' %>
+</p>
+
+<% if(
+property.transactionType === 'RENT' ||
+property.transactionType === 'LEASE'
+){ %>
+
+<p>
+<b>Monthly Rent:</b>
+₹ <%= property.monthlyRent || 0 %>
+</p>
+
+<p>
+<b>Security Deposit:</b>
+₹ <%= property.securityDeposit || 0 %>
+</p>
+
+<p>
+<b>Maintenance Charges:</b>
+₹ <%= property.maintenanceCharges || 0 %>
+</p>
+
+<p>
+<b>Lease Duration:</b>
+<%= property.leaseDurationMonths || 0 %>
+Months
+</p>
+
+<% } %>
+
+<p>
     <b>Property Status:</b>
     <%= property.propertyStatus || 'Available' %>
 </p>

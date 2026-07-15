@@ -41,6 +41,38 @@
 <label>Max Budget</label>
 <input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>"><br><br>
 
+<label>Transaction Type</label>
+
+<select name="transactionType">
+
+<option
+value="SALE"
+<%= buyer.transactionType === 'SALE'
+? 'selected'
+: '' %>>
+Sale
+</option>
+
+<option
+value="RENT"
+<%= buyer.transactionType === 'RENT'
+? 'selected'
+: '' %>>
+Rent
+</option>
+
+<option
+value="LEASE"
+<%= buyer.transactionType === 'LEASE'
+? 'selected'
+: '' %>>
+Lease
+</option>
+
+</select>
+
+<br><br>
+
 <label>Required Possession</label><br>
 
 <input

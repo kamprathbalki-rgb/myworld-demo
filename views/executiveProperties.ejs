@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Properties</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+margin:20px;
+background:#f5f7fa;
+}
+
+.card{
+background:white;
+border:1px solid #ddd;
+border-radius:10px;
+padding:15px;
+margin-bottom:15px;
+}
+
+.top-nav{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.top-nav a{
+background:#1f4e79;
+color:white;
+text-decoration:none;
+padding:10px 15px;
+border-radius:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top-nav">
+
+<a href="/executive/dashboard">
+Dashboard
+</a>
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+</div>
+
+<h2>My Properties</h2>
+
+<% properties.forEach(function(p){ %>
+
+<div class="card">
+
+<b>Project:</b>
+<%= p.projectName || '-' %>
+
+<br><br>
+
+<b>Location:</b>
+<%= p.propertyLocation || '-' %>
+
+<br><br>
+
+<b>Type:</b>
+<%= p.singleFlatType || '-' %>
+
+<br><br>
+
+<b>Price:</b>
+<%= p.singleQuotedPrice || 0 %>
+
+<br><br>
+
+<b>Status:</b>
+<%= p.propertyStatus || 'Available' %>
+
+</div>
+
+<% }) %>
+
+</body>
+</html>

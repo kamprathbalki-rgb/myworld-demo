@@ -9,6 +9,12 @@ const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 
 const {sendEmail} = require('../utils/emailService')
 
+const client =
+require('../services/whatsapp');
+
+const WhatsappGroup =
+require('../models/WhatsappGroup');
+
 router.get('/login',(req,res)=>{
 
     res.render('login')
@@ -263,17 +269,6 @@ return res.redirect('/login')
 res.render(
     'changePassword'
 )
-
-})
-
-router.get('/debug-users', async (req, res) => {
-
-    const users = await User.find({}, {
-        email: 1,
-        role: 1
-    })
-
-    res.json(users)
 
 })
 

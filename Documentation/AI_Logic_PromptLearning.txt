@@ -1,0 +1,276 @@
+SAAS Admin Login
+
+http://localhost:7000/saas/dashboard
+Click On AI Corrections - takes to http://localhost:7000/learning-correction/list
+Here I see previous corrections. This was tested successfully. On save corrections a new row is added in he template.
+
+On Save Correction:
+
+1. Data is stored in MongoDB
+
+Collection: learningcorrections
+
+Example:
+{
+  "originalMessage": "double sharing pg needed",
+  "aiOutput": {
+    "propertyType": "APARTMENT"
+  },
+  "correctedOutput": {
+    "propertyType": "PG"
+  },
+  "createdAt": "..."
+}
+
+2. AI does NOT retrain
+
+Nothing is sent to OpenAI for training.
+No model fine-tuning occurs.
+
+3. What actually happens
+
+When extractWithAI() runs:
+
+learningcorrections
+        ↓
+learningService
+        ↓
+loads latest corrections
+        ↓
+injects them into prompt
+        ↓
+OpenAI receives prompt + examples
+
+Example prompt injection:
+
+Example:
+
+Message: double sharing pg needed
+AI Wrong: propertyType=APARTMENT
+Correct: propertyType=PG
+
+4. Current effect
+
+Future AI calls see those examples.
+
+This is:
+
+Prompt Learning not Model Training
+
+5. Result storage
+
+Stored in:
+
+MongoDB
+└── learningcorrections
+
+Verify: db.learningcorrections.find().pretty()
+
+Current status
+✓ Corrections saved
+✓ Corrections loaded
+✓ Corrections injected into prompt
+✓ AI sees correction examples
+
+✗ Model not retrained
+✗ No fine-tuning
+✗ No automatic feedback loop
+
+The system currently performs few-shot learning via prompt injection using the saved corrections.
+
+---------
+Completed
+---------
+
+✓ External prompt file
+✓ Prompt versioning
+✓ LearningCorrection model
+✓ LearningCorrection API
+✓ LearningCorrection admin page
+✓ Save correction from UI
+✓ Store corrections in MongoDB
+✓ Load corrections from MongoDB
+✓ Inject corrections into prompt
+✓ AI sees previous corrections
+✓ Error logging
+✓ End-to-end testing
+✓ Correct AI button
+✓ Prefilled Original Message
+✓ Prefilled AI Output JSON
+✓ Save Correction workflow
+
+--------------------
+Current Working Flow
+--------------------
+
+WhatsApp Message
+        ↓
+Correct AI
+        ↓
+Original Message loaded
+        ↓
+AI Output loaded
+        ↓
+Admin enters Corrected Output
+        ↓
+Save
+        ↓
+learningcorrections
+        ↓
+Prompt Injection
+        ↓
+Future AI calls see correction. Not Part Of This Module
+
+✓ Multi-Inventory Extraction COMPLETE
+✓ Multi-Requirement Extraction COMPLETE
+✓ Recovery path updated
+✓ Live message path updated
+✓ PM2 starts successfully
+✓ No syntax errors
+✓ AI returns records[]
+✓ Database logic supports multiple documents
+
+✓ LearningCorrection collection
+✓ Add Correction
+✓ AI Corrections List
+✓ Correct AI from Other Messages
+✓ Copy AI Output
+✓ Edit Correction
+✓ Prompt Injection
+✓ Learning Examples Loading
+✓ Multi-Inventory Extraction
+✓ Multi-Requirement Extraction
+✓ Recovery Processing
+✓ Live Processing
+
+----------------------------------
+These are separate future tickets:
+-----------------------------------
+
+□ Confidence scoring from corrections
+□ Analytics on correction accuracy
+
+
+Status
+
+AI Learning Module
+STATUS: COMPLETE
+DATE: 15-Jul-2026
+
+-------------------------
+□ True model fine-tuning
+-------------------------
+
+What you have today
+
+learningcorrections
+        ↓
+loadLearningExamples()
+        ↓
+Prompt Injection
+        ↓
+AI Response
+
+This is: Prompt-based learning. The model itself is unchanged.
+
+What true fine-tuning means
+
+learningcorrections
+        ↓
+Training Dataset
+        ↓
+Fine-tune Job
+        ↓
+New Model
+
+Example:
+
+Base Model
+gpt-5.x
+        ↓
+Fine-tune
+        ↓
+myworld-property-model-v1
+
+The knowledge becomes part of the model weights. No prompt examples are required after training.
+
+Comparison
+
+Current system:
+
+Pros
+✓ Easy
+✓ Cheap
+✓ Immediate
+✓ No training pipeline
+
+Cons
+✗ Larger prompts
+✗ Limited examples
+✗ Learning depends on prompt
+
+Fine-tuning:
+
+Pros
+✓ Faster inference
+✓ Smaller prompts
+✓ Better consistency
+✓ Large-scale learning
+
+Cons
+✗ Complex pipeline
+✗ Training cost
+✗ Dataset preparation
+✗ Model version management
+For MyWorld
+
+You currently have:
+
+2 learning corrections
+
+Fine-tuning makes no sense yet.
+
+Usually you would want:
+
+100+
+500+
+1000+
+high-quality corrections
+
+before considering it.
+
+Current Priority
+✓ AI Learning Module
+✓ Multi Inventory
+✓ Multi Requirement
+
+Next valuable phase:
+□ Inventory matching
+□ Requirement matching
+□ Recommendation engine
+□ Auto-shortlisting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

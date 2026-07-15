@@ -21,6 +21,17 @@ return R * c
 
 async function calculateScore(property, buyer) {
 
+if(
+
+property.transactionType !==
+buyer.transactionType
+
+){
+
+return 0
+
+}
+
 const config = await MatchConfig.findOne({
 tenantId: buyer.tenantId
 })
@@ -75,16 +86,39 @@ PRICE MATCH
 Use quotedPrice from configuration
 */
 
-const propertyPrice =
+let propertyPrice = 0
+
+if (
+
+buyer.transactionType === 'RENT' ||
+
+buyer.transactionType === 'LEASE'
+
+) {
+
+propertyPrice =
+property.monthlyRent || 0
+
+}
+else {
+
+propertyPrice =
 property.propertyMode === 'SINGLE'
 ? property.singleQuotedPrice
 : matchedConfig.quotedPrice
 
+}
+
 if (
+
 propertyPrice >= buyer.minBudget &&
+
 propertyPrice <= buyer.maxBudget
+
 ) {
+
 score += finalConfig.weights.price
+
 }
 
 /*
@@ -189,6 +223,8 @@ Keep old geo logic also
 
 if (
 property.location &&
+property.location.coordinates &&
+property.location.coordinates.length === 2 &&
 buyer.preferredLocation &&
 buyer.preferredLocation.coordinates &&
 buyer.preferredLocation.coordinates.length === 2

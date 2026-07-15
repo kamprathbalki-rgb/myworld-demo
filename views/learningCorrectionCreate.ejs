@@ -1,0 +1,93 @@
+<a href="/saas/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+<br><br>
+
+<h1>
+Create AI Correction
+</h1>
+
+<form
+method="POST"
+action="/learning-correction/add"
+>
+
+<p>
+Original Message
+</p>
+
+<textarea
+name="originalMessage"
+rows="10"
+cols="120"
+><%= message.message %></textarea>
+
+<p>
+AI Output JSON
+</p>
+
+<button
+type="button"
+onclick="copyAIOutput()"
+>
+Copy AI Output
+</button>
+
+<br><br>
+
+<textarea
+id="aiOutput"
+name="aiOutput"
+rows="10"
+cols="120"
+><%= JSON.stringify(
+message.aiData || {},
+null,
+2
+) %></textarea>
+
+<p>
+Corrected Output JSON
+</p>
+
+<textarea
+id="correctedOutput"
+name="correctedOutput"
+rows="10"
+cols="120"
+>{}</textarea>
+
+<br><br>
+
+<button type="submit">
+Save Correction
+</button>
+
+</form>
+
+<script>
+
+function copyAIOutput() {
+
+    document
+    .getElementById(
+        'correctedOutput'
+    )
+    .value =
+
+    document
+    .getElementById(
+        'aiOutput'
+    )
+    .value;
+
+}
+
+</script>

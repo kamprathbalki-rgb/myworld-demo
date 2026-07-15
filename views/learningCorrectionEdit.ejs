@@ -1,0 +1,66 @@
+<a href="/saas/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="/learning-correction/list">
+Back To Corrections
+</a>
+
+<br><br>
+
+<h1>
+Edit AI Correction
+</h1>
+
+<form
+method="POST"
+action="/learning-correction/edit/<%= correction._id %>"
+>
+
+<p>
+Original Message
+</p>
+
+<textarea
+name="originalMessage"
+rows="10"
+cols="120"
+><%= correction.originalMessage %></textarea>
+
+<p>
+AI Output JSON
+</p>
+
+<textarea
+name="aiOutput"
+rows="10"
+cols="120"
+><%= JSON.stringify(
+correction.aiOutput,
+null,
+2
+) %></textarea>
+
+<p>
+Corrected Output JSON
+</p>
+
+<textarea
+name="correctedOutput"
+rows="10"
+cols="120"
+><%= JSON.stringify(
+correction.correctedOutput,
+null,
+2
+) %></textarea>
+
+<br><br>
+
+<button type="submit">
+Update Correction
+</button>
+
+</form>

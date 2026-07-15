@@ -2,6 +2,12 @@ const express = require('express')
 const router = express.Router()
 const { isLoggedIn,isAdmin } = require('../middleware/auth')
 
+const { sendEmail } =
+require('../utils/emailService')
+
+const Tenant =
+require('../models/Tenant')
+
 const Property = require('../models/Property')
 
 const Buyer = require('../models/Buyer')
@@ -13,6 +19,11 @@ const Shortlist = require('../models/Shortlist')
 
 const multer = require('multer')
 const path = require('path')
+const XLSX = require('xlsx')
+
+const uploadExcel = multer({
+    storage: multer.memoryStorage()
+})
 
 const storage = multer.diskStorage({
 
@@ -36,6 +47,324 @@ const upload = multer({
     storage: storage
 })
 
+const Executive = require('../models/Executive');
+
+const {
+    notifyExecutive
+} = require('../services/notificationService');
+
+router.post(
+    '/bulk-upload',
+    isLoggedIn,
+    isAdmin,
+    uploadExcel.single('excelFile'),
+    async (req, res) => {
+
+        const workbook = XLSX.read(
+            req.file.buffer,
+            { type: 'buffer' }
+        )
+
+        const sheet =
+            workbook.Sheets[
+                workbook.SheetNames[0]
+            ]
+
+const rows =
+    XLSX.utils.sheet_to_json(sheet, {
+        defval: ''
+    })
+
+let importedCount = 0
+let duplicateCount = 0
+let invalidLocationCount = 0
+let invalidLocations = []
+let missingLocationRequests = []
+let duplicateLocations = []
+
+for (const row of rows) {
+
+const existingProperty = await Property.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    ownerMobile:
+    String(
+        row['Owner Mobile'] || ''
+    ),
+
+    propertyLocation:
+    row['Property Location'],
+
+    transactionType:
+    (
+        row['Transaction Type']
+        ||
+        'SALE'
+    ).toUpperCase()
+
+})
+
+if (existingProperty) {
+
+if (
+    !duplicateLocations.includes(
+        row['Property Location']
+    )
+) {
+    duplicateLocations.push(
+        row['Property Location']
+    )
+}
+
+    duplicateCount++
+    continue
+}
+
+const location = await LocationMaster.findOne({
+    officeName: {
+        $regex: '^' + row['Property Location'],
+        $options: 'i'
+    }
+})
+
+if (!location) {
+
+    invalidLocationCount++
+
+if (
+    !missingLocationRequests.includes(
+        row['Property Location']
+    )
+) {
+    missingLocationRequests.push(
+        row['Property Location']
+    )
+}
+
+    continue
+}
+
+    const property = new Property({
+
+askingPricePerSqFt:
+
+row['Quoted Price Lakhs'] &&
+row['Carpet Area SqFt']
+
+? Math.round(
+
+(
+    Number(row['Quoted Price Lakhs']) *
+    100000
+)
+/
+Number(row['Carpet Area SqFt'])
+
+)
+
+: 0,
+
+        tenantId: req.session.tenantId,
+
+        propertyMode: row['Property Mode'],
+
+        projectName: row['Project Name'],
+
+        builderName: row['Builder Name'],
+
+        ownerName: row['Owner Name'],
+
+        ownerMobile: String(
+            row['Owner Mobile'] || ''
+        ),
+
+        propertyLocation: location.officeName,
+
+        city: location.city || row['City'],
+
+        projectType: [
+            row['Project Type']
+        ],
+
+        propertyType: [
+            row['Property Type']
+        ],
+
+        location: {
+    type: "Point",
+    coordinates: [
+        Number(location.lng),
+        Number(location.lat)
+    ]
+},
+
+divisionName: location.divisionName,
+pincode: location.pincode,
+district: location.district,
+stateName: location.stateName,
+
+        projectStatus: row['Project Status'],
+
+        propertyStatus: row['Property Status'],
+
+transactionType:
+(
+row['Transaction Type']
+||
+'SALE'
+)
+.toUpperCase(),
+
+monthlyRent:
+Number(
+row['Monthly Rent'] || 0
+),
+
+securityDeposit:
+Number(
+row['Security Deposit'] || 0
+),
+
+maintenanceCharges:
+Number(
+row['Maintenance Charges'] || 0
+),
+
+leaseDurationMonths:
+Number(
+row['Lease Duration'] || 0
+),
+
+
+        reraApproved: row['RERA Approved'],
+
+        singleFlatType: row['Flat Type'],
+
+        singleCarpetArea: Number(
+            row['Carpet Area SqFt'] || 0
+        ),
+
+        singleQuotedPrice: Number(
+            row['Quoted Price Lakhs'] || 0
+        ),
+
+        singleClosingPrice: Number(
+            row['Closing Price Lakhs'] || 0
+        ),
+
+        furnishedStatus:
+            row['Furnished Status'],
+
+        parkingType:
+            row['Parking Type'],
+
+        possessionStatus:
+            row['Possession Status'],
+
+        numberOfTowers:
+            Number(
+                row['Number Of Towers'] || 0
+            ),
+
+        amenities:
+            row['Amenities']
+            ? row['Amenities'].split(',')
+            : [],
+
+        usp: row['USP'],
+
+        notes: row['Notes']
+
+    })
+
+    await property.save()
+
+importedCount++
+
+}
+
+if (missingLocationRequests.length > 0) {
+
+    const tenant = await Tenant.findById(
+        req.session.tenantId
+    )
+
+    await sendEmail(
+
+        'kbalki2k15@gmail.com',
+
+        'New Locations Requested',
+
+        `
+        <h2>Location Master Update Required</h2>
+
+        <p>
+        Tenant:
+        ${tenant?.name || ''}
+        </p>
+
+        <p>
+        Missing Locations:
+        </p>
+
+        <pre>
+${missingLocationRequests.join('\n')}
+        </pre>
+        `
+
+    ).catch(console.error)
+
+}
+
+if (duplicateLocations.length > 0) {
+
+    const tenant = await Tenant.findById(
+        req.session.tenantId
+    )
+
+    await sendEmail(
+
+        tenant.adminEmail,
+
+        'Property Upload Duplicates',
+
+        `
+        <h2>Duplicate Properties Found</h2>
+
+        <p>
+        Tenant:
+        ${tenant?.name || ''}
+        </p>
+
+        <pre>
+${duplicateLocations.join('\n')}
+        </pre>
+        `
+
+    ).catch(console.error)
+
+}
+
+
+res.render('bulkUploadResult', {
+
+    importedCount,
+
+    duplicateCount,
+
+    invalidLocationCount,
+
+    duplicateLocations,
+
+    missingLocationRequests
+
+})
+
+    }
+)
+
 router.post('/add', async (req,res)=>{
 
 const property = new Property({
@@ -50,6 +379,17 @@ await generateRecommendations(property)
 res.json(property)
 
 })
+
+router.get(
+    '/bulk-upload',
+    isLoggedIn,
+    isAdmin,
+    (req, res) => {
+
+        res.render('propertyBulkUpload')
+
+    }
+)
 
 router.get('/shortlist/:propertyId/:buyerId', async (req,res)=>{
 
@@ -112,16 +452,36 @@ router.get(
     isLoggedIn,
     async (req, res) => {
 
-const properties = await Property.find({
+const transactionType =
+req.query.transactionType;
+
+const filter = {
 tenantId: req.session.tenantId
-})
+};
+
+if (
+transactionType &&
+transactionType !== 'ALL'
+) {
+
+filter.transactionType =
+transactionType;
+
+}
+
+const properties =
+await Property.find(filter)
 .sort({
 createdAt: -1
-})
+});
 
-res.render('properties', {
-properties
-})
+res.render(
+'properties',
+{
+properties,
+transactionType
+}
+);
 
 })
 
@@ -240,11 +600,38 @@ let filter = {
     propertyStatus: { $ne: 'Sold' }
 }
 
+if(
+req.query.transactionType
+){
+
+filter.transactionType =
+req.query.transactionType
+
+}
+
+if(
+req.query.transactionType === 'RENT' ||
+req.query.transactionType === 'LEASE'
+){
+
+if(minPrice && maxPrice){
+
+filter.monthlyRent = {
+    $gte: Number(minPrice),
+    $lte: Number(maxPrice)
+}
+
+}
+
+}else{
+
 if(minPrice && maxPrice){
 
 filter.singleQuotedPrice = {
     $gte: Number(minPrice),
     $lte: Number(maxPrice)
+}
+
 }
 
 }
@@ -335,11 +722,21 @@ if (req.body.propertyMode === 'SINGLE') {
         )
     }
 
-    const duplicateProperty = await Property.findOne({
-        tenantId: req.session.tenantId,
-        ownerMobile: req.body.ownerMobile,
-        propertyLocation: req.body.propertyLocation
-    })
+const duplicateProperty = await Property.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    ownerMobile:
+    req.body.ownerMobile,
+
+    propertyLocation:
+    req.body.propertyLocation,
+
+    transactionType:
+    req.body.transactionType
+
+})
 
     if (duplicateProperty) {
 
@@ -625,16 +1022,37 @@ if (!Array.isArray(projectType)) {
     projectType = [projectType]
 }
 
+let propertyStatus = req.body.propertyStatus
+
+if (Array.isArray(propertyStatus)) {
+    propertyStatus = propertyStatus[0]
+}
+
     const property = new Property({
 
     tenantId: req.session.tenantId,
 
     propertyMode: req.body.propertyMode,
 
+transactionType:
+req.body.transactionType,
+
+monthlyRent:
+Number(req.body.monthlyRent || 0),
+
+securityDeposit:
+Number(req.body.securityDeposit || 0),
+
+maintenanceCharges:
+Number(req.body.maintenanceCharges || 0),
+
+leaseDurationMonths:
+Number(req.body.leaseDurationMonths || 0),
+
     ownerName: req.body.ownerName,
     ownerMobile: req.body.ownerMobile,
 
-propertyStatus: req.body.propertyStatus || 'Available',
+propertyStatus: propertyStatus || 'Available',
 
 floorNumber: req.body.floorNumber,
 
@@ -734,6 +1152,33 @@ propertyAge: req.body.propertyAge,
 })
 
 await property.save()
+
+const executives = await Executive.find({
+
+    tenantId: req.session.tenantId,
+
+    assignedLocations: property.propertyLocation,
+
+    isActive: true
+
+});
+
+for (const executive of executives) {
+
+    await notifyExecutive(
+
+        executive,
+
+        `New Property Added
+
+Project: ${property.projectName || 'Property'}
+
+Location: ${property.propertyLocation}`
+
+    );
+
+}
+
 
 res.redirect('/property/page')
 
@@ -843,15 +1288,23 @@ const selectedLocation = await LocationMaster.findOne({
     officeName: req.body.propertyLocation
 })
 
-const lng = Number(req.body.lng)
-const lat = Number(req.body.lat)
+const lng =
+    Number(req.body.lng) ||
+    Number(selectedLocation?.lng)
+
+const lat =
+    Number(req.body.lat) ||
+    Number(selectedLocation?.lat)
 
 const location =
-Number.isFinite(lng) && Number.isFinite(lat)
+(
+    Number.isFinite(lng) &&
+    Number.isFinite(lat)
+)
 ? {
     type: "Point",
     coordinates: [lng, lat]
-  }
+}
 : undefined
 
 const existingProperty = await Property.findOne({
@@ -889,6 +1342,10 @@ await Property.findOneAndUpdate(
 {
 
     propertyMode: req.body.propertyMode,
+
+transactionType:
+req.body.transactionType,
+
     projectName: req.body.projectName,
     builderName: req.body.builderName,
 
@@ -899,6 +1356,19 @@ singleFlatType: req.body.singleFlatType,
 singleCarpetArea: req.body.singleCarpetArea,
 singleQuotedPrice: req.body.singleQuotedPrice,
 singleClosingPrice: req.body.singleClosingPrice,
+
+monthlyRent:
+Number(req.body.monthlyRent || 0),
+
+securityDeposit:
+Number(req.body.securityDeposit || 0),
+
+maintenanceCharges:
+Number(req.body.maintenanceCharges || 0),
+
+leaseDurationMonths:
+Number(req.body.leaseDurationMonths || 0),
+
 
 parkingType: req.body.parkingType,
 furnishedStatus: req.body.furnishedStatus,

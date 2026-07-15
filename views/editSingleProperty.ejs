@@ -94,6 +94,38 @@ value="<%= property.projectName || '' %>">
 
 <br><br>
 
+<label>Transaction Type</label>
+
+<select name="transactionType">
+
+<option
+value="SALE"
+<%= property.transactionType === 'SALE'
+? 'selected'
+: '' %>>
+Sale
+</option>
+
+<option
+value="RENT"
+<%= property.transactionType === 'RENT'
+? 'selected'
+: '' %>>
+Rent
+</option>
+
+<option
+value="LEASE"
+<%= property.transactionType === 'LEASE'
+? 'selected'
+: '' %>>
+Lease
+</option>
+
+</select>
+
+<br><br>
+
 <label>Property Type</label>
 
 <select name="propertyType">
@@ -171,6 +203,39 @@ value="<%= property.projectName || '' %>">
 <input type="number"
        name="singleClosingPrice"
        value="<%= property.singleClosingPrice || '' %>">
+
+<br><br>
+
+
+<label>Monthly Rent</label>
+<input
+type="number"
+name="monthlyRent"
+value="<%= property.monthlyRent || '' %>">
+
+<br><br>
+
+<label>Security Deposit</label>
+<input
+type="number"
+name="securityDeposit"
+value="<%= property.securityDeposit || '' %>">
+
+<br><br>
+
+<label>Maintenance Charges</label>
+<input
+type="number"
+name="maintenanceCharges"
+value="<%= property.maintenanceCharges || '' %>">
+
+<br><br>
+
+<label>Lease Duration (Months)</label>
+<input
+type="number"
+name="leaseDurationMonths"
+value="<%= property.leaseDurationMonths || '' %>">
 
 <br><br>
 

@@ -17,6 +17,11 @@ const {
 
 const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 
+const {
+    notifyExecutive
+} = require('../services/notificationService');
+
+
 router.post('/unlock-contact/:id', async (req, res) => {
 
     if (!req.session.executiveId) {
@@ -97,6 +102,25 @@ await BuyerProjectVisit.findOneAndUpdate(
     }
 )
 
+const executive = await Executive.findById(
+    req.session.executiveId
+);
+
+await notifyExecutive(
+
+    executive,
+
+    `Site Visit Scheduled
+
+Buyer: ${buyer.name}
+
+Project: ${property.projectName}
+
+Visit Date:
+${req.body.scheduledVisitDate}`
+
+);
+
     res.redirect('/executive/matches/' + buyer._id)
 
 })
@@ -135,6 +159,30 @@ const updateData = {
 
         updateData.dealClosedDate =
             new Date()
+
+const executive = await Executive.findById(
+    req.session.executiveId
+);
+
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+await notifyExecutive(
+
+    executive,
+
+    `Congratulations
+
+Deal Closed Successfully
+
+Buyer: ${buyer.name}
+
+Value: ${req.body.dealValue || 0} Lakhs`
+
+);
+
+
     }
 
     if (req.body.status === 'Lost') {
@@ -144,6 +192,30 @@ const updateData = {
 
         updateData.lostDate =
             new Date()
+
+const executive = await Executive.findById(
+    req.session.executiveId
+);
+
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+await notifyExecutive(
+
+    executive,
+
+    `Oh ! 
+
+Deal Lost
+
+Buyer: ${buyer.name}
+
+Value: ${req.body.dealValue || 0} Lakhs`
+
+);
+
+
     }
 
 if(req.body.siteVisitDate){
@@ -198,9 +270,17 @@ router.get('/matches/:buyerId', async (req, res) => {
         return res.send("Buyer not found")
     }
 
-    const properties = await Property.find({
-        tenantId: req.session.tenantId
-    })
+const properties = await Property.find({
+
+    tenantId:
+    req.session.tenantId,
+
+    propertyLocation: {
+        $in:
+        buyer.preferredLocations || []
+    }
+
+})
 
     let results = []
 
@@ -599,6 +679,19 @@ endOfDay.setDate(endOfDay.getDate() + 1)
 
 const myLeads = buyers.length
 
+const myProperties =
+    await Property.countDocuments({
+
+        tenantId:
+        req.session.tenantId,
+
+        propertyLocation: {
+            $in:
+            executive.assignedLocations
+        }
+
+    })
+
 const openBuyers = buyers.filter(b =>
     b.status !== 'Deal Closed' &&
     b.status !== 'Lost'
@@ -715,6 +808,7 @@ res.render('executiveMyDashboard', {
     contactUnlockTimeout: CONTACT_UNLOCK_TIMEOUT,
     attendance,
     myLeads,
+    myProperties,
     followUps,
     siteVisits,
     closedDeals,
@@ -754,6 +848,43 @@ lostValue:
 lostValue[0]?.total || 0
 
 })
+
+})
+
+router.get('/property-map', async (req, res) => {
+
+    if (!req.session.executiveId) {
+        return res.redirect('/executive/login')
+    }
+
+    const executive =
+        await Executive.findById(
+            req.session.executiveId
+        )
+
+    const properties =
+        await Property.find({
+
+            tenantId:
+            req.session.tenantId,
+
+            propertyLocation: {
+                $in:
+                executive.assignedLocations
+            },
+
+            location: {
+                $exists: true
+            }
+
+        })
+
+    res.render(
+        'executivePropertyMap',
+        {
+            properties
+        }
+    )
 
 })
 
@@ -1074,5 +1205,38 @@ record.logoutTimes.push(currentTime)
 
 })
 
+router.get('/properties', async (req, res) => {
+
+    if (!req.session.executiveId) {
+        return res.redirect('/executive/login')
+    }
+
+    const executive =
+        await Executive.findById(
+            req.session.executiveId
+        )
+
+    const properties =
+        await Property.find({
+
+            tenantId:
+            req.session.tenantId,
+
+            propertyLocation: {
+                $in:
+                executive.assignedLocations
+            }
+
+        })
+        .sort({ createdAt: -1 })
+
+    res.render(
+        'executiveProperties',
+        {
+            properties
+        }
+    )
+
+})
 
 module.exports = router

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WhatsApp Requirements</title>
+</head>
+<body>
+
+<a href="/dashboard/main">Home</a>
+
+<h1>WhatsApp Requirements</h1>
+
+<table border="1">
+
+<tr>
+<th>Date</th>
+<th>Group</th>
+<th>Sender</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Type</th>
+<th>Transaction</th>
+<th>BHK</th>
+<th>Location</th>
+<th>Area</th>
+<th>Budget</th>
+<th>Confidence</th>
+<th>Summary</th>
+</tr>
+
+<% requirements.forEach(r=>{ %>
+
+<tr>
+
+<td>
+<%= new Date(r.createdAt)
+.toLocaleString('en-IN') %>
+</td>
+
+<td>
+<%= r.groupName || '' %>
+</td>
+
+<td>
+<%= r.senderId || r.sender || '' %>
+</td>
+
+<td><%= r.senderName || '' %></td>
+
+<td><%= r.senderPhone || '' %></td>
+
+
+<td>
+<%= r.propertyType || '' %>
+</td>
+
+<td>
+<%= r.transactionType || '' %>
+</td>
+
+<td>
+<%= r.bhk || '' %>
+</td>
+
+<td>
+<%= r.location || '' %>
+</td>
+
+<td>
+<%= r.area || '' %>
+<%= r.areaUnit || '' %>
+</td>
+
+<td>
+<%= r.budget || '' %>
+</td>
+
+<td>
+<%= r.confidence || '' %>
+</td>
+
+<td>
+<%= r.summary || '' %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

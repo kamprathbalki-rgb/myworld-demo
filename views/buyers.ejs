@@ -131,7 +131,39 @@ Clear Search
 
 </select>
 
+<select
+name="transactionType"
+onchange="this.form.submit()">
 
+<option value="">
+All Transactions
+</option>
+
+<option
+value="SALE"
+<%= transactionType === 'SALE'
+? 'selected'
+: '' %>>
+Sale
+</option>
+
+<option
+value="RENT"
+<%= transactionType === 'RENT'
+? 'selected'
+: '' %>>
+Rent
+</option>
+
+<option
+value="LEASE"
+<%= transactionType === 'LEASE'
+? 'selected'
+: '' %>>
+Lease
+</option>
+
+</select>
 
 </form>
 
@@ -142,6 +174,7 @@ Clear Search
 <tr>
 <th>Name</th>
 <th>Phone</th>
+<th>Transaction</th>
 <th>Budget</th>
 <th>Required Possession</th>
 <th>Required Flat Type</th>
@@ -166,6 +199,10 @@ Clear Search
 <td><%= b.name %></td>
 
 <td><%= b.phone %></td>
+
+<td>
+<%= b.transactionType || 'SALE' %>
+</td>
 
 <td>
 <%= b.minBudget %> - <%= b.maxBudget %>

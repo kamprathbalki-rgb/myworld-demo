@@ -1,0 +1,334 @@
+
+Extract real estate information from WhatsApp messages.
+
+The extracted JSON will be stored directly in MongoDB.
+
+Do not invent values.
+
+If a field is not explicitly present or cannot be inferred with high confidence, return null.
+
+Always preserve schema structure.
+
+Return ONLY a single valid JSON object.
+
+GENERAL RULES
+
+- Never return markdown.
+- Never return explanations.
+- Never return code fences.
+- Never return arrays of objects.
+- Return exactly one JSON object.
+- If information is unavailable, return null.
+- If message is not a real estate inventory or requirement, classify as OTHER.
+- Confidence must be between 0 and 1.
+
+CLASSIFICATION
+
+INVENTORY
+REQUIREMENT
+OTHER
+
+TRANSACTION TYPES
+
+SALE
+RENT
+LEASE
+AUCTION
+JOINT_VENTURE
+REDEVELOPMENT
+PRE_LAUNCH
+RESALE
+OTHER
+
+PROPERTY TYPES
+
+APARTMENT
+VILLA
+BUNGALOW
+ROW_HOUSE
+PENTHOUSE
+PLOT
+LAND
+AGRICULTURAL_LAND
+COMMERCIAL_LAND
+FARMHOUSE
+BUILDING
+SHOP
+SHOWROOM
+OFFICE
+WAREHOUSE
+INDUSTRIAL
+PG
+HOSTEL
+CO_LIVING
+HOTEL
+RESTAURANT
+OTHER
+
+PROPERTY CATEGORIES
+
+RESIDENTIAL
+COMMERCIAL
+MIXED_USE
+
+NORMALIZATION RULES
+
+Flat, Apartment, Studio Apartment -> APARTMENT
+1RK -> APARTMENT and bhk=0.5
+1BHK -> APARTMENT and bhk=1
+2BHK -> APARTMENT and bhk=2
+3BHK -> APARTMENT and bhk=3
+4BHK -> APARTMENT and bhk=4
+5BHK -> APARTMENT and bhk=5
+
+Townhouse -> ROW_HOUSE
+NA Plot -> PLOT
+Farm Plot -> PLOT
+Farm Land -> AGRICULTURAL_LAND
+Office Space -> OFFICE
+Corporate Office -> OFFICE
+Coworking -> OFFICE
+Business Center -> OFFICE
+Godown -> WAREHOUSE
+Industrial Shed -> INDUSTRIAL
+Factory -> INDUSTRIAL
+MIDC Plot -> INDUSTRIAL
+MIDC Shed -> INDUSTRIAL
+Lodge -> HOTEL
+Cafe -> RESTAURANT
+Food Court -> RESTAURANT
+
+LOCATION EXTRACTION
+
+Prefer:
+Society Name, Locality
+
+
+Additional Examples:
+
+Message:
+Requirement for double-sharing PG accommodation near Salunke Vihar Road with a budget of 7000.
+
+Output:
+{
+  "classification":"REQUIREMENT",
+  "transactionType":"RENT",
+  "propertyType":"PG",
+  "bhk":null,
+  "location":"Salunke Vihar Road",
+  "area":null,
+  "areaUnit":null,
+  "budget":7000,
+  "contactNumbers":[],
+  "confidence":0.99,
+  "summary":"Requirement for double-sharing PG accommodation near Salunke Vihar Road with a budget of 7000."
+}
+
+Message:
+Working boys PG required in Kondhwa.
+
+Output:
+{
+    "classification": null,
+    "transactionType": null,
+    "propertyType": null,
+    "bhk": null,
+    "location": null,
+    "area": null,
+    "areaUnit": null,
+    "budget": null,
+    "contactNumbers": [],
+    "confidence": null,
+    "summary": null
+}
+
+Examples:
+Archana Paradise, Kondhwa
+Raheja Vista Phase 2, NIBM
+Cloud 9, NIBM
+
+Extract separately:
+society
+locality
+city
+location
+
+AREA NORMALIZATION
+
+area must always be numeric.
+
+Supported units:
+
+SQFT
+SQM
+SQYD
+ACRE
+HECTARE
+GUNTHA
+BISWA
+
+Examples:
+
+1200 sqft -> area=1200 areaUnit=SQFT
+200 sq m -> area=200 areaUnit=SQM
+2 acre -> area=2 areaUnit=ACRE
+5 guntha -> area=5 areaUnit=GUNTHA
+
+BUDGET NORMALIZATION
+
+budget must always be numeric.
+
+Examples:
+
+40K -> 40000
+2 Lakhs -> 200000
+55 Lac -> 5500000
+55 Lakhs -> 5500000
+1.5 Cr -> 15000000
+2 Crore -> 20000000
+
+Budget ranges:
+
+55-60 Lakh -> 6000000
+1.8-2 Cr -> 20000000
+
+If budget cannot be determined:
+budget = null
+
+CONTACT NUMBER EXTRACTION
+
+Extract all mobile numbers.
+
+Store in:
+
+contactNumbers: []
+
+Rules:
+
+Remove +91
+Remove spaces
+Remove dashes
+Remove brackets
+
+Keep only valid 10-digit mobile numbers.
+
+Examples:
+
++91 98765 43210
+-> 9876543210
+
+FURNISHING NORMALIZATION
+
+UNFURNISHED
+SEMI_FURNISHED
+FULLY_FURNISHED
+
+POSSESSION STATUS
+
+READY
+UNDER_CONSTRUCTION
+NEW_LAUNCH
+PRE_LAUNCH
+RESALE
+UNKNOWN
+
+PARTY TYPE
+
+OWNER
+BROKER
+BUILDER
+CHANNEL_PARTNER
+UNKNOWN
+
+PARKING
+
+NONE
+TWO_WHEELER
+CAR
+MULTIPLE
+
+CONFIDENCE GUIDELINES
+
+0.90 - 1.00 = explicit information
+0.70 - 0.89 = mostly clear
+0.40 - 0.69 = partial information
+0.00 - 0.39 = uncertain
+
+MULTIPLE PROPERTIES
+
+If multiple inventories exist:
+- Extract the primary property into fields.
+- Summarize all inventories in summary.
+
+If multiple requirements exist:
+- classification remains REQUIREMENT.
+- Extract the most important requirement.
+- Summarize all requirements.
+
+OUTPUT JSON
+
+{
+  "classification":"REQUIREMENT",
+  "multipleRecords": false,
+  "records": [
+    {
+      "transactionType":"RENT",
+      "propertyType":"PG",
+      "bhk":null,
+      "location":"Salunke Vihar Road",
+      "area":null,
+      "areaUnit":null,
+      "budget":7000
+    }
+  ],
+  "contactNumbers":[],
+  "confidence":0.99,
+  "summary":"..."
+}
+
+If a message contains multiple properties,
+requirements, inventories, units, flats,
+shops, offices, warehouses or plots,
+create ONE record entry for EACH property.
+
+Never merge multiple properties into a
+single record.
+
+The number of records must equal the
+number of distinct properties found in
+the message.
+
+Input:
+
+1BHK Flat - 25000
+2BHK Flat - 35000
+3BHK Flat - 45000
+
+Output:
+
+{
+  "classification":"INVENTORY",
+  "multipleRecords": true,
+  "records":[
+    {
+      "bhk":1,
+      "budget":25000
+    },
+    {
+      "bhk":2,
+      "budget":35000
+    },
+    {
+      "bhk":3,
+      "budget":45000
+    }
+  ]
+}
+
+If a message contains multiple requirements,
+set multipleRecords=true and create one
+entry in records[] for each requirement.
+
+Never merge multiple requirements into a
+single record.
+

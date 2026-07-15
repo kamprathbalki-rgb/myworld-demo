@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buyer Bulk Upload</title>
+</head>
+<body>
+
+<h2>Buyer Bulk Upload</h2>
+
+<form
+    action="/buyer/bulk-upload"
+    method="POST"
+    enctype="multipart/form-data">
+
+    <input
+        type="file"
+        name="excelFile"
+        accept=".csv,.xlsx"
+        required>
+
+    <button type="submit">
+        Upload
+    </button>
+
+</form>
+
+<br>
+
+<a href="/dashboard">
+    Dashboard
+</a>
+
+</body>
+</html>

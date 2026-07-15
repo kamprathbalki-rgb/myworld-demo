@@ -9,8 +9,34 @@ const calculateScore = require('../services/matchService')
 const Recommendation = require('../models/Recommendation')
 const Shortlist = require('../models/Shortlist')
 const Executive = require('../models/Executive')
-
+const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
+
+const {
+    notifyExecutive
+} = require('../services/notificationService');
+
+const XLSX = require('xlsx')
+
+const multer = require('multer')
+
+const { sendEmail } =
+require('../utils/emailService')
+
+const Tenant =
+require('../models/Tenant')
+
+const uploadExcel = multer({
+    storage: multer.memoryStorage()
+})
+
+const WhatsappGroup =
+require('../models/WhatsappGroup');
+
+const clientManager =
+require(
+'../services/tenantWhatsapp/clientManager'
+)
 
 router.post('/add', async (req,res)=>{
 
@@ -71,6 +97,7 @@ async (req, res) => {
     })
 
 })
+
 
 router.get(
 '/delete/:id',
@@ -140,6 +167,445 @@ res.render('shortlist',{ list })
 
 })
 
+
+router.get(
+    '/bulk-upload',
+    isLoggedIn,
+    isAdmin,
+    (req, res) => {
+
+        res.render(
+            'buyerBulkUpload'
+        )
+
+    }
+)
+
+router.post(
+    '/bulk-upload',
+    isLoggedIn,
+    isAdmin,
+    uploadExcel.single('excelFile'),
+    async (req, res) => {
+
+        const workbook = XLSX.read(
+            req.file.buffer,
+            { type: 'buffer' }
+        )
+
+        const sheet =
+            workbook.Sheets[
+                workbook.SheetNames[0]
+            ]
+
+        const rows =
+            XLSX.utils.sheet_to_json(
+                sheet,
+                { defval: '' }
+            )
+
+        let importedCount = 0
+        let duplicateCount = 0
+        let invalidCount = 0
+
+        let duplicateMobiles = []
+        let invalidRows = []
+        let missingLocationRequests = []
+
+        for (const row of rows) {
+
+            if (
+                !row.Phone ||
+                !/^\d{10}$/.test(
+                    String(row.Phone)
+                )
+            ) {
+
+                invalidCount++
+
+                invalidRows.push(
+                    row.Name || 'Unknown'
+                )
+
+                continue
+            }
+
+            const existingBuyer =
+                await Buyer.findOne({
+
+                    tenantId:
+                    req.session.tenantId,
+
+                    phone:
+                    String(row.Phone)
+
+                })
+
+            if (existingBuyer) {
+
+                duplicateCount++
+
+                if (
+                    !duplicateMobiles.includes(
+                        String(row.Phone)
+                    )
+                ) {
+                    duplicateMobiles.push(
+                        String(row.Phone)
+                    )
+                }
+
+                continue
+            }
+
+            let preferredLocations = [
+
+                row['Preferred Location 1'],
+
+                row['Preferred Location 2'],
+
+                row['Preferred Location 3']
+
+            ].filter(Boolean)
+
+let locationData = []
+
+const primaryLocationName =
+    preferredLocations[0]
+
+const primaryLocationRecord =
+    await LocationMaster.findOne({
+
+        officeName: {
+            $regex: '^' + primaryLocationName,
+            $options: 'i'
+        }
+
+    })
+
+if (!primaryLocationRecord) {
+
+    invalidCount++
+
+    invalidRows.push(
+        `${row.Name} - ${primaryLocationName}`
+    )
+
+    if (
+        !missingLocationRequests.includes(
+            primaryLocationName
+        )
+    ) {
+        missingLocationRequests.push(
+            primaryLocationName
+        )
+    }
+
+    continue
+}
+
+locationData.push(
+    primaryLocationRecord
+)
+
+for (const locationName of preferredLocations.slice(1)) {
+
+    const location =
+        await LocationMaster.findOne({
+
+            officeName: {
+                $regex: '^' + locationName,
+                $options: 'i'
+            }
+
+        })
+
+    if (location) {
+        locationData.push(location)
+    }
+
+}
+
+
+            const preferredPincodes = [
+                ...new Set(
+                    locationData.map(
+                        l => l.pincode
+                    )
+                )
+            ]
+
+            const preferredDistricts = [
+                ...new Set(
+                    locationData.map(
+                        l => l.district
+                    )
+                )
+            ]
+
+            const preferredDivisionNames = [
+                ...new Set(
+                    locationData.map(
+                        l => l.divisionName
+                    )
+                )
+            ]
+
+            const stateName =
+                locationData.length > 0
+                ? locationData[0].stateName
+                : ""
+
+            const primaryLocation =
+    primaryLocationRecord.officeName
+
+const primaryLocationData =
+    locationData[0]
+
+            const buyerLat =
+                primaryLocationData?.lat || 0
+
+            const buyerLng =
+                primaryLocationData?.lng || 0
+
+            const matchedExecutive =
+                await Executive.findOne({
+
+                    tenantId:
+                    req.session.tenantId,
+
+                    assignedLocations:
+                    primaryLocation,
+
+                    isActive: true
+
+                })
+
+            let requiredPossession =
+                row['Required Possession']
+                || []
+
+            if (
+                requiredPossession &&
+                typeof requiredPossession ===
+                'string'
+            ) {
+
+                requiredPossession =
+                    requiredPossession
+                    .split(',')
+                    .map(x => x.trim())
+                    .filter(Boolean)
+
+            }
+
+
+const transactionType =
+(
+row.TransactionType ||
+'SALE'
+)
+.toUpperCase();
+
+if (
+![
+'SALE',
+'RENT',
+'LEASE'
+]
+.includes(transactionType)
+) {
+
+invalidCount++;
+
+invalidRows.push(
+`${row.Name} - Invalid Transaction Type`
+);
+
+continue;
+
+}
+
+            await Buyer.create({
+
+                tenantId:
+                req.session.tenantId,
+
+                name:
+                row.Name,
+
+                phone:
+                String(row.Phone),
+
+                email:
+                row.Email,
+
+                minBudget:
+                Number(
+                    row['Min Budget'] || 0
+                ),
+
+                maxBudget:
+                Number(
+                    row['Max Budget'] || 0
+                ),
+
+
+transactionType:
+transactionType,
+
+                requiredPossession:
+                requiredPossession,
+
+                requiredFlatType:
+                row['Required Flat Type'],
+
+                minArea:
+                Number(
+                    row['Min Area'] || 0
+                ),
+
+                maxArea:
+                Number(
+                    row['Max Area'] || 0
+                ),
+
+                radius:
+                Number(
+                    row['Radius'] || 0
+                ),
+
+                assignmentType:
+                "AUTO",
+
+                primaryLocation:
+                primaryLocation,
+
+                preferredLocations:
+locationData.map(
+    l => l.officeName
+),
+
+                preferredPincodes:
+                preferredPincodes,
+
+                preferredDistricts:
+                preferredDistricts,
+
+                preferredDivisionNames:
+                preferredDivisionNames,
+
+                stateName:
+                stateName,
+
+                assignedExecutiveId:
+                matchedExecutive
+                ? matchedExecutive._id
+                : null,
+
+                assignedExecutiveName:
+                matchedExecutive
+                ? matchedExecutive.name
+                : "",
+
+                preferredLocation: {
+
+                    type: "Point",
+
+                    coordinates: [
+                        buyerLat,
+                        buyerLng
+                    ]
+
+                }
+
+            })
+
+            importedCount++
+
+        }
+
+        if (
+            duplicateMobiles.length > 0
+        ) {
+
+            const tenant =
+                await Tenant.findById(
+                    req.session.tenantId
+                )
+
+            await sendEmail(
+
+                tenant.adminEmail,
+
+                'Buyer Upload Summary',
+
+                `
+                <h2>
+                Buyer Upload Summary
+                </h2>
+
+                <p>
+                Tenant:
+                ${tenant?.name || ''}
+                </p>
+
+                <p>
+                Duplicate Mobiles:
+                </p>
+
+                <pre>
+${duplicateMobiles.join('\n')}
+                </pre>
+                `
+
+            ).catch(console.error)
+
+        }
+
+if (missingLocationRequests.length > 0) {
+
+    const tenant =
+        await Tenant.findById(
+            req.session.tenantId
+        )
+
+    await sendEmail(
+
+        'kbalki2k15@gmail.com',
+
+        'Buyer Upload - New Locations Requested',
+
+        `
+        <h2>Location Master Update Required</h2>
+
+        <p>
+        Tenant:
+        ${tenant?.name || ''}
+        </p>
+
+        <pre>
+${missingLocationRequests.join('\n')}
+        </pre>
+        `
+
+    ).catch(console.error)
+
+}
+
+        res.render(
+            'buyerBulkUploadResult',
+            {
+                importedCount,
+                duplicateCount,
+                invalidCount,
+                duplicateMobiles,
+                invalidRows
+            }
+        )
+
+    }
+)
 
 router.post(
 '/update/:id',
@@ -258,6 +724,9 @@ await Buyer.findOneAndUpdate(
 
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
+
+transactionType:
+req.body.transactionType,
 
     requiredPossession: requiredPossession,
 
@@ -481,6 +950,10 @@ const buyer = new Buyer({
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
 
+transactionType:
+req.body.transactionType,
+
+
     requiredPossession: requiredPossession,
 
     requiredFlatType: requiredFlatType,
@@ -526,6 +999,42 @@ preferredLocation: {
 
 await buyer.save()
 
+await notifyExecutive(
+
+    matchedExecutive,
+
+    `New Lead Assigned
+
+Name: ${buyer.name}
+Mobile: ${buyer.phone}
+Location: ${buyer.primaryLocation}`
+
+);
+
+
+if (matchedExecutive && matchedExecutive.mobile) {
+
+    await sendWhatsApp(
+        matchedExecutive.mobile,
+        `New Lead Assigned
+
+Name: ${buyer.name}
+Mobile: ${buyer.phone}
+Location: ${buyer.primaryLocation}`
+    );
+
+}
+
+await sendWhatsApp(
+    '9503728537',
+    `New Buyer Lead
+
+Name: ${buyer.name}
+Mobile: ${buyer.phone}
+Location: ${buyer.primaryLocation}
+Executive: ${buyer.assignedExecutiveName || 'Not Assigned'}`
+)
+
 res.redirect('/buyer/page')
 
 })
@@ -554,6 +1063,10 @@ const search = req.query.search || ''
 
 const status = req.query.status || ''
 
+const transactionType =
+req.query.transactionType || ''
+
+
 let filter = {
     tenantId: req.session.tenantId
 }
@@ -573,6 +1086,13 @@ if(search){
 
 if(status){
     filter.status = status
+}
+
+if(transactionType){
+
+    filter.transactionType =
+    transactionType
+
 }
 
 const buyers = await Buyer.find(filter)
@@ -631,6 +1151,7 @@ const lostDeals = await Buyer.countDocuments({
 
 res.render('buyers', {
     buyers,
+    transactionType,
     executives,
     search,
     status,
@@ -729,6 +1250,23 @@ await Buyer.findOneAndUpdate(
 }
 )
 
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+await notifyExecutive(
+
+    executive,
+
+    `Lead Reassigned
+
+Name: ${buyer.name}
+Mobile: ${buyer.phone}
+
+This lead has been assigned to you.`
+
+);
+
 res.redirect('/buyer/page')
 
 })
@@ -764,7 +1302,13 @@ tenantId: req.session.tenantId
 })
 
 const properties = await Property.find({
-tenantId: req.session.tenantId
+
+tenantId:
+req.session.tenantId,
+
+transactionType:
+buyer.transactionType || 'SALE'
+
 })
 
 let results = []
@@ -865,7 +1409,13 @@ tenantId: req.session.tenantId
 })
 
 const properties = await Property.find({
-tenantId: req.session.tenantId
+
+tenantId:
+req.session.tenantId,
+
+transactionType:
+buyer.transactionType || 'SALE'
+
 }).limit(100)
 
 let filteredProperties = []
@@ -956,5 +1506,166 @@ properties: results.slice(0,5)
 })
 
 })
+
+router.get(
+'/whatsapp-groups',
+isLoggedIn,
+isAdmin,
+async (req, res) => {
+
+try {
+
+const client =
+clientManager[
+req.session.tenantId
+]
+
+if (!client) {
+
+return res.send(
+'WhatsApp not connected. Please connect WhatsApp first.'
+)
+
+}
+
+let chats = []
+
+try {
+
+    chats = await Promise.race([
+
+        client.getChats().catch(() => []),
+
+        new Promise((_, reject) =>
+            setTimeout(
+                () => reject(
+                    new Error('getChats timeout')
+                ),
+                15000
+            )
+        )
+
+    ])
+
+} catch (err) {
+
+    console.log(
+        'GET CHATS ERROR:',
+        err.message
+    )
+
+    return res.send(
+        'Unable to load WhatsApp groups. Please try again.'
+    )
+
+}
+
+    const groups =
+    chats
+    .filter(c => c.isGroup)
+    .map(c => ({
+        groupId: c.id._serialized,
+        groupName: c.name
+    }));
+
+    const selectedGroups =
+    await WhatsappGroup.find({
+        tenantId: req.session.tenantId
+    });
+
+    res.render(
+        'whatsappGroups',
+        {
+            groups,
+            selectedGroups,
+            saved: req.query.saved
+        }
+    );
+
+} catch (err) {
+
+    console.error(err);
+
+    return res.send(
+        'WhatsApp is reconnecting. Please refresh in 10 seconds.'
+    );
+
+}
+
+});
+
+router.post(
+'/whatsapp-groups',
+isLoggedIn,
+isAdmin,
+async (req, res) => {
+
+    await WhatsappGroup.deleteMany({
+        tenantId: req.session.tenantId
+    });
+
+    let groups =
+    req.body.groups || [];
+
+    if (!Array.isArray(groups)) {
+        groups = [groups];
+    }
+
+    for (const item of groups) {
+
+        const [
+            groupId,
+            groupName
+        ] = item.split('|');
+
+        await WhatsappGroup.create({
+
+            tenantId:
+            req.session.tenantId,
+
+            groupId,
+
+            groupName,
+
+            active: true
+
+        });
+
+    }
+
+const savedGroups =
+await WhatsappGroup.find({
+    tenantId: req.session.tenantId
+});
+
+res.redirect(
+    '/buyer/whatsapp-groups?saved=1'
+);
+
+});
+
+
+router.get(
+'/broadcasts',
+isLoggedIn,
+isAdmin,
+async (req,res)=>{
+
+const WhatsappBroadcast =
+require('../models/WhatsappBroadcast');
+
+const broadcasts =
+await WhatsappBroadcast.find()
+.sort({ createdAt:-1 })
+.limit(500);
+
+res.render(
+    'broadcasts',
+    {
+        broadcasts
+    }
+);
+
+});
 
 module.exports = router

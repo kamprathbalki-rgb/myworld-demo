@@ -1,0 +1,237 @@
+ `
+Extract real estate information.
+
+Return ONLY valid JSON.
+
+Rules:
+
+classification:
+INVENTORY | REQUIREMENT | OTHER
+
+Property Types:
+
+APARTMENT
+VILLA
+BUNGALOW
+ROW_HOUSE
+PENTHOUSE
+PLOT
+LAND
+AGRICULTURAL_LAND
+COMMERCIAL_LAND
+FARMHOUSE
+BUILDING
+SHOP
+SHOWROOM
+OFFICE
+WAREHOUSE
+INDUSTRIAL
+PG
+HOSTEL
+CO_LIVING
+HOTEL
+RESTAURANT
+OTHER
+COMMERCIAL
+RESIDENTIAL
+MIXED_USE
+
+Normalize property types:
+
+Flat -> APARTMENT
+Apartment -> APARTMENT
+1RK -> APARTMENT (bhk=0.5)
+1BHK -> APARTMENT (bhk=1)
+2BHK -> APARTMENT (bhk=2)
+3BHK -> APARTMENT (bhk=3)
+4BHK -> APARTMENT (bhk=4)
+5BHK -> APARTMENT (bhk=5)
+Studio Apartment -> APARTMENT
+
+Villa -> VILLA
+
+Bungalow -> BUNGALOW
+
+Row House -> ROW_HOUSE
+Townhouse -> ROW_HOUSE
+
+Penthouse -> PENTHOUSE
+
+Plot -> PLOT
+Residential Plot -> PLOT
+NA Plot -> PLOT
+
+Land -> LAND
+
+Agricultural Land -> AGRICULTURAL_LAND
+Farm Land -> AGRICULTURAL_LAND
+Farm Plot -> PLOT
+
+Commercial Land -> COMMERCIAL_LAND
+
+Farm House -> FARMHOUSE
+
+Building -> BUILDING
+Residential Building -> BUILDING
+Commercial Building -> BUILDING
+Entire Building -> BUILDING
+
+Shop -> SHOP
+
+Showroom -> SHOWROOM
+
+Office -> OFFICE
+Office Space -> OFFICE
+Commercial Office -> OFFICE
+Corporate Office -> OFFICE
+
+Godown -> WAREHOUSE
+Warehouse -> WAREHOUSE
+Storage -> WAREHOUSE
+
+Industrial Shed -> INDUSTRIAL
+Factory -> INDUSTRIAL
+Manufacturing Unit -> INDUSTRIAL
+
+PG -> PG
+Paying Guest -> PG
+Double Sharing PG -> PG
+Triple Sharing PG -> PG
+Shared Accommodation -> PG
+
+Hostel -> HOSTEL
+
+Co Living -> CO_LIVING
+
+Hotel -> HOTEL
+Lodge -> HOTEL
+
+Restaurant -> RESTAURANT
+Cafe -> RESTAURANT
+Food Court -> RESTAURANT
+
+Coworking -> OFFICE
+Business Center -> OFFICE
+
+Industrial Plot -> INDUSTRIAL
+MIDC Plot -> INDUSTRIAL
+MIDC Shed -> INDUSTRIAL
+
+Marriage Hall -> COMMERCIAL
+Banquet Hall -> COMMERCIAL
+School -> COMMERCIAL
+Hospital -> COMMERCIAL
+Clinic -> COMMERCIAL
+
+transactionType:
+
+SALE
+RENT
+LEASE
+AUCTION
+JOINT_VENTURE
+REDEVELOPMENT
+PRE_LAUNCH
+RESALE
+OTHER
+
+Auction -> AUCTION
+Bank Auction -> AUCTION
+E Auction -> AUCTION
+SARFAESI -> AUCTION
+
+JV -> JOINT_VENTURE
+Joint Venture -> JOINT_VENTURE
+Development Agreement -> JOINT_VENTURE
+
+Redevelopment -> REDEVELOPMENT
+SRA -> REDEVELOPMENT
+Society Redevelopment -> REDEVELOPMENT
+
+Pre Launch -> PRE_LAUNCH
+New Launch -> PRE_LAUNCH
+Launching Soon -> PRE_LAUNCH
+
+Sale -> SALE
+Sell -> SALE
+For Sale -> SALE
+
+Rent -> RENT
+Rental -> RENT
+To Let -> RENT
+
+Lease -> LEASE
+Leave and License -> LEASE
+
+Resale -> RESALE
+
+Commercial Space -> COMMERCIAL
+Commercial Property -> COMMERCIAL
+Retail Space -> COMMERCIAL
+Business Premises -> COMMERCIAL
+
+Residential Property -> RESIDENTIAL
+Residential Unit -> RESIDENTIAL
+
+Mixed Use -> MIXED_USE
+Residential + Commercial -> MIXED_USE
+Commercial Cum Residential -> MIXED_USE
+
+budget must always be numeric
+
+Examples:
+
+40K -> 40000
+2 Lakhs -> 200000
+1.5 Cr -> 15000000
+
+area must always be numeric
+
+
+If BHK is explicitly mentioned, always extract bhk.
+
+If multiple properties are present in the same message,
+extract the primary property and summarize all properties
+in the summary field.
+
+Extract all mobile numbers appearing in the message.
+
+Store them in:
+
+contactNumbers: []
+
+Remove spaces, dashes and country code formatting.
+
+Prefer society name + locality when both are available.
+
+Examples:
+
+Archana Paradise, Kondhwa
+Raheja Vista Phase 2, NIBM
+Cloud 9, NIBM
+
+confidence must be between 0 and 1.
+
+If multiple requirements are present in a single message,
+classification remains REQUIREMENT.
+
+Extract the most important requirement into the fields.
+
+Summarize all requirements in the summary field.
+
+Return ONLY JSON
+
+{
+    "classification": null,
+    "transactionType": null,
+    "propertyType": null,
+    "bhk": null,
+    "location": null,
+    "area": null,
+    "areaUnit": null,
+    "budget": null,
+    "contactNumbers": [],
+    "confidence": null,
+    "summary": null
+}
+`

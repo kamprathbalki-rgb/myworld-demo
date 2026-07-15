@@ -1,0 +1,369 @@
+MyWorld WhatsApp AI Platform – Handover Document
+
+Project Objective
+
+The system monitors selected WhatsApp groups, classifies messages using AI, extracts structured real-estate information, and stores the results in MongoDB for matching, recommendations, and SaaS administration.
+
+High Level Flow
+
+WhatsApp Group Message
+        ↓
+whatsapp-web.js
+        ↓
+createClient.js
+        ↓
+classifyWhatsappMessage()
+        ↓
+extractWithAI()
+        ↓
+AI JSON Output
+        ↓
+Store in MongoDB
+        ↓
+Inventory / Requirement Records
+        ↓
+Future Matching Engine
+
+--------------------------
+Major Features Implemented
+---------------------------
+
+1. Multi-Tenant WhatsApp
+
+Supports multiple tenants. Each tenant has:
+
+Tenant
+    ↓
+WhatsApp Session
+    ↓
+Groups
+    ↓
+Messages
+
+Files:
+services/tenantWhatsapp/createClient.js
+services/tenantWhatsapp/restoreSessions.js
+services/tenantWhatsapp/clientManager.js
+models/TenantWhatsapp.js
+
+2. WhatsApp Group Monitoring
+
+Admin selects monitored groups.
+
+Database: whatsappgroups
+
+Model: models/WhatsappGroup.js
+
+UI: buyer/whatsapp-groups
+
+3. Message Capture
+
+All monitored group messages are stored.
+
+Collection: whatsappmessages
+
+Model: models/WhatsappMessage.js
+
+Stores:
+message
+group
+sender
+classification
+aiData
+aiUsage
+
+4. AI Classification
+
+File: services/classifyWhatsappMessage.js
+
+Classifications:
+INVENTORY
+REQUIREMENT
+OTHER
+
+5. AI Extraction
+
+File: services/whatsappAIExtractor.js
+
+Function: extractWithAI()
+
+Uses: OpenAI GPT Model
+
+Current model: gpt-5.6-luna
+
+Configured via: .env
+
+6. External Prompt - Prompt is no longer hardcoded.
+
+File: Prompts/whatsappExtractionPrompt.v2.txt
+This is the most important AI file.
+
+7. AI Learning System is Implemented.
+
+Collection: learningcorrections
+
+Model: models/LearningCorrection.js
+
+Purpose: 
+Admin corrects AI mistakes
+        ↓
+Corrections stored
+        ↓
+Prompt examples injected
+        ↓
+AI improves
+
+AI Learning Flow
+
+Other Messages
+        ↓
+Correct AI
+        ↓
+Create Correction
+        ↓
+Save
+        ↓
+learningcorrections
+        ↓
+loadLearningExamples()
+        ↓
+Prompt Injection
+        ↓
+extractWithAI()
+
+Learning Correction Files
+
+Model: models/LearningCorrection.js
+
+Routes: routes/learningCorrectionRoutes.js
+
+Views:
+views/learningCorrections.ejs
+views/learningCorrectionCreate.ejs
+views/learningCorrectionEdit.ejs
+Features Implemented in AI Learning
+Create Correction
+
+URL: /learning-correction/create/:messageId
+
+Copy AI Output - Button implemented.
+
+File: views/learningCorrectionCreate.ejs
+
+Purpose:
+AI Output
+        ↓
+Copy
+        ↓
+Corrected Output
+
+Edit Correction is Implemented.
+
+Routes:
+GET  /learning-correction/edit/:id
+POST /learning-correction/edit/:id
+
+File: routes/learningCorrectionRoutes.js
+
+View: views/learningCorrectionEdit.ejs
+
+Collections - whatsappmessages
+
+Raw messages.
+
+whatsappinventories - Extracted inventory records.
+
+Model: models/WhatsappInventory.js
+
+whatsapprequirements - Extracted requirement records.
+
+Model: models/WhatsappRequirement.js
+
+learningcorrections - AI corrections.
+
+Model: models/LearningCorrection.js
+
+Multi Inventory Extraction is Implemented.
+
+Example:
+
+7 Properties
+        ↓
+AI
+        ↓
+records[]
+        ↓
+7 Mongo Documents
+
+Files:
+Prompts/whatsappExtractionPrompt.v2.txt
+services/tenantWhatsapp/createClient.js
+
+Multi Requirement Extraction is Implemented.
+
+Example:
+
+3 Requirements
+        ↓
+AI
+        ↓
+records[]
+        ↓
+3 Mongo Documents
+
+Files:
+Prompts/whatsappExtractionPrompt.v2.txt
+services/tenantWhatsapp/createClient.js
+
+Important AI Output Format
+
+Current AI contract:
+
+{
+  "classification": "INVENTORY",
+  "multipleRecords": true,
+  "records": [
+    {
+      "transactionType": "RENT",
+      "propertyType": "APARTMENT",
+      "bhk": 2,
+      "location": "Kharadi",
+      "budget": 30000
+    }
+  ],
+  "contactNumbers": [],
+  "confidence": 0.99,
+  "summary": ""
+}
+
+DO NOT revert to:
+
+{
+  "propertyType": "",
+  "bhk": ""
+}
+
+All future development must use: records[] architecture.
+
+Recovery Processing
+
+When server restarts:
+
+restoreSessions()
+        ↓
+createClient()
+        ↓
+client.on('ready')
+        ↓
+Recovery Processing
+
+File: services/tenantWhatsapp/createClient.js
+
+Recovery now supports: Multi Inventory and Multi Requirement
+
+
+Live Processing
+
+File: services/tenantWhatsapp/createClient.js
+Handler: client.on('message')
+Supports: Multi Inventory and Multi Requirement
+
+PM2 Commands
+Start
+pm2 start app.js --name myworld
+Stop
+pm2 stop myworld
+Restart
+pm2 restart myworld
+Logs
+pm2 logs myworld
+Save Configuration
+
+Must be done after PM2 changes:
+
+pm2 save
+Startup After Reboot
+pm2 resurrect
+
+or
+
+pm2 start myworld
+
+depending on environment.
+
+
+Important Files
+
+AI Prompt - Prompts/whatsappExtractionPrompt.v2.txt
+AI Extractor - services/whatsappAIExtractor.js
+Classification - services/classifyWhatsappMessage.js
+WhatsApp Integration - services/tenantWhatsapp/createClient.js
+Session Restore - services/tenantWhatsapp/restoreSessions.js
+Learning Routes - routes/learningCorrectionRoutes.js
+
+Future Roadmap
+
+Phase 1 (Completed)
+✓ AI Extraction
+✓ AI Learning
+✓ Prompt Versioning
+✓ Multi Inventory
+✓ Multi Requirement
+✓ Edit Corrections
+✓ Copy AI Output
+
+Phase 2
+□ Inventory Matching
+□ Requirement Matching
+□ Recommendations
+□ Auto Shortlisting
+□ Match Score
+
+Phase 3
+□ Lead Management
+□ Property CRM
+□ Executive Assignment
+□ Auto Notifications
+
+Phase 4
+□ Analytics Dashboard
+□ AI Insights
+□ Market Trends
+□ Hot Locations
+
+Development Rules
+
+Rule 1
+
+Never hardcode prompts.
+Always update: - Prompts/whatsappExtractionPrompt.v2.txt
+
+Rule 2
+
+Never remove: records[] architecture.
+
+Rule 3
+Never bypass: - learningcorrections
+Prompt learning depends on it.
+
+Rule 4
+All AI changes must first be tested through:
+test-ai.js
+before deployment.
+
+Rule 5
+All database structure changes must update:
+models/
+first.
+
+Current Project Status
+WhatsApp Integration          COMPLETE
+AI Classification            COMPLETE
+AI Extraction                COMPLETE
+Prompt Learning              COMPLETE
+Correction Workflow          COMPLETE
+Multi Inventory              COMPLETE
+Multi Requirement            COMPLETE
+PM2 Deployment               COMPLETE
+
+Next Major Module: Inventory ↔ Requirement Matching Engine

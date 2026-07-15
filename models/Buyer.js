@@ -12,6 +12,16 @@ minBudget: Number,
 
 maxBudget: Number,
 
+transactionType:{
+type:String,
+enum:[
+'SALE',
+'RENT',
+'LEASE'
+],
+default:'SALE'
+},
+
 requiredFlatType: {
     type: String,
     enum: [

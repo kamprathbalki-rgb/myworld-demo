@@ -1,0 +1,87 @@
+<h2>WhatsApp Groups</h2>
+
+<% if(saved){ %>
+
+<div style="
+background:#d4edda;
+color:#155724;
+padding:10px;
+margin-bottom:15px;
+border-radius:5px;
+">
+✓ Groups Saved Successfully
+</div>
+
+<% } %>
+
+<div style="margin-bottom:15px;">
+
+<a href="/dashboard/main">
+    Home
+</a>
+
+&nbsp;&nbsp;
+
+<a href="/buyer/page">
+    Buyers
+</a>
+
+</div>
+
+<form
+method="post"
+action="/buyer/whatsapp-groups">
+
+<% groups.forEach(group => { %>
+
+<%
+const selected =
+selectedGroups.some(
+g => g.groupId === group.groupId
+);
+%>
+
+<div>
+
+<label>
+
+<input
+type="checkbox"
+name="groups"
+value="<%= group.groupId %>|<%= group.groupName %>"
+<%= selected ? 'checked' : '' %>
+>
+
+<%= group.groupName %>
+
+</label>
+
+</div>
+
+<% }) %>
+
+<br>
+
+<button type="submit">
+
+Save Selected Groups
+
+</button>
+
+</form>
+
+<hr>
+
+<h3>Currently Monitored Groups</h3>
+
+<ul>
+
+<% selectedGroups.forEach(group => { %>
+
+<li>
+<%= group.groupName %>
+</li>
+
+<% }) %>
+
+</ul>

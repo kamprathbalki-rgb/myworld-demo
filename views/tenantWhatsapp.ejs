@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>
+WhatsApp Setup
+</title>
+</head>
+
+<body>
+
+<a href="/dashboard">
+Home
+</a>
+
+<hr>
+
+<h2>
+WhatsApp Setup
+</h2>
+
+<% if(
+whatsapp &&
+whatsapp.isAuthenticated
+){ %>
+
+<p>
+Status:
+<b>
+Connected
+</b>
+</p>
+
+<p>
+Phone:
+<%= whatsapp.phoneNumber %>
+</p>
+
+<% } else { %>
+
+<p>
+Status:
+<b>
+Disconnected
+</b>
+</p>
+
+<a href="/tenant-whatsapp/connect">
+
+Connect WhatsApp
+
+</a>
+
+<% } %>
+
+</body>
+
+</html>

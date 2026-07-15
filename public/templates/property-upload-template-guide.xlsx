@@ -1,0 +1,40 @@
+| Column              | Expected Value                                                      |
+| ------------------- | ------------------------------------------------------------------- |
+| Property Mode       | PROJECT or SINGLE                                                   |
+| Project Name        | Godrej River Crest                                                  |
+| Builder Name        | Godrej Properties                                                   |
+| Owner Name          | Only for SINGLE                                                     |
+| Owner Mobile        | 10 digits, only for SINGLE                                          |
+| Property Location   | Must exactly match LocationMaster.officeName                        |
+| City                | Pune                                                                |
+| Project Type        | Residential / Commercial / Mixed Use                                |
+| Property Type       | Apartment / Villa / Plot / Office / Showroom / Retail / Shop        |
+| Project Status      | New Launch / Under Construction / Ready Possession / Resale         |
+| Property Status     | Available / Blocked / Token Received / Agreement Done / Sold        |
+| RERA Approved       | Yes / No                                                            |
+| Flat Type           | 1 BHK, 2 BHK, 3 BHK, Villa, Plot, Office etc                        |
+| Carpet Area SqFt    | Number only                                                         |
+| Quoted Price Lakhs  | Number only                                                         |
+| Closing Price Lakhs | Number only                                                         |
+| Available Units     | Number only                                                         |
+| Furnished Status    | Unfurnished / Semi-Furnished / Fully Furnished                      |
+| Parking Type        | Open / Covered / Basement / Podium / Stilt                          |
+| Possession Status   | Immediate / Ready Possession / Under Construction / Possession Soon |
+| Number Of Towers    | Number                                                              |
+| Tower Name          | A Wing                                                              |
+| Number Of Floors    | Number                                                              |
+| Tower Status        | Under Construction / Ready Possession / Sold Out                    |
+| Inventory Status    | Available / Limited Availability / Sold Out                         |
+| Possession Month    | January ... December                                                |
+| Possession Year     | 2025                                                                |
+| Floor Number        | Number                                                              |
+| Total Floors        | Number                                                              |
+| Facing              | East / West / North / South                                         |
+| Lift Available      | Yes / No                                                            |
+| Property Age        | Number of years                                                     |
+| Google Pin          | Optional URL/Text                                                   |
+| Latitude            | Decimal number                                                      |
+| Longitude           | Decimal number                                                      |
+| Amenities           | Comma separated                                                     |
+| USP                 | Text                                                                |
+| Notes               | Text                                                                |

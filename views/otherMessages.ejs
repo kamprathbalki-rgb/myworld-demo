@@ -1,0 +1,64 @@
+<a href="/saas/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+<br><br>
+
+<h2>
+Other Messages
+</h2>
+
+<a href="/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="/keyword/list">
+Keyword Master
+</a>
+
+<br><br>
+
+<table border="1">
+
+<tr>
+    <th>Date</th>
+    <th>Group</th>
+    <th>Message</th>
+    <th>Action</th>
+</tr>
+
+<% messages.forEach(m => { %>
+
+<tr>
+
+<td>
+<%= m.createdAt %>
+</td>
+
+<td>
+<%= m.groupName %>
+</td>
+
+<td>
+<%= m.message %>
+</td>
+
+<td>
+<a href="/learning-correction/create/<%= m._id %>">
+Correct AI
+</a>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>

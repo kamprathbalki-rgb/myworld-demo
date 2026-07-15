@@ -76,6 +76,38 @@
     <option <%= property.projectStatus === 'Resale' ? 'selected' : '' %>>Resale</option>
 </select><br><br>
 
+<label>Transaction Type</label>
+
+<select name="transactionType">
+
+<option
+value="SALE"
+<%= property.transactionType === 'SALE'
+? 'selected'
+: '' %>>
+Sale
+</option>
+
+<option
+value="RENT"
+<%= property.transactionType === 'RENT'
+? 'selected'
+: '' %>>
+Rent
+</option>
+
+<option
+value="LEASE"
+<%= property.transactionType === 'LEASE'
+? 'selected'
+: '' %>>
+Lease
+</option>
+
+</select>
+
+<br><br>
+
 <label>RERA Approved</label>
 <select name="reraApproved">
     <option value="">Select</option>

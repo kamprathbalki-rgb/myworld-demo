@@ -1,0 +1,62 @@
+<a href="/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="/keyword/list">
+Keyword List
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+<br><br>
+
+<h2>Add Keyword</h2>
+
+<form
+method="POST"
+action="/keyword/save"
+>
+
+<label>
+Keyword
+</label>
+
+<input
+type="text"
+name="keyword"
+required
+>
+
+<br><br>
+
+<label>
+Type
+</label>
+
+<select
+name="type"
+>
+
+<option value="INVENTORY">
+INVENTORY
+</option>
+
+<option value="REQUIREMENT">
+REQUIREMENT
+</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+Save
+</button>
+
+</form>

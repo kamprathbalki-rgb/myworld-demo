@@ -1,0 +1,33 @@
+<h2>Bulk Upload Result</h2>
+
+<p>Imported: <%= importedCount %></p>
+
+<p>Duplicates: <%= duplicateCount %></p>
+
+<p>Invalid Locations: <%= invalidLocationCount %></p>
+
+<h3>Duplicate Locations</h3>
+<ul>
+<% duplicateLocations.forEach(location => { %>
+<li><%= location %></li>
+<% }) %>
+</ul>
+
+<h3>Missing Locations</h3>
+<ul>
+<% missingLocationRequests.forEach(location => { %>
+<li><%= location %></li>
+<% }) %>
+</ul>
+
+<br><br>
+
+<a href="/property/bulk-upload">
+    Upload Another File
+</a>
+
+&nbsp;&nbsp;&nbsp;
+
+<a href="/dashboard">
+    Dashboard
+</a>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buyer Upload Result</title>
+</head>
+<body>
+
+<h2>Buyer Upload Result</h2>
+
+<p>
+Imported:
+<%= importedCount %>
+</p>
+
+<p>
+Duplicates:
+<%= duplicateCount %>
+</p>
+
+<p>
+Invalid Rows:
+<%= invalidCount %>
+</p>
+
+<h3>Duplicate Mobiles</h3>
+
+<ul>
+<% duplicateMobiles.forEach(mobile => { %>
+<li><%= mobile %></li>
+<% }) %>
+</ul>
+
+<h3>Invalid Rows</h3>
+
+<ul>
+<% invalidRows.forEach(row => { %>
+<li><%= row %></li>
+<% }) %>
+</ul>
+
+<br>
+
+<a href="/buyer/bulk-upload">
+Upload Another File
+</a>
+
+&nbsp;&nbsp;
+
+<a href="/dashboard">
+Dashboard
+</a>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<a href="/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="/keyword/list">
+Keyword List
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+<br><br>
+
+<h2>Edit Keyword</h2>
+
+<form
+method="POST"
+action="/keyword/update/<%= keyword._id %>"
+>
+
+<input
+type="text"
+name="keyword"
+value="<%= keyword.keyword %>"
+required
+>
+
+<br><br>
+
+<select
+name="type"
+>
+
+<option
+value="INVENTORY"
+<%= keyword.type === 'INVENTORY' ? 'selected' : '' %>>
+INVENTORY
+</option>
+
+<option
+value="REQUIREMENT"
+<%= keyword.type === 'REQUIREMENT' ? 'selected' : '' %>>
+REQUIREMENT
+</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+Update
+</button>
+
+</form>

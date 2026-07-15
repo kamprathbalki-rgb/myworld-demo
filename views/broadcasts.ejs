@@ -1,0 +1,22 @@
+<h2>WhatsApp Broadcasts</h2>
+
+<a href="/dashboard/main">
+Home
+</a>
+
+<hr>
+
+<% broadcasts.forEach(item => { %>
+
+<div
+style="
+border:1px solid #ccc;
+padding:10px;
+margin-bottom:10px;
+">
+
+<pre><%= item.message %></pre>
+
+</div>
+
+<% }) %>

@@ -43,6 +43,11 @@ body {
 <td><b>Flat Type</b></td>
 <td><%= buyer.requiredFlatType %></td>
 
+<td><b>Transaction</b></td>
+<td>
+<%= buyer.transactionType || 'SALE' %>
+</td>
+
 <td><b>Area</b></td>
 <td>
 <%= buyer.minArea %> -
@@ -72,6 +77,7 @@ body {
 <th>Project Name</th>
 <th>Builder Name</th>
 <th>Property Location</th>
+<th>Transaction</th>
 <th>Matched Flat Type</th>
 <th>Carpet Area</th>
 <th>Quoted Price</th>
@@ -114,6 +120,11 @@ else if (m.score >= 40) {
 
 <td>
 <%= m.property.propertyLocation || '' %>
+</td>
+
+
+<td>
+<%= m.property.transactionType || 'SALE' %>
 </td>
 
 <td>

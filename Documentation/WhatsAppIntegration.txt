@@ -1,0 +1,425 @@
+/services/WhatsApp.js, whatsappservice.js
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+##########################################################################
+
+Achieved So Far ✅
+WhatsApp Integration
+WhatsApp connected successfully using whatsapp-web.js
+Session persists using LocalAuth
+QR login completed
+Runs from MyWorld server
+CRM Notifications
+
+Completed and working:
+
+New Lead Assigned → Executive WhatsApp
+New Lead Assigned → Admin WhatsApp
+Lead Reassigned → Executive WhatsApp
+New Property Added → Executive WhatsApp
+Site Visit Scheduled → Executive WhatsApp
+Site Visit Tomorrow Reminder → Executive WhatsApp
+Follow-up Due Today (8 AM cron)
+Deal Closed Congratulations
+Daily Summary (7 PM)
+WhatsApp Group Intelligence
+WhatsApp can see all groups
+Detected 59 groups
+Created WhatsApp Groups screen
+Admin can select groups to monitor
+Selected groups stored in MongoDB
+
+Current monitored groups:
+
+🔮Salunkevihar/LullaNagar🔮
+
+Pune City PCMC Plot Property
+
+Pune Commercial Market
+Message Capture
+
+Working end-to-end:
+
+WhatsApp
+    ↓
+Selected Groups
+    ↓
+MongoDB
+
+Collection:
+
+whatsappmessages
+
+Successfully captured real estate messages such as:
+
+Office for Sale
+Land Parcels
+Commercial Listings
+Broadcast / Newsletter Capture
+
+Working architecture created:
+
+status@broadcast
+@newsletter
+    ↓
+whatsappbroadcasts
+
+Kept separate from real estate messages.
+
+SaaS Architecture Direction
+No hardcoded group names
+User selects groups
+Groups stored per tenant
+Suitable for SaaS rollout
+Immediate Next Steps (Priority Order)
+Phase 1 — Classification (Highest Priority)
+
+Create:
+
+WhatsappInventory
+WhatsappRequirement
+
+AI should classify every message as:
+
+Inventory
+Requirement
+Other
+
+Examples:
+
+2 BHK Required
+Budget 70 Lakh
+
+↓
+
+Requirement
+Office for Sale
+Price 9.5 Cr
+
+↓
+
+Inventory
+Good Morning
+
+↓
+
+Other
+Phase 2 — Extraction
+
+Convert message to structured data.
+
+Example:
+
+2 BHK NIBM
+Budget 70 Lakh
+Contact 9876543210
+
+↓
+
+{
+  "bhk": 2,
+  "location": "NIBM",
+  "budget": 70,
+  "contact": "9876543210"
+}
+
+Store in:
+
+WhatsappRequirement
+Phase 3 — Inventory Extraction
+
+Example:
+
+Office for Sale
+Viman Nagar
+8986 Sq Ft
+9.5 Cr
+
+↓
+
+{
+  "propertyType": "Office",
+  "location": "Viman Nagar",
+  "area": 8986,
+  "price": 950
+}
+
+Store in:
+
+WhatsappInventory
+Phase 4 — Matching Engine (Money Feature)
+Requirement
+        ↕
+AI Matching Engine
+        ↕
+Inventory
+
+Example:
+
+Requirement:
+2 BHK NIBM
+Budget 70L
+
+matches
+
+Inventory:
+2 BHK NIBM
+68L
+
+System alerts admin.
+
+This is where commissions are generated.
+
+Phase 5 — Dashboard
+
+Add pages:
+
+WhatsApp Messages
+Requirements
+Inventory
+Matches
+
+Admin should never need to search WhatsApp manually again.
+
+What Not To Do Now
+
+Do NOT spend time on:
+
+OpenAI integration
+Complex AI agents
+Automatic buyer creation
+Automatic property creation
+Multi-group matching
+
+First complete:
+
+Capture
+    ↓
+Classify
+    ↓
+Extract
+
+Once you have 100–200 real messages stored, the AI and matching become much easier and more accurate.
+
+Current Status
+CRM Notifications           ✅
+WhatsApp Integration        ✅
+Group Selection             ✅
+Message Capture             ✅
+Broadcast Capture           ⚠️ Verify on next broadcast
+AI Classification           ⏳ Next
+Data Extraction             ⏳ Next
+Matching Engine             ⏳ Later
+Revenue Feature             ⏳ After Matching
+
+You have already completed the hardest part: reliable acquisition of real-world WhatsApp real estate data into MyWorld. The remaining work is turning that data into structured requirements, inventory, and matches.
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+##########################################################################
+
+
+db.whatsappbroadcasts.find()
+.sort({createdAt:-1})
+.limit(20)
+
+db.whatsappmessages.find()
+.sort({ createdAt:-1 })
+.limit(20)
+
+db.whatsappmessages.find(
+{
+    groupName: {
+        $in: [
+            '🔮Salunkevihar/LullaNagar🔮',
+            'Pune City PCMC Plot Property',
+            'Pune Commercial Market'
+        ]
+    }
+}
+)
+.sort({ createdAt:-1 })
+.limit(20)
+
+db.whatsappmessages.countDocuments()
+
+db.whatsappmessages.aggregate([
+{
+    $group:{
+        _id:"$groupName",
+        count:{ $sum:1 }
+    }
+},
+{
+    $sort:{ count:-1 }
+}
+])
+
+
+Implement in this exact order:
+
+1. New Lead Assigned
+3. Site Visit Scheduled
+5. Lead Reassigned
+6. New Property Added
+7. Deal Closed
+
+THEN
+
+2. Follow-Up Due Today
+4. Site Visit Tomorrow
+8. Daily Summary
+
+Phase 1 (Today)
+1. New Lead Assigned
+
+Already working/almost working.
+
+Trigger:
+
+await buyer.save()
+
+Send to:
+
+Executive
+Admin
+3. Site Visit Scheduled
+
+Trigger:
+
+router.post('/project-visit/:buyerId/:propertyId')
+
+in both:
+
+buyerRoutes.js
+executiveRoutes.js
+
+Send:
+
+Site Visit Scheduled
+
+Buyer: Rajesh
+Project: ABC Residency
+Date: 10-Jul-2026
+
+Executive: Adim
+5. Lead Reassigned
+
+Trigger:
+
+router.post('/reassign/:id')
+
+After:
+
+await Buyer.findOneAndUpdate(...)
+
+Send:
+
+Lead Reassigned
+
+Buyer: Rajesh
+
+This lead is now assigned to you.
+6. New Property Added In Executive Area
+
+Trigger:
+
+router.post('/save')
+
+inside propertyRoutes.js.
+
+Find executives:
+
+assignedLocations: property.propertyLocation
+
+Send:
+
+New Property Added
+
+Project: ABC Residency
+Location: Wakad
+
+Available for matching.
+7. Deal Closed Congratulations
+
+Trigger:
+
+router.post('/followup/:id')
+
+inside executiveRoutes.js.
+
+You already have:
+
+if (req.body.status === 'Deal Closed')
+
+Send:
+
+Congratulations
+
+Deal Closed Successfully
+
+Buyer: Rajesh
+Phase 2 (Tomorrow)
+
+Scheduled jobs.
+
+2. Follow-Up Due Today (8 AM)
+
+Create:
+
+utils/followupReminderJob.js
+
+Run every morning.
+
+Find:
+
+nextFollowUp = today
+
+Send:
+
+Good Morning
+
+Today's Follow Ups
+
+1. Rajesh
+2. Amit
+3. Suresh
+4. Site Visit Tomorrow (5 PM)
+
+Every day at 5 PM.
+
+Find:
+
+scheduledVisitDate = tomorrow
+
+Send:
+
+Reminder
+
+Tomorrow Site Visits
+
+1. Rajesh - 11:00 AM
+2. Amit - 4:00 PM
+
+This is a very good notification.
+
+8. Daily Summary (7 PM)
+
+Every day.
+
+Send:
+
+Daily Summary
+
+New Leads: 4
+Follow Ups Done: 6
+Site Visits: 2
+Deals Closed: 1
+
+Pending Follow Ups: 3
+
+This should go to:
+
+Executive
+Admin
+

@@ -15,6 +15,16 @@ const propertySchema = new mongoose.Schema({
 
     ownerMobile: String,
 
+transactionType:{
+type:String,
+enum:[
+'SALE',
+'RENT',
+'LEASE'
+],
+default:'SALE'
+},
+
     propertyStatus: {
         type: String,
         default: 'Available'
@@ -37,6 +47,27 @@ const propertySchema = new mongoose.Schema({
     singleCarpetArea: Number,
 
     singleQuotedPrice: Number,
+
+monthlyRent: {
+    type: Number,
+    default: 0
+},
+
+securityDeposit: {
+    type: Number,
+    default: 0
+},
+
+maintenanceCharges: {
+    type: Number,
+    default: 0
+},
+
+leaseDurationMonths: {
+    type: Number,
+    default: 0
+},
+
 
     singleClosingPrice: Number,
 
@@ -127,8 +158,7 @@ const propertySchema = new mongoose.Schema({
 
     location: {
         type: {
-            type: String,
-            default: 'Point'
+            type: String
         },
         coordinates: [Number]
     },

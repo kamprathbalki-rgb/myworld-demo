@@ -1,3 +1,35 @@
+DB BackUp
+
+D:\mongodb_tools\bin\mongodump.exe --db myworld --out D:\backup
+dir D:\backup\myworld
+
+Next you need the Railway public MongoDB connection string.
+In Railway:
+Open the MongoDB service.
+Click Connect.
+Select Public Networking.
+Copy the full MongoDB URI.
+
+In Railway MongoDB:
+Open Connect.
+Copy the exact connection string that Railway provides for external tools.
+Do not use the variable you copied from MONGO_URL.
+
+mongorestore.exe --uri="mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167/?authSource=admin" --db myworld D:\backup\myworld
+
+D:\MyWorld>mongorestore.exe --uri="mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167/?authSource=admin" --db myworld D:\backup\myworld
+
+D:\MyWorld>mongorestore.exe --uri="mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167/admin?authSource=admin" --db myworld D:\backup\myworld
+
+D:\MyWorld>mongosh "mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167/admin?authSource=admin"
+
+D:\MyWorld>mongorestore.exe --uri="mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167" --db myworld D:\backup\myworld
+
+D:\MyWorld>D:\mongodb_tools\mongorestore.exe --uri="mongodb://mongo:sXEEfMDTSNervwUSUADixXpNLoKAJMII@hayabusa.proxy.rlwy.net:13167" --db myworld D:\backup\myworld
+
+
+
+
 myworld> db.tenants.deleteMany({})
 { acknowledged: true, deletedCount: 8 }
 myworld> db.buyers.deleteMany({})

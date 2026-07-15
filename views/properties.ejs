@@ -12,11 +12,56 @@
 
 <h1>Project List</h1>
 
+<form method="GET" action="/property/page">
+
+<select
+name="transactionType"
+onchange="this.form.submit()">
+
+<option value="ALL">
+All
+</option>
+
+<option
+value="SALE"
+<%= transactionType === 'SALE'
+? 'selected'
+: '' %>>
+Sale
+</option>
+
+<option
+value="RENT"
+<%= transactionType === 'RENT'
+? 'selected'
+: '' %>>
+Rent
+</option>
+
+<option
+value="LEASE"
+<%= transactionType === 'LEASE'
+? 'selected'
+: '' %>>
+Lease
+</option>
+
+</select>
+
+</form>
+
+<br>
+
+
 <table border="1" cellpadding="10" cellspacing="0">
 
 <tr>
     <th>Photo</th>
     <th>Status</th>
+    <th>Transaction</th>
+    <th>Monthly Rent</th>
+    <th>Deposit</th>
+    <th>Maintenance</th>
     <th>Project Name</th>
     <th>Mode</th>
     <th>Builder Name</th>
@@ -78,6 +123,22 @@ No Photo
 
 <% } %>
 
+</td>
+
+<td>
+<%= p.transactionType || 'SALE' %>
+</td>
+
+<td>
+<%= p.monthlyRent || '' %>
+</td>
+
+<td>
+<%= p.securityDeposit || '' %>
+</td>
+
+<td>
+<%= p.maintenanceCharges || '' %>
 </td>
 
     <td>

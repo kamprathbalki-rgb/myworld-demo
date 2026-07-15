@@ -28,4 +28,21 @@ next()
 
 }
 
-module.exports = { isLoggedIn,isAdmin,isExecutive }
+const isSaasAdmin =
+(req, res, next) => {
+
+if (
+    req.session.user &&
+    req.session.user.role ===
+    'saasadmin'
+) {
+    return next();
+}
+
+return res.redirect(
+    '/dashboard'
+);
+
+}
+
+module.exports = { isLoggedIn,isAdmin,isExecutive,isSaasAdmin }

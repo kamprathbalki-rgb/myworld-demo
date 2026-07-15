@@ -1,0 +1,90 @@
+npm install pm2 -g
+
+####################################
+services/whatsapp.js
+process.on(
+'SIGINT',
+async () => {
+
+    console.log(
+        'SHUTTING DOWN WHATSAPP...'
+    );
+
+    try {
+
+        await client.destroy();
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+    process.exit(0);
+
+});
+####################################
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+pm2 start app.js --name myworld
+pm2 status
+myworld online
+pm2 logs myworld
+pm2 restart myworld
+pm2 stop myworld
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+start-myworld.bat
+restart-myworld.bat
+stop-myworld.bat
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+After first successful PM2 start, run once:
+pm2 save
+Then:
+pm2 startup
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+pm2 logs myworld
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Press:
+Ctrl + C
+This exits:
+pm2 logs myworld
+
+It only closes the log viewer.
+It does NOT stop:
+myworld
+or
+PM2
+
+Application keeps running in the background.
+
+--------------------------------------------
+Useful commands:
+--------------------------------------------
+pm2 logs myworld
+View logs
+Ctrl + C
+Exit log viewer
+
+pm2 status
+See running apps
+
+pm2 restart myworld
+Restart app
+
+pm2 stop myworld
+Stop app
+
+pm2 delete myworld
+Remove app from PM2 completely
+
+For pm2 logs myworld, Ctrl+C is the correct way to exit.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+

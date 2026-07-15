@@ -1,0 +1,49 @@
+<a href="/dashboard">
+Home
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+&nbsp;|&nbsp;
+
+<a href="/keyword/add">
+Add Keyword
+</a>
+
+<br><br>
+
+<h2>Keyword Master</h2>
+
+<table border="1">
+
+<tr>
+    <th>Keyword</th>
+    <th>Type</th>
+    <th>Active</th>
+    <th>Action</th>
+</tr>
+
+<% keywords.forEach(k => { %>
+
+<tr>
+    <td><%= k.keyword %></td>
+    <td><%= k.type %></td>
+    <td><%= k.active %></td>
+    <td>
+
+<a href="/keyword/toggle/<%= k._id %>">
+
+<%= k.active ? 'Deactivate' : 'Activate' %>
+
+</a>
+
+</td>
+</tr>
+
+<% }) %>
+
+</table>

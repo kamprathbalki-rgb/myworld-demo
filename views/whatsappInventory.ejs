@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WhatsApp Inventory</title>
+</head>
+<body>
+
+<a href="/dashboard/main">Home</a>
+
+<h1>WhatsApp Inventory</h1>
+
+<table border="1">
+
+<tr>
+<th>Date</th>
+<th>Group</th>
+<th>Sender</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Type</th>
+<th>Transaction</th>
+<th>BHK</th>
+<th>Location</th>
+<th>Area</th>
+<th>Budget</th>
+<th>Confidence</th>
+<th>Summary</th>
+</tr>
+
+<% inventory.forEach(i=>{ %>
+
+<tr>
+
+<td>
+<%= new Date(i.createdAt)
+.toLocaleString('en-IN') %>
+</td>
+
+<td>
+<%= i.groupName || '' %>
+</td>
+
+<td>
+<%= i.sender || '' %>
+</td>
+
+<td>
+<%= i.senderId || i.sender || '' %>
+</td>
+
+<td><%= i.senderPhone || '' %></td>
+
+<td>
+<%= i.propertyType || '' %>
+</td>
+
+<td>
+<%= i.transactionType || '' %>
+</td>
+
+<td>
+<%= i.bhk || '' %>
+</td>
+
+<td>
+<%= i.location || '' %>
+</td>
+
+<td>
+<%= i.area || '' %>
+<%= i.areaUnit || '' %>
+</td>
+
+<td>
+<%= i.budget || '' %>
+</td>
+
+<td>
+<%= i.confidence || '' %>
+</td>
+
+<td>
+<%= i.summary || '' %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>
