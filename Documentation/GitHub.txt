@@ -1,3 +1,29 @@
+Step 1 - Update .gitignore
+node_modules/
+.env
+.wwebjs_auth/
+.wwebjs_cache/
+ai-error-log.txt
+logs/
+.pm2/
+
+Step 2 - Stop tracking node_modules
+git rm -r --cached node_modules
+
+Step 3 - Stop tracking .env
+git rm --cached .env
+
+Step 4 - Verify
+git status
+
+Step 5 - Commit
+git add .
+git status | findstr /i node_modules
+git status | findstr /i ".env"
+git commit -m "WhatsApp AI Learning, Multi Inventory, Multi Requirement"
+git push origin master
+
+
 GIT-Hub and Railway - Login is kamprathbalki@gmail.com
 for email send it is balki2k15@gmail.com
 
@@ -27,7 +53,7 @@ kbalki2k15@gmail.com
 D:\MyWorld>
 D:\MyWorld>cmdkey /list
 
-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
+[REMOVED]
 
 git config --global credential.helper manager-core
 
