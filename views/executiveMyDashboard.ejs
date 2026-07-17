@@ -488,103 +488,6 @@ Properties<br><%= myProperties %>
 
 </div></details>
 
-<div class="card">
-
-<div style="margin-bottom:15px;">
-
-<b>
-🤝 Client Meeting
-(#<%= meetingOutCount %>)
-</b>
-
-<br><br>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-<input type="hidden" name="type" value="meetingOut">
-<button <%= meetingActive || currentlyBusy ? 'disabled' : '' %>>
-Start
-</button>
-</form>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-<input type="hidden" name="type" value="meetingIn">
-<button <%= !meetingActive ? 'disabled' : '' %>>
-End
-</button>
-</form>
-
-<form
-class="gpsLocationForm"
-method="POST"
-action="/executive/location-log"
-style="display:inline;"
->
-
-<input type="hidden" name="type" value="CLIENT">
-<input type="hidden" name="latitude" class="gpsLat">
-<input type="hidden" name="longitude" class="gpsLng">
-<input type="hidden" name="accuracy" class="gpsAcc">
-
-<button
-<%= !meetingActive ? 'disabled' : '' %>
->
-📍 Client
-</button>
-
-</form>
-
-</div>
-
-<hr style="margin:15px 0;">
-
-<div>
-
-<b>
-🏢 Site Visit
-(#<%= siteOutCount %>)
-</b>
-
-<br><br>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-<input type="hidden" name="type" value="siteVisitOut">
-<button <%= siteActive || currentlyBusy ? 'disabled' : '' %>>
-Start
-</button>
-</form>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-<input type="hidden" name="type" value="siteVisitIn">
-<button <%= !siteActive ? 'disabled' : '' %>>
-End
-</button>
-</form>
-
-<form
-class="gpsLocationForm"
-method="POST"
-action="/executive/location-log"
-style="display:inline;"
->
-
-<input type="hidden" name="type" value="SITE">
-<input type="hidden" name="latitude" class="gpsLat">
-<input type="hidden" name="longitude" class="gpsLng">
-<input type="hidden" name="accuracy" class="gpsAcc">
-
-<button
-<%= !siteActive ? 'disabled' : '' %>
->
-📍 Site
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-
 <h2 style="margin-top:20px;">My Leads</h2>
 <div class="buyer-list">
 
@@ -1038,6 +941,26 @@ box-shadow:0 2px 10px rgba(0,0,0,.25);
 ☕
 </button>
 
+<button
+id="activitiesBtn"
+style="
+position:fixed;
+right:20px;
+bottom:150px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#1f4e79;
+color:white;
+border:none;
+font-size:24px;
+z-index:2001;
+box-shadow:0 2px 10px rgba(0,0,0,.25);
+">
+⚙️
+</button>
+
+
 <div
 id="breaksModal"
 style="
@@ -1145,6 +1068,150 @@ Close
 
 </div>
 
+<div
+id="activitiesModal"
+style="
+display:none;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+background:#f5f7fa;
+padding:20px;
+border-radius:20px 20px 0 0;
+box-shadow:0 -4px 20px rgba(0,0,0,.2);
+z-index:3000;
+"
+>
+
+<div style="
+background:#1f4e79;
+color:white;
+padding:12px 15px;
+border-radius:10px;
+margin-bottom:15px;
+font-weight:bold;
+font-size:18px;
+">
+⚙️ Activities
+</div>
+
+<div class="card">
+
+<div style="margin-bottom:15px;">
+
+<b>
+🤝 Client Meeting
+(#<%= meetingOutCount %>)
+</b>
+
+<br><br>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="meetingOut">
+<button <%= meetingActive || currentlyBusy ? 'disabled' : '' %>>
+Start
+</button>
+</form>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="meetingIn">
+<button <%= !meetingActive ? 'disabled' : '' %>>
+End
+</button>
+</form>
+
+<form
+class="gpsLocationForm"
+method="POST"
+action="/executive/location-log"
+style="display:inline;"
+>
+
+<input type="hidden" name="type" value="CLIENT">
+<input type="hidden" name="latitude" class="gpsLat">
+<input type="hidden" name="longitude" class="gpsLng">
+<input type="hidden" name="accuracy" class="gpsAcc">
+
+<button
+<%= !meetingActive ? 'disabled' : '' %>
+>
+📍 Client
+</button>
+
+</form>
+
+</div>
+
+<hr style="margin:15px 0;">
+
+<div>
+
+<b>
+🏢 Site Visit
+(#<%= siteOutCount %>)
+</b>
+
+<br><br>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="siteVisitOut">
+<button <%= siteActive || currentlyBusy ? 'disabled' : '' %>>
+Start
+</button>
+</form>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="siteVisitIn">
+<button <%= !siteActive ? 'disabled' : '' %>>
+End
+</button>
+</form>
+
+<form
+class="gpsLocationForm"
+method="POST"
+action="/executive/location-log"
+style="display:inline;"
+>
+
+<input type="hidden" name="type" value="SITE">
+<input type="hidden" name="latitude" class="gpsLat">
+<input type="hidden" name="longitude" class="gpsLng">
+<input type="hidden" name="accuracy" class="gpsAcc">
+
+<button
+<%= !siteActive ? 'disabled' : '' %>
+>
+📍 Site
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<button
+onclick="closeActivitiesModal()"
+style="
+width:100%;
+margin-top:15px;
+background:#1f4e79;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+font-weight:bold;
+">
+Close
+</button>
+
+</div>
+
+
+
+
 <div class="mobile-bottom-nav">
 
 <a href="/executive/dashboard">
@@ -1189,6 +1256,24 @@ function closeBreaksModal(){
 
     document
     .getElementById('breaksModal')
+    .style.display = 'none'
+
+}
+
+document
+.getElementById('activitiesBtn')
+.addEventListener('click', function(){
+
+    document
+    .getElementById('activitiesModal')
+    .style.display = 'block'
+
+})
+
+function closeActivitiesModal(){
+
+    document
+    .getElementById('activitiesModal')
     .style.display = 'none'
 
 }
