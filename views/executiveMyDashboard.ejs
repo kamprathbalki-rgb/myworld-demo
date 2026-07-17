@@ -304,13 +304,12 @@ color:#1f4e79;
 
 <div class="top-nav">
 
-<a href="javascript:history.back()">Back</a>
-
 <a href="/executive/location-history">
-Location History</a>
+📍 Location History
+</a>
 
 <a href="/executive/route-map">
-Route Map
+🗺️ Route Map
 </a>
 
 <form
@@ -428,31 +427,27 @@ color:#555;
 
 <div class="quick-actions">
 
+<div class="quick-actions">
+
 <a href="/executive/dashboard" class="quick-card">
-Leads<br><%= myLeads %>
+👥 Leads<br><%= myLeads %>
 </a>
 
 <a href="/executive/properties" class="quick-card">
-Properties<br><%= myProperties %>
+🏢 Properties<br><%= myProperties %>
 </a>
+
+<div class="quick-card">
+📞 Contacted<br><%= contacted %>
+</div>
+
+<div class="quick-card">
+🤝 Negotiation<br><%= negotiation %>
+</div>
 
 </div>
 
 <details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">My Dashboard</summary><div class="summary">
-
-<a href="/executive/dashboard">
-<div class="card">
-<h3>My Leads</h3>
-<h2><%= myLeads %></h2>
-</div>
-</a>
-
-<a href="/executive/properties">
-<div class="card">
-<h3>My Properties</h3>
-<h2><%= myProperties %></h2>
-</div>
-</a>
 
 <a href="/executive/property-map">
 <div class="card">
@@ -460,16 +455,6 @@ Properties<br><%= myProperties %>
 <h2>View</h2>
 </div>
 </a>
-
-<div class="card">
-<h3>Contacted</h3>
-<h2><%= contacted %></h2>
-</div>
-
-<div class="card">
-<h3>Negotiation</h3>
-<h2><%= negotiation %></h2>
-</div>
 
 <div class="card">
 <h3>Pipeline (<%= openLeadCount %>)</h3>
@@ -1229,7 +1214,7 @@ Close
 </a>
 
 <a href="/executive/reports">
-📊<br>Reports
+📊<br>Attendance
 </a>
 
 <a href="#"
