@@ -27,6 +27,25 @@ require('../models/ExecutiveLocationLog')
 const OfficeLocation =
 require('../models/OfficeLocation')
 
+function getISTTime() {
+    return new Date().toLocaleTimeString(
+        'en-IN',
+        {
+            timeZone: 'Asia/Kolkata',
+            hour12: true
+        }
+    )
+}
+
+function getISTDate() {
+    return new Date().toLocaleDateString(
+        'en-CA',
+        {
+            timeZone: 'Asia/Kolkata'
+        }
+    )
+}
+
 function getDistanceMeters(
 lat1,
 lon1,
@@ -602,7 +621,7 @@ console.log(
 
 
     // --- AUTO CAPTURE LOGIN TIME ---
-    const today = new Date().toISOString().slice(0,10)
+    const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
         executiveId: executive._id,
@@ -613,7 +632,7 @@ if (record && !record.activityLog) {
     record.activityLog = []
 }
 
-const now = new Date().toLocaleTimeString()
+const now = getISTTime()
 
 if (!record) {
 
@@ -709,7 +728,7 @@ router.get('/reports', async (req, res) => {
         return res.redirect('/executive/login')
     }
 
-    const today = new Date().toISOString().slice(0,10)
+    const today = getISTDate()
 
     const attendance = await ExecutiveAttendance.findOne({
         executiveId: req.session.executiveId,
@@ -809,7 +828,7 @@ const negotiation = await Buyer.countDocuments({
     status: 'Negotiation'
 })
 
-const today = new Date().toISOString().slice(0,10)
+const today = getISTDate()
 
 const attendance = await ExecutiveAttendance.findOne({
     executiveId: req.session.executiveId,
@@ -1147,7 +1166,7 @@ router.post('/attendance/punch', async (req, res) => {
         return res.redirect('/executive/login')
     }
 
-    const today = new Date().toISOString().slice(0,10)
+    const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
         executiveId: req.session.executiveId,
@@ -1170,10 +1189,10 @@ if (!record) {
 
     // Auto-capture first login
     if (!record.loginTime) {
-        record.loginTime = new Date().toLocaleTimeString()
+        record.loginTime = getISTTime()
     }
 
-    const time = new Date().toLocaleTimeString()
+    const time = getISTTime()
 
     const teaActive =
         (record.teaOut?.length || 0) >
@@ -1347,7 +1366,7 @@ res.render('executiveLost',{
 
 router.get('/logout', async (req, res) => {
 
-    const today = new Date().toISOString().slice(0,10)
+    const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
         executiveId: req.session.executiveId,
@@ -1399,7 +1418,7 @@ console.log(
 
     if (record) {
 
-        const currentTime = new Date().toLocaleTimeString()
+        const currentTime = getISTTime()
 
 if (!record.logoutLocations) {
     record.logoutLocations = []

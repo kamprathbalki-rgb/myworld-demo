@@ -2,6 +2,25 @@ const axios = require('axios')
 
 const SELL_DO_API = 'http://app.sell.do/api/leads/create'
 
+function getISTTime() {
+    return new Date().toLocaleTimeString(
+        'en-IN',
+        {
+            timeZone: 'Asia/Kolkata',
+            hour12: true
+        }
+    )
+}
+
+function getISTDate() {
+    return new Date().toLocaleDateString(
+        'en-CA',
+        {
+            timeZone: 'Asia/Kolkata'
+        }
+    )
+}
+
 async function pushLeadToSellDo(lead) {
   try {
     const params = {

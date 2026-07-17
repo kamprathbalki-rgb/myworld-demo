@@ -25,6 +25,26 @@ const {
     extractWithAI
 } = require('../whatsappAIExtractor');
 
+
+function getISTTime() {
+    return new Date().toLocaleTimeString(
+        'en-IN',
+        {
+            timeZone: 'Asia/Kolkata',
+            hour12: true
+        }
+    )
+}
+
+function getISTDate() {
+    return new Date().toLocaleDateString(
+        'en-CA',
+        {
+            timeZone: 'Asia/Kolkata'
+        }
+    )
+}
+
 async function createClient(
 tenantId
 ) {

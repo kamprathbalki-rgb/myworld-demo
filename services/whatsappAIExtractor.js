@@ -21,6 +21,25 @@ console.log(
     )
 );
 
+function getISTTime() {
+    return new Date().toLocaleTimeString(
+        'en-IN',
+        {
+            timeZone: 'Asia/Kolkata',
+            hour12: true
+        }
+    )
+}
+
+function getISTDate() {
+    return new Date().toLocaleDateString(
+        'en-CA',
+        {
+            timeZone: 'Asia/Kolkata'
+        }
+    )
+}
+
 function loadPrompt() {
 
     const promptFile =
