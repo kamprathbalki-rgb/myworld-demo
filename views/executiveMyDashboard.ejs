@@ -274,16 +274,6 @@ text-decoration:none;
 z-index:2001;
 }
 
-.logout-btn{
-background:#dc3545;
-color:#fff;
-border:none;
-padding:10px 18px;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-}
-
 </style>
 
 </head>
@@ -330,12 +320,6 @@ name="accuracy"
 id="logoutAccuracy"
 >
 
-<button
-type="submit"
-class="logout-btn">
-🚪 Sign Out
-</button>
-
 </form>
 
 </div>
@@ -346,26 +330,58 @@ class="logout-btn">
 Executive Dashboard
 </h1>
 
-<h2>
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+flex-wrap:wrap;
+gap:10px;
+">
+
+<div>
+
+<h2 style="margin:0;">
 Welcome, <%= executiveName %>
 </h2>
 
-<p style="color:#666;">
-Manage Leads, Follow Ups, Site Visits and Attendance
+<p style="color:#666;margin:5px 0 0 0;">
+Manage Leads, Follow Ups & Site Visits
 </p>
+
+</div>
+
+<div style="
+background:#f5f7fa;
+padding:10px 14px;
+border-radius:10px;
+font-size:14px;
+min-width:220px;
+text-align:right;
+">
+
+<div>
+🟢 <strong><%= currentStatus %></strong>
+</div>
+
+<div>
+📅 <span id="todayDate"></span>
+</div>
+
+<div>
+🕒 <span id="liveClock"></span>
+</div>
+
+<div>
+⏰ Login:
+<%= attendance?.loginTimes?.slice(-1)[0] || '--:--' %>
+</div>
+
+</div>
 
 </div>
 
 
 <div class="quick-actions">
-
-<a href="/executive/followups" class="quick-card">
-Follow Ups<br><%= followUps %>
-</a>
-
-<a href="/executive/sitevisits" class="quick-card">
-Visits<br><%= siteVisits %>
-</a>
 
 <a href="/executive/dashboard" class="quick-card">
 Leads<br><%= myLeads %>
@@ -381,29 +397,7 @@ Properties<br><%= myProperties %>
 
 <div class="attendance-grid">
 
-<div class="duty-card">
-
-<h3>Today's Duty Status</h3>
-
-<div class="duty-status">
-    <%= currentStatus %>
-</div>
-
-<div class="duty-row">
-    <span>Login</span>
-    <strong><%= attendance?.loginTimes?.slice(-1)[0] || '--:--' %></strong>
-</div>
-
-<div class="duty-row">
-    <span>Logout</span>
-    <strong><%= displayLogoutTime || '--:--' %></strong>
-</div>
-
-</div>
-
 <div class="card">
-
-<h3>BREAKS</h3>
 
 <div style="margin-bottom:15px;">
 
@@ -414,7 +408,7 @@ Count: <strong><%= teaOutCount %></strong>
 </div>
 
 <div style="margin-bottom:10px;">
-<%= teaActive ? 'Active' : 'Available' %>
+<%= teaActive ? 'Active' : '' %>
 </div>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
@@ -449,7 +443,7 @@ Completed
 <% } else if (lunchActive) { %>
 Active
 <% } else { %>
-Available
+
 <% } %>
 </div>
 
@@ -478,7 +472,7 @@ Available
 <h2><%= meetingOutCount %></h2>
 
 <p>
-<%= meetingActive ? 'IN MEETING' : 'AVAILABLE' %>
+<%= meetingActive ? 'IN MEETING' : '' %>
 </p>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
@@ -532,7 +526,7 @@ id="clientMeetButton"
 <h2><%= siteOutCount %></h2>
 
 <p>
-<%= siteActive ? 'AT SITE' : 'AVAILABLE' %>
+<%= siteActive ? 'AT SITE' : '' %>
 </p>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
@@ -591,13 +585,6 @@ id="clientSiteButton"
 </div>
 </a>
 
-<a href="/executive/followups">
-<div class="card">
-<h3>Today's Follow Ups</h3>
-<h2><%= followUps %></h2>
-</div>
-</a>
-
 <a href="/executive/properties">
 <div class="card">
 <h3>My Properties</h3>
@@ -609,13 +596,6 @@ id="clientSiteButton"
 <div class="card">
 <h3>Property Map</h3>
 <h2>View</h2>
-</div>
-</a>
-
-<a href="/executive/sitevisits">
-<div class="card">
-<h3>Today's Visits</h3>
-<h2><%= siteVisits %></h2>
 </div>
 </a>
 
@@ -1041,15 +1021,72 @@ form.addEventListener('submit', function(e){
 
 </script>
 
+<script>
+
+function updateHeaderClock(){
+
+    const now = new Date()
+
+    document.getElementById('todayDate').innerText =
+    now.toLocaleDateString(
+        'en-IN',
+        {
+            weekday:'short',
+            day:'numeric',
+            month:'short',
+            year:'numeric'
+        }
+    )
+
+    document.getElementById('liveClock').innerText =
+    now.toLocaleTimeString(
+        'en-IN',
+        {
+            hour:'2-digit',
+            minute:'2-digit',
+            second:'2-digit',
+            hour12:true
+        }
+    )
+
+}
+
+updateHeaderClock()
+
+setInterval(
+    updateHeaderClock,
+    1000
+)
+
+</script>
 
 <a href="/executive/followups" class="fab">+</a>
 
 <div class="mobile-bottom-nav">
-<a href="/executive/dashboard">🏠<br>Home</a>
-<a href="/executive/followups">📞<br>Followups</a>
-<a href="/executive/sitevisits">🏢<br>Visits</a>
-<a href="/executive/reports">📊<br>Reports</a>
-<a href="#" onclick="document.getElementById('logoutForm').requestSubmit();return false;">🚪<br>Logout</a>
+
+<a href="/executive/dashboard">
+🏠<br>Home
+</a>
+
+<a href="/executive/followups">
+📞<br>Followups
+(<%= followUps %>)
+</a>
+
+<a href="/executive/sitevisits">
+🏢<br>Visits
+(<%= siteVisits %>)
+</a>
+
+<a href="/executive/reports">
+📊<br>Reports
+</a>
+
+<a href="#"
+onclick="document.getElementById('logoutForm').requestSubmit();return false;">
+🚪<br>Sign Out
+</a>
+
 </div>
 
 </body>
