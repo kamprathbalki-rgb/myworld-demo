@@ -314,6 +314,10 @@ color:#1f4e79;
 (<%= siteVisits %>)
 </a>
 
+<div class="quick-card">
+🤝 Negotiation<br><%= negotiation %>
+</div>
+
 <form
 id="logoutForm"
 method="GET"
@@ -463,7 +467,8 @@ color:#555;
 </div>
 
 <div class="quick-card">
-🤝 Negotiation<br><%= negotiation %>
+💰 Pipeline<br>
+₹ <%= pipelineValue.toLocaleString('en-IN') %>
 </div>
 
 </div>
@@ -1220,11 +1225,11 @@ Close
 </a>
 
 <a href="/executive/location-history">
-📍 Location History
+📍<br>Location History
 </a>
 
 <a href="/executive/route-map">
-🗺️ Route Map
+🗺️<br>Route Map
 </a>
 
 <a href="/executive/reports">
