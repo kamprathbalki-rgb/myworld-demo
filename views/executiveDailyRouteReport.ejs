@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Executive Daily Route Report</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:1400px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+h1,h2,h3{
+margin-top:0;
+}
+
+.summary{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.card{
+background:#fafafa;
+border:1px solid #ddd;
+border-radius:8px;
+padding:15px;
+}
+
+.card h3{
+margin:0 0 10px 0;
+font-size:14px;
+color:#666;
+}
+
+.card h2{
+margin:0;
+}
+
+.section{
+margin-top:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+table th,
+table td{
+border:1px solid #ddd;
+padding:10px;
+text-align:left;
+}
+
+table th{
+background:#f0f0f0;
+}
+
+.site{
+background:#fff3cd;
+}
+
+.client{
+background:#d1ecf1;
+}
+
+.login{
+background:#d4edda;
+}
+
+.logout{
+background:#f8d7da;
+}
+
+.route-box{
+border:2px dashed #bbb;
+padding:30px;
+text-align:center;
+font-size:18px;
+background:#fafafa;
+}
+
+.good{
+color:green;
+font-weight:bold;
+}
+
+.bad{
+color:red;
+font-weight:bold;
+}
+
+</style>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"
+/>
+
+<script
+src="https://unpkg.com/leaflet/dist/leaflet.js">
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<p>
+
+<a href="javascript:history.back()">
+Back
+</a>
+
+|
+
+<a href="/attendance/admin">
+Attendance
+</a>
+
+</p>
+
+<h1>
+Executive Daily Route Report
+</h1>
+
+<div class="summary">
+
+<div class="card">
+<h3>Executive</h3>
+<h2><%= attendance.executiveName %></h2>
+</div>
+
+<div class="card">
+<h3>Date</h3>
+<h2><%= attendance.date %></h2>
+</div>
+
+<div class="card">
+<h3>Site Visits</h3>
+<h2><%= siteVisitCount %></h2>
+</div>
+
+<div class="card">
+<h3>Client Meetings</h3>
+<h2><%= clientVisitCount %></h2>
+</div>
+
+<div class="card">
+<h3>Total GPS Visits</h3>
+<h2>
+<%= siteVisitCount + clientVisitCount %>
+</h2>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>
+Timeline
+</h2>
+
+<table>
+
+<tr>
+
+<th>#</th>
+
+<th>Type</th>
+
+<th>Time</th>
+
+<th>Latitude</th>
+
+<th>Longitude</th>
+
+<th>Accuracy</th>
+
+</tr>
+
+<%
+
+let rowNo = 1
+
+if(attendance.loginLocations){
+
+attendance.loginLocations.forEach(function(x){
+
+%>
+
+<tr class="login">
+
+<td>#<%= rowNo++ %></td>
+
+<td>LOGIN</td>
+
+<td><%= x.time || '' %></td>
+
+<td><%= x.latitude || '' %></td>
+
+<td><%= x.longitude || '' %></td>
+
+<td><%= x.accuracy || '' %></td>
+
+</tr>
+
+<%
+
+})
+
+}
+
+if(locationLogs){
+
+locationLogs.forEach(function(x){
+
+%>
+
+<tr class="<%= x.type === 'SITE' ? 'site' : 'client' %>">
+
+<td>#<%= rowNo++ %></td>
+
+<td><%= x.type %></td>
+
+<td>
+
+<%= new Date(x.timestamp)
+.toLocaleString('en-IN') %>
+
+</td>
+
+<td><%= x.latitude %></td>
+
+<td><%= x.longitude %></td>
+
+<td><%= x.accuracy %></td>
+
+</tr>
+
+<%
+
+})
+
+}
+
+if(attendance.logoutLocations){
+
+attendance.logoutLocations.forEach(function(x){
+
+%>
+
+<tr class="logout">
+
+<td>#<%= rowNo++ %></td>
+
+<td>LOGOUT</td>
+
+<td><%= x.time || '' %></td>
+
+<td><%= x.latitude || '' %></td>
+
+<td><%= x.longitude || '' %></td>
+
+<td><%= x.accuracy || '' %></td>
+
+</tr>
+
+<%
+
+})
+
+}
+
+%>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>
+Route Map
+</h2>
+
+<div class="route-box">
+
+Route Map Integration Coming Next
+
+<br><br>
+
+<div
+id="routeMap"
+style="
+height:700px;
+width:100%;
+border:1px solid #ccc;
+border-radius:8px;
+">
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>
+Productivity
+</h2>
+
+<table>
+
+<tr>
+
+<th>Metric</th>
+
+<th>Value</th>
+
+</tr>
+
+<tr>
+
+<td>Site Visits</td>
+
+<td><%= siteVisitCount %></td>
+
+</tr>
+
+<tr>
+
+<td>Client Meetings</td>
+
+<td><%= clientVisitCount %></td>
+
+</tr>
+
+<tr>
+
+<td>Total GPS Visits</td>
+
+<td>
+<%= siteVisitCount + clientVisitCount %>
+</td>
+
+</tr>
+
+<tr>
+
+<td>Total Activities</td>
+
+<td>
+<%= attendance.activityLog
+? attendance.activityLog.length
+: 0 %>
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>
+Route Quality
+</h2>
+
+<%
+
+let totalAccuracy = 0
+let accuracyCount = 0
+let bestAccuracy = null
+let worstAccuracy = null
+
+if(locationLogs){
+
+locationLogs.forEach(function(x){
+
+if(x.accuracy){
+
+totalAccuracy += x.accuracy
+accuracyCount++
+
+if(
+bestAccuracy === null ||
+x.accuracy < bestAccuracy
+){
+bestAccuracy = x.accuracy
+}
+
+if(
+worstAccuracy === null ||
+x.accuracy > worstAccuracy
+){
+worstAccuracy = x.accuracy
+}
+
+}
+
+})
+
+}
+
+const avgAccuracy =
+accuracyCount
+? Math.round(
+totalAccuracy /
+accuracyCount
+)
+: 0
+
+%>
+
+<table>
+
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+
+<tr>
+<td>Average GPS Accuracy</td>
+<td><%= avgAccuracy %> m</td>
+</tr>
+
+<tr>
+<td>Best GPS Accuracy</td>
+<td><%= bestAccuracy || '-' %> m</td>
+</tr>
+
+<tr>
+<td>Worst GPS Accuracy</td>
+<td><%= worstAccuracy || '-' %> m</td>
+</tr>
+
+<tr>
+<td>Office Configured</td>
+<td>
+<%= office ? 'YES' : 'NO' %>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+<script>
+
+const map = L.map(
+'routeMap'
+).setView(
+[18.523243,73.760289],
+15
+)
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+maxZoom:19
+}
+).addTo(map)
+
+const points = []
+
+<% if(office){ %>
+
+const officeMarker =
+L.marker(
+[
+<%= office.latitude %>,
+<%= office.longitude %>
+]
+)
+.addTo(map)
+
+officeMarker.bindPopup(
+'🏢 OFFICE<br><%= office.officeName %>'
+)
+
+points.push([
+<%= office.latitude %>,
+<%= office.longitude %>
+])
+
+<% } %>
+
+<%
+let seq = 1
+%>
+
+<% if(attendance.loginLocations){ %>
+
+<% attendance.loginLocations.forEach(function(x){ %>
+
+<% if(x.latitude && x.longitude){ %>
+
+L.marker(
+[
+<%= x.latitude %>,
+<%= x.longitude %>
+]
+)
+.addTo(map)
+.bindPopup(
+'🟢 #<%= seq++ %> LOGIN<br><%= x.time || "" %>'
+)
+
+points.push([
+<%= x.latitude %>,
+<%= x.longitude %>
+])
+
+<% } %>
+
+<% }) %>
+
+<% } %>
+
+<% if(locationLogs){ %>
+
+<% locationLogs.forEach(function(x){ %>
+
+L.marker(
+[
+<%= x.latitude %>,
+<%= x.longitude %>
+]
+)
+.addTo(map)
+.bindPopup(
+'<%= x.type === "SITE" ? "🟡" : "🔵" %> #<%= seq++ %> <%= x.type %><br>' +
+'<%= new Date(x.timestamp).toLocaleString("en-IN") %>'
+)
+
+points.push([
+<%= x.latitude %>,
+<%= x.longitude %>
+])
+
+<% }) %>
+
+<% } %>
+
+<% if(attendance.logoutLocations){ %>
+
+<% attendance.logoutLocations.forEach(function(x){ %>
+
+<% if(x.latitude && x.longitude){ %>
+
+L.marker(
+[
+<%= x.latitude %>,
+<%= x.longitude %>
+]
+)
+.addTo(map)
+.bindPopup(
+'🔴 #<%= seq++ %> LOGOUT<br><%= x.time || "" %>'
+)
+
+points.push([
+<%= x.latitude %>,
+<%= x.longitude %>
+])
+
+<% } %>
+
+<% }) %>
+
+<% } %>
+
+if(points.length){
+
+const routeLine =
+L.polyline(
+points,
+{
+weight:4
+}
+)
+.addTo(map)
+
+map.fitBounds(
+routeLine.getBounds(),
+{
+padding:[40,40]
+}
+)
+
+}
+
+</script>
+
+
+</body>
+
+
+</html>

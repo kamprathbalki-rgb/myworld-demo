@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Location History</h2>
+
+<table border="1">
+
+<tr>
+<th>Type</th>
+<th>Time</th>
+<th>Map</th>
+</tr>
+
+<% logs.forEach(log=>{ %>
+
+<tr>
+
+<td>
+<%= log.type %>
+</td>
+
+<td>
+<%= log.timestamp %>
+</td>
+
+<td>
+
+<a
+target="_blank"
+href="https://maps.google.com/?q=<%= log.latitude %>,<%= log.longitude %>"
+>
+View
+</a>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+</html>

@@ -15,6 +15,14 @@ require('../services/whatsapp');
 const WhatsappGroup =
 require('../models/WhatsappGroup');
 
+const ExecutiveLocationLog =
+require('../models/ExecutiveLocationLog')
+
+const OfficeLocation =
+require('../models/OfficeLocation')
+
+
+
 router.get('/login',(req,res)=>{
 
     res.render('login')
@@ -141,38 +149,189 @@ res.redirect('/property/page')
 
 router.get('/attendance/admin', async (req, res) => {
 
-const records = await ExecutiveAttendance.find({
+let records = await ExecutiveAttendance.find({
     tenantId: req.session.tenantId
 })
 .sort({ date: -1 })
 
-    res.render('adminAttendance', {
-        records
-    })
+records = records.map(r=>{
+
+const obj = r.toObject()
+
+obj.loginTime = ''
+
+obj.logoutTime = ''
+
+if(
+obj.loginLocations &&
+obj.loginLocations.length
+){
+
+obj.loginTime =
+obj.loginLocations[0].time || ''
+
+}
+
+if(
+obj.logoutLocations &&
+obj.logoutLocations.length
+){
+
+obj.logoutTime =
+obj.logoutLocations[
+obj.logoutLocations.length - 1
+].time || ''
+
+}
+
+return obj
 
 })
 
+res.render(
+'adminAttendance',
+{
+records
+}
+)
+
+})
+
+
 router.get('/attendance/log/:id', async (req, res) => {
 
-    const attendance = await ExecutiveAttendance.findById(
+    const attendance =
+    await ExecutiveAttendance.findById(
         req.params.id
     )
 
     if (!attendance) {
-        return res.send('Attendance record not found')
+
+        return res.send(
+            'Attendance record not found'
+        )
+
     }
 
-    res.render('attendanceLog', {
-        attendance
+    const siteVisitCount =
+    await ExecutiveLocationLog.countDocuments({
+
+        attendanceId:
+        attendance._id,
+
+        type:'SITE'
+
     })
+
+    const clientVisitCount =
+    await ExecutiveLocationLog.countDocuments({
+
+        attendanceId:
+        attendance._id,
+
+        type:'CLIENT'
+
+    })
+
+    const locationLogs =
+    await ExecutiveLocationLog.find({
+
+        attendanceId:
+        attendance._id
+
+    })
+    .sort({ timestamp:1 })
+
+    res.render(
+        'attendanceLog',
+        {
+
+            attendance,
+
+            siteVisitCount,
+
+            clientVisitCount,
+
+            locationLogs
+
+        }
+    )
 
 })
 
-router.get('/logout',(req,res)=>{
 
-req.session.destroy()
+router.get(
+'/attendance/route-report/:id',
+async(req,res)=>{
 
-res.redirect('/login')
+const attendance =
+await ExecutiveAttendance.findById(
+req.params.id
+)
+
+if(!attendance){
+
+return res.send(
+'Attendance record not found'
+)
+
+}
+
+const locationLogs =
+await ExecutiveLocationLog.find({
+
+attendanceId:
+attendance._id
+
+})
+.sort({ timestamp:1 })
+
+const office =
+await OfficeLocation.findOne({
+
+tenantId:
+attendance.tenantId,
+
+active:true
+
+})
+
+const siteVisitCount =
+await ExecutiveLocationLog.countDocuments({
+
+attendanceId:
+attendance._id,
+
+type:'SITE'
+
+})
+
+const clientVisitCount =
+await ExecutiveLocationLog.countDocuments({
+
+attendanceId:
+attendance._id,
+
+type:'CLIENT'
+
+})
+
+res.render(
+'executiveDailyRouteReport',
+{
+
+attendance,
+
+locationLogs,
+
+office,
+
+siteVisitCount,
+
+clientVisitCount
+
+}
+)
 
 })
 

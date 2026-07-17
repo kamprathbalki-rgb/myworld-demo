@@ -85,9 +85,14 @@ border-radius:4px;
 font-weight:bold;
 }
 
-.map-link{
+.route-btn{
+display:inline-block;
+padding:10px 15px;
+background:#198754;
+color:white;
 text-decoration:none;
-font-weight:bold;
+border-radius:6px;
+margin-bottom:20px;
 }
 
 </style>
@@ -100,73 +105,40 @@ font-weight:bold;
 
 <p>
 
-<a href="javascript:history.back()">
-Back
-</a>
+<a href="javascript:history.back()">Back</a>
 
 |
 
-<a href="/dashboard">
-Home
-</a>
+<a href="/dashboard">Home</a>
 
 </p>
 
-<h1>
-Attendance Activity Log
-</h1>
+<h1>Attendance Activity Log</h1>
 
 <div class="summary">
 
 Executive :
-<b>
-<%= attendance.executiveName || '' %>
-</b>
+<b><%= attendance.executiveName %></b>
 
 <br><br>
 
 Date :
-<b>
-<%= attendance.date || '' %>
-</b>
+<b><%= attendance.date %></b>
 
 <br><br>
 
 Total Activities :
-<b>
-<%= attendance.activityLog ? attendance.activityLog.length : 0 %>
-</b>
+<b><%= attendance.activityLog.length %></b>
 
 |
 
 Actual Site Visits :
-<b>
-<%= siteVisitCount || 0 %>
-</b>
+<b><%= siteVisitCount || 0 %></b>
 
 |
 
 Actual Client Meetings :
-<b>
-<%= clientVisitCount || 0 %>
-</b>
-
-|
-
-<a
-href="/attendance/route-report/<%= attendance._id %>"
-style="
-display:inline-block;
-padding:10px 15px;
-background:#198754;
-color:white;
-text-decoration:none;
-border-radius:6px;
-margin-bottom:20px;
-"
->
-Executive Daily Route Report
-</a>
+<b><%= clientVisitCount || 0 %></b>
 
 </div>
 
@@ -183,8 +155,6 @@ Activity Timeline
 </tr>
 
 <%
-
-if(attendance.activityLog){
 
 attendance.activityLog.forEach(function(log,index){
 
@@ -223,9 +193,7 @@ activity = 'LOGIN'
 cssClass = 'login'
 
 }
-else if(
-index === attendance.activityLog.length - 1
-){
+else if(index === attendance.activityLog.length - 1){
 
 activity = 'LOGOUT'
 cssClass = 'logout'
@@ -249,7 +217,7 @@ cssClass = 'system'
 </td>
 
 <td>
-<%= log.time || '' %>
+<%= log.time %>
 </td>
 
 <td>
@@ -260,7 +228,6 @@ cssClass = 'system'
 
 <%
 })
-}
 %>
 
 </table>
@@ -284,8 +251,6 @@ GPS Visit Details
 <th>Longitude</th>
 
 <th>Accuracy</th>
-
-<th>Map</th>
 
 </tr>
 
@@ -323,7 +288,8 @@ CLIENT
 
 <td>
 
-<%= new Date(log.timestamp).toLocaleString('en-IN') %>
+<%= new Date(log.timestamp)
+.toLocaleString('en-IN') %>
 
 </td>
 
@@ -339,18 +305,6 @@ CLIENT
 <%= log.accuracy || '-' %> m
 </td>
 
-<td>
-
-<a
-class="map-link"
-target="_blank"
-href="https://www.google.com/maps?q=<%= log.latitude %>,<%= log.longitude %>"
->
-📍 View
-</a>
-
-</td>
-
 </tr>
 
 <%
@@ -361,10 +315,8 @@ href="https://www.google.com/maps?q=<%= log.latitude %>,<%= log.longitude %>"
 
 <tr>
 
-<td colspan="7">
-
+<td colspan="6">
 No GPS Visits Found
-
 </td>
 
 </tr>
@@ -387,17 +339,13 @@ GPS Visit Summary
 </tr>
 
 <tr>
-<td>Actual Site Visits</td>
-<td>
-<%= siteVisitCount || 0 %>
-</td>
+<td>Actual Site Visits (GPS Captured)</td>
+<td><%= siteVisitCount || 0 %></td>
 </tr>
 
 <tr>
-<td>Actual Client Meetings</td>
-<td>
-<%= clientVisitCount || 0 %>
-</td>
+<td>Actual Client Meetings (GPS Captured)</td>
+<td><%= clientVisitCount || 0 %></td>
 </tr>
 
 <tr>
@@ -409,9 +357,7 @@ GPS Visit Summary
 
 <tr>
 <td>Total Activities</td>
-<td>
-<%= attendance.activityLog ? attendance.activityLog.length : 0 %>
-</td>
+<td><%= attendance.activityLog.length %></td>
 </tr>
 
 </table>

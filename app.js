@@ -19,6 +19,7 @@ const restoreSessions = require('./services/tenantWhatsapp/restoreSessions')
 const aiDashboardRoutes = require('./routes/adminAiDashboardRoutes');
 const whatsappDataRoutes = require('./routes/whatsappDataRoutes');
 const learningCorrectionRoutes = require('./routes/learningCorrectionRoutes');
+const officeLocationRoutes = require('./routes/officeLocationRoutes')
 
 connectDB()
 
@@ -91,7 +92,7 @@ app.use('/tenant-whatsapp',tenantWhatsappRoutes)
 app.use(aiDashboardRoutes);
 app.use('/whatsapp-data',tenantGuard,companyActiveGuard,whatsappDataRoutes);
 app.use('/learning-correction',learningCorrectionRoutes);
-
+app.use('/admin',officeLocationRoutes)
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 app.get('/dashboard', async (req, res) => {

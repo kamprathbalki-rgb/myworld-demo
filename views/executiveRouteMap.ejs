@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+Executive Route Map
+</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"
+/>
+
+<style>
+
+#map{
+height:700px;
+}
+
+#timeline{
+padding:15px;
+}
+
+.route-number{
+
+background:white !important;
+
+border:none !important;
+
+box-shadow:none !important;
+
+font-weight:bold;
+
+color:black;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>
+Executive Route Map
+</h2>
+
+<input
+type="date"
+id="date"
+>
+
+<button
+onclick="loadRoute()"
+>
+Load
+</button>
+
+<div id="map"></div>
+
+<div id="timeline"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const map =
+L.map('map')
+.setView(
+[18.52,73.85],
+13
+)
+
+L.tileLayer(
+'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map)
+
+let routeLine
+
+async function loadRoute(){
+
+const date =
+document
+.getElementById('date')
+.value
+
+window.selectedDate = date
+
+const res =
+await fetch(
+'/executive/route-map-data?date='
++ date
+)
+
+const data =
+await res.json()
+
+renderRoute(data)
+
+}
+
+const icons = {
+
+LOGIN:
+L.icon({
+    iconUrl:
+'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    shadowUrl:
+'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize:[25,41],
+    iconAnchor:[12,41]
+}),
+
+LOGOUT:
+L.icon({
+    iconUrl:
+'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl:
+'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize:[25,41],
+    iconAnchor:[12,41]
+}),
+
+CLIENT:
+L.icon({
+    iconUrl:
+'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    shadowUrl:
+'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize:[25,41],
+    iconAnchor:[12,41]
+}),
+
+SITE:
+L.icon({
+    iconUrl:
+'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+    shadowUrl:
+'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize:[25,41],
+    iconAnchor:[12,41]
+})
+
+}
+
+function renderRoute(data){
+
+const points = []
+
+if(data.office){
+
+points.push({
+
+type:'OFFICE',
+
+lat:data.office.latitude,
+
+lng:data.office.longitude,
+
+time:'OFFICE',
+
+timestamp:new Date(0)
+
+})
+
+}
+
+if(data.attendance){
+
+data.attendance.loginLocations
+?.forEach(x=>{
+
+points.push({
+
+type:'LOGIN',
+
+lat:x.latitude,
+
+lng:x.longitude,
+
+time:x.time,
+
+timestamp:
+new Date()
+
+})
+
+})
+
+data.attendance.logoutLocations
+?.forEach(x=>{
+
+points.push({
+
+type:'LOGOUT',
+
+lat:x.latitude,
+
+lng:x.longitude,
+
+time:x.time,
+
+timestamp:
+new Date(
+window.selectedDate +
+' ' +
+x.time
+)
+
+})
+
+})
+
+}
+
+data.logs.forEach(x=>{
+
+points.push({
+
+type:x.type,
+
+lat:x.latitude,
+
+lng:x.longitude,
+
+time:new Date(
+x.timestamp
+).toLocaleTimeString(),
+
+timestamp:
+new Date(
+x.timestamp
+)
+
+})
+
+})
+
+points.sort(
+(a,b)=>
+a.timestamp -
+b.timestamp
+)
+
+const line=[]
+
+let html=''
+
+points.forEach((p,index)=>{
+
+if(
+    p.lat == null ||
+    p.lng == null
+){
+    return
+}
+
+const marker =
+L.circleMarker(
+[
+    p.lat,
+    p.lng
+],
+{
+    radius:12,
+
+    color:
+
+    p.type === 'LOGIN'
+    ? 'green'
+
+    :
+
+    p.type === 'LOGOUT'
+    ? 'red'
+
+    :
+
+    p.type === 'SITE'
+    ? 'orange'
+
+    :
+
+    p.type === 'CLIENT'
+    ? 'blue'
+
+    :
+
+    'black'
+}
+)
+.addTo(map)
+
+
+
+marker.bindPopup(
+'#' +
+(index + 1) +
+'<br>' +
+p.type +
+'<br>' +
+p.time
+)
+
+if(
+    p.lat != null &&
+    p.lng != null
+){
+
+    line.push([
+        p.lat,
+        p.lng
+    ])
+
+}
+
+html +=
+'<div style="padding:6px;border-bottom:1px solid #ddd;">'
++
+'<b>#' +
+(index + 1)
++
+'</b> '
++
+p.time
++
+' - '
++
+p.type
++
+'</div>'
+})
+
+if(line.length > 0){
+    map.fitBounds(
+        line,
+        {
+            padding:[50,50]
+        }
+    )
+
+}
+
+
+if(routeLine){
+map.removeLayer(routeLine)
+}
+
+routeLine =
+L.polyline(line)
+.addTo(map)
+
+document
+.getElementById('timeline')
+.innerHTML =
+html
+
+}
+
+</script>
+
+</body>
+
+</html>

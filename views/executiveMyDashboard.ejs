@@ -174,7 +174,43 @@ margin-top:10px;
 
 <a href="/executive/reports">Reports</a>
 
-<a href="/executive/logout">Logout</a>
+<a href="/executive/location-history">
+Location History</a>
+
+<a href="/executive/route-map">
+Route Map
+</a>
+
+<form
+id="logoutForm"
+method="GET"
+action="/executive/logout"
+style="display:inline;"
+>
+
+<input
+type="hidden"
+name="latitude"
+id="logoutLatitude"
+>
+
+<input
+type="hidden"
+name="longitude"
+id="logoutLongitude"
+>
+
+<input
+type="hidden"
+name="accuracy"
+id="logoutAccuracy"
+>
+
+<button type="submit">
+Logout
+</button>
+
+</form>
 
 </div>
 
@@ -295,9 +331,37 @@ OUT
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="meetingIn">
-<button <%= !meetingActive ? 'disabled' : '' %>>
+<button id="meetingInButton" <%= !meetingActive ? 'disabled' : '' %>>
 IN
 </button>
+</form>
+
+<form
+class="gpsLocationForm"
+method="POST"
+action="/executive/location-log"
+style="display:inline;"
+>
+
+<input type="hidden" name="type" value="CLIENT">
+
+<input type="hidden" name="latitude" class="gpsLat">
+
+<input type="hidden" name="longitude" class="gpsLng">
+
+<input type="hidden" name="accuracy" class="gpsAcc">
+
+<span id="clientMeetCounter" style="font-weight:bold;color:green;">
+#<%= clientCounter %>
+</span>
+
+<button
+id="clientMeetButton"
+<%= !meetingActive ? 'disabled' : '' %>
+>
+📍 CLIENT
+</button>
+
 </form>
 
 </div>
@@ -321,9 +385,38 @@ OUT
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="siteVisitIn">
-<button <%= !siteActive ? 'disabled' : '' %>>
+<button id="siteInButton" <%= !siteActive ? 'disabled' : '' %>>
 IN
 </button>
+</form>
+
+<form
+class="gpsLocationForm"
+method="POST"
+action="/executive/location-log"
+style="display:inline;"
+>
+
+<input type="hidden" name="type" value="SITE">
+
+<input type="hidden" name="latitude" class="gpsLat">
+
+<input type="hidden" name="longitude" class="gpsLng">
+
+<input type="hidden" name="accuracy" class="gpsAcc">
+
+<span id="clientSiteCounter" style="font-weight:bold;color:green;">
+#<%= siteCounter %>
+</span>
+
+
+<button
+id="clientSiteButton"
+<%= !siteActive ? 'disabled' : '' %>
+>
+📍 SITE
+</button>
+
 </form>
 
 </div>
@@ -689,6 +782,85 @@ document.getElementById('editBtn').href =
 '/executive/buyer/edit/' + this.value
 
 openBuyerModal()
+
+})
+
+})
+
+</script>
+
+<script>
+
+document.getElementById('logoutForm')
+.addEventListener('submit', function(e){
+
+    e.preventDefault()
+
+    const form = this
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            document.getElementById('logoutLatitude').value =
+            position.coords.latitude
+
+            document.getElementById('logoutLongitude').value =
+            position.coords.longitude
+
+            document.getElementById('logoutAccuracy').value =
+            position.coords.accuracy
+
+            HTMLFormElement.prototype.submit.call(form)
+
+        },
+
+        function(){
+
+            HTMLFormElement.prototype.submit.call(form)
+
+        }
+
+    )
+
+})
+
+</script>
+
+<script>
+
+document
+.querySelectorAll('.gpsLocationForm')
+.forEach(form => {
+
+form.addEventListener('submit', function(e){
+
+    e.preventDefault()
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            form.querySelector('.gpsLat').value =
+            position.coords.latitude
+
+            form.querySelector('.gpsLng').value =
+            position.coords.longitude
+
+            form.querySelector('.gpsAcc').value =
+            position.coords.accuracy
+
+            HTMLFormElement.prototype.submit.call(form)
+
+        },
+
+        function(){
+
+            alert('Location not available')
+
+        }
+
+    )
 
 })
 

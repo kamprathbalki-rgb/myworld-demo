@@ -203,7 +203,13 @@ button:hover{
 
 <% } %>
 
-<form method="POST" action="/executive/login">
+<form method="POST" action="/executive/login" id="loginForm">
+
+<input type="hidden" name="latitude" id="latitude">
+
+<input type="hidden" name="longitude" id="longitude">
+
+<input type="hidden" name="accuracy" id="accuracy">
 
 <label>Email</label>
 
@@ -237,6 +243,58 @@ MyWorld Executive Access
 
 </div>
 
+<script>
+
+document.getElementById('loginForm')
+.addEventListener('submit', function(e){
+
+    e.preventDefault()
+
+    const form = this
+
+    if (!navigator.geolocation) {
+        form.submit()
+        return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            console.log('GPS SUCCESS', position.coords)
+
+            document.getElementById('latitude').value =
+                position.coords.latitude
+
+            document.getElementById('longitude').value =
+                position.coords.longitude
+
+            document.getElementById('accuracy').value =
+                position.coords.accuracy
+
+            HTMLFormElement.prototype.submit.call(form)
+
+        },
+
+        function(error){
+
+            console.log('GPS ERROR', error)
+
+            HTMLFormElement.prototype.submit.call(form)
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+
+    )
+
+})
+
+</script>
 </body>
 
 </html>

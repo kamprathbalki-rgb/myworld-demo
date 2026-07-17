@@ -65,5 +65,3 @@ https://myworld-demo-production.up.railway.app/login
 git add routes/authRoutes.js
 git commit -m "Add debug users route"
 git push origin master
-
-

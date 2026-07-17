@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Office Location Setup</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    margin-bottom:20px;
+}
+
+h1{
+    color:#1f4e79;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    background:#1f4e79;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:15px;
+    margin-right:10px;
+}
+
+button:hover{
+    background:#163b5d;
+}
+
+#map{
+    height:500px;
+    border-radius:10px;
+    margin-top:20px;
+}
+
+.info{
+    background:#eef6ff;
+    border-left:4px solid #1f4e79;
+    padding:15px;
+    margin-bottom:20px;
+}
+
+.success{
+    background:#dff0d8;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>
+🚩 Office Location Setup
+</h1>
+
+<p>
+
+Set the office location once.
+
+You may either:
+
+</p>
+
+<ul>
+
+<li>
+Capture Current GPS Location
+</li>
+
+<li>
+Select Location Directly On Map
+</li>
+
+</ul>
+
+</div>
+
+<% if (office) { %>
+
+<div class="success">
+
+Current Office:
+
+<b>
+<%= office.officeName %>
+</b>
+
+<br>
+
+Lat:
+<%= office.latitude %>
+
+|
+
+Lng:
+<%= office.longitude %>
+
+|
+
+Radius:
+<%= office.radiusMeters %> m
+
+</div>
+
+<% } %>
+
+<div class="card">
+
+<form
+method="POST"
+action="/admin/office-location"
+>
+
+<label>
+
+Office Name
+
+</label>
+
+<input
+type="text"
+name="officeName"
+value="<%= office?.officeName || 'Main Office' %>"
+required
+>
+
+<label>
+
+Latitude
+
+</label>
+
+<input
+type="text"
+id="latitude"
+name="latitude"
+value="<%= office?.latitude || '' %>"
+required
+>
+
+<label>
+
+Longitude
+
+</label>
+
+<input
+type="text"
+id="longitude"
+name="longitude"
+value="<%= office?.longitude || '' %>"
+required
+>
+
+<label>
+
+GPS Accuracy (meters)
+
+</label>
+
+<input
+type="text"
+id="accuracy"
+name="accuracy"
+value="<%= office?.accuracy || '' %>"
+>
+
+<label>
+
+Allowed Radius (meters)
+
+</label>
+
+<input
+type="number"
+name="radiusMeters"
+value="<%= office?.radiusMeters || 100 %>"
+required
+>
+
+<input
+type="hidden"
+id="captureMethod"
+name="captureMethod"
+value="MAP"
+>
+
+<button
+type="button"
+id="captureBtn"
+>
+
+📍 Capture Current Location
+
+</button>
+
+<button
+type="submit"
+>
+
+💾 Save Office Location
+
+</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+Map Verification
+
+</h3>
+
+<p>
+
+Click anywhere on the map to move the office pin.
+
+</p>
+
+<div id="map"></div>
+
+</div>
+
+</div>
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+
+let lat =
+parseFloat(
+document.getElementById('latitude').value
+) || 18.5204
+
+let lng =
+parseFloat(
+document.getElementById('longitude').value
+) || 73.8567
+
+const map =
+L.map('map')
+.setView(
+[lat,lng],
+15
+)
+
+L.tileLayer(
+
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+{
+maxZoom:19
+}
+
+).addTo(map)
+
+let marker =
+L.marker(
+[lat,lng]
+)
+
+.addTo(map)
+
+.bindPopup(
+'🚩 Office Location'
+)
+
+.openPopup()
+
+map.on(
+'click',
+function(e){
+
+marker.setLatLng(
+e.latlng
+)
+
+document
+.getElementById('latitude')
+.value =
+e.latlng.lat
+
+document
+.getElementById('longitude')
+.value =
+e.latlng.lng
+
+document
+.getElementById('captureMethod')
+.value =
+'MAP'
+
+}
+)
+
+document
+.getElementById('captureBtn')
+.addEventListener(
+
+'click',
+
+function(){
+
+navigator.geolocation
+.getCurrentPosition(
+
+function(position){
+
+const lat =
+position.coords.latitude
+
+const lng =
+position.coords.longitude
+
+const accuracy =
+position.coords.accuracy
+
+document
+.getElementById('latitude')
+.value =
+lat
+
+document
+.getElementById('longitude')
+.value =
+lng
+
+document
+.getElementById('accuracy')
+.value =
+accuracy
+
+document
+.getElementById('captureMethod')
+.value =
+'GPS'
+
+marker.setLatLng(
+[lat,lng]
+)
+
+map.setView(
+[lat,lng],
+18
+)
+
+marker
+.bindPopup(
+'🚩 Captured Office Location<br>Accuracy: '
++ accuracy.toFixed(0)
++ ' m'
+)
+.openPopup()
+
+if(accuracy > 100){
+
+alert(
+'GPS accuracy is poor ('
++ accuracy.toFixed(0)
++ 'm). Consider capturing again.'
+)
+
+}
+
+},
+
+function(err){
+
+alert(
+'GPS Error: '
++ err.message
+)
+
+},
+
+{
+enableHighAccuracy:true,
+timeout:15000,
+maximumAge:0
+}
+
+)
+
+}
+
+)
+
+</script>
+
+</body>
+
+</html>

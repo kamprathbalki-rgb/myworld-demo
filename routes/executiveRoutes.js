@@ -21,6 +21,55 @@ const {
     notifyExecutive
 } = require('../services/notificationService');
 
+const ExecutiveLocationLog =
+require('../models/ExecutiveLocationLog')
+
+const OfficeLocation =
+require('../models/OfficeLocation')
+
+function getDistanceMeters(
+lat1,
+lon1,
+lat2,
+lon2
+){
+
+const R = 6371000
+
+const dLat =
+(lat2 - lat1) *
+Math.PI / 180
+
+const dLon =
+(lon2 - lon1) *
+Math.PI / 180
+
+const a =
+
+Math.sin(dLat/2) *
+Math.sin(dLat/2)
+
++
+
+Math.cos(lat1 * Math.PI/180) *
+
+Math.cos(lat2 * Math.PI/180) *
+
+Math.sin(dLon/2) *
+
+Math.sin(dLon/2)
+
+const c =
+2 *
+Math.atan2(
+Math.sqrt(a),
+Math.sqrt(1-a)
+)
+
+return R * c
+
+}
+
 
 router.post('/unlock-contact/:id', async (req, res) => {
 
@@ -474,6 +523,12 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
 
+console.log('GPS LOGIN:', {
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    accuracy: req.body.accuracy
+})
+
 const executive = await Executive.findOne({
     email: req.body.email,
     isActive: true
@@ -496,6 +551,54 @@ if (!valid) {
 req.session.executiveId = executive._id
 req.session.executiveName = executive.name
 req.session.tenantId = executive.tenantId
+
+const office =
+await OfficeLocation.findOne({
+
+    tenantId:
+    executive.tenantId,
+
+    active:true
+
+})
+
+console.log(
+'OFFICE LOCATION:',
+office
+)
+
+let distanceFromOffice = null
+
+if (
+    office &&
+    req.body.latitude &&
+    req.body.longitude
+) {
+
+    distanceFromOffice =
+    Math.round(
+
+        getDistanceMeters(
+
+            Number(req.body.latitude),
+
+            Number(req.body.longitude),
+
+            office.latitude,
+
+            office.longitude
+
+        )
+
+    )
+
+}
+
+console.log(
+    'DISTANCE FROM OFFICE:',
+    distanceFromOffice,
+    'meters'
+)
 
 
     // --- AUTO CAPTURE LOGIN TIME ---
@@ -520,6 +623,20 @@ if (!record) {
         executiveName: executive.name,
         date: today,
         loginTimes: [now],
+loginLocations: [{
+    latitude: req.body.latitude || null,
+    longitude: req.body.longitude || null,
+    accuracy: req.body.accuracy || null,
+
+    distanceFromOffice:
+    distanceFromOffice,
+
+    insideOfficeRadius:
+    distanceFromOffice <=
+    (office?.radiusMeters || 0),
+
+    time: now
+}],
         activityLog: []
     })
 
@@ -531,15 +648,53 @@ if (!record.loginTimes) {
 
 record.loginTimes.push(now)
 
+if (!record.loginLocations) {
+    record.loginLocations = []
+}
+
+record.loginLocations.push({
+    latitude: req.body.latitude || null,
+    longitude: req.body.longitude || null,
+    accuracy: req.body.accuracy || null,
+
+    distanceFromOffice:
+    distanceFromOffice,
+
+    insideOfficeRadius:
+    distanceFromOffice <=
+    (office?.radiusMeters || 0),
+
+    time: now
+})
+
     if (!record.activityLog) {
         record.activityLog = []
     }
 
 }
 
+console.log({
+
+loginLatitude:
+req.body.latitude,
+
+loginLongitude:
+req.body.longitude,
+
+officeLatitude:
+office?.latitude,
+
+officeLongitude:
+office?.longitude
+
+})
+
 record.activityLog.push({
     type: 'LOGIN',
-    time: now
+    time: now,
+    latitude: req.body.latitude || null,
+    longitude: req.body.longitude || null,
+    accuracy: req.body.accuracy || null
 })
 
 await record.save()
@@ -801,6 +956,26 @@ const lunchCompleted =
     (attendance?.lunchOut?.length || 0) >= 1 &&
     (attendance?.lunchIn?.length || 0) >= 1
 
+const clientCounter =
+await ExecutiveLocationLog.countDocuments({
+
+    attendanceId:
+    attendance?._id,
+
+    type:'CLIENT'
+
+})
+
+const siteCounter =
+await ExecutiveLocationLog.countDocuments({
+
+    attendanceId:
+    attendance?._id,
+
+    type:'SITE'
+
+})
+
 res.render('executiveMyDashboard', {
     buyers,
     executiveName: req.session.executiveName,
@@ -825,6 +1000,9 @@ meetingActive,
 
 siteOutCount,
 siteActive,
+
+clientCounter,
+siteCounter,
 
 contacted,
 negotiation,
@@ -1176,9 +1354,80 @@ router.get('/logout', async (req, res) => {
         date: today
     })
 
+const office =
+await OfficeLocation.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    active:true
+
+})
+
+let distanceFromOffice = null
+
+if (
+    office &&
+    req.query.latitude &&
+    req.query.longitude
+) {
+
+    distanceFromOffice =
+    Math.round(
+
+        getDistanceMeters(
+
+            Number(req.query.latitude),
+
+            Number(req.query.longitude),
+
+            office.latitude,
+
+            office.longitude
+
+        )
+
+    )
+
+}
+
+console.log(
+    'LOGOUT DISTANCE FROM OFFICE:',
+    distanceFromOffice,
+    'meters'
+)
+
     if (record) {
 
         const currentTime = new Date().toLocaleTimeString()
+
+if (!record.logoutLocations) {
+    record.logoutLocations = []
+}
+
+record.logoutLocations.push({
+
+    latitude:
+    req.query.latitude || null,
+
+    longitude:
+    req.query.longitude || null,
+
+    accuracy:
+    req.query.accuracy || null,
+
+    distanceFromOffice:
+    distanceFromOffice,
+
+    insideOfficeRadius:
+    distanceFromOffice <=
+    (office?.radiusMeters || 0),
+
+    time:
+    currentTime
+
+})
+
 
     if (!record.logoutTimes) {
     record.logoutTimes = []
@@ -1194,6 +1443,12 @@ record.logoutTimes.push(currentTime)
             type: 'LOGOUT',
             time: currentTime
         })
+
+console.log('GPS LOGOUT:', {
+    latitude: req.query.latitude,
+    longitude: req.query.longitude,
+    accuracy: req.query.accuracy
+})
 
         await record.save()
     }
@@ -1238,5 +1493,208 @@ router.get('/properties', async (req, res) => {
     )
 
 })
+
+router.post(
+'/location-log',
+async (req,res) => {
+
+try {
+
+const attendance =
+await ExecutiveAttendance.findOne({
+
+    executiveName:
+    req.session.executiveName,
+
+    date:
+    new Date()
+    .toISOString()
+    .split('T')[0]
+
+})
+
+await ExecutiveLocationLog.create({
+
+    executiveId:
+    req.session.executiveId,
+
+    executiveName:
+    req.session.executiveName,
+
+    attendanceId:
+    attendance?._id,
+
+    type:
+    req.body.type,
+
+    latitude:
+    Number(req.body.latitude),
+
+    longitude:
+    Number(req.body.longitude),
+
+    accuracy:
+    Number(req.body.accuracy)
+
+})
+
+res.redirect(
+'/executive/dashboard'
+)
+
+} catch(err){
+
+console.log(
+'LOCATION LOG ERROR:',
+err.message
+)
+
+res.redirect(
+'/executive/dashboard'
+)
+
+}
+
+})
+
+router.get(
+'/location-history',
+async (req,res) => {
+
+const logs =
+await ExecutiveLocationLog
+.find({
+    executiveName:
+    req.session.executiveName
+})
+.sort({timestamp:-1})
+.limit(200)
+
+res.render(
+'locationHistory',
+{
+    logs
+}
+)
+
+})
+
+router.get(
+'/route-data',
+async(req,res)=>{
+
+const date =
+req.query.date ||
+new Date()
+.toISOString()
+.slice(0,10)
+
+const attendance =
+await ExecutiveAttendance.findOne({
+
+    executiveName:
+    req.session.executiveName,
+
+    date
+
+})
+
+const locations =
+await ExecutiveLocationLog.find({
+
+    executiveName:
+    req.session.executiveName
+
+})
+
+const office =
+await OfficeLocation.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    active:true
+
+})
+
+res.json({
+
+    office,
+
+    attendance,
+
+    locations
+
+})
+
+})
+
+router.get('/route-map', async(req,res)=>{
+
+    res.render('executiveRouteMap')
+
+})
+
+router.get('/route-map-data', async(req,res)=>{
+
+    const date =
+    req.query.date
+
+const attendance =
+await ExecutiveAttendance.findOne({
+
+    executiveId:
+    req.session.executiveId,
+
+    date
+
+})
+
+const startDate =
+new Date(date)
+
+startDate.setHours(
+0,0,0,0
+)
+
+const endDate =
+new Date(startDate)
+
+endDate.setDate(
+endDate.getDate() + 1
+)
+
+const logs =
+await ExecutiveLocationLog.find({
+
+    executiveId:
+    req.session.executiveId,
+
+    timestamp:{
+        $gte:startDate,
+        $lt:endDate
+    }
+
+})
+
+const office =
+await OfficeLocation.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    active:true
+
+})
+
+    res.json({
+        attendance,
+        logs,
+        office
+    })
+
+})
+
+
 
 module.exports = router

@@ -27,6 +27,80 @@ const executiveAttendanceSchema = new mongoose.Schema({
     siteVisitOut: [String],
     siteVisitIn: [String],
 
+loginLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    distanceFromOffice: Number,
+    insideOfficeRadius: Boolean,
+    time: String
+}],
+
+logoutLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    distanceFromOffice: Number,
+    insideOfficeRadius: Boolean,
+    time: String
+}],
+
+teaOutLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+teaInLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+lunchOutLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+lunchInLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+meetingOutLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+meetingInLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+siteVisitOutLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
+siteVisitInLocations: [{
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number,
+    time: String
+}],
+
 activityLog: [
 {
     action: String,

@@ -5,3 +5,5 @@ node_modules/
 ai-error-log.txt
 logs/
 .pm2/
+Documentation/
+backup/
