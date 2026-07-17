@@ -304,12 +304,14 @@ color:#1f4e79;
 
 <div class="top-nav">
 
-<a href="/executive/location-history">
-📍 Location History
+<a href="/executive/followups">
+📞<br>Followups
+(<%= followUps %>)
 </a>
 
-<a href="/executive/route-map">
-🗺️ Route Map
+<a href="/executive/sitevisits">
+🏢<br>Visits
+(<%= siteVisits %>)
 </a>
 
 <form
@@ -396,6 +398,27 @@ Manage Leads, Follow Ups & Site Visits
 
 <div style="
 margin-top:10px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+font-weight:bold;
+color:#1f4e79;
+">
+
+<div>
+🏆 Closed Deals:
+<%= closedDeals %>
+</div>
+
+<div>
+💰 Total Value:
+₹ <%= closedValue.toLocaleString('en-IN') %>
+</div>
+
+</div>
+
+<div style="
+margin-top:10px;
 padding:12px;
 background:white;
 border:1px solid #e5e7eb;
@@ -445,8 +468,6 @@ color:#555;
 
 </div>
 
-</div>
-
 <details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">My Dashboard</summary><div class="summary">
 
 <a href="/executive/property-map">
@@ -459,11 +480,6 @@ color:#555;
 <div class="card">
 <h3>Pipeline (<%= openLeadCount %>)</h3>
 <h2>₹ <%= pipelineValue.toLocaleString('en-IN') %></h2>
-</div>
-
-<div class="card">
-<h3>Closed Value (<%= closedDeals %>)</h3>
-<h2>₹ <%= closedValue.toLocaleString('en-IN') %></h2>
 </div>
 
 <div class="card">
@@ -1203,14 +1219,12 @@ Close
 🏠<br>Home
 </a>
 
-<a href="/executive/followups">
-📞<br>Followups
-(<%= followUps %>)
+<a href="/executive/location-history">
+📍 Location History
 </a>
 
-<a href="/executive/sitevisits">
-🏢<br>Visits
-(<%= siteVisits %>)
+<a href="/executive/route-map">
+🗺️ Route Map
 </a>
 
 <a href="/executive/reports">
