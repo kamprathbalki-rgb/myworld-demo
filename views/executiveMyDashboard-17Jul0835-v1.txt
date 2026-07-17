@@ -274,16 +274,6 @@ text-decoration:none;
 z-index:2001;
 }
 
-.logout-btn{
-background:#dc3545;
-color:#fff;
-border:none;
-padding:10px 18px;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-}
-
 </style>
 
 </head>
@@ -330,10 +320,8 @@ name="accuracy"
 id="logoutAccuracy"
 >
 
-<button
-type="submit"
-class="logout-btn">
-🚪 Sign Out
+<button type="submit">
+Logout
 </button>
 
 </form>
@@ -403,71 +391,59 @@ Properties<br><%= myProperties %>
 
 <div class="card">
 
-<h3>BREAKS</h3>
+<h3>TEA</h3>
 
-<div style="margin-bottom:15px;">
+<h2><%= teaOutCount %></h2>
 
-<b>Tea Break</b>
-
-<div style="margin:8px 0;">
-Count: <strong><%= teaOutCount %></strong>
-</div>
-
-<div style="margin-bottom:10px;">
-<%= teaActive ? 'Active' : 'Available' %>
-</div>
+<p>
+<%= teaActive ? 'TEA BREAK' : 'AVAILABLE' %>
+</p>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="teaOut">
-    <button <%= teaActive || currentlyBusy ? 'disabled' : '' %>>
-        Start
-    </button>
+<input type="hidden" name="type" value="teaOut">
+<button <%= teaActive || currentlyBusy ? 'disabled' : '' %>>
+OUT
+</button>
 </form>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="teaIn">
-    <button <%= !teaActive ? 'disabled' : '' %>>
-        End
-    </button>
+<input type="hidden" name="type" value="teaIn">
+<button <%= !teaActive ? 'disabled' : '' %>>
+IN
+</button>
 </form>
 
 </div>
 
-<hr style="margin:15px 0;">
+<div class="card">
 
-<div>
+<h3>LUNCH</h3>
 
-<b>Lunch Break</b>
+<h2><%= lunchOutCount %></h2>
 
-<div style="margin:8px 0;">
-Count: <strong><%= lunchOutCount %></strong>
-</div>
-
-<div style="margin-bottom:10px;">
+<p>
 <% if (lunchCompleted) { %>
-Completed
+COMPLETED
 <% } else if (lunchActive) { %>
-Active
+LUNCH BREAK
 <% } else { %>
-Available
+AVAILABLE
 <% } %>
-</div>
+</p>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="lunchOut">
-    <button <%= lunchCompleted || lunchActive || currentlyBusy ? 'disabled' : '' %>>
-        Start
-    </button>
+<input type="hidden" name="type" value="lunchOut">
+<button <%= lunchCompleted || lunchActive || currentlyBusy ? 'disabled' : '' %>>
+OUT
+</button>
 </form>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="lunchIn">
-    <button <%= lunchCompleted || !lunchActive ? 'disabled' : '' %>>
-        End
-    </button>
+<input type="hidden" name="type" value="lunchIn">
+<button <%= lunchCompleted || !lunchActive ? 'disabled' : '' %>>
+IN
+</button>
 </form>
-
-</div>
 
 </div>
 
@@ -582,7 +558,7 @@ id="clientSiteButton"
 
 </div>
 
-<details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">My Dashboard</summary><div class="summary">
+<details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">Performance Dashboard</summary><div class="summary">
 
 <a href="/executive/dashboard">
 <div class="card">
