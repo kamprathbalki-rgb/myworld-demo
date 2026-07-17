@@ -361,17 +361,16 @@ id="logoutAccuracy"
 
 <div class="top-info-item">
 ⏰<br>
-<%= attendance?.loginTimes?.slice(-1)[0] || '--:--' %>
+<%= attendance?.loginTimes?.length
+    ? attendance.loginTimes[0]
+    : '--:--'
+%>
 </div>
 
 </div>
 
 
 <div class="welcome-card">
-
-<h1 style="margin-top:0;">
-Executive Dashboard
-</h1>
 
 <div style="
 display:flex;
@@ -390,6 +389,33 @@ Welcome, <%= executiveName %>
 <p style="color:#666;margin:5px 0 0 0;">
 Manage Leads, Follow Ups & Site Visits
 </p>
+
+<div style="
+margin-top:10px;
+padding:12px;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:10px;
+">
+
+<div style="
+font-size:11px;
+font-weight:bold;
+color:#1f4e79;
+text-transform:uppercase;
+margin-bottom:5px;
+">
+Today's Insight
+</div>
+
+<div style="
+font-style:italic;
+color:#555;
+">
+<%= motivation %>
+</div>
+
+</div>
 
 </div>
 </div>
@@ -421,9 +447,7 @@ Properties<br><%= myProperties %>
 ☕ Tea (#<%= teaOutCount %>)
 </b>
 
-<div style="margin-bottom:10px;">
-<%= teaActive ? 'On Break' : '' %>
-</div>
+<br><br>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
     <input type="hidden" name="type" value="teaOut">
@@ -449,11 +473,12 @@ Properties<br><%= myProperties %>
 🍽 Lunch (#<%= lunchOutCount %>)
 </b>
 
+<br><br>
+
 <div style="margin-bottom:10px;">
 <% if (lunchCompleted) { %>
 Completed
 <% } else if (lunchActive) { %>
-At Lunch
 <% } else { %>
 
 <% } %>
@@ -486,9 +511,7 @@ At Lunch
 (#<%= meetingOutCount %>)
 </b>
 
-<div style="margin:10px 0;">
-<%= meetingActive ? 'In Meeting' : '' %>
-</div>
+<br><br>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="meetingOut">
@@ -535,9 +558,7 @@ style="display:inline;"
 (#<%= siteOutCount %>)
 </b>
 
-<div style="margin:10px 0;">
-<%= siteActive ? 'At Site' : '' %>
-</div>
+<br><br>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="siteVisitOut">

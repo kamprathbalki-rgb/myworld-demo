@@ -27,6 +27,18 @@ require('../models/ExecutiveLocationLog')
 const OfficeLocation =
 require('../models/OfficeLocation')
 
+const fs = require('fs')
+const path = require('path')
+
+const motivations =
+require('../data/motivations')
+
+const statePath =
+path.join(
+    __dirname,
+    '../data/motivationState.json'
+)
+
 function getISTTime() {
     return new Date().toLocaleTimeString(
         'en-IN',
@@ -836,13 +848,6 @@ const attendance = await ExecutiveAttendance.findOne({
 })
 
 
-const currentStatus =
-attendance?.siteVisitOut?.length >
-attendance?.siteVisitIn?.length
-? 'SITE VISIT'
-: 'ACTIVE'
-
-
 const startOfDay = new Date()
 
 startOfDay.setHours(0,0,0,0)
@@ -953,6 +958,21 @@ const lastLogin =
 const lastLogout =
     attendance?.logoutTimes?.slice(-1)[0]
 
+let currentStatus = 'At Office'
+
+if (lunchActive) {
+    currentStatus = 'At Lunch'
+}
+else if (teaActive) {
+    currentStatus = 'Tea Break'
+}
+else if (meetingActive) {
+    currentStatus = 'In Meeting'
+}
+else if (siteActive) {
+    currentStatus = 'On Site'
+}
+
 let displayLogoutTime = lastLogout
 
 if (lastLogin && lastLogout) {
@@ -995,7 +1015,45 @@ await ExecutiveLocationLog.countDocuments({
 
 })
 
+
+let state =
+JSON.parse(
+    fs.readFileSync(
+        statePath,
+        'utf8'
+    )
+)
+
+if(state.date !== today){
+
+    state = {
+
+        date: today,
+
+        index:
+        Math.floor(
+            Math.random() *
+            motivations.length
+        )
+
+    }
+
+    fs.writeFileSync(
+        statePath,
+        JSON.stringify(
+            state,
+            null,
+            2
+        )
+    )
+
+}
+
+const motivation =
+motivations[state.index]
+
 res.render('executiveMyDashboard', {
+    motivation,
     buyers,
     executiveName: req.session.executiveName,
     unlockedBuyerId: req.session.unlockedBuyerId || null,
