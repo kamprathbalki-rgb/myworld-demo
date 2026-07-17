@@ -1080,9 +1080,92 @@ setInterval(
     1000
 )
 
+<button
+id="breaksBtn"
+style="
+position:fixed;
+right:20px;
+bottom:80px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#ff9800;
+color:white;
+border:none;
+font-size:24px;
+z-index:2001;
+box-shadow:0 2px 10px rgba(0,0,0,.25);
+">
+☕
+</button>
+
 </script>
 
-<a href="/executive/followups" class="fab">+</a>
+<div
+id="breaksModal"
+style="
+display:none;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+background:white;
+padding:20px;
+border-radius:20px 20px 0 0;
+box-shadow:0 -4px 20px rgba(0,0,0,.2);
+z-index:3000;
+"
+>
+
+<h3>Breaks</h3>
+
+<!-- Tea block -->
+
+<b>☕ Tea (#<%= teaOutCount %>)</b>
+
+<br><br>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="teaOut">
+<button <%= teaActive || currentlyBusy ? 'disabled' : '' %>>
+Start
+</button>
+</form>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="teaIn">
+<button <%= !teaActive ? 'disabled' : '' %>>
+End
+</button>
+</form>
+
+<hr>
+
+<b>🍽 Lunch (#<%= lunchOutCount %>)</b>
+
+<br><br>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="lunchOut">
+<button <%= lunchCompleted || lunchActive || currentlyBusy ? 'disabled' : '' %>>
+Start
+</button>
+</form>
+
+<form method="POST" action="/executive/attendance/punch" style="display:inline;">
+<input type="hidden" name="type" value="lunchIn">
+<button <%= lunchCompleted || !lunchActive ? 'disabled' : '' %>>
+End
+</button>
+</form>
+
+<br><br>
+
+<button onclick="closeBreaksModal()">
+Close
+</button>
+
+</div>
 
 <div class="mobile-bottom-nav">
 
@@ -1110,6 +1193,29 @@ onclick="document.getElementById('logoutForm').requestSubmit();return false;">
 </a>
 
 </div>
+
+
+<script>
+
+document
+.getElementById('breaksBtn')
+.addEventListener('click', function(){
+
+    document
+    .getElementById('breaksModal')
+    .style.display = 'block'
+
+})
+
+function closeBreaksModal(){
+
+    document
+    .getElementById('breaksModal')
+    .style.display = 'none'
+
+}
+
+</script>
 
 </body>
 
