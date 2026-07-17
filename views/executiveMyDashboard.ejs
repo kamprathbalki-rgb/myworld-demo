@@ -250,6 +250,7 @@ padding:12px 5px;
 box-shadow:0 -2px 12px rgba(0,0,0,.15);
 z-index:2000;
 }
+
 .mobile-bottom-nav a{
 text-decoration:none;
 font-weight:bold;
@@ -257,6 +258,7 @@ color:#1f4e79;
 font-size:12px;
 text-align:center;
 }
+
 .fab{
 position:fixed;
 right:20px;
@@ -274,6 +276,26 @@ text-decoration:none;
 z-index:2001;
 }
 
+.top-info-bar{
+position:sticky;
+top:55px;
+z-index:999;
+background:#fff;
+display:flex;
+justify-content:space-around;
+padding:10px 5px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.top-info-item{
+text-align:center;
+font-size:12px;
+font-weight:bold;
+color:#1f4e79;
+}
+
 </style>
 
 </head>
@@ -283,10 +305,6 @@ z-index:2001;
 <div class="top-nav">
 
 <a href="javascript:history.back()">Back</a>
-
-<a href="/executive/dashboard">Home</a>
-
-<a href="/executive/reports">Reports</a>
 
 <a href="/executive/location-history">
 Location History</a>
@@ -324,6 +342,31 @@ id="logoutAccuracy"
 
 </div>
 
+<div class="top-info-bar">
+
+<div class="top-info-item">
+🟢<br>
+<%= currentStatus %>
+</div>
+
+<div class="top-info-item">
+📅<br>
+<span id="todayDate"></span>
+</div>
+
+<div class="top-info-item">
+🕒<br>
+<span id="liveClock"></span>
+</div>
+
+<div class="top-info-item">
+⏰<br>
+<%= attendance?.loginTimes?.slice(-1)[0] || '--:--' %>
+</div>
+
+</div>
+
+
 <div class="welcome-card">
 
 <h1 style="margin-top:0;">
@@ -349,37 +392,8 @@ Manage Leads, Follow Ups & Site Visits
 </p>
 
 </div>
-
-<div style="
-background:#f5f7fa;
-padding:10px 14px;
-border-radius:10px;
-font-size:14px;
-min-width:220px;
-text-align:right;
-">
-
-<div>
-🟢 <strong><%= currentStatus %></strong>
 </div>
-
-<div>
-📅 <span id="todayDate"></span>
 </div>
-
-<div>
-🕒 <span id="liveClock"></span>
-</div>
-
-<div>
-⏰ Login:
-<%= attendance?.loginTimes?.slice(-1)[0] || '--:--' %>
-</div>
-
-</div>
-
-</div>
-
 
 <div class="quick-actions">
 
@@ -393,6 +407,8 @@ Properties<br><%= myProperties %>
 
 </div>
 
+</div>
+
 <div class="attendance-card">
 
 <div class="attendance-grid">
@@ -401,14 +417,12 @@ Properties<br><%= myProperties %>
 
 <div style="margin-bottom:15px;">
 
-<b>Tea Break</b>
-
-<div style="margin:8px 0;">
-Count: <strong><%= teaOutCount %></strong>
-</div>
+<b>
+☕ Tea (#<%= teaOutCount %>)
+</b>
 
 <div style="margin-bottom:10px;">
-<%= teaActive ? 'Active' : '' %>
+<%= teaActive ? 'On Break' : '' %>
 </div>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
@@ -431,17 +445,15 @@ Count: <strong><%= teaOutCount %></strong>
 
 <div>
 
-<b>Lunch Break</b>
-
-<div style="margin:8px 0;">
-Count: <strong><%= lunchOutCount %></strong>
-</div>
+<b>
+🍽 Lunch (#<%= lunchOutCount %>)
+</b>
 
 <div style="margin-bottom:10px;">
 <% if (lunchCompleted) { %>
 Completed
 <% } else if (lunchActive) { %>
-Active
+At Lunch
 <% } else { %>
 
 <% } %>
@@ -467,25 +479,28 @@ Active
 
 <div class="card">
 
-<h3>MEETING</h3>
+<div style="margin-bottom:15px;">
 
-<h2><%= meetingOutCount %></h2>
+<b>
+🤝 Client Meeting
+(#<%= meetingOutCount %>)
+</b>
 
-<p>
-<%= meetingActive ? 'IN MEETING' : '' %>
-</p>
+<div style="margin:10px 0;">
+<%= meetingActive ? 'In Meeting' : '' %>
+</div>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="meetingOut">
 <button <%= meetingActive || currentlyBusy ? 'disabled' : '' %>>
-OUT
+Start
 </button>
 </form>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="meetingIn">
-<button id="meetingInButton" <%= !meetingActive ? 'disabled' : '' %>>
-IN
+<button <%= !meetingActive ? 'disabled' : '' %>>
+End
 </button>
 </form>
 
@@ -497,49 +512,44 @@ style="display:inline;"
 >
 
 <input type="hidden" name="type" value="CLIENT">
-
 <input type="hidden" name="latitude" class="gpsLat">
-
 <input type="hidden" name="longitude" class="gpsLng">
-
 <input type="hidden" name="accuracy" class="gpsAcc">
 
-<span id="clientMeetCounter" style="font-weight:bold;color:green;">
-#<%= clientCounter %>
-</span>
-
 <button
-id="clientMeetButton"
 <%= !meetingActive ? 'disabled' : '' %>
 >
-📍 CLIENT
+📍 Client
 </button>
 
 </form>
 
 </div>
 
-<div class="card">
+<hr style="margin:15px 0;">
 
-<h3>SITE</h3>
+<div>
 
-<h2><%= siteOutCount %></h2>
+<b>
+🏢 Site Visit
+(#<%= siteOutCount %>)
+</b>
 
-<p>
-<%= siteActive ? 'AT SITE' : '' %>
-</p>
+<div style="margin:10px 0;">
+<%= siteActive ? 'At Site' : '' %>
+</div>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="siteVisitOut">
 <button <%= siteActive || currentlyBusy ? 'disabled' : '' %>>
-OUT
+Start
 </button>
 </form>
 
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="siteVisitIn">
-<button id="siteInButton" <%= !siteActive ? 'disabled' : '' %>>
-IN
+<button <%= !siteActive ? 'disabled' : '' %>>
+End
 </button>
 </form>
 
@@ -551,23 +561,14 @@ style="display:inline;"
 >
 
 <input type="hidden" name="type" value="SITE">
-
 <input type="hidden" name="latitude" class="gpsLat">
-
 <input type="hidden" name="longitude" class="gpsLng">
-
 <input type="hidden" name="accuracy" class="gpsAcc">
 
-<span id="clientSiteCounter" style="font-weight:bold;color:green;">
-#<%= siteCounter %>
-</span>
-
-
 <button
-id="clientSiteButton"
 <%= !siteActive ? 'disabled' : '' %>
 >
-📍 SITE
+📍 Site
 </button>
 
 </form>
