@@ -201,10 +201,6 @@ transition:.2s;
 transform:scale(.98);
 }
 
-.buyer-radio{
-display:none;
-}
-
 #buyerModal{
 left:0 !important;
 right:0 !important;
@@ -627,7 +623,7 @@ id="clientSiteButton"
 
 <% buyers.forEach(function(b){ %>
 
-<div class="buyer-card">
+<div class="buyer-card" onclick="selectBuyer(this)">
 
 <input
 type="radio"
@@ -922,6 +918,19 @@ openBuyerModal()
 })
 
 })
+
+function selectBuyer(card){
+
+    const radio =
+    card.querySelector('.buyer-radio');
+
+    radio.checked = true;
+
+    radio.dispatchEvent(
+        new Event('change')
+    );
+
+}
 
 </script>
 
