@@ -1,8 +1,20 @@
 const OpenAI = require('openai');
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+let openai = null;
+
+if (process.env.OPENAI_API_KEY) {
+
+    openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+    });
+
+} else {
+
+    console.log(
+        'OPENAI_API_KEY NOT FOUND - AI EXTRACTION DISABLED'
+    );
+
+}
 
 const fs = require('fs');
 const path = require('path');
@@ -59,6 +71,14 @@ function loadPrompt() {
 async function extractWithAI(
     message
 ) {
+
+if (!openai) {
+
+    return {
+        error: 'OPENAI_API_KEY missing'
+    };
+
+}
 
     try {
 
