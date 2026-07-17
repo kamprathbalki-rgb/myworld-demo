@@ -345,7 +345,12 @@ id="logoutAccuracy"
 <div class="top-info-bar">
 
 <div class="top-info-item">
-🟢<br>
+<%= currentStatus === 'At Office' ? '🏢' :
+    currentStatus === 'Tea Break' ? '☕' :
+    currentStatus === 'At Lunch' ? '🍽' :
+    currentStatus === 'In Meeting' ? '🤝' :
+    currentStatus === 'On Site' ? '🏗️' : '🏢' %>
+<br>
 <%= currentStatus %>
 </div>
 
@@ -433,74 +438,55 @@ Properties<br><%= myProperties %>
 
 </div>
 
+<details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">My Dashboard</summary><div class="summary">
+
+<a href="/executive/dashboard">
+<div class="card">
+<h3>My Leads</h3>
+<h2><%= myLeads %></h2>
 </div>
+</a>
 
-<div class="attendance-card">
+<a href="/executive/properties">
+<div class="card">
+<h3>My Properties</h3>
+<h2><%= myProperties %></h2>
+</div>
+</a>
 
-<div class="attendance-grid">
+<a href="/executive/property-map">
+<div class="card">
+<h3>Property Map</h3>
+<h2>View</h2>
+</div>
+</a>
 
 <div class="card">
-
-<div style="margin-bottom:15px;">
-
-<b>
-☕ Tea (#<%= teaOutCount %>)
-</b>
-
-<br><br>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="teaOut">
-    <button <%= teaActive || currentlyBusy ? 'disabled' : '' %>>
-        Start
-    </button>
-</form>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="teaIn">
-    <button <%= !teaActive ? 'disabled' : '' %>>
-        End
-    </button>
-</form>
-
+<h3>Contacted</h3>
+<h2><%= contacted %></h2>
 </div>
 
-<hr style="margin:15px 0;">
-
-<div>
-
-<b>
-🍽 Lunch (#<%= lunchOutCount %>)
-</b>
-
-<br><br>
-
-<div style="margin-bottom:10px;">
-<% if (lunchCompleted) { %>
-Completed
-<% } else if (lunchActive) { %>
-<% } else { %>
-
-<% } %>
+<div class="card">
+<h3>Negotiation</h3>
+<h2><%= negotiation %></h2>
 </div>
 
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="lunchOut">
-    <button <%= lunchCompleted || lunchActive || currentlyBusy ? 'disabled' : '' %>>
-        Start
-    </button>
-</form>
-
-<form method="POST" action="/executive/attendance/punch" style="display:inline;">
-    <input type="hidden" name="type" value="lunchIn">
-    <button <%= lunchCompleted || !lunchActive ? 'disabled' : '' %>>
-        End
-    </button>
-</form>
-
+<div class="card">
+<h3>Pipeline (<%= openLeadCount %>)</h3>
+<h2>₹ <%= pipelineValue.toLocaleString('en-IN') %></h2>
 </div>
 
+<div class="card">
+<h3>Closed Value (<%= closedDeals %>)</h3>
+<h2>₹ <%= closedValue.toLocaleString('en-IN') %></h2>
 </div>
+
+<div class="card">
+<h3>Lost Value (<%= lost %>)</h3>
+<h2>₹ <%= lostValue.toLocaleString('en-IN') %></h2>
+</div>
+
+</div></details>
 
 <div class="card">
 
@@ -598,55 +584,6 @@ style="display:inline;"
 
 </div>
 
-<details open><summary style="font-size:18px;font-weight:bold;margin-bottom:10px;">My Dashboard</summary><div class="summary">
-
-<a href="/executive/dashboard">
-<div class="card">
-<h3>My Leads</h3>
-<h2><%= myLeads %></h2>
-</div>
-</a>
-
-<a href="/executive/properties">
-<div class="card">
-<h3>My Properties</h3>
-<h2><%= myProperties %></h2>
-</div>
-</a>
-
-<a href="/executive/property-map">
-<div class="card">
-<h3>Property Map</h3>
-<h2>View</h2>
-</div>
-</a>
-
-<div class="card">
-<h3>Contacted</h3>
-<h2><%= contacted %></h2>
-</div>
-
-<div class="card">
-<h3>Negotiation</h3>
-<h2><%= negotiation %></h2>
-</div>
-
-<div class="card">
-<h3>Pipeline (<%= openLeadCount %>)</h3>
-<h2>₹ <%= pipelineValue.toLocaleString('en-IN') %></h2>
-</div>
-
-<div class="card">
-<h3>Closed Value (<%= closedDeals %>)</h3>
-<h2>₹ <%= closedValue.toLocaleString('en-IN') %></h2>
-</div>
-
-<div class="card">
-<h3>Lost Value (<%= lost %>)</h3>
-<h2>₹ <%= lostValue.toLocaleString('en-IN') %></h2>
-</div>
-
-</div></details>
 
 <h2 style="margin-top:20px;">My Leads</h2>
 <div class="buyer-list">
@@ -1091,7 +1028,7 @@ bottom:80px;
 width:60px;
 height:60px;
 border-radius:50%;
-background:#ff9800;
+background:#1f4e79;
 color:white;
 border:none;
 font-size:24px;
@@ -1109,7 +1046,7 @@ position:fixed;
 left:0;
 right:0;
 bottom:0;
-background:white;
+background:#f5f7fa;
 padding:20px;
 border-radius:20px 20px 0 0;
 box-shadow:0 -4px 20px rgba(0,0,0,.2);
@@ -1117,8 +1054,19 @@ z-index:3000;
 "
 >
 
-<h3>Breaks</h3>
+<div style="
+background:#1f4e79;
+color:white;
+padding:12px 15px;
+border-radius:10px;
+margin-bottom:15px;
+font-weight:bold;
+font-size:18px;
+">
+☕ Break Management
+</div>
 
+<div class="card" style="margin-bottom:15px;">
 <!-- Tea block -->
 
 <b>☕ Tea (#<%= teaOutCount %>)</b>
@@ -1139,7 +1087,9 @@ End
 </button>
 </form>
 
-<hr>
+</div>
+
+<div class="card">
 
 <b>🍽 Lunch (#<%= lunchOutCount %>)</b>
 
@@ -1176,7 +1126,20 @@ End
 
 <br><br>
 
-<button onclick="closeBreaksModal()">
+</div>
+
+<button
+onclick="closeBreaksModal()"
+style="
+width:100%;
+margin-top:15px;
+background:#1f4e79;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+font-weight:bold;
+">
 Close
 </button>
 
