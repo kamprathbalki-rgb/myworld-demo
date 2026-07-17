@@ -1145,6 +1145,21 @@ End
 
 <br><br>
 
+<div style="margin:10px 0;font-weight:bold;">
+
+<% if (lunchCompleted) { %>
+
+✅ Completed
+
+<% } else if (lunchActive) { %>
+
+🍽 At Lunch
+
+<% } else { %>
+<% } %>
+
+</div>
+
 <form method="POST" action="/executive/attendance/punch" style="display:inline;">
 <input type="hidden" name="type" value="lunchOut">
 <button <%= lunchCompleted || lunchActive || currentlyBusy ? 'disabled' : '' %>>
