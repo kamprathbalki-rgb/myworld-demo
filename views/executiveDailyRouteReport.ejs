@@ -1,114 +1,261 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>Executive Daily Route Report</title>
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
 body{
-font-family:Arial,sans-serif;
-background:#f5f5f5;
-margin:0;
-padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
 }
 
 .container{
-max-width:1400px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:10px;
+    max-width:700px;
+    margin:auto;
 }
 
-h1,h2,h3{
-margin-top:0;
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.header-spacer{
+    width:30px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
 
 .summary{
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-bottom:25px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:20px;
 }
 
 .card{
-background:#fafafa;
-border:1px solid #ddd;
-border-radius:8px;
-padding:15px;
+    background:white;
+    border:none;
+    border-radius:10px;
+    padding:14px 10px;
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
 .card h3{
-margin:0 0 10px 0;
-font-size:14px;
-color:#666;
+    margin:0 0 7px;
+    font-size:12px;
+    color:#666;
 }
 
 .card h2{
-margin:0;
+    margin:0;
+    font-size:17px;
+    color:#1f4e79;
 }
 
+
+/* ================================
+   SECTIONS
+================================ */
+
 .section{
-margin-top:30px;
+    margin-top:20px;
+}
+
+.section h2{
+    color:#1f4e79;
+    font-size:17px;
+    margin:0 0 10px;
+}
+
+
+/* ================================
+   ROUTE MAP
+================================ */
+
+.route-box{
+    background:white;
+    padding:8px;
+    border-radius:12px;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+#routeMap{
+    height:420px;
+    width:100%;
+    border-radius:8px;
+}
+
+
+/* ================================
+   TABLES
+================================ */
+
+.table-scroll{
+    width:100%;
+    overflow-x:auto;
+
+    background:white;
+    border-radius:10px;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
 table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
+    width:100%;
+    border-collapse:collapse;
+    margin:0;
 }
 
 table th,
 table td{
-border:1px solid #ddd;
-padding:10px;
-text-align:left;
+    border-bottom:1px solid #eee;
+    padding:10px;
+    font-size:12px;
+    text-align:left;
 }
 
 table th{
-background:#f0f0f0;
+    background:#1f4e79;
+    color:white;
+    white-space:nowrap;
 }
 
+
+/* Timeline needs horizontal scroll */
+
+.timeline-table{
+    min-width:650px;
+}
+
+.timeline-table td{
+    white-space:nowrap;
+}
+
+
+/* Timeline row indication */
+
 .site{
-background:#fff3cd;
+    background:#fff8e1;
 }
 
 .client{
-background:#d1ecf1;
+    background:#e3f2fd;
 }
 
 .login{
-background:#d4edda;
+    background:#e8f5e9;
 }
 
 .logout{
-background:#f8d7da;
+    background:#ffebee;
 }
 
-.route-box{
-border:2px dashed #bbb;
-padding:30px;
-text-align:center;
-font-size:18px;
-background:#fafafa;
+
+/* ================================
+   METRIC TABLES
+================================ */
+
+.metric-box{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
-.good{
-color:green;
-font-weight:bold;
+.metric-table{
+    min-width:0;
 }
 
-.bad{
-color:red;
-font-weight:bold;
+.metric-table td:first-child{
+    font-weight:bold;
+    color:#555;
+}
+
+.metric-table td:last-child{
+    text-align:right;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .card{
+        padding:12px 8px;
+    }
+
+    .card h2{
+        font-size:15px;
+    }
+
+    #routeMap{
+        height:380px;
+    }
+
 }
 
 </style>
+
 
 <link
 rel="stylesheet"
@@ -119,68 +266,143 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"
 src="https://unpkg.com/leaflet/dist/leaflet.js">
 </script>
 
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-<p>
 
-<a href="javascript:history.back()">
-Back
-</a>
+<!-- ================================
+     HEADER
+================================ -->
 
-|
 
-<a href="/attendance/admin">
-Attendance
-</a>
+<div class="page-header">
 
-</p>
+    <a
+    href="javascript:history.back()"
+    class="back-btn"
+    >
+        ←
+    </a>
 
-<h1>
-Executive Daily Route Report
-</h1>
+    <h2>
+        🗺️ Daily Route
+    </h2>
+
+    <div class="header-spacer"></div>
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
 
 <div class="summary">
 
-<div class="card">
-<h3>Executive</h3>
-<h2><%= attendance.executiveName %></h2>
+
+    <div class="card">
+
+        <h3>
+            👤 Executive
+        </h3>
+
+        <h2>
+            <%= attendance.executiveName %>
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            📅 Date
+        </h3>
+
+        <h2>
+            <%= attendance.date %>
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            🏢 Site Visits
+        </h3>
+
+        <h2>
+            <%= siteVisitCount %>
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            🤝 Client Meetings
+        </h3>
+
+        <h2>
+            <%= clientVisitCount %>
+        </h2>
+
+    </div>
+
+
 </div>
 
-<div class="card">
-<h3>Date</h3>
-<h2><%= attendance.date %></h2>
-</div>
 
-<div class="card">
-<h3>Site Visits</h3>
-<h2><%= siteVisitCount %></h2>
-</div>
 
-<div class="card">
-<h3>Client Meetings</h3>
-<h2><%= clientVisitCount %></h2>
-</div>
+<!-- ================================
+     ROUTE MAP
+================================ -->
 
-<div class="card">
-<h3>Total GPS Visits</h3>
-<h2>
-<%= siteVisitCount + clientVisitCount %>
-</h2>
-</div>
+
+<div class="section">
+
+    <h2>
+        🗺️ Route Map
+    </h2>
+
+
+    <div class="route-box">
+
+        <div id="routeMap"></div>
+
+    </div>
 
 </div>
+
+
+
+<!-- ================================
+     TIMELINE
+================================ -->
+
 
 <div class="section">
 
 <h2>
-Timeline
+    📍 Timeline
 </h2>
 
-<table>
+
+<div class="table-scroll">
+
+
+<table class="timeline-table">
+
 
 <tr>
 
@@ -198,9 +420,11 @@ Timeline
 
 </tr>
 
+
 <%
 
 let rowNo = 1
+
 
 if(attendance.loginLocations){
 
@@ -208,21 +432,35 @@ attendance.loginLocations.forEach(function(x){
 
 %>
 
+
 <tr class="login">
 
-<td>#<%= rowNo++ %></td>
+<td>
+    #<%= rowNo++ %>
+</td>
 
-<td>LOGIN</td>
+<td>
+    🟢 LOGIN
+</td>
 
-<td><%= x.time || '' %></td>
+<td>
+    <%= x.time || '' %>
+</td>
 
-<td><%= x.latitude || '' %></td>
+<td>
+    <%= x.latitude || '' %>
+</td>
 
-<td><%= x.longitude || '' %></td>
+<td>
+    <%= x.longitude || '' %>
+</td>
 
-<td><%= x.accuracy || '' %></td>
+<td>
+    <%= x.accuracy || '' %>
+</td>
 
 </tr>
+
 
 <%
 
@@ -230,17 +468,32 @@ attendance.loginLocations.forEach(function(x){
 
 }
 
+
+
 if(locationLogs){
 
 locationLogs.forEach(function(x){
 
 %>
 
+
 <tr class="<%= x.type === 'SITE' ? 'site' : 'client' %>">
 
-<td>#<%= rowNo++ %></td>
 
-<td><%= x.type %></td>
+<td>
+    #<%= rowNo++ %>
+</td>
+
+
+<td>
+
+<%= x.type === 'SITE'
+    ? '🟡 SITE'
+    : '🔵 CLIENT'
+%>
+
+</td>
+
 
 <td>
 
@@ -249,19 +502,32 @@ locationLogs.forEach(function(x){
 
 </td>
 
-<td><%= x.latitude %></td>
 
-<td><%= x.longitude %></td>
+<td>
+    <%= x.latitude %>
+</td>
 
-<td><%= x.accuracy %></td>
+
+<td>
+    <%= x.longitude %>
+</td>
+
+
+<td>
+    <%= x.accuracy %>
+</td>
+
 
 </tr>
+
 
 <%
 
 })
 
 }
+
+
 
 if(attendance.logoutLocations){
 
@@ -269,21 +535,42 @@ attendance.logoutLocations.forEach(function(x){
 
 %>
 
+
 <tr class="logout">
 
-<td>#<%= rowNo++ %></td>
 
-<td>LOGOUT</td>
+<td>
+    #<%= rowNo++ %>
+</td>
 
-<td><%= x.time || '' %></td>
 
-<td><%= x.latitude || '' %></td>
+<td>
+    🔴 LOGOUT
+</td>
 
-<td><%= x.longitude || '' %></td>
 
-<td><%= x.accuracy || '' %></td>
+<td>
+    <%= x.time || '' %>
+</td>
+
+
+<td>
+    <%= x.latitude || '' %>
+</td>
+
+
+<td>
+    <%= x.longitude || '' %>
+</td>
+
+
+<td>
+    <%= x.accuracy || '' %>
+</td>
+
 
 </tr>
+
 
 <%
 
@@ -293,104 +580,117 @@ attendance.logoutLocations.forEach(function(x){
 
 %>
 
+
 </table>
 
+
 </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PRODUCTIVITY
+================================ -->
+
 
 <div class="section">
 
-<h2>
-Route Map
-</h2>
-
-<div class="route-box">
-
-Route Map Integration Coming Next
-
-<br><br>
-
-<div
-id="routeMap"
-style="
-height:700px;
-width:100%;
-border:1px solid #ccc;
-border-radius:8px;
-">
-</div>
-
-</div>
-
-<div class="section">
 
 <h2>
-Productivity
+    📊 Productivity
 </h2>
 
-<table>
+
+<div class="metric-box">
+
+
+<table class="metric-table">
+
 
 <tr>
-
-<th>Metric</th>
-
-<th>Value</th>
-
-</tr>
-
-<tr>
-
-<td>Site Visits</td>
-
-<td><%= siteVisitCount %></td>
-
-</tr>
-
-<tr>
-
-<td>Client Meetings</td>
-
-<td><%= clientVisitCount %></td>
-
-</tr>
-
-<tr>
-
-<td>Total GPS Visits</td>
 
 <td>
-<%= siteVisitCount + clientVisitCount %>
+    🏢 Site Visits
+</td>
+
+<td>
+    <%= siteVisitCount %>
 </td>
 
 </tr>
 
+
 <tr>
 
-<td>Total Activities</td>
+<td>
+    🤝 Client Meetings
+</td>
 
 <td>
+    <%= clientVisitCount %>
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+    📍 Total GPS Visits
+</td>
+
+<td>
+    <%= siteVisitCount + clientVisitCount %>
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+    ⚙️ Total Activities
+</td>
+
+<td>
+
 <%= attendance.activityLog
 ? attendance.activityLog.length
 : 0 %>
+
 </td>
 
 </tr>
 
+
 </table>
+
 
 </div>
 
-<div class="section">
 
-<h2>
-Route Quality
-</h2>
+</div>
+
+
+
+<!-- ================================
+     ROUTE QUALITY CALCULATION
+================================ -->
+
 
 <%
 
 let totalAccuracy = 0
+
 let accuracyCount = 0
+
 let bestAccuracy = null
+
 let worstAccuracy = null
+
 
 if(locationLogs){
 
@@ -399,21 +699,29 @@ locationLogs.forEach(function(x){
 if(x.accuracy){
 
 totalAccuracy += x.accuracy
+
 accuracyCount++
+
 
 if(
 bestAccuracy === null ||
 x.accuracy < bestAccuracy
 ){
+
 bestAccuracy = x.accuracy
+
 }
+
 
 if(
 worstAccuracy === null ||
 x.accuracy > worstAccuracy
 ){
+
 worstAccuracy = x.accuracy
+
 }
+
 
 }
 
@@ -421,201 +729,337 @@ worstAccuracy = x.accuracy
 
 }
 
+
 const avgAccuracy =
+
 accuracyCount
+
 ? Math.round(
 totalAccuracy /
 accuracyCount
 )
+
 : 0
 
 %>
 
-<table>
+
+
+<!-- ================================
+     ROUTE QUALITY
+================================ -->
+
+
+<div class="section">
+
+
+<h2>
+    📡 Route Quality
+</h2>
+
+
+<div class="metric-box">
+
+
+<table class="metric-table">
+
 
 <tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
 
-<tr>
-<td>Average GPS Accuracy</td>
-<td><%= avgAccuracy %> m</td>
-</tr>
-
-<tr>
-<td>Best GPS Accuracy</td>
-<td><%= bestAccuracy || '-' %> m</td>
-</tr>
-
-<tr>
-<td>Worst GPS Accuracy</td>
-<td><%= worstAccuracy || '-' %> m</td>
-</tr>
-
-<tr>
-<td>Office Configured</td>
 <td>
-<%= office ? 'YES' : 'NO' %>
+    📡 Average GPS Accuracy
 </td>
+
+<td>
+    <%= avgAccuracy %> m
+</td>
+
 </tr>
+
+
+<tr>
+
+<td>
+    🎯 Best GPS Accuracy
+</td>
+
+<td>
+    <%= bestAccuracy || '-' %> m
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+    📍 Worst GPS Accuracy
+</td>
+
+<td>
+    <%= worstAccuracy || '-' %> m
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+    🏢 Office Configured
+</td>
+
+<td>
+    <%= office ? 'YES' : 'NO' %>
+</td>
+
+</tr>
+
 
 </table>
 
-</div>
 
 </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     LEAFLET MAP
+================================ -->
 
 
 <script>
 
+
 const map = L.map(
-'routeMap'
+    'routeMap'
 ).setView(
-[18.523243,73.760289],
-15
+    [18.523243,73.760289],
+    15
 )
 
+
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-maxZoom:19
-}
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom:19
+    }
 ).addTo(map)
+
 
 const points = []
 
+
+
+/* ================================
+   OFFICE
+================================ */
+
+
 <% if(office){ %>
 
+
 const officeMarker =
+
 L.marker(
 [
-<%= office.latitude %>,
-<%= office.longitude %>
+    <%= office.latitude %>,
+    <%= office.longitude %>
 ]
 )
 .addTo(map)
 
+
 officeMarker.bindPopup(
-'🏢 OFFICE<br><%= office.officeName %>'
+    '🏢 OFFICE<br><%= office.officeName %>'
 )
 
+
 points.push([
-<%= office.latitude %>,
-<%= office.longitude %>
+    <%= office.latitude %>,
+    <%= office.longitude %>
 ])
+
 
 <% } %>
 
+
+
 <%
+
 let seq = 1
+
 %>
+
+
+
+/* ================================
+   LOGIN
+================================ */
+
 
 <% if(attendance.loginLocations){ %>
 
+
 <% attendance.loginLocations.forEach(function(x){ %>
+
 
 <% if(x.latitude && x.longitude){ %>
 
+
 L.marker(
 [
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ]
 )
 .addTo(map)
 .bindPopup(
-'🟢 #<%= seq++ %> LOGIN<br><%= x.time || "" %>'
+    '🟢 #<%= seq++ %> LOGIN<br><%= x.time || "" %>'
 )
 
+
 points.push([
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ])
 
+
 <% } %>
+
 
 <% }) %>
 
+
 <% } %>
+
+
+
+/* ================================
+   CLIENT / SITE LOCATIONS
+================================ */
+
 
 <% if(locationLogs){ %>
 
+
 <% locationLogs.forEach(function(x){ %>
+
 
 L.marker(
 [
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ]
 )
 .addTo(map)
 .bindPopup(
-'<%= x.type === "SITE" ? "🟡" : "🔵" %> #<%= seq++ %> <%= x.type %><br>' +
-'<%= new Date(x.timestamp).toLocaleString("en-IN") %>'
+
+'<%= x.type === "SITE"
+    ? "🟡"
+    : "🔵"
+%> #<%= seq++ %> <%= x.type %><br>' +
+
+'<%= new Date(x.timestamp)
+.toLocaleString("en-IN") %>'
+
 )
 
+
 points.push([
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ])
+
 
 <% }) %>
 
+
 <% } %>
+
+
+
+/* ================================
+   LOGOUT
+================================ */
+
 
 <% if(attendance.logoutLocations){ %>
 
+
 <% attendance.logoutLocations.forEach(function(x){ %>
+
 
 <% if(x.latitude && x.longitude){ %>
 
+
 L.marker(
 [
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ]
 )
 .addTo(map)
 .bindPopup(
-'🔴 #<%= seq++ %> LOGOUT<br><%= x.time || "" %>'
+    '🔴 #<%= seq++ %> LOGOUT<br><%= x.time || "" %>'
 )
 
+
 points.push([
-<%= x.latitude %>,
-<%= x.longitude %>
+    <%= x.latitude %>,
+    <%= x.longitude %>
 ])
 
+
 <% } %>
+
 
 <% }) %>
 
+
 <% } %>
+
+
+
+/* ================================
+   ROUTE LINE
+================================ */
+
 
 if(points.length){
 
+
 const routeLine =
+
 L.polyline(
-points,
-{
-weight:4
-}
+    points,
+    {
+        weight:4
+    }
 )
 .addTo(map)
 
+
 map.fitBounds(
-routeLine.getBounds(),
-{
-padding:[40,40]
-}
+    routeLine.getBounds(),
+    {
+        padding:[40,40]
+    }
 )
 
+
 }
+
 
 </script>
 
 
 </body>
-
 
 </html>

@@ -1,77 +1,383 @@
-<h2>Executive Attendance Report</h2>
+<!DOCTYPE html>
+<html>
 
-<a href="/executive/dashboard">Back</a> |
-<a href="/executive/logout">Logout</a>
+<head>
 
-<hr>
+<title>Attendance History</title>
 
-<table border="1" cellpadding="8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<tr>
-<th>Date</th>
-<th>Executive</th>
-<th>Login</th>
-<th>Logout</th>
-<th>Tea Out</th>
-<th>Tea In</th>
-<th>Lunch Out</th>
-<th>Lunch In</th>
-<th>Meeting Out</th>
-<th>Meeting In</th>
-<th>Site Out</th>
-<th>Site In</th>
-</tr>
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:15px;
+    color:#222;
+}
+
+/* HEADER */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:20px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+}
+
+/* REPORT CARD */
+
+.report-card{
+    background:white;
+    border-radius:12px;
+    margin-bottom:12px;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+/* SUMMARY */
+
+.report-summary{
+    padding:15px;
+    cursor:pointer;
+    list-style:none;
+}
+
+.report-summary::-webkit-details-marker{
+    display:none;
+}
+
+.report-date-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.report-date{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.expand-icon{
+    font-size:14px;
+    color:#666;
+}
+
+.report-main-times{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.main-time{
+    background:#f5f7fa;
+    border-radius:8px;
+    padding:10px;
+    text-align:center;
+}
+
+.time-label{
+    font-size:11px;
+    color:#666;
+    margin-bottom:5px;
+}
+
+.time-value{
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+/* EXPANDED DETAILS */
+
+.report-details{
+    padding:12px;
+    border-top:1px solid #eee;
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.activity-item{
+    background:#f5f7fa;
+    border-radius:8px;
+    padding:10px;
+}
+
+.activity-title{
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:8px;
+    color:#1f4e79;
+}
+
+.activity-times{
+    font-size:12px;
+    line-height:1.6;
+    color:#444;
+}
+
+/* EMPTY */
+
+.no-records{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
+    color:#666;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="page-header">
+
+    <a
+    href="/executive/reports"
+    class="back-btn"
+    >
+        ←
+    </a>
+
+    <h2>
+        📅 Attendance History
+    </h2>
+
+    <div style="width:22px;"></div>
+
+</div>
+
+
+<% if (!records || records.length === 0) { %>
+
+<div class="no-records">
+    📅<br><br>
+    No attendance records available.
+</div>
+
+<% } %>
+
 
 <% records.forEach(function(r){ %>
 
-<tr>
-<td><%= r.date %></td>
-<td><%= r.executiveName %></td>
 
-<td>
-<%= r.loginTimes
-    ? r.loginTimes.join(', ')
-    : '' %>
-</td>
+<details class="report-card">
 
-<td>
-<%= r.logoutTimes
-    ? r.logoutTimes.join(', ')
-    : '' %>
-</td>
+    <summary class="report-summary">
 
-<td>
-<%= r.teaOut
-    ? r.teaOut.join(', ')
-    : '' %>
-</td>
 
-<td>
-<%= r.teaIn
-    ? r.teaIn.join(', ')
-    : '' %>
-</td>
+        <div class="report-date-row">
 
-<td><%= r.lunchOut || '' %></td>
-<td><%= r.lunchIn || '' %></td>
+            <div class="report-date">
+                📅 <%= r.date %>
+            </div>
 
-<td>
-<%= r.meetingOut
-    ? r.meetingOut.join(', ')
-    : '' %>
-</td>
+            <div class="expand-icon">
+                ▼
+            </div>
 
-<td>
-<%= r.meetingIn
-    ? r.meetingIn.join(', ')
-    : '' %>
-</td>
+        </div>
 
-<td><%= r.siteVisitOut || '' %></td>
-<td><%= r.siteVisitIn || '' %></td>
 
-</tr>
+        <div class="report-main-times">
+
+
+            <div class="main-time">
+
+                <div class="time-label">
+                    🟢 Login
+                </div>
+
+                <div class="time-value">
+                    <%= r.loginTimes?.length
+                        ? r.loginTimes.join(', ')
+                        : '--:--'
+                    %>
+                </div>
+
+            </div>
+
+
+            <div class="main-time">
+
+                <div class="time-label">
+                    🔴 Logout
+                </div>
+
+                <div class="time-value">
+                    <%= r.logoutTimes?.length
+                        ? r.logoutTimes.join(', ')
+                        : '--:--'
+                    %>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </summary>
+
+
+    <div class="report-details">
+
+
+        <div class="activity-item">
+
+            <div class="activity-title">
+                ☕ Tea
+            </div>
+
+            <div class="activity-times">
+
+                Out:
+                <%= r.teaOut?.length
+                    ? r.teaOut.join(', ')
+                    : '--:--'
+                %>
+
+                <br>
+
+                In:
+                <%= r.teaIn?.length
+                    ? r.teaIn.join(', ')
+                    : '--:--'
+                %>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div class="activity-title">
+                🍽️ Lunch
+            </div>
+
+            <div class="activity-times">
+
+                Out:
+                <%= Array.isArray(r.lunchOut)
+                    ? (r.lunchOut.length
+                        ? r.lunchOut.join(', ')
+                        : '--:--')
+                    : (r.lunchOut || '--:--')
+                %>
+
+                <br>
+
+                In:
+                <%= Array.isArray(r.lunchIn)
+                    ? (r.lunchIn.length
+                        ? r.lunchIn.join(', ')
+                        : '--:--')
+                    : (r.lunchIn || '--:--')
+                %>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div class="activity-title">
+                🤝 Meetings
+            </div>
+
+            <div class="activity-times">
+
+                Out:
+                <%= r.meetingOut?.length
+                    ? r.meetingOut.join(', ')
+                    : '--:--'
+                %>
+
+                <br>
+
+                In:
+                <%= r.meetingIn?.length
+                    ? r.meetingIn.join(', ')
+                    : '--:--'
+                %>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div class="activity-title">
+                🏢 Site Visits
+            </div>
+
+            <div class="activity-times">
+
+                Out:
+                <%= Array.isArray(r.siteVisitOut)
+                    ? (r.siteVisitOut.length
+                        ? r.siteVisitOut.join(', ')
+                        : '--:--')
+                    : (r.siteVisitOut || '--:--')
+                %>
+
+                <br>
+
+                In:
+                <%= Array.isArray(r.siteVisitIn)
+                    ? (r.siteVisitIn.length
+                        ? r.siteVisitIn.join(', ')
+                        : '--:--')
+                    : (r.siteVisitIn || '--:--')
+                %>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</details>
+
 
 <% }) %>
 
-</table>
+
+</body>
+
+</html>

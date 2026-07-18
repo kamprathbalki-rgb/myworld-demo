@@ -1,91 +1,361 @@
-<h2>Reports</h2>
+<!DOCTYPE html>
+<html>
 
-<a href="/executive/dashboard">Back</a> |
-<a href="/executive/logout">Logout</a>
+<head>
 
-<hr>
+<title>My Attendance</title>
 
-<h3>Today Attendance</h3>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<table border="1" cellpadding="8">
+<style>
 
-<tr>
-<th>Login</th>
-<th>Logout</th>
-<th>Tea-1 Out</th>
-<th>Tea-1 In</th>
-<th>Lunch Out</th>
-<th>Lunch In</th>
-<th>Meeting Out</th>
-<th>Meeting In</th>
-<th>Site Out</th>
-<th>Site In</th></tr>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:15px;
+    color:#222;
+}
 
-<tr>
+/* HEADER */
 
-<td>
-<%= attendance?.loginTimes
-    ? attendance.loginTimes.join(', ')
-    : '' %>
-</td>
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:15px;
 
-<td>
-<%= attendance?.logoutTimes
-    ? attendance.logoutTimes.join(', ')
-    : '' %>
-</td>
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-<td>
-<%= attendance && attendance.teaOut
-    ? attendance.teaOut.join(', ')
-    : '' %>
-</td>
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
 
-<td>
-<%= attendance && attendance.teaIn
-    ? attendance.teaIn.join(', ')
-    : '' %>
-</td>
+.page-header h2{
+    margin:0;
+    font-size:20px;
+}
 
-<td>
-<%= attendance && attendance.lunchOut
-    ? attendance.lunchOut.join(', ')
-    : '' %>
-</td>
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+}
 
-<td>
-<%= attendance && attendance.lunchIn
-    ? attendance.lunchIn.join(', ')
-    : '' %>
-</td>
+/* DATE / TITLE */
 
-<td>
-<%= attendance && attendance.meetingOut
-    ? attendance.meetingOut.join(', ')
-    : '' %>
-</td>
+.section-title{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+    margin:20px 0 10px;
+}
 
-<td>
-<%= attendance && attendance.meetingIn
-    ? attendance.meetingIn.join(', ')
-    : '' %>
-</td>
+/* ATTENDANCE GRID */
 
-<td>
-<%= attendance && attendance.siteVisitOut
-    ? attendance.siteVisitOut.join(', ')
-    : '' %>
-</td>
+.attendance-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
 
-<td>
-<%= attendance && attendance.siteVisitIn
-    ? attendance.siteVisitIn.join(', ')
-    : '' %>
-</td>
+/* ATTENDANCE CARD */
 
-</tr>
-</table>
+.attendance-item{
+    background:white;
+    border-radius:10px;
+    padding:14px 10px;
+    text-align:center;
 
-<br>
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
 
-<a href="/executive/attendance-report">Full Attendance Report</a>
+.attendance-icon{
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+.attendance-label{
+    font-size:12px;
+    color:#666;
+    margin-bottom:6px;
+}
+
+.attendance-time{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+    word-break:break-word;
+}
+
+/* FULL REPORT */
+
+.full-report-btn{
+    display:block;
+    margin-top:20px;
+
+    background:#1f4e79;
+    color:white;
+
+    text-decoration:none;
+    text-align:center;
+    font-weight:bold;
+
+    padding:14px;
+    border-radius:10px;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="page-header">
+
+    <a
+    href="/executive/dashboard"
+    class="back-btn"
+    >
+        ←
+    </a>
+
+    <h2>
+        📊 My Attendance
+    </h2>
+
+    <div style="width:22px;"></div>
+
+</div>
+
+
+<div class="section-title">
+    📅 Today's Attendance
+</div>
+
+
+<div class="attendance-grid">
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🟢
+        </div>
+
+        <div class="attendance-label">
+            Login
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.loginTimes?.length
+                ? attendance.loginTimes.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🔴
+        </div>
+
+        <div class="attendance-label">
+            Logout
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.logoutTimes?.length
+                ? attendance.logoutTimes.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            ☕
+        </div>
+
+        <div class="attendance-label">
+            Tea Out
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.teaOut?.length
+                ? attendance.teaOut.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            ☕
+        </div>
+
+        <div class="attendance-label">
+            Tea In
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.teaIn?.length
+                ? attendance.teaIn.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🍽️
+        </div>
+
+        <div class="attendance-label">
+            Lunch Out
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.lunchOut?.length
+                ? attendance.lunchOut.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🍽️
+        </div>
+
+        <div class="attendance-label">
+            Lunch In
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.lunchIn?.length
+                ? attendance.lunchIn.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🤝
+        </div>
+
+        <div class="attendance-label">
+            Meeting Out
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.meetingOut?.length
+                ? attendance.meetingOut.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🤝
+        </div>
+
+        <div class="attendance-label">
+            Meeting In
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.meetingIn?.length
+                ? attendance.meetingIn.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🏢
+        </div>
+
+        <div class="attendance-label">
+            Site Out
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.siteVisitOut?.length
+                ? attendance.siteVisitOut.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+    <div class="attendance-item">
+
+        <div class="attendance-icon">
+            🏢
+        </div>
+
+        <div class="attendance-label">
+            Site In
+        </div>
+
+        <div class="attendance-time">
+            <%= attendance?.siteVisitIn?.length
+                ? attendance.siteVisitIn.join(', ')
+                : '--:--'
+            %>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<a
+href="/executive/attendance-report"
+class="full-report-btn"
+>
+    📅 View Full Attendance Report
+</a>
+
+
+</body>
+
+</html>
