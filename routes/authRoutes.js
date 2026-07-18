@@ -431,4 +431,25 @@ res.render(
 
 })
 
+// ================================
+// LOGOUT
+// ================================
+
+router.get('/logout', (req, res) => {
+
+    req.session.destroy((err) => {
+
+        if (err) {
+            console.error('Logout error:', err)
+            return res.redirect('/saas/dashboard')
+        }
+
+        res.clearCookie('connect.sid')
+
+        res.redirect('/login')
+
+    })
+
+})
+
 module.exports = router
