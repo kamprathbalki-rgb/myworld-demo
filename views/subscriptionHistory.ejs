@@ -1,57 +1,939 @@
-<h1>Subscription History</h1>
+<!DOCTYPE html>
+<html>
 
-<a href="/saas/dashboard">
-Back
-</a>
+<head>
 
-<hr>
+<title>Subscription History</title>
 
-<table border="1" cellpadding="8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<style>
+
+/* ================================
+   GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+
+    font-family:Arial,sans-serif;
+
+    background:#f4f6f9;
+
+    color:#222;
+}
+
+.container{
+    max-width:1300px;
+
+    margin:auto;
+
+    padding:18px;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+
+    color:white;
+
+    padding:16px 20px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.15);
+}
+
+.header-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.back-btn{
+    color:white;
+
+    text-decoration:none;
+
+    font-size:24px;
+
+    width:30px;
+}
+
+.header-title{
+    font-size:20px;
+
+    font-weight:bold;
+}
+
+.header-subtitle{
+    margin-top:4px;
+
+    font-size:12px;
+
+    opacity:.8;
+}
+
+.dashboard-btn{
+    color:white;
+
+    text-decoration:none;
+
+    font-size:22px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.summary-card{
+    background:white;
+
+    border-radius:12px;
+
+    padding:14px 16px;
+
+    margin-bottom:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    box-shadow:
+        0 1px 6px
+        rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#1f4e79;
+
+    font-size:15px;
+
+    font-weight:bold;
+}
+
+.summary-count{
+    background:#1f4e79;
+
+    color:white;
+
+    min-width:40px;
+
+    height:32px;
+
+    padding:0 12px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-card{
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 1px 6px
+        rgba(0,0,0,.08);
+}
+
+.table-scroll{
+    width:100%;
+
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:900px;
+}
+
+th{
+    background:#1f4e79;
+
+    color:white;
+
+    padding:13px;
+
+    text-align:left;
+
+    font-size:12px;
+
+    white-space:nowrap;
+}
+
+td{
+    padding:13px;
+
+    border-bottom:
+        1px solid #eee;
+
+    font-size:12px;
+
+    vertical-align:middle;
+}
+
+tr:last-child td{
+    border-bottom:none;
+}
+
+tbody tr:hover td{
+    background:#fafafa;
+}
+
+.company-name{
+    color:#1f4e79;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   ACTION BADGE
+================================ */
+
+.action-badge{
+    display:inline-block;
+
+    padding:6px 10px;
+
+    border-radius:14px;
+
+    background:#eef4fa;
+
+    color:#1f4e79;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MONTH BADGE
+================================ */
+
+.month-badge{
+    display:inline-block;
+
+    padding:6px 10px;
+
+    border-radius:14px;
+
+    background:#fff8e1;
+
+    color:#ef6c00;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MOBILE CARDS
+================================ */
+
+.mobile-history{
+    display:none;
+}
+
+.history-card{
+    background:white;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    box-shadow:
+        0 1px 6px
+        rgba(0,0,0,.08);
+}
+
+.history-header{
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding-bottom:12px;
+
+    margin-bottom:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+.history-company{
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+.history-date{
+    margin-top:5px;
+
+    font-size:11px;
+
+    color:#777;
+}
+
+.history-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+}
+
+.history-item{
+    background:#f5f7fa;
+
+    border-radius:8px;
+
+    padding:10px;
+}
+
+.history-label{
+    font-size:10px;
+
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.history-value{
+    font-size:12px;
+
+    font-weight:bold;
+
+    color:#333;
+
+    line-height:1.4;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:
+        0 1px 6px
+        rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+
+    margin-bottom:12px;
+}
+
+.empty-title{
+    color:#1f4e79;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    color:#777;
+
+    font-size:13px;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+
+        border-radius:10px;
+    }
+
+    .header-title{
+        font-size:17px;
+    }
+
+    .header-subtitle{
+        display:none;
+    }
+
+    .desktop-history{
+        display:none;
+    }
+
+    .mobile-history{
+        display:block;
+    }
+
+}
+
+
+@media(max-width:360px){
+
+    .history-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+
+<div class="page-header">
+
+
+    <div class="header-left">
+
+
+        <a
+            href="/saas/dashboard"
+            class="back-btn"
+        >
+
+            ←
+
+        </a>
+
+
+        <div>
+
+
+            <div class="header-title">
+
+                💳 Subscription History
+
+            </div>
+
+
+            <div class="header-subtitle">
+
+                Company subscription activity
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <a
+        href="/saas/dashboard"
+        class="dashboard-btn"
+        title="Platform Owner Dashboard"
+    >
+
+        ⚙️
+
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+
+<div class="summary-card">
+
+
+    <div class="summary-title">
+
+        📋 Subscription Records
+
+    </div>
+
+
+    <div class="summary-count">
+
+        <%= history ? history.length : 0 %>
+
+    </div>
+
+
+</div>
+
+
+
+<% if (
+    history &&
+    history.length > 0
+) { %>
+
+
+
+<!-- ================================
+     DESKTOP TABLE
+================================ -->
+
+
+<div class="
+    table-card
+    desktop-history
+">
+
+
+<div class="table-scroll">
+
+
+<table>
+
+
+<thead>
+
 
 <tr>
 
-<th>Company</th>
-<th>Action</th>
-<th>Months</th>
-<th>Old Expiry</th>
-<th>New Expiry</th>
-<th>Performed By</th>
-<th>Date</th>
+    <th>
+        Company
+    </th>
+
+    <th>
+        Action
+    </th>
+
+    <th>
+        Months
+    </th>
+
+    <th>
+        Old Expiry
+    </th>
+
+    <th>
+        New Expiry
+    </th>
+
+    <th>
+        Performed By
+    </th>
+
+    <th>
+        Date
+    </th>
 
 </tr>
+
+
+</thead>
+
+
+
+<tbody>
+
 
 <% history.forEach(function(h){ %>
 
+
 <tr>
 
-<td><%= h.tenantName %></td>
 
-<td><%= h.action %></td>
+    <td class="company-name">
 
-<td><%= h.months || '' %></td>
+        🏢
+        <%= h.tenantName %>
 
-<td>
-<%= h.oldExpiryDate
-? h.oldExpiryDate.toLocaleDateString()
-: ''
-%>
-</td>
+    </td>
 
-<td>
-<%= h.newExpiryDate
-? h.newExpiryDate.toLocaleDateString()
-: ''
-%>
-</td>
 
-<td><%= h.performedBy %></td>
+    <td>
 
-<td>
-<%= h.createdAt.toLocaleString() %>
-</td>
+        <span class="action-badge">
+
+            <%= h.action %>
+
+        </span>
+
+    </td>
+
+
+    <td>
+
+
+        <% if(h.months){ %>
+
+
+        <span class="month-badge">
+
+            <%= h.months %>
+            Months
+
+        </span>
+
+
+        <% } %>
+
+
+    </td>
+
+
+    <td>
+
+
+        <%= h.oldExpiryDate
+
+            ? h.oldExpiryDate
+                .toLocaleDateString()
+
+            : ''
+        %>
+
+
+    </td>
+
+
+    <td>
+
+
+        <%= h.newExpiryDate
+
+            ? h.newExpiryDate
+                .toLocaleDateString()
+
+            : ''
+        %>
+
+
+    </td>
+
+
+    <td>
+
+        <%= h.performedBy %>
+
+    </td>
+
+
+    <td>
+
+
+        <%= h.createdAt
+            .toLocaleString()
+        %>
+
+
+    </td>
+
 
 </tr>
 
+
 <% }) %>
 
+
+</tbody>
+
+
 </table>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     MOBILE HISTORY CARDS
+================================ -->
+
+
+<div class="mobile-history">
+
+
+<% history.forEach(function(h){ %>
+
+
+<div class="history-card">
+
+
+    <div class="history-header">
+
+
+        <div>
+
+
+            <div class="history-company">
+
+                🏢
+                <%= h.tenantName %>
+
+            </div>
+
+
+            <div class="history-date">
+
+                🕒
+                <%= h.createdAt
+                    .toLocaleString()
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <span class="action-badge">
+
+            <%= h.action %>
+
+        </span>
+
+
+    </div>
+
+
+
+    <div class="history-grid">
+
+
+
+        <div class="history-item">
+
+
+            <div class="history-label">
+
+                💳 Subscription Period
+
+            </div>
+
+
+            <div class="history-value">
+
+                <%= h.months
+                    ? h.months + ' Months'
+                    : '-'
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="history-item">
+
+
+            <div class="history-label">
+
+                👤 Performed By
+
+            </div>
+
+
+            <div class="history-value">
+
+                <%= h.performedBy || '-' %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="history-item">
+
+
+            <div class="history-label">
+
+                📅 Old Expiry
+
+            </div>
+
+
+            <div class="history-value">
+
+                <%= h.oldExpiryDate
+
+                    ? h.oldExpiryDate
+                        .toLocaleDateString()
+
+                    : '-'
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="history-item">
+
+
+            <div class="history-label">
+
+                📅 New Expiry
+
+            </div>
+
+
+            <div class="history-value">
+
+                <%= h.newExpiryDate
+
+                    ? h.newExpiryDate
+                        .toLocaleDateString()
+
+                    : '-'
+                %>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<% }) %>
+
+
+</div>
+
+
+<% } else { %>
+
+
+
+<!-- ================================
+     EMPTY STATE
+================================ -->
+
+
+<div class="empty-state">
+
+
+    <div class="empty-icon">
+
+        💳
+
+    </div>
+
+
+    <div class="empty-title">
+
+        No Subscription History
+
+    </div>
+
+
+    <div class="empty-text">
+
+        Subscription activity
+        will appear here.
+
+    </div>
+
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
+
+</body>
+
+</html>

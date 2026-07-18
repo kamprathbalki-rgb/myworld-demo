@@ -1,232 +1,541 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+
 <title>Edit Company</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#222;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:18px;
+}
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:16px 20px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.header-title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-subtitle{
+    font-size:12px;
+    opacity:.8;
+    margin-top:4px;
+}
+
+.header-link{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+}
+
+.top-nav{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+}
+
+.nav-btn{
+    background:white;
+    color:#1f4e79;
+    padding:10px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:bold;
+    border:1px solid #e1e5ea;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:16px;
+}
+
+.summary-card{
+    background:white;
+    border-radius:10px;
+    padding:14px;
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.summary-label{
+    font-size:11px;
+    color:#777;
+    margin-bottom:6px;
+}
+
+.summary-value{
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.status-active{color:#2e7d32}
+.status-inactive{color:#c62828}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.section-title{
+    color:#1f4e79;
+    font-size:16px;
+    font-weight:bold;
+    padding-bottom:11px;
+    margin-bottom:15px;
+    border-bottom:1px solid #eee;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.field label{
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d8dde3;
+    border-radius:8px;
+    background:white;
+    font-size:14px;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#1f4e79;
+    box-shadow:0 0 0 3px rgba(31,78,121,.08);
+}
+
+input[readonly]{
+    background:#f5f7fa;
+    color:#777;
+}
+
+.history-scroll{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#eef4fa;
+    color:#1f4e79;
+    padding:11px;
+    text-align:left;
+    font-size:12px;
+}
+
+td{
+    padding:11px;
+    border-bottom:1px solid #eee;
+    font-size:12px;
+}
+
+.form-actions{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+}
+
+.update-btn{
+    flex:1;
+    border:none;
+    background:#1f4e79;
+    color:white;
+    padding:14px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    padding:14px 22px;
+    background:#eee;
+    color:#555;
+    border-radius:9px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:bold;
+}
+
+@media(max-width:650px){
+
+    .container{padding:10px}
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header-title{font-size:17px}
+
+    .top-nav{
+        overflow-x:auto;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Edit Company</h2>
+<div class="container">
 
-<p>
+<div class="page-header">
 
-<a href="/saas/dashboard">
-Dashboard
-</a>
+    <div>
+        <div class="header-title">
+            🏢 Edit Company
+        </div>
 
-|
+        <div class="header-subtitle">
+            Tenant & Subscription Management
+        </div>
+    </div>
 
-<a href="/saas/subscription-history">
-Subscription History
-</a>
+    <a href="/saas/dashboard" class="header-link">
+        ⚙️
+    </a>
 
-</p>
+</div>
 
-<hr>
 
-<p>
-Subscription Start:
-<%= tenant.subscriptionStartDate
-? tenant.subscriptionStartDate.toLocaleDateString()
-: '' %>
-</p>
+<div class="top-nav">
 
-<p>
-Subscription End:
-<%= tenant.subscriptionEndDate
-? tenant.subscriptionEndDate.toLocaleDateString()
-: '' %>
-</p>
+    <a href="/saas/dashboard" class="nav-btn">
+        ← Dashboard
+    </a>
 
-<p>
-Status:
-<%= tenant.isActive
-? 'Active'
-: 'Inactive' %>
-</p>
+    <a href="/saas/subscription-history" class="nav-btn">
+        💳 Subscription History
+    </a>
 
-<p>
+</div>
 
-Days Remaining:
 
-<%= tenant.subscriptionEndDate
+<%
+let daysRemaining = tenant.subscriptionEndDate
 ? Math.max(
-0,
-Math.ceil(
-(
-tenant.subscriptionEndDate -
-new Date()
-) /
-(1000 * 60 * 60 * 24)
+    0,
+    Math.ceil(
+        (tenant.subscriptionEndDate - new Date()) /
+        (1000 * 60 * 60 * 24)
+    )
 )
-)
-: 0
+: 0;
 %>
 
-</p>
 
-<h3>Recent Subscription Activity</h3>
+<div class="summary-grid">
 
-<table border="1" cellpadding="5">
+    <div class="summary-card">
+        <div class="summary-label">📅 Subscription Start</div>
+        <div class="summary-value">
+            <%= tenant.subscriptionStartDate
+                ? tenant.subscriptionStartDate.toLocaleDateString()
+                : '-' %>
+        </div>
+    </div>
 
-<tr>
-<th>Action</th>
-<th>Date</th>
-<th>Months</th>
-</tr>
+    <div class="summary-card">
+        <div class="summary-label">📅 Subscription End</div>
+        <div class="summary-value">
+            <%= tenant.subscriptionEndDate
+                ? tenant.subscriptionEndDate.toLocaleDateString()
+                : '-' %>
+        </div>
+    </div>
 
-<% history.forEach(function(h){ %>
+    <div class="summary-card">
+        <div class="summary-label">⏳ Days Remaining</div>
+        <div class="summary-value">
+            <%= daysRemaining %>
+        </div>
+    </div>
 
-<tr>
+    <div class="summary-card">
+        <div class="summary-label">Status</div>
+        <div class="summary-value <%= tenant.isActive ? 'status-active' : 'status-inactive' %>">
+            <%= tenant.isActive ? '🟢 Active' : '🔴 Inactive' %>
+        </div>
+    </div>
 
-<td>
-<%= h.action %>
-</td>
+</div>
 
-<td>
-<%= h.createdAt.toLocaleDateString() %>
-</td>
 
-<td>
-<%= h.months || '' %>
-</td>
+<div class="card">
 
-</tr>
+    <div class="section-title">
+        🕒 Recent Subscription Activity
+    </div>
 
-<% }) %>
+    <div class="history-scroll">
 
-</table>
+        <table>
 
-<br>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Date</th>
+                    <th>Months</th>
+                </tr>
+            </thead>
 
-<a href="/saas/dashboard">
-Back
-</a>
+            <tbody>
 
-<hr>
+            <% history.forEach(function(h){ %>
+
+                <tr>
+                    <td><%= h.action %></td>
+                    <td><%= h.createdAt.toLocaleDateString() %></td>
+                    <td><%= h.months || '' %></td>
+                </tr>
+
+            <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 
 <form
 method="POST"
 action="/saas/company/<%= tenant._id %>"
 >
 
-<label>Company Name</label>
-<br>
-<input
-type="text"
-name="name"
-value="<%= tenant.name %>"
-required
->
-<br><br>
 
-<label>Email</label>
-<br>
-<input
-type="email"
-name="email"
-value="<%= tenant.email %>"
-required
->
-<br><br>
+<div class="card">
 
-<label>State</label>
-<br>
-<input
-type="text"
-name="stateName"
-value="<%= tenant.stateName %>"
-required
->
-<br><br>
+    <div class="section-title">
+        🏢 Company Details
+    </div>
 
-<label>Primary District</label>
-<br>
+    <div class="form-grid">
 
-<h3>Company Admin</h3>
+        <div class="field">
+            <label>Company Name</label>
+            <input
+                type="text"
+                name="name"
+                value="<%= tenant.name %>"
+                required
+            >
+        </div>
 
-<label>Admin Name</label>
-<br>
-<input
-type="text"
-name="adminName"
-value="<%= tenant.adminName || '' %>"
-required
->
-<br><br>
+        <div class="field">
+            <label>Company Email</label>
+            <input
+                type="email"
+                name="email"
+                value="<%= tenant.email %>"
+                required
+            >
+        </div>
 
-<label>Admin Email</label>
-<br>
-<input
-type="email"
-value="<%= tenant.adminEmail || '' %>"
-required
->
-<br><br>
+        <div class="field">
+            <label>State</label>
+            <input
+                type="text"
+                name="stateName"
+                value="<%= tenant.stateName %>"
+                required
+            >
+        </div>
 
-<input
-type="text"
-name="primaryDistrict"
-value="<%= tenant.primaryDistrict %>"
-required
->
-<br><br>
+        <div class="field">
+            <label>Primary District</label>
+            <input
+                type="text"
+                name="primaryDistrict"
+                value="<%= tenant.primaryDistrict %>"
+                required
+            >
+        </div>
 
-<label>Subscription Months</label>
-<br>
-<input
-type="number"
-name="subscriptionMonths"
-value="<%= tenant.subscriptionMonths %>"
-readonly
->
-<br><br>
+    </div>
 
-<label>Status</label>
-<br>
-
-<select name="isActive">
-
-<option
-value="true"
-<%= tenant.isActive ? 'selected' : '' %>
->
-Active
-</option>
-
-<option
-value="false"
-<%= !tenant.isActive ? 'selected' : '' %>
->
-Inactive
-</option>
-
-</select>
-
-<br><br>
-
-<h3>Reset Admin Password</h3>
-
-<input
-type="password"
-name="newPassword"
-placeholder="New Password"
->
-
-<br><br>
+</div>
 
 
-<button type="submit">
-Update Company
-</button>
+<div class="card">
+
+    <div class="section-title">
+        👤 Company Admin
+    </div>
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>Admin Name</label>
+
+            <input
+                type="text"
+                name="adminName"
+                value="<%= tenant.adminName || '' %>"
+                required
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Admin Email</label>
+
+            <input
+                type="email"
+                name="adminEmail"
+                value="<%= tenant.adminEmail || '' %>"
+                required
+            >
+
+        </div>
+
+    </div>
+
+</div>
 
 
-<a href="/saas/dashboard">
-Cancel
-</a>
+<div class="card">
+
+    <div class="section-title">
+        💳 Subscription & Access
+    </div>
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>Subscription Months</label>
+
+            <input
+                type="number"
+                name="subscriptionMonths"
+                value="<%= tenant.subscriptionMonths %>"
+                readonly
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Status</label>
+
+            <select name="isActive">
+
+                <option
+                    value="true"
+                    <%= tenant.isActive ? 'selected' : '' %>
+                >
+                    Active
+                </option>
+
+                <option
+                    value="false"
+                    <%= !tenant.isActive ? 'selected' : '' %>
+                >
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="section-title">
+        🔐 Reset Admin Password
+    </div>
+
+    <div class="field">
+
+        <label>New Password</label>
+
+        <input
+            type="password"
+            name="newPassword"
+            placeholder="Leave blank to keep current password"
+        >
+
+    </div>
+
+</div>
+
+
+<div class="form-actions">
+
+    <button type="submit" class="update-btn">
+        💾 Update Company
+    </button>
+
+    <a href="/saas/dashboard" class="cancel-btn">
+        Cancel
+    </a>
+
+</div>
+
 
 </form>
+
+</div>
 
 </body>
 </html>

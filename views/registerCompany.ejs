@@ -2,182 +2,926 @@
 <html>
 
 <head>
+
 <title>Register Company</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<style>
+
+/* ================================
+   GLOBAL
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:0;
+
+    font-family:Arial,sans-serif;
+
+    background:#f4f6f9;
+    color:#222;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    padding:18px;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:16px 20px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+
+    font-size:24px;
+
+    width:30px;
+}
+
+.header-title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-subtitle{
+    margin-top:4px;
+
+    font-size:12px;
+
+    opacity:.8;
+}
+
+.dashboard-btn{
+    color:white;
+    text-decoration:none;
+
+    font-size:22px;
+
+    width:30px;
+    text-align:right;
+}
+
+
+/* ================================
+   INTRO
+================================ */
+
+.intro-card{
+    background:white;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.intro-title{
+    color:#1f4e79;
+
+    font-size:16px;
+    font-weight:bold;
+
+    margin-bottom:6px;
+}
+
+.intro-text{
+    color:#777;
+
+    font-size:13px;
+    line-height:1.5;
+}
+
+
+/* ================================
+   FORM CARD
+================================ */
+
+.form-card{
+    background:white;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.section-title{
+    color:#1f4e79;
+
+    font-size:16px;
+    font-weight:bold;
+
+    padding-bottom:11px;
+    margin-bottom:15px;
+
+    border-bottom:1px solid #eee;
+}
+
+
+/* ================================
+   FORM GRID
+================================ */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+}
+
+.form-field{
+    margin-bottom:14px;
+}
+
+.form-grid .form-field{
+    margin-bottom:0;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+
+/* ================================
+   LABELS
+================================ */
+
+label{
+    display:block;
+
+    font-size:12px;
+    font-weight:bold;
+
+    color:#555;
+
+    margin-bottom:7px;
+}
+
+
+/* ================================
+   INPUTS
+================================ */
+
+input,
+select{
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #d8dde3;
+
+    border-radius:8px;
+
+    background:white;
+
+    font-size:14px;
+
+    color:#222;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(31,78,121,.08);
+}
+
+
+/* ================================
+   SUBSCRIPTION BOX
+================================ */
+
+.subscription-note{
+    margin-top:8px;
+
+    padding:10px 12px;
+
+    background:#eef4fa;
+
+    border-radius:8px;
+
+    color:#555;
+
+    font-size:12px;
+    line-height:1.5;
+}
+
+
+/* ================================
+   REGISTER BUTTON
+================================ */
+
+.submit-section{
+    margin-top:18px;
+}
+
+.register-btn{
+    width:100%;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:14px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    font-size:15px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 2px 6px
+        rgba(0,0,0,.12);
+}
+
+.register-btn:hover{
+    background:#173d61;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .container{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+
+        border-radius:10px;
+    }
+
+    .header-title{
+        font-size:17px;
+    }
+
+    .header-subtitle{
+        display:none;
+    }
+
+    .form-card{
+        padding:14px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:auto;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<h2>Register Company</h2>
 
-<form method="POST" action="/register-company">
+<div class="container">
 
-<label>Company Name</label>
-<br>
-<input type="text" name="name" required>
-<br><br>
 
-<label>Email</label>
-<br>
-<input type="email" name="email" required>
-<br><br>
+<!-- ================================
+     HEADER
+================================ -->
 
-<label>State</label>
-<br>
 
-<select
-    name="stateName"
-    id="stateName"
-    required
+<div class="page-header">
+
+
+    <div class="header-left">
+
+
+        <a
+            href="/saas/dashboard"
+            class="back-btn"
+        >
+            ←
+        </a>
+
+
+        <div>
+
+
+            <div class="header-title">
+
+                🏢 Register Company
+
+            </div>
+
+
+            <div class="header-subtitle">
+
+                Create a new company account
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <a
+        href="/saas/dashboard"
+        class="dashboard-btn"
+        title="Platform Owner Dashboard"
+    >
+
+        ⚙️
+
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     INTRO
+================================ -->
+
+
+<div class="intro-card">
+
+
+    <div class="intro-title">
+
+        ➕ New Company Registration
+
+    </div>
+
+
+    <div class="intro-text">
+
+        Enter the company details,
+        subscription period and administrator
+        account information below.
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     FORM
+================================ -->
+
+
+<form
+    method="POST"
+    action="/register-company"
 >
 
-<option value="">
-Select State
-</option>
-
-<% states.forEach(function(s){ %>
-
-<option value="<%= s.state %>">
-<%= s.state %>
-</option>
-
-<% }) %>
-
-</select>
-
-<br><br>
-
-<label>Primary District</label>
-<br>
-
-<select
-    name="primaryDistrict"
-    id="primaryDistrict"
-    required
->
-
-<option value="">
-Select District
-</option>
-
-</select>
-
-<br><br>
-
-<label>Subscription Period</label>
-<br>
-
-<select
-    name="subscriptionMonths"
-    required
->
-
-<option value="3">
-3 Months
-</option>
-
-<option value="6">
-6 Months
-</option>
-
-<option value="12" selected>
-12 Months
-</option>
-
-<option value="24">
-24 Months
-</option>
-
-<option value="36">
-36 Months
-</option>
-
-<option value="60">
-60 Months
-</option>
-
-</select>
-
-<br><br>
 
 
-<h3>Admin User</h3>
+<!-- ================================
+     COMPANY DETAILS
+================================ -->
 
-<label>Admin Name</label>
-<br>
-<input
-    type="text"
-    name="adminName"
-    required
->
-<br><br>
 
-<label>Admin Email</label>
-<br>
-<input
-    type="email"
-    name="adminEmail"
-    required
->
-<br><br>
+<div class="form-card">
 
-<label>Password</label>
-<br>
-<input
-    type="password"
-    name="password"
-    required
->
 
-<br><br>
+    <div class="section-title">
 
-<button type="submit">Register</button>
+        🏢 Company Details
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+
+        <!-- COMPANY NAME -->
+
+
+        <div class="form-field">
+
+
+            <label for="name">
+
+                Company Name
+
+            </label>
+
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter company name"
+                required
+            >
+
+
+        </div>
+
+
+
+        <!-- COMPANY EMAIL -->
+
+
+        <div class="form-field">
+
+
+            <label for="email">
+
+                Company Email
+
+            </label>
+
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="company@example.com"
+                required
+            >
+
+
+        </div>
+
+
+
+        <!-- STATE -->
+
+
+        <div class="form-field">
+
+
+            <label for="stateName">
+
+                📍 State
+
+            </label>
+
+
+            <select
+                name="stateName"
+                id="stateName"
+                required
+            >
+
+
+                <option value="">
+
+                    Select State
+
+                </option>
+
+
+                <% states.forEach(function(s){ %>
+
+
+                <option value="<%= s.state %>">
+
+                    <%= s.state %>
+
+                </option>
+
+
+                <% }) %>
+
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- DISTRICT -->
+
+
+        <div class="form-field">
+
+
+            <label for="primaryDistrict">
+
+                📍 Primary District
+
+            </label>
+
+
+            <select
+                name="primaryDistrict"
+                id="primaryDistrict"
+                required
+            >
+
+
+                <option value="">
+
+                    Select District
+
+                </option>
+
+
+            </select>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     SUBSCRIPTION
+================================ -->
+
+
+<div class="form-card">
+
+
+    <div class="section-title">
+
+        💳 Subscription
+
+    </div>
+
+
+    <div class="form-field">
+
+
+        <label for="subscriptionMonths">
+
+            Subscription Period
+
+        </label>
+
+
+        <select
+            name="subscriptionMonths"
+            id="subscriptionMonths"
+            required
+        >
+
+
+            <option value="3">
+
+                3 Months
+
+            </option>
+
+
+            <option value="6">
+
+                6 Months
+
+            </option>
+
+
+            <option
+                value="12"
+                selected
+            >
+
+                12 Months
+
+            </option>
+
+
+            <option value="24">
+
+                24 Months
+
+            </option>
+
+
+            <option value="36">
+
+                36 Months
+
+            </option>
+
+
+            <option value="60">
+
+                60 Months
+
+            </option>
+
+
+        </select>
+
+
+        <div class="subscription-note">
+
+            📅 The subscription period will
+            determine the company's initial
+            access duration.
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ADMIN USER
+================================ -->
+
+
+<div class="form-card">
+
+
+    <div class="section-title">
+
+        👤 Admin User
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+
+        <!-- ADMIN NAME -->
+
+
+        <div class="form-field">
+
+
+            <label for="adminName">
+
+                Admin Name
+
+            </label>
+
+
+            <input
+                type="text"
+                id="adminName"
+                name="adminName"
+                placeholder="Enter administrator name"
+                required
+            >
+
+
+        </div>
+
+
+
+        <!-- ADMIN EMAIL -->
+
+
+        <div class="form-field">
+
+
+            <label for="adminEmail">
+
+                Admin Email
+
+            </label>
+
+
+            <input
+                type="email"
+                id="adminEmail"
+                name="adminEmail"
+                placeholder="admin@example.com"
+                required
+            >
+
+
+        </div>
+
+
+
+        <!-- PASSWORD -->
+
+
+        <div class="
+            form-field
+            full-width
+        ">
+
+
+            <label for="password">
+
+                🔐 Initial Password
+
+            </label>
+
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter initial password"
+                required
+            >
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     REGISTER
+================================ -->
+
+
+<div class="submit-section">
+
+
+    <button
+        type="submit"
+        class="register-btn"
+    >
+
+        🏢 Register Company
+
+    </button>
+
+
+</div>
+
 
 </form>
 
-</body>
+
+</div>
+
+
+
+<!-- ================================
+     STATE / DISTRICT SCRIPT
+     EXISTING FUNCTIONALITY PRESERVED
+================================ -->
+
 
 <script>
+
 
 const states =
 <%- JSON.stringify(states) %>
 
+
 document
 .getElementById('stateName')
-.addEventListener('change', function(){
+.addEventListener(
+    'change',
+    function(){
 
-const stateName = this.value
 
-const districtDropdown =
-document.getElementById(
-    'primaryDistrict'
+        const stateName =
+        this.value
+
+
+        const districtDropdown =
+
+        document.getElementById(
+            'primaryDistrict'
+        )
+
+
+        districtDropdown.innerHTML =
+
+        '<option value="">Select District</option>'
+
+
+        const selectedState =
+
+        states.find(
+
+            s =>
+            s.state === stateName
+
+        )
+
+
+        if(!selectedState){
+
+            return
+
+        }
+
+
+        selectedState.districts.forEach(
+
+            district => {
+
+
+                const option =
+
+                document.createElement(
+                    'option'
+                )
+
+
+                option.value =
+                district
+
+
+                option.textContent =
+                district
+
+
+                districtDropdown
+                .appendChild(
+                    option
+                )
+
+
+            }
+
+        )
+
+
+    }
+
 )
 
-districtDropdown.innerHTML =
-'<option value="">Select District</option>'
-
-const selectedState =
-states.find(
-s => s.state === stateName
-)
-
-if(!selectedState) return
-
-selectedState.districts.forEach(
-district => {
-
-const option =
-document.createElement('option')
-
-option.value = district
-
-option.textContent = district
-
-districtDropdown.appendChild(option)
-
-})
-
-})
 
 </script>
+
+
+</body>
 
 </html>

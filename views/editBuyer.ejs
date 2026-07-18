@@ -1,294 +1,561 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Edit Buyer</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#222;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:18px;
+}
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.page-header h1{
+    margin:0;
+    font-size:19px;
+}
+
+.header-link{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+    border-bottom:1px solid #eee;
+    padding-bottom:10px;
+    margin-bottom:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.full-width{
+    grid-column:1/-1;
+}
+
+.field label,
+.field-label{
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+    margin-bottom:7px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #d8dde3;
+    border-radius:8px;
+    font-size:14px;
+    font-family:Arial,sans-serif;
+    background:white;
+}
+
+textarea{
+    resize:vertical;
+}
+
+.checkbox-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.check-option{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:#f5f7fa;
+    padding:10px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+.check-option input{
+    width:auto;
+    margin:0;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.tab-btn{
+    flex:1;
+    border:1px solid #1f4e79;
+    background:white;
+    color:#1f4e79;
+    padding:11px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.update-btn{
+    width:100%;
+    border:none;
+    background:#1f4e79;
+    color:white;
+    padding:14px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+@media(max-width:600px){
+
+    .container{padding:10px}
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:auto;
+    }
+
+    .tabs{
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
+<div class="container">
 
-<a href="/dashboard">Home</a> |
+<div class="page-header">
 
-<a href="/logout">Logout</a>
+    <a href="javascript:history.back()" class="header-link">←</a>
 
-<hr>
+    <h1>👤 Edit Buyer</h1>
 
-<h1>Edit Buyer</h1>
+    <a href="/dashboard" class="header-link">🏠</a>
+
+</div>
+
 
 <form method="POST" action="/buyer/update/<%= buyer._id %>">
 
-<hr>
 
-<h2>Basic Buyer Details</h2>
+<div class="card">
 
+<div class="section-title">
+    👤 Basic Buyer Details
+</div>
+
+<div class="form-grid">
+
+<div class="field">
 <label>Name</label>
-<input type="text" name="name" value="<%= buyer.name || '' %>"><br><br>
+<input type="text" name="name" value="<%= buyer.name || '' %>">
+</div>
 
-<label>Phone</label>
-<input type="text" name="phone" value="<%= buyer.phone || '' %>"><br><br>
+<div class="field">
+<label>📱 Phone</label>
+<input type="text" name="phone" value="<%= buyer.phone || '' %>">
+</div>
 
-<label>Email</label>
-<input type="text" name="email" value="<%= buyer.email || '' %>"><br><br>
+<div class="field full-width">
+<label>📧 Email</label>
+<input type="text" name="email" value="<%= buyer.email || '' %>">
+</div>
 
-<hr>
+</div>
 
-<h2>Budget & Requirement</h2>
+</div>
 
+
+<div class="card">
+
+<div class="section-title">
+    💰 Budget & Requirement
+</div>
+
+<div class="form-grid">
+
+<div class="field">
 <label>Min Budget</label>
-<input type="number" name="minBudget" value="<%= buyer.minBudget || '' %>"><br><br>
+<input type="number" name="minBudget" value="<%= buyer.minBudget || '' %>">
+</div>
 
+<div class="field">
 <label>Max Budget</label>
-<input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>"><br><br>
+<input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>">
+</div>
+
+<div class="field full-width">
 
 <label>Transaction Type</label>
 
 <select name="transactionType">
 
-<option
-value="SALE"
-<%= buyer.transactionType === 'SALE'
-? 'selected'
-: '' %>>
+<option value="SALE" <%= buyer.transactionType === 'SALE' ? 'selected' : '' %>>
 Sale
 </option>
 
-<option
-value="RENT"
-<%= buyer.transactionType === 'RENT'
-? 'selected'
-: '' %>>
+<option value="RENT" <%= buyer.transactionType === 'RENT' ? 'selected' : '' %>>
 Rent
 </option>
 
-<option
-value="LEASE"
-<%= buyer.transactionType === 'LEASE'
-? 'selected'
-: '' %>>
+<option value="LEASE" <%= buyer.transactionType === 'LEASE' ? 'selected' : '' %>>
 Lease
 </option>
 
 </select>
 
-<br><br>
+</div>
 
-<label>Required Possession</label><br>
+</div>
 
-<input
-type="checkbox"
-name="requiredPossession"
-value="Immediate"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Immediate') ? 'checked' : '' %>
->
+<br>
+
+<div class="field-label">
+Required Possession
+</div>
+
+<div class="checkbox-group">
+
+<label class="check-option">
+<input type="checkbox" name="requiredPossession" value="Immediate"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Immediate') ? 'checked' : '' %>>
 Immediate
+</label>
 
-<input
-type="checkbox"
-name="requiredPossession"
-value="Ready Possession"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Ready Possession') ? 'checked' : '' %>
->
+<label class="check-option">
+<input type="checkbox" name="requiredPossession" value="Ready Possession"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Ready Possession') ? 'checked' : '' %>>
 Ready Possession
+</label>
 
-<input
-type="checkbox"
-name="requiredPossession"
-value="Under Construction"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Under Construction') ? 'checked' : '' %>
->
+<label class="check-option">
+<input type="checkbox" name="requiredPossession" value="Under Construction"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Under Construction') ? 'checked' : '' %>>
 Under Construction
+</label>
 
-<input
-type="checkbox"
-name="requiredPossession"
-value="Possession Soon"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Possession Soon') ? 'checked' : '' %>
->
+<label class="check-option">
+<input type="checkbox" name="requiredPossession" value="Possession Soon"
+<%= buyer.requiredPossession && buyer.requiredPossession.includes('Possession Soon') ? 'checked' : '' %>>
 Possession Soon
+</label>
 
-<br><br>
+</div>
+
+</div>
 
 
-<button type="button" onclick="showBuyerTab('apartmentBuyerTab')">
-Apartment (BHK)
+<div class="card">
+
+<div class="section-title">
+    🏠 Property Requirement
+</div>
+
+<div class="tabs">
+
+<button type="button" class="tab-btn" onclick="showBuyerTab('apartmentBuyerTab')">
+🏢 Apartment (BHK)
 </button>
 
-<button type="button" onclick="showBuyerTab('otherBuyerTab')">
-Villa / Plot / Office / Showroom / Retail / Shop
+<button type="button" class="tab-btn" onclick="showBuyerTab('otherBuyerTab')">
+🏡 Villa / Plot / Commercial
 </button>
 
-<br><br>
+</div>
+
 
 <div id="apartmentBuyerTab">
 
-<h3>Apartment Requirement</h3>
+<div class="form-grid">
+
+<div class="field">
 
 <label>Required Flat Type</label>
+
 <select name="apartmentFlatType">
-    <option value="">Select</option>
-    <option <%= buyer.requiredFlatType === 'Studio' ? 'selected' : '' %>>Studio</option>
-    <option <%= buyer.requiredFlatType === '1 RK' ? 'selected' : '' %>>1 RK</option>
-    <option <%= buyer.requiredFlatType === '1 BHK' ? 'selected' : '' %>>1 BHK</option>
-    <option <%= buyer.requiredFlatType === '1.5 BHK' ? 'selected' : '' %>>1.5 BHK</option>
-    <option <%= buyer.requiredFlatType === '2 BHK' ? 'selected' : '' %>>2 BHK</option>
-    <option <%= buyer.requiredFlatType === '2.5 BHK' ? 'selected' : '' %>>2.5 BHK</option>
-    <option <%= buyer.requiredFlatType === '3 BHK' ? 'selected' : '' %>>3 BHK</option>
-    <option <%= buyer.requiredFlatType === '3.5 BHK' ? 'selected' : '' %>>3.5 BHK</option>
-    <option <%= buyer.requiredFlatType === '4 BHK' ? 'selected' : '' %>>4 BHK</option>
-    <option <%= buyer.requiredFlatType === '4.5 BHK' ? 'selected' : '' %>>4.5 BHK</option>
-    <option <%= buyer.requiredFlatType === '5 BHK' ? 'selected' : '' %>>5 BHK</option>
-    <option <%= buyer.requiredFlatType === '5+ BHK' ? 'selected' : '' %>>5+ BHK</option>
-</select><br><br>
 
-<label>Min Carpet Area</label>
-<input type="number" name="apartmentMinArea" value="<%= buyer.minArea || '' %>"><br><br>
+<option value="">Select</option>
+<option <%= buyer.requiredFlatType === 'Studio' ? 'selected' : '' %>>Studio</option>
+<option <%= buyer.requiredFlatType === '1 RK' ? 'selected' : '' %>>1 RK</option>
+<option <%= buyer.requiredFlatType === '1 BHK' ? 'selected' : '' %>>1 BHK</option>
+<option <%= buyer.requiredFlatType === '1.5 BHK' ? 'selected' : '' %>>1.5 BHK</option>
+<option <%= buyer.requiredFlatType === '2 BHK' ? 'selected' : '' %>>2 BHK</option>
+<option <%= buyer.requiredFlatType === '2.5 BHK' ? 'selected' : '' %>>2.5 BHK</option>
+<option <%= buyer.requiredFlatType === '3 BHK' ? 'selected' : '' %>>3 BHK</option>
+<option <%= buyer.requiredFlatType === '3.5 BHK' ? 'selected' : '' %>>3.5 BHK</option>
+<option <%= buyer.requiredFlatType === '4 BHK' ? 'selected' : '' %>>4 BHK</option>
+<option <%= buyer.requiredFlatType === '4.5 BHK' ? 'selected' : '' %>>4.5 BHK</option>
+<option <%= buyer.requiredFlatType === '5 BHK' ? 'selected' : '' %>>5 BHK</option>
+<option <%= buyer.requiredFlatType === '5+ BHK' ? 'selected' : '' %>>5+ BHK</option>
 
-<label>Max Carpet Area</label>
-<input type="number" name="apartmentMaxArea" value="<%= buyer.maxArea || '' %>"><br><br>
+</select>
 
 </div>
 
-<div id="otherBuyerTab" style="display:none;">
+<div class="field">
+<label>Min Carpet Area</label>
+<input type="number" name="apartmentMinArea" value="<%= buyer.minArea || '' %>">
+</div>
 
-<h3>Villa / Plot / Commercial Requirement</h3>
+<div class="field">
+<label>Max Carpet Area</label>
+<input type="number" name="apartmentMaxArea" value="<%= buyer.maxArea || '' %>">
+</div>
+
+</div>
+
+</div>
+
+
+<div id="otherBuyerTab" style="display:none">
+
+<div class="form-grid">
+
+<div class="field">
 
 <label>Required Type</label>
+
 <select name="otherFlatType">
-    <option value="">Select</option>
-    <option <%= buyer.requiredFlatType === 'Villa' ? 'selected' : '' %>>Villa</option>
-    <option <%= buyer.requiredFlatType === 'Plot' ? 'selected' : '' %>>Plot</option>
-    <option <%= buyer.requiredFlatType === 'Office' ? 'selected' : '' %>>Office</option>
-    <option <%= buyer.requiredFlatType === 'Showroom' ? 'selected' : '' %>>Showroom</option>
-    <option <%= buyer.requiredFlatType === 'Retail' ? 'selected' : '' %>>Retail</option>
-    <option <%= buyer.requiredFlatType === 'Shop' ? 'selected' : '' %>>Shop</option>
-</select><br><br>
-
-<label>Min Area</label>
-<input type="number" name="otherMinArea" value="<%= buyer.minArea || '' %>"><br><br>
-
-<label>Max Area</label>
-<input type="number" name="otherMaxArea" value="<%= buyer.maxArea || '' %>"><br><br>
+<option value="">Select</option>
+<option <%= buyer.requiredFlatType === 'Villa' ? 'selected' : '' %>>Villa</option>
+<option <%= buyer.requiredFlatType === 'Plot' ? 'selected' : '' %>>Plot</option>
+<option <%= buyer.requiredFlatType === 'Office' ? 'selected' : '' %>>Office</option>
+<option <%= buyer.requiredFlatType === 'Showroom' ? 'selected' : '' %>>Showroom</option>
+<option <%= buyer.requiredFlatType === 'Retail' ? 'selected' : '' %>>Retail</option>
+<option <%= buyer.requiredFlatType === 'Shop' ? 'selected' : '' %>>Shop</option>
+</select>
 
 </div>
 
-<hr>
+<div class="field">
+<label>Min Area</label>
+<input type="number" name="otherMinArea" value="<%= buyer.minArea || '' %>">
+</div>
 
-<h2>Location Preferences</h2>
+<div class="field">
+<label>Max Area</label>
+<input type="number" name="otherMaxArea" value="<%= buyer.maxArea || '' %>">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+📍 Location Preferences
+</div>
+
+<div class="form-grid">
+
+<div class="field full-width">
 
 <label>1st Preference (Required)</label>
 
 <select name="preferredLocation1" required>
-    <option value="">Select Location</option>
 
-    <% locations.forEach(function(location){ %>
-        <option
-            value="<%= location.officeName %>"
-            <%= buyer.preferredLocations &&
-                buyer.preferredLocations[0] === location.officeName
-                ? 'selected'
-                : '' %>
-        >
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+<option value="">Select Location</option>
+
+<% locations.forEach(function(location){ %>
+
+<option
+value="<%= location.officeName %>"
+<%= buyer.preferredLocations &&
+buyer.preferredLocations[0] === location.officeName
+? 'selected' : '' %>
+>
+<%= location.officeName %>
+(<%= location.divisionName %>, <%= location.district %>)
+</option>
+
+<% }) %>
 
 </select>
 
-<br><br>
+</div>
+
+
+<div class="field">
 
 <label>2nd Preference (Optional)</label>
 
 <select name="preferredLocation2">
-    <option value="">Not Required</option>
 
-    <% locations.forEach(function(location){ %>
-        <option
-            value="<%= location.officeName %>"
-            <%= buyer.preferredLocations &&
-                buyer.preferredLocations[1] === location.officeName
-                ? 'selected'
-                : '' %>
-        >
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+<option value="">Not Required</option>
+
+<% locations.forEach(function(location){ %>
+
+<option
+value="<%= location.officeName %>"
+<%= buyer.preferredLocations &&
+buyer.preferredLocations[1] === location.officeName
+? 'selected' : '' %>
+>
+<%= location.officeName %>
+(<%= location.divisionName %>, <%= location.district %>)
+</option>
+
+<% }) %>
 
 </select>
 
-<br><br>
+</div>
+
+
+<div class="field">
 
 <label>3rd Preference (Optional)</label>
 
 <select name="preferredLocation3">
-    <option value="">Not Required</option>
 
-    <% locations.forEach(function(location){ %>
-        <option
-            value="<%= location.officeName %>"
-            <%= buyer.preferredLocations &&
-                buyer.preferredLocations[2] === location.officeName
-                ? 'selected'
-                : '' %>
-        >
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+<option value="">Not Required</option>
+
+<% locations.forEach(function(location){ %>
+
+<option
+value="<%= location.officeName %>"
+<%= buyer.preferredLocations &&
+buyer.preferredLocations[2] === location.officeName
+? 'selected' : '' %>
+>
+<%= location.officeName %>
+(<%= location.divisionName %>, <%= location.district %>)
+</option>
+
+<% }) %>
 
 </select>
 
-<br><br>
+</div>
 
-<hr>
+</div>
 
-<h2>Geo Preference (Optional)</h2>
+</div>
 
+
+<div class="card">
+
+<div class="section-title">
+🌍 Geo Preference (Optional)
+</div>
+
+<div class="form-grid">
+
+<div class="field">
 <label>Longitude</label>
-<input type="text" name="lng" value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[0] : '' %>"><br><br>
+<input type="text" name="lng"
+value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[0] : '' %>">
+</div>
 
+<div class="field">
 <label>Latitude</label>
-<input type="text" name="lat" value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[1] : '' %>"><br><br>
+<input type="text" name="lat"
+value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buyer.preferredLocation.coordinates[1] : '' %>">
+</div>
 
+<div class="field">
 <label>Radius (meters)</label>
-<input type="number" name="radius" value="<%= buyer.radius || '' %>"><br><br>
+<input type="number" name="radius" value="<%= buyer.radius || '' %>">
+</div>
 
-<hr>
+</div>
 
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+📝 Lead Status & Follow Up
+</div>
+
+<div class="form-grid">
+
+<div class="field">
 <label>Status</label>
-<input type="text" name="status" value="<%= buyer.status || '' %>"><br><br>
+<input type="text" name="status" value="<%= buyer.status || '' %>">
+</div>
 
-<label>Follow Up Notes</label><br>
-<textarea name="followUpNotes" rows="4" cols="50"><%= buyer.followUpNotes || '' %></textarea><br><br>
+<div class="field full-width">
+<label>Follow Up Notes</label>
+<textarea name="followUpNotes" rows="4"><%= buyer.followUpNotes || '' %></textarea>
+</div>
 
-<button type="submit">Update Buyer</button>
+</div>
+
+</div>
+
+
+<button type="submit" class="update-btn">
+💾 Update Buyer
+</button>
+
 
 </form>
 
-<br>
+</div>
 
-<a href="/buyer/page">Back to Buyer List</a>
 
 <script>
+
 function showBuyerTab(tabId) {
     document.getElementById('apartmentBuyerTab').style.display = 'none';
     document.getElementById('otherBuyerTab').style.display = 'none';
     document.getElementById(tabId).style.display = 'block';
 }
-</script>
-
-<script>
 
 function validateLocations() {
 

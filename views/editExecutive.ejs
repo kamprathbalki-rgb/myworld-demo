@@ -1,96 +1,349 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Edit Executive</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#222;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:18px;
+}
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.page-header h1{
+    margin:0;
+    font-size:19px;
+}
+
+.header-link{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+    border-bottom:1px solid #eee;
+    padding-bottom:10px;
+    margin-bottom:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.field label{
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d8dde3;
+    border-radius:8px;
+    font-size:14px;
+    background:white;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#1f4e79;
+}
+
+.location-select{
+    min-height:280px;
+}
+
+.help-text{
+    font-size:11px;
+    color:#777;
+    margin-top:7px;
+    line-height:1.5;
+}
+
+.error-box{
+    background:#ffebee;
+    color:#c62828;
+    border:1px solid #ef9a9a;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.update-btn{
+    flex:1;
+    border:none;
+    background:#1f4e79;
+    color:white;
+    padding:14px;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    padding:14px 20px;
+    background:#eee;
+    color:#555;
+    text-decoration:none;
+    border-radius:9px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    .container{padding:10px}
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .page-header h1{
+        font-size:17px;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
+<div class="container">
 
-<a href="/dashboard">Home</a> |
+<div class="page-header">
 
-<a href="/logout">Logout</a>
+    <a href="javascript:history.back()" class="header-link">
+        ←
+    </a>
 
-<hr>
+    <h1>👤 Edit Executive</h1>
 
-<h1>Edit Executive</h1>
+    <a href="/dashboard" class="header-link">
+        🏠
+    </a>
 
-<form method="POST" action="/executive/update/<%= executive._id %>">
+</div>
+
+
+<form
+method="POST"
+action="/executive/update/<%= executive._id %>"
+>
+
 
 <% if(error){ %>
-<div style="
-background:#ffe5e5;
-color:#c00;
-padding:10px;
-margin-bottom:15px;
-border:1px solid #c00;
-border-radius:5px;">
-<%= error %>
+
+<div class="error-box">
+    ⚠️ <%= error %>
 </div>
+
 <% } %>
 
-<label>Name</label>
-<input type="text" name="name" value="<%= executive.name || '' %>" required>
-<br><br>
 
-<label>Mobile Number</label>
-<input type="text" name="mobile" value="<%= executive.mobile || '' %>" required>
-<br><br>
+<div class="card">
 
-<label>Date of Joining</label>
-<input
-type="date"
-name="dateOfJoining"
-value="<%= executive.dateOfJoining || '' %>"
->
-<br><br>
+    <div class="section-title">
+        👤 Executive Details
+    </div>
 
-<label>Date of Leaving</label>
-<input
-type="date"
-name="dateOfLeaving"
-value="<%= executive.dateOfLeaving || '' %>"
->
-<br><br>
+    <div class="form-grid">
 
-<label>Email ID</label>
-<input type="email" name="email" value="<%= executive.email || '' %>" required>
-<br><br>
+        <div class="field">
+            <label>Name</label>
+            <input
+                type="text"
+                name="name"
+                value="<%= executive.name || '' %>"
+                required
+            >
+        </div>
 
-<label>Password</label>
-<input type="text" name="password" value="<%= executive.password || '' %>" required>
-<br><br>
+        <div class="field">
+            <label>📱 Mobile Number</label>
+            <input
+                type="text"
+                name="mobile"
+                value="<%= executive.mobile || '' %>"
+                required
+            >
+        </div>
 
-<label>Assign Multiple Locations</label>
-<br><br>
+        <div class="field">
+            <label>📧 Email ID</label>
+            <input
+                type="email"
+                name="email"
+                value="<%= executive.email || '' %>"
+                required
+            >
+        </div>
 
-<select name="assignedLocations[]" multiple size="15" required>
+        <div class="field">
+            <label>🔐 Password</label>
+            <input
+                type="text"
+                name="password"
+                value="<%= executive.password || '' %>"
+                required
+            >
+        </div>
 
-<% locations.forEach(function(location){ %>
+    </div>
 
-<option value="<%= location.officeName %>"
-<%= executive.assignedLocations && executive.assignedLocations.includes(location.officeName) ? 'selected' : '' %>>
-<%= location.officeName %>
-(
-<%= location.divisionName %>,
-<%= location.district %>
-)
-</option>
+</div>
 
-<% }) %>
 
-</select>
+<div class="card">
 
-<br><br>
+    <div class="section-title">
+        📅 Employment Details
+    </div>
 
-<button type="submit">Update Executive</button>
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>Date of Joining</label>
+
+            <input
+                type="date"
+                name="dateOfJoining"
+                value="<%= executive.dateOfJoining || '' %>"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Date of Leaving</label>
+
+            <input
+                type="date"
+                name="dateOfLeaving"
+                value="<%= executive.dateOfLeaving || '' %>"
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="section-title">
+        📍 Assigned Locations
+    </div>
+
+    <div class="field">
+
+        <label>Assign Multiple Locations</label>
+
+        <select
+            name="assignedLocations[]"
+            multiple
+            size="15"
+            required
+            class="location-select"
+        >
+
+        <% locations.forEach(function(location){ %>
+
+            <option
+                value="<%= location.officeName %>"
+                <%= executive.assignedLocations &&
+                    executive.assignedLocations.includes(location.officeName)
+                    ? 'selected'
+                    : '' %>
+            >
+                <%= location.officeName %>
+                (
+                <%= location.divisionName %>,
+                <%= location.district %>
+                )
+            </option>
+
+        <% }) %>
+
+        </select>
+
+        <div class="help-text">
+            Select all locations assigned to this executive.
+            Use Ctrl / Cmd to select multiple locations on desktop.
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="actions">
+
+    <button type="submit" class="update-btn">
+        💾 Update Executive
+    </button>
+
+    <a href="/executive/list" class="cancel-btn">
+        Cancel
+    </a>
+
+</div>
+
 
 </form>
 
-<br><br>
-
-<a href="/executive/list">Back to Executive List</a>
+</div>
 
 </body>
 </html>
