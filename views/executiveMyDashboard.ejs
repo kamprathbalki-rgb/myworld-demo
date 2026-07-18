@@ -296,6 +296,44 @@ font-weight:bold;
 color:#1f4e79;
 }
 
+.top-nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+
+    background:#f5f7fa;
+    padding:8px 0 10px;
+    margin-bottom:10px;
+}
+
+.top-nav a,
+.top-nav .top-nav-card{
+    background:#1f4e79;
+    color:white;
+    text-decoration:none;
+
+    padding:10px 6px;
+    border-radius:10px;
+
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+    line-height:1.4;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+
+.top-nav .nav-count{
+    display:block;
+    margin-top:2px;
+    font-size:18px;
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -304,18 +342,24 @@ color:#1f4e79;
 
 <div class="top-nav">
 
-<a href="/executive/followups">
-📞<br>Followups
-(<%= followUps %>)
-</a>
+    <a href="/executive/followups">
+        📞<br>
+        Followups
+        <span class="nav-count"><%= followUps %></span>
+    </a>
 
-<a href="/executive/sitevisits">
-🏢<br>Visits
-(<%= siteVisits %>)
-</a>
+    <a href="/executive/sitevisits">
+        🏢<br>
+        Visits
+        <span class="nav-count"><%= siteVisits %></span>
+    </a>
 
-<div class="quick-card">
-🤝 Negotiation<br><%= negotiation %>
+    <div class="top-nav-card">
+        🤝<br>
+        Negotiation
+        <span class="nav-count"><%= negotiation %></span>
+    </div>
+
 </div>
 
 <form
