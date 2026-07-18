@@ -531,6 +531,13 @@ color:#1f4e79;
     font-weight:bold;
 }
 
+.lost-value-nav{
+    color:#d32f2f;
+    font-weight:bold;
+    font-size:14px;
+    text-align:center;
+}
+
 </style>
 
 </head>
@@ -1325,10 +1332,14 @@ height:60px;
 border-radius:50%;
 background:#1f4e79;
 color:white;
+
+border:3px solid white;
+outline:2px solid #1f4e79;
+
 border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 2px 10px rgba(0,0,0,.25);
+box-shadow:0 3px 12px rgba(0,0,0,.3);
 ">
 ☕
 </button>
@@ -1344,10 +1355,14 @@ height:60px;
 border-radius:50%;
 background:#1f4e79;
 color:white;
+
+border:3px solid white;
+outline:2px solid #1f4e79;
+
 border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 2px 10px rgba(0,0,0,.25);
+box-shadow:0 3px 12px rgba(0,0,0,.3);
 ">
 ⚙️
 </button>
@@ -1363,10 +1378,16 @@ height:60px;
 border-radius:50%;
 background:#1f4e79;
 color:white;
+
+border:3px solid white;
+outline:2px solid #1f4e79;
+
+
+
 border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 2px 10px rgba(0,0,0,.25);
+box-shadow:0 3px 12px rgba(0,0,0,.3);
 ">
 🗺️
 </button>
@@ -1382,7 +1403,7 @@ bottom:0;
 background:#f5f7fa;
 padding:20px;
 border-radius:20px 20px 0 0;
-box-shadow:0 -4px 20px rgba(0,0,0,.2);
+box-shadow:0 3px 12px rgba(0,0,0,.3);
 z-index:3000;
 "
 >
@@ -1686,10 +1707,9 @@ Close
 🏠<br>Home
 </a>
 
-<div class="bottom-nav-item">
-💸<br>
-Lost Value<br>
-₹ <%= lostValue.toLocaleString('en-IN') %>
+<div class="bottom-nav-item lost-value-nav">
+    💸<br>
+    ₹ <%= lostValue.toLocaleString('en-IN') %>
 </div>
 
 <a href="/executive/reports">
