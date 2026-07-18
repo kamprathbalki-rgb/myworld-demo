@@ -334,6 +334,50 @@ color:#1f4e79;
     font-weight:bold;
 }
 
+.lead-group{
+    margin-bottom:25px;
+}
+
+.lead-group-title{
+    margin:0 0 12px 0;
+    padding:10px 12px;
+    background:white;
+    border-radius:8px;
+    border-left:4px solid #1f4e79;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+    font-size:16px;
+}
+
+.lead-group .buyer-list{
+    margin-bottom:10px;
+}
+
+.buyer-name{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.buyer-info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:10px 0;
+}
+
+.buyer-info-grid > div{
+    background:#f5f7fa;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.buyer-status-display{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid #eee;
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -515,11 +559,62 @@ color:#555;
 
 </div>
 
-<h2 style="margin-top:20px;">My Leads</h2>
+<h2 style="margin-top:20px;">
+    My Leads (<%= buyers.length %>)
+</h2>
+
+<%
+
+const groups = [
+
+    {
+        title: '🔴 Overdue Follow-ups',
+        leads: leadGroups.overdue
+    },
+
+    {
+        title: '🔵 Today\'s Follow-ups',
+        leads: leadGroups.today
+    },
+
+    {
+        title: '🟢 Fresh Leads (0–3 Days)',
+        leads: leadGroups.fresh
+    },
+
+    {
+        title: '🟡 Leads (4–7 Days)',
+        leads: leadGroups.days4to7
+    },
+
+    {
+        title: '🟠 Aging Leads (8–15 Days)',
+        leads: leadGroups.days8to15
+    },
+
+    {
+        title: '🔴 Old Leads (16+ Days)',
+        leads: leadGroups.days16plus
+    }
+
+]
+
+%>
+
+<% groups.forEach(function(group){ %>
+
+<% if(group.leads.length > 0){ %>
+
+<div class="lead-group">
+
+<h3 class="lead-group-title">
+    <%= group.title %>
+    (<%= group.leads.length %>)
+</h3>
 
 <div class="buyer-list">
 
-<% buyers.forEach(function(b){ %>
+<% group.leads.forEach(function(b){ %>
 
 <div class="buyer-card" onclick="selectBuyer(this)">
 
@@ -530,42 +625,76 @@ value="<%= b._id %>"
 class="buyer-radio"
 >
 
-<div class="buyer-row">
-<b>Name:</b>
-
-<%= b.name || '' %>
+<div class="buyer-row buyer-name">
+    👤 <strong><%= b.name || '' %></strong>
 </div>
 
 <div class="buyer-row">
-<b>Phone:</b>
+    📱
+    <% if (
+        unlockedBuyerId &&
+        String(unlockedBuyerId) === String(b._id)
+    ) { %>
 
-<% if (unlockedBuyerId && String(unlockedBuyerId) === String(b._id)) { %>
-<%= b.phone || '' %>
-<% } else { %>
-<%= b.phone ? b.phone.slice(0,2) + 'XXXX' + b.phone.slice(-4) : '' %>
-<% } %>
+        <%= b.phone || '' %>
+
+    <% } else { %>
+
+        <%= b.phone
+            ? b.phone.slice(0,2) +
+              'XXXX' +
+              b.phone.slice(-4)
+            : ''
+        %>
+
+    <% } %>
+</div>
+
+<div class="buyer-info-grid">
+
+    <div>
+        🏠 <%= b.requiredFlatType || '-' %>
+    </div>
+
+    <div>
+        💰
+        <%= b.minBudget || '-' %>
+        -
+        <%= b.maxBudget || '-' %>
+    </div>
+
 </div>
 
 <div class="buyer-row">
-<b>Budget:</b>
-<%= b.minBudget || '' %> - <%= b.maxBudget || '' %>
+    📍 <%= b.preferredLocations?.join(', ') || '-' %>
 </div>
 
-<div class="buyer-row">
-<b>Type:</b>
-<%= b.requiredFlatType || '' %>
-</div>
+<div class="buyer-row buyer-status-display">
 
-<div class="buyer-row">
-<b>Location:</b>
-<%= b.preferredLocations?.join(', ') || '' %>
-</div>
+<%
+let statusIcon = '🆕'
 
-<div class="buyer-row">
-<b>Status:</b>
-<%= b.status || 'New Lead' %>
-</div>
+if (b.status === 'Contacted') {
+    statusIcon = '📞'
+}
+else if (b.status === 'Site Visit') {
+    statusIcon = '🏢'
+}
+else if (b.status === 'Negotiation') {
+    statusIcon = '🤝'
+}
+else if (b.status === 'Deal Closed') {
+    statusIcon = '✅'
+}
+else if (b.status === 'Lost') {
+    statusIcon = '❌'
+}
+%>
 
+    <%= statusIcon %>
+    <%= b.status || 'New Lead' %>
+
+</div>
 <input
 type="hidden"
 class="buyer-status"
@@ -629,6 +758,12 @@ value="<%= b.lostValue || '' %>"
 <% }) %>
 
 </div>
+
+</div>
+
+<% } %>
+
+<% }) %>
 
 <div id="buyerModal" style="
 display:none;
