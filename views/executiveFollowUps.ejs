@@ -2,80 +2,525 @@
 <html>
 
 <head>
+
 <title>Today's Follow Ups</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
-table{
-width:100%;
-border-collapse:collapse;
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
 }
 
-th,td{
-border:1px solid #ccc;
-padding:10px;
-text-align:left;
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
 }
 
-th{
-background:#f5f5f5;
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.header-spacer{
+    width:30px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.followup-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#1f4e79;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.summary-count{
+    background:#1f4e79;
+    color:white;
+
+    min-width:40px;
+    height:32px;
+
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   FOLLOW-UP LIST
+================================ */
+
+.followup-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ================================
+   FOLLOW-UP CARD
+================================ */
+
+.followup-card{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+
+    border-left:5px solid #1f4e79;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+
+/* BUYER */
+
+.buyer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.buyer-name{
+    font-size:18px;
+    font-weight:bold;
+    color:#222;
+}
+
+.buyer-phone{
+    margin-top:6px;
+    font-size:14px;
+    color:#555;
+}
+
+
+/* STATUS */
+
+.status-badge{
+    background:#f5f7fa;
+
+    padding:7px 10px;
+    border-radius:16px;
+
+    font-size:12px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    white-space:nowrap;
+}
+
+
+/* ================================
+   TIME
+================================ */
+
+.followup-time{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px 12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:10px;
+}
+
+.time-label{
+    font-size:12px;
+    color:#666;
+}
+
+.time-value{
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   NOTES
+================================ */
+
+.followup-notes{
+    border-top:1px solid #eee;
+    padding-top:10px;
+
+    font-size:13px;
+    line-height:1.5;
+
+    color:#555;
+}
+
+.notes-label{
+    font-weight:bold;
+    color:#1f4e79;
+    margin-right:4px;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:17px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    font-size:13px;
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .followup-card{
+        padding:14px;
+    }
+
+    .buyer-name{
+        font-size:17px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="/executive/dashboard">Dashboard</a>
 
-<hr>
+<div class="container">
 
-<h1>Today's Follow Ups</h1>
 
-<table>
+<!-- ================================
+     HEADER
+================================ -->
 
-<tr>
-<th>Buyer</th>
-<th>Phone</th>
-<th>Status</th>
-<th>Follow Up Date</th>
-<th>Notes</th>
-</tr>
+
+<div class="page-header">
+
+    <a
+        href="/executive/dashboard"
+        class="back-btn"
+    >
+        ←
+    </a>
+
+
+    <h2>
+        📞 Today's Follow-ups
+    </h2>
+
+
+    <div class="header-spacer"></div>
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+
+<div class="followup-summary">
+
+    <div class="summary-title">
+        📅 Follow-ups Scheduled Today
+    </div>
+
+    <div class="summary-count">
+        <%= buyers ? buyers.length : 0 %>
+    </div>
+
+</div>
+
+
+
+<!-- ================================
+     FOLLOW-UP CARDS
+================================ -->
+
+
+<% if (buyers && buyers.length > 0) { %>
+
+
+<div class="followup-list">
+
 
 <% buyers.forEach(function(b){ %>
 
-<tr>
 
-<td>
-<%= b.name || '' %>
-</td>
+<%
 
-<td>
-<%= b.phone
-? b.phone.slice(0,2) + 'XXXX' + b.phone.slice(-4)
-: '' %>
-</td>
+let statusIcon = '🆕'
 
-<td>
-<%= b.status || 'New Lead' %>
-</td>
+if(b.status === 'Contacted'){
+    statusIcon = '📞'
+}
+else if(b.status === 'Site Visit'){
+    statusIcon = '🏢'
+}
+else if(b.status === 'Negotiation'){
+    statusIcon = '🤝'
+}
+else if(b.status === 'Deal Closed'){
+    statusIcon = '✅'
+}
+else if(b.status === 'Lost'){
+    statusIcon = '❌'
+}
 
-<td>
-<%= b.nextFollowUp
-? new Date(b.nextFollowUp).toLocaleString('en-IN')
-: '' %>
-</td>
+%>
 
-<td>
-<%= b.followUpNotes || '' %>
-</td>
 
-</tr>
+<div class="followup-card">
+
+
+    <!-- BUYER + STATUS -->
+
+
+    <div class="buyer-row">
+
+
+        <div>
+
+            <div class="buyer-name">
+
+                👤
+                <%= b.name || 'Buyer' %>
+
+            </div>
+
+
+            <div class="buyer-phone">
+
+                📱
+
+                <%= b.phone
+                    ? b.phone.slice(0,2) +
+                      'XXXX' +
+                      b.phone.slice(-4)
+                    : ''
+                %>
+
+            </div>
+
+        </div>
+
+
+        <div class="status-badge">
+
+            <%= statusIcon %>
+
+            <%= b.status || 'New Lead' %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- FOLLOW-UP TIME -->
+
+
+    <div class="followup-time">
+
+
+        <div class="time-label">
+            ⏰ Follow-up
+        </div>
+
+
+        <div class="time-value">
+
+            <%= b.nextFollowUp
+                ? new Date(
+                    b.nextFollowUp
+                  ).toLocaleTimeString(
+                    'en-IN',
+                    {
+                        hour:'2-digit',
+                        minute:'2-digit'
+                    }
+                  )
+                : '--:--'
+            %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- NOTES -->
+
+
+    <div class="followup-notes">
+
+        <span class="notes-label">
+            📝 Notes:
+        </span>
+
+        <%= b.followUpNotes ||
+            'No follow-up notes'
+        %>
+
+    </div>
+
+
+</div>
+
 
 <% }) %>
 
-</table>
+
+</div>
+
+
+<% } else { %>
+
+
+
+<!-- ================================
+     NO FOLLOW-UPS
+================================ -->
+
+
+<div class="empty-state">
+
+    <div class="empty-icon">
+        ✅
+    </div>
+
+    <div class="empty-title">
+        No Follow-ups Today
+    </div>
+
+    <div class="empty-text">
+        You have no follow-ups scheduled for today.
+    </div>
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
 
 </body>
 

@@ -1,316 +1,2114 @@
-<h1>SaaS Admin Dashboard</h1>
+<!DOCTYPE html>
+<html>
 
-<p>
-<a href="/register-company">Register Company</a> |
+<head>
 
-<a href="/saas/subscription-history">
-Subscription History
-</a>
+<title>Platform Owner Dashboard</title>
 
-|
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<a href="/keyword/add">
-Keyword Add
-</a>
+<style>
 
-|
+/* ================================
+   GLOBAL
+================================ */
 
-<a href="/keyword/list">
-Keyword List
-</a>
+*{
+    box-sizing:border-box;
+}
 
-|
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#222;
+}
 
-<a href="/keyword/other-messages">
-Other Messages
-</a>
-
-|
-
-<a href="/learning-correction/list">
-AI Corrections
-</a>
-
-|
-
-<a href="/logout">Logout</a>
-</p>
-
-|
-<h2>Subscription Summary</h2>
-
-<p>
-Total Companies:
-<%= totalCompanies %>
-</p>
-
-<p>
-Active Companies:
-<%= activeCompanies %>
-</p>
-
-<p>
-Inactive Companies:
-<%= inactiveCompanies %>
-</p>
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:18px;
+}
 
 
-<p>
-WhatsApp Connected:
-<%= whatsappConnected %>
-</p>
+/* ================================
+   HEADER
+================================ */
 
-<p>
-Total Buyers:
-<%= totalBuyers %>
-</p>
+.main-header{
+    background:#1f4e79;
+    color:white;
 
-<p>
-Total Properties:
-<%= totalProperties %>
-</p>
+    border-radius:12px;
+    padding:16px 20px;
 
-<p>
-Total Visits:
-<%= totalVisits %>
-</p>
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-<p>
-WhatsApp Messages:
-<%= totalMessages %>
-</p>
+    gap:15px;
 
-<p>
-AI Requests:
-<%= aiRequests %>
-</p>
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
 
-<p>
-AI Tokens:
-<%= aiTokens %>
-</p>
+.header-title{
+    font-size:22px;
+    font-weight:bold;
+}
 
-<hr>
+.header-subtitle{
+    font-size:12px;
+    opacity:.8;
+    margin-top:4px;
+}
 
+.logout-btn{
+    background:white;
+    color:#1f4e79;
 
+    text-decoration:none;
+    font-size:13px;
+    font-weight:bold;
 
-<hr>
+    padding:10px 14px;
+    border-radius:8px;
 
-<h2>Registered Companies</h2>
-
-
-<h2>Expiring Within 30 Days</h2>
-
-<ul>
-
-<% expiringSoon.forEach(function(t){ %>
-
-<li>
-
-<%= t.name %>
-
--
-
-Expires On
-
-<%= t.subscriptionEndDate.toLocaleDateString() %>
-
-</li>
-
-<% }) %>
-
-</ul>
-
-<h2>Expired Companies</h2>
-
-<ul>
-
-<% expiredCompanies.forEach(function(t){ %>
-
-<li>
-
-<%= t.name %>
-
-</li>
-
-<% }) %>
-
-</ul>
-
-<hr>
+    white-space:nowrap;
+}
 
 
-<h2>AI Usage By Agency</h2>
+/* ================================
+   NAVIGATION
+================================ */
 
-<table border="1" cellpadding="8">
+.main-nav{
+    margin-top:12px;
+
+    display:flex;
+    gap:8px;
+
+    overflow-x:auto;
+
+    padding-bottom:5px;
+
+    scrollbar-width:none;
+}
+
+.main-nav::-webkit-scrollbar{
+    display:none;
+}
+
+.nav-item{
+    background:white;
+    color:#1f4e79;
+
+    text-decoration:none;
+
+    padding:11px 14px;
+
+    border-radius:9px;
+
+    font-size:13px;
+    font-weight:bold;
+
+    white-space:nowrap;
+
+    border:1px solid #e1e5ea;
+
+    box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+
+.nav-item:hover{
+    background:#eef4fa;
+}
+
+
+/* ================================
+   SECTION
+================================ */
+
+.section{
+    margin-top:25px;
+}
+
+.section-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.section-note{
+    font-size:12px;
+    color:#777;
+}
+
+
+/* ================================
+   KPI GRID
+================================ */
+
+.kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+}
+
+.kpi-card{
+    background:white;
+
+    border-radius:12px;
+    padding:16px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.kpi-icon{
+    font-size:23px;
+    margin-bottom:10px;
+}
+
+.kpi-label{
+    font-size:12px;
+    color:#777;
+    margin-bottom:6px;
+}
+
+.kpi-value{
+    font-size:24px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.kpi-card.active .kpi-value{
+    color:#2e7d32;
+}
+
+.kpi-card.inactive .kpi-value{
+    color:#555;
+}
+
+
+/* ================================
+   USAGE CARDS
+================================ */
+
+.usage-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+
+    margin-top:12px;
+}
+
+.usage-card{
+    background:white;
+
+    border-radius:12px;
+    padding:16px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.usage-title{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:14px;
+}
+
+.usage-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.usage-stat{
+    background:#f5f7fa;
+    border-radius:9px;
+    padding:12px;
+}
+
+.usage-label{
+    font-size:11px;
+    color:#777;
+    margin-bottom:5px;
+}
+
+.usage-value{
+    font-size:18px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   ATTENTION
+================================ */
+
+.attention-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.attention-card{
+    background:white;
+
+    border-radius:12px;
+    overflow:hidden;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.attention-title{
+    padding:13px 15px;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+.expiring-title{
+    background:#fff8e1;
+    color:#ef6c00;
+}
+
+.expired-title{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.attention-list{
+    padding:0;
+    margin:0;
+
+    list-style:none;
+}
+
+.attention-item{
+    padding:12px 15px;
+
+    border-bottom:1px solid #eee;
+
+    font-size:13px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+}
+
+.attention-item:last-child{
+    border-bottom:none;
+}
+
+.attention-name{
+    font-weight:bold;
+    color:#333;
+}
+
+.attention-date{
+    font-size:11px;
+    color:#777;
+    white-space:nowrap;
+}
+
+.no-attention{
+    padding:20px 15px;
+
+    text-align:center;
+
+    color:#777;
+    font-size:13px;
+}
+
+
+/* ================================
+   TABLE CONTAINER
+================================ */
+
+.table-card{
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.table-scroll{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1f4e79;
+    color:white;
+
+    padding:12px;
+
+    text-align:left;
+
+    font-size:12px;
+
+    white-space:nowrap;
+}
+
+td{
+    padding:12px;
+
+    border-bottom:1px solid #eee;
+
+    font-size:12px;
+
+    vertical-align:top;
+}
+
+tr:last-child td{
+    border-bottom:none;
+}
+
+tr:hover td{
+    background:#fafafa;
+}
+
+
+/* ================================
+   AI TABLE
+================================ */
+
+.ai-table{
+    min-width:500px;
+}
+
+.ai-number{
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   COMPANY TABLE
+================================ */
+
+.company-table{
+    min-width:1250px;
+}
+
+.company-name{
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.small-text{
+    margin-top:4px;
+    font-size:11px;
+    color:#777;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.status{
+    display:inline-block;
+
+    padding:6px 9px;
+
+    border-radius:14px;
+
+    font-size:11px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.status-active{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.status-renewal{
+    background:#fff8e1;
+    color:#ef6c00;
+}
+
+.status-soon{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.status-expired{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.status-disabled{
+    background:#eeeeee;
+    color:#555;
+}
+
+
+/* ================================
+   ACTION BUTTONS
+================================ */
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+
+    min-width:260px;
+}
+
+.action-btn{
+    display:inline-block;
+
+    padding:7px 9px;
+
+    border-radius:6px;
+
+    text-decoration:none;
+
+    font-size:11px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.edit-btn{
+    background:#e3f2fd;
+    color:#1565c0;
+}
+
+.disable-btn{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.enable-btn{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.renew-btn{
+    background:#fff8e1;
+    color:#ef6c00;
+}
+
+
+/* ================================
+   MOBILE COMPANY CARDS
+================================ */
+
+.company-mobile-list{
+    display:none;
+}
+
+.company-card{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+
+    margin-bottom:12px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.company-card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding-bottom:12px;
+    margin-bottom:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+.company-card-name{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.company-card-email{
+    margin-top:5px;
+    font-size:12px;
+    color:#777;
+
+    word-break:break-word;
+}
+
+.company-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+
+    margin-bottom:12px;
+}
+
+.company-detail{
+    background:#f5f7fa;
+    border-radius:8px;
+    padding:9px;
+}
+
+.detail-label{
+    font-size:10px;
+    color:#777;
+    margin-bottom:4px;
+}
+
+.detail-value{
+    font-size:12px;
+    font-weight:bold;
+    color:#333;
+
+    line-height:1.4;
+}
+
+.company-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.company-actions .action-btn{
+    text-align:center;
+    padding:10px 7px;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-message{
+    padding:25px;
+
+    text-align:center;
+
+    font-size:13px;
+    color:#777;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1100px){
+
+    .kpi-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+
+@media(max-width:768px){
+
+    .container{
+        padding:10px;
+    }
+
+    .main-header{
+        border-radius:10px;
+        padding:14px;
+    }
+
+    .header-title{
+        font-size:18px;
+    }
+
+    .header-subtitle{
+        display:none;
+    }
+
+    .kpi-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .usage-grid,
+    .attention-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section-title{
+        font-size:16px;
+    }
+
+    .desktop-company-table{
+        display:none;
+    }
+
+    .company-mobile-list{
+        display:block;
+    }
+
+}
+
+
+@media(max-width:380px){
+
+    .kpi-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .kpi-card{
+        padding:12px;
+    }
+
+    .kpi-value{
+        font-size:20px;
+    }
+
+    .company-details{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+
+<div class="main-header">
+
+
+    <div>
+
+        <div class="header-title">
+
+            ⚙️ Platform Owner
+
+        </div>
+
+        <div class="header-subtitle">
+
+            SaaS Administration Dashboard
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="/logout"
+        class="logout-btn"
+    >
+
+        🚪 Logout
+
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     NAVIGATION
+================================ -->
+
+
+<div class="main-nav">
+
+
+    <a
+        href="/register-company"
+        class="nav-item"
+    >
+        🏢 Register Company
+    </a>
+
+
+    <a
+        href="/saas/subscription-history"
+        class="nav-item"
+    >
+        💳 Subscriptions
+    </a>
+
+
+    <a
+        href="/keyword/add"
+        class="nav-item"
+    >
+        ➕ Keyword Add
+    </a>
+
+
+    <a
+        href="/keyword/list"
+        class="nav-item"
+    >
+        🔑 Keyword List
+    </a>
+
+
+    <a
+        href="/keyword/other-messages"
+        class="nav-item"
+    >
+        💬 Other Messages
+    </a>
+
+
+    <a
+        href="/learning-correction/list"
+        class="nav-item"
+    >
+        🧠 AI Corrections
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     PLATFORM OVERVIEW
+================================ -->
+
+
+<div class="section">
+
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            📊 Platform Overview
+
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-grid">
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🏢
+            </div>
+
+            <div class="kpi-label">
+                Total Companies
+            </div>
+
+            <div class="kpi-value">
+                <%= totalCompanies %>
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card active">
+
+            <div class="kpi-icon">
+                🟢
+            </div>
+
+            <div class="kpi-label">
+                Active Companies
+            </div>
+
+            <div class="kpi-value">
+                <%= activeCompanies %>
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card inactive">
+
+            <div class="kpi-icon">
+                ⚫
+            </div>
+
+            <div class="kpi-label">
+                Inactive Companies
+            </div>
+
+            <div class="kpi-value">
+                <%= inactiveCompanies %>
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                👥
+            </div>
+
+            <div class="kpi-label">
+                Total Buyers
+            </div>
+
+            <div class="kpi-value">
+                <%= totalBuyers %>
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🏠
+            </div>
+
+            <div class="kpi-label">
+                Total Properties
+            </div>
+
+            <div class="kpi-value">
+                <%= totalProperties %>
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                📍
+            </div>
+
+            <div class="kpi-label">
+                Total Visits
+            </div>
+
+            <div class="kpi-value">
+                <%= totalVisits %>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- USAGE -->
+
+
+    <div class="usage-grid">
+
+
+        <div class="usage-card">
+
+
+            <div class="usage-title">
+
+                💬 WhatsApp Usage
+
+            </div>
+
+
+            <div class="usage-stats">
+
+
+                <div class="usage-stat">
+
+                    <div class="usage-label">
+                        Connected
+                    </div>
+
+                    <div class="usage-value">
+                        <%= whatsappConnected %>
+                    </div>
+
+                </div>
+
+
+                <div class="usage-stat">
+
+                    <div class="usage-label">
+                        Messages
+                    </div>
+
+                    <div class="usage-value">
+                        <%= totalMessages %>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="usage-card">
+
+
+            <div class="usage-title">
+
+                🧠 AI Usage
+
+            </div>
+
+
+            <div class="usage-stats">
+
+
+                <div class="usage-stat">
+
+                    <div class="usage-label">
+                        Requests
+                    </div>
+
+                    <div class="usage-value">
+                        <%= aiRequests %>
+                    </div>
+
+                </div>
+
+
+                <div class="usage-stat">
+
+                    <div class="usage-label">
+                        Tokens
+                    </div>
+
+                    <div class="usage-value">
+                        <%= aiTokens %>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     SUBSCRIPTION ATTENTION
+================================ -->
+
+
+<div class="section">
+
+
+    <div class="section-header">
+
+
+        <div class="section-title">
+
+            ⚠️ Subscription Attention
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="attention-grid">
+
+
+
+        <!-- EXPIRING -->
+
+
+        <div class="attention-card">
+
+
+            <div class="
+                attention-title
+                expiring-title
+            ">
+
+                🟠 Expiring Within 30 Days
+
+            </div>
+
+
+
+            <% if (
+                expiringSoon &&
+                expiringSoon.length > 0
+            ) { %>
+
+
+            <ul class="attention-list">
+
+
+                <% expiringSoon.forEach(function(t){ %>
+
+
+                <li class="attention-item">
+
+
+                    <span class="attention-name">
+
+                        <%= t.name %>
+
+                    </span>
+
+
+                    <span class="attention-date">
+
+                        <%= t.subscriptionEndDate
+                            ? t.subscriptionEndDate
+                                .toLocaleDateString()
+                            : ''
+                        %>
+
+                    </span>
+
+
+                </li>
+
+
+                <% }) %>
+
+
+            </ul>
+
+
+            <% } else { %>
+
+
+            <div class="no-attention">
+
+                ✅ No subscriptions expiring
+                within 30 days.
+
+            </div>
+
+
+            <% } %>
+
+
+        </div>
+
+
+
+        <!-- EXPIRED -->
+
+
+        <div class="attention-card">
+
+
+            <div class="
+                attention-title
+                expired-title
+            ">
+
+                🔴 Expired Companies
+
+            </div>
+
+
+
+            <% if (
+                expiredCompanies &&
+                expiredCompanies.length > 0
+            ) { %>
+
+
+            <ul class="attention-list">
+
+
+                <% expiredCompanies.forEach(function(t){ %>
+
+
+                <li class="attention-item">
+
+
+                    <span class="attention-name">
+
+                        <%= t.name %>
+
+                    </span>
+
+
+                    <span class="attention-date">
+
+                        Expired
+
+                    </span>
+
+
+                </li>
+
+
+                <% }) %>
+
+
+            </ul>
+
+
+            <% } else { %>
+
+
+            <div class="no-attention">
+
+                ✅ No expired companies.
+
+            </div>
+
+
+            <% } %>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     AI USAGE BY AGENCY
+================================ -->
+
+
+<div class="section">
+
+
+    <div class="section-header">
+
+
+        <div class="section-title">
+
+            🧠 AI Usage By Agency
+
+        </div>
+
+
+        <div class="section-note">
+
+            Requests and token usage
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="table-card">
+
+
+        <% if (
+            aiTenantStats &&
+            aiTenantStats.length > 0
+        ) { %>
+
+
+        <div class="table-scroll">
+
+
+            <table class="ai-table">
+
+
+                <thead>
+
+
+                    <tr>
+
+                        <th>
+                            Agency
+                        </th>
+
+                        <th>
+                            Requests
+                        </th>
+
+                        <th>
+                            Tokens
+                        </th>
+
+                    </tr>
+
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <% aiTenantStats.forEach(function(t){ %>
+
+
+                    <tr>
+
+
+                        <td>
+
+                            <strong>
+                                <%= t.tenantName %>
+                            </strong>
+
+                        </td>
+
+
+                        <td class="ai-number">
+
+                            <%= t.requests %>
+
+                        </td>
+
+
+                        <td class="ai-number">
+
+                            <%= t.tokens %>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    <% }) %>
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+        <% } else { %>
+
+
+        <div class="empty-message">
+
+            No AI usage data available.
+
+        </div>
+
+
+        <% } %>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     REGISTERED COMPANIES
+================================ -->
+
+
+<div class="section">
+
+
+    <div class="section-header">
+
+
+        <div class="section-title">
+
+            🏢 Registered Companies
+
+        </div>
+
+
+        <div class="section-note">
+
+            <%= tenants ? tenants.length : 0 %>
+            Companies
+
+        </div>
+
+
+    </div>
+
+
+
+<!-- ================================
+     DESKTOP COMPANY TABLE
+================================ -->
+
+
+<div class="
+    table-card
+    desktop-company-table
+">
+
+
+<div class="table-scroll">
+
+
+<table class="company-table">
+
+
+<thead>
+
 
 <tr>
-<th>Tenant</th>
-<th>Requests</th>
-<th>Tokens</th>
-</tr>
 
-<% aiTenantStats.forEach(function(t){ %>
-
-<tr>
-
-<td>
-<%= t.tenantName %>
-</td>
-
-<td>
-<%= t.requests %>
-</td>
-
-<td>
-<%= t.tokens %>
-</td>
-
-</tr>
-
-<% }) %>
-
-</table>
-
-<hr>
-
-
-<table border="1" cellpadding="8">
-
-<tr>
 <th>Company</th>
+
 <th>Company Email</th>
-<th>Admin Name</th>
+
+<th>Admin</th>
+
 <th>Admin Email</th>
+
 <th>State</th>
+
 <th>Primary District</th>
+
 <th>Subscription</th>
+
 <th>Expiry Date</th>
+
 <th>Status</th>
+
 <th>Days Left</th>
+
 <th>Created</th>
+
 <th>Actions</th>
+
 </tr>
+
+
+</thead>
+
+
+<tbody>
+
 
 <% tenants.forEach(function(t){ %>
 
-<tr>
-
-<td><%= t.name %></td>
-
-<td><%= t.email %></td>
-
-<td>
-<%= t.adminName || '' %>
-</td>
-
-<td>
-<%= t.adminEmail || '' %>
-</td>
-
-<td><%= t.stateName || '' %></td>
-
-<td><%= t.primaryDistrict || '' %></td>
-
-<td>
-<%= t.subscriptionMonths || 0 %> Months
-</td>
-
-<td>
-<%= t.subscriptionEndDate
-? t.subscriptionEndDate.toLocaleDateString()
-: ''
-%>
-</td>
-
-<td>
 
 <%
+
 let daysRemaining = 0
+
 
 if(t.subscriptionEndDate){
 
-daysRemaining =
-Math.ceil(
-(
-t.subscriptionEndDate -
-new Date()
-) /
-(1000 * 60 * 60 * 24)
-)
+
+    daysRemaining =
+
+    Math.ceil(
+
+        (
+            t.subscriptionEndDate -
+            new Date()
+        )
+
+        /
+
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        )
+
+    )
+
 
 }
+
+
+let statusText = 'Active'
+
+let statusClass = 'status-active'
+
+let statusIcon = '🟢'
+
+
+if(!t.isActive){
+
+    statusText = 'Disabled'
+
+    statusClass =
+    'status-disabled'
+
+    statusIcon = '⚫'
+
+}
+
+else if(daysRemaining <= 0){
+
+    statusText = 'Expired'
+
+    statusClass =
+    'status-expired'
+
+    statusIcon = '❌'
+
+}
+
+else if(daysRemaining <= 7){
+
+    statusText =
+    'Expires Soon'
+
+    statusClass =
+    'status-soon'
+
+    statusIcon = '🔴'
+
+}
+
+else if(daysRemaining <= 30){
+
+    statusText =
+    'Renewal Due'
+
+    statusClass =
+    'status-renewal'
+
+    statusIcon = '🟠'
+
+}
+
 %>
 
-<% if(!t.isActive){ %>
 
-⚫ Disabled
+<tr>
 
-<% } else if(daysRemaining <= 0){ %>
-
-❌ Expired
-
-<% } else if(daysRemaining <= 7){ %>
-
-🔴 Expires Soon
-
-<% } else if(daysRemaining <= 30){ %>
-
-🟠 Renewal Due
-
-<% } else { %>
-
-🟢 Active
-
-<% } %>
-
-</td>
-
-<td>
-<%= daysRemaining %>
-</td>
-
-<td>
-<%= t.createdAt
-? t.createdAt.toLocaleDateString()
-: ''
-%>
-</td>
 
 <td>
 
-<a href="/saas/company/<%= t._id %>">
-Edit
-</a>
+    <div class="company-name">
 
-|
+        <%= t.name %>
 
-<a href="/saas/company/<%= t._id %>/disable">
-Disable
-</a>
-
-|
-
-<a href="/saas/company/<%= t._id %>/enable">
-Enable
-</a>
-
-|
-
-<a href="/saas/company/<%= t._id %>/renew/12">
-Renew 12M
-</a>
-
-|
-
-<a href="/saas/company/<%= t._id %>/renew/24">
-Renew 24M
-</a>
+    </div>
 
 </td>
+
+
+<td>
+
+    <%= t.email %>
+
+</td>
+
+
+<td>
+
+    <%= t.adminName || '' %>
+
+</td>
+
+
+<td>
+
+    <%= t.adminEmail || '' %>
+
+</td>
+
+
+<td>
+
+    <%= t.stateName || '' %>
+
+</td>
+
+
+<td>
+
+    <%= t.primaryDistrict || '' %>
+
+</td>
+
+
+<td>
+
+    <%= t.subscriptionMonths || 0 %>
+    Months
+
+</td>
+
+
+<td>
+
+    <%= t.subscriptionEndDate
+        ? t.subscriptionEndDate
+            .toLocaleDateString()
+        : ''
+    %>
+
+</td>
+
+
+<td>
+
+
+    <span class="
+        status
+        <%= statusClass %>
+    ">
+
+        <%= statusIcon %>
+
+        <%= statusText %>
+
+    </span>
+
+
+</td>
+
+
+<td>
+
+    <%= daysRemaining %>
+
+</td>
+
+
+<td>
+
+    <%= t.createdAt
+        ? t.createdAt
+            .toLocaleDateString()
+        : ''
+    %>
+
+</td>
+
+
+<td>
+
+
+<div class="actions">
+
+
+    <a
+        href="/saas/company/<%= t._id %>"
+        class="action-btn edit-btn"
+    >
+
+        ✏️ Edit
+
+    </a>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/disable"
+        class="action-btn disable-btn"
+    >
+
+        ⛔ Disable
+
+    </a>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/enable"
+        class="action-btn enable-btn"
+    >
+
+        ✅ Enable
+
+    </a>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/renew/12"
+        class="action-btn renew-btn"
+    >
+
+        🔄 Renew 12M
+
+    </a>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/renew/24"
+        class="action-btn renew-btn"
+    >
+
+        🔄 Renew 24M
+
+    </a>
+
+
+</div>
+
+
+</td>
+
 
 </tr>
 
+
 <% }) %>
 
+
+</tbody>
+
+
 </table>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     MOBILE COMPANY CARDS
+================================ -->
+
+
+<div class="company-mobile-list">
+
+
+<% tenants.forEach(function(t){ %>
+
+
+<%
+
+let mobileDaysRemaining = 0
+
+
+if(t.subscriptionEndDate){
+
+
+    mobileDaysRemaining =
+
+    Math.ceil(
+
+        (
+            t.subscriptionEndDate -
+            new Date()
+        )
+
+        /
+
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        )
+
+    )
+
+
+}
+
+
+let mobileStatusText =
+'Active'
+
+let mobileStatusClass =
+'status-active'
+
+let mobileStatusIcon =
+'🟢'
+
+
+if(!t.isActive){
+
+    mobileStatusText =
+    'Disabled'
+
+    mobileStatusClass =
+    'status-disabled'
+
+    mobileStatusIcon =
+    '⚫'
+
+}
+
+else if(
+    mobileDaysRemaining <= 0
+){
+
+    mobileStatusText =
+    'Expired'
+
+    mobileStatusClass =
+    'status-expired'
+
+    mobileStatusIcon =
+    '❌'
+
+}
+
+else if(
+    mobileDaysRemaining <= 7
+){
+
+    mobileStatusText =
+    'Expires Soon'
+
+    mobileStatusClass =
+    'status-soon'
+
+    mobileStatusIcon =
+    '🔴'
+
+}
+
+else if(
+    mobileDaysRemaining <= 30
+){
+
+    mobileStatusText =
+    'Renewal Due'
+
+    mobileStatusClass =
+    'status-renewal'
+
+    mobileStatusIcon =
+    '🟠'
+
+}
+
+%>
+
+
+
+<div class="company-card">
+
+
+
+<div class="company-card-header">
+
+
+    <div>
+
+
+        <div class="company-card-name">
+
+            🏢 <%= t.name %>
+
+        </div>
+
+
+        <div class="company-card-email">
+
+            <%= t.email %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <span class="
+        status
+        <%= mobileStatusClass %>
+    ">
+
+        <%= mobileStatusIcon %>
+
+        <%= mobileStatusText %>
+
+    </span>
+
+
+</div>
+
+
+
+<div class="company-details">
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            👤 Admin
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= t.adminName || '-' %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            ✉️ Admin Email
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= t.adminEmail || '-' %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            📍 Location
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= t.primaryDistrict || '' %>
+
+            <% if(t.stateName){ %>
+
+                ,
+                <%= t.stateName %>
+
+            <% } %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            💳 Subscription
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= t.subscriptionMonths || 0 %>
+            Months
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            📅 Expiry
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= t.subscriptionEndDate
+
+                ? t.subscriptionEndDate
+                    .toLocaleDateString()
+
+                : '-'
+            %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="company-detail">
+
+
+        <div class="detail-label">
+
+            ⏳ Days Left
+
+        </div>
+
+
+        <div class="detail-value">
+
+            <%= mobileDaysRemaining %>
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<!-- COMPANY ACTIONS -->
+
+
+<div class="company-actions">
+
+
+    <a
+        href="/saas/company/<%= t._id %>"
+        class="action-btn edit-btn"
+    >
+
+        ✏️ Edit
+
+    </a>
+
+
+    <% if(t.isActive){ %>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/disable"
+        class="action-btn disable-btn"
+    >
+
+        ⛔ Disable
+
+    </a>
+
+
+    <% } else { %>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/enable"
+        class="action-btn enable-btn"
+    >
+
+        ✅ Enable
+
+    </a>
+
+
+    <% } %>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/renew/12"
+        class="action-btn renew-btn"
+    >
+
+        🔄 Renew 12M
+
+    </a>
+
+
+    <a
+        href="/saas/company/<%= t._id %>/renew/24"
+        class="action-btn renew-btn"
+    >
+
+        🔄 Renew 24M
+
+    </a>
+
+
+</div>
+
+
+</div>
+
+
+<% }) %>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

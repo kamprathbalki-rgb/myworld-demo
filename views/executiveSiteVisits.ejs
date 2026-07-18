@@ -2,92 +2,763 @@
 <html>
 
 <head>
+
 <title>Today's Site Visits</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
-table{
-width:100%;
-border-collapse:collapse;
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
 }
 
-th,td{
-border:1px solid #ccc;
-padding:10px;
-text-align:left;
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
 }
 
-th{
-background:#f5f5f5;
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.home-btn{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+    width:30px;
+    text-align:right;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.visit-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#1f4e79;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.summary-count{
+    background:#1f4e79;
+    color:white;
+
+    min-width:40px;
+    height:32px;
+
+    padding:0 12px;
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   VISIT LIST
+================================ */
+
+.visit-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ================================
+   VISIT CARD
+================================ */
+
+.visit-card{
+    background:white;
+
+    border-radius:12px;
+    overflow:hidden;
+
+    border-left:5px solid #1f4e79;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+
+/* ================================
+   BUYER HEADER
+================================ */
+
+.visit-header{
+    padding:15px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+
+    border-bottom:1px solid #eee;
+}
+
+.buyer-name{
+    font-size:17px;
+    font-weight:bold;
+    color:#222;
+
+    line-height:1.3;
+}
+
+.buyer-phone{
+    margin-top:6px;
+
+    font-size:13px;
+    color:#555;
+}
+
+
+/* ================================
+   STATUS BADGE
+================================ */
+
+.status-badge{
+    background:#e3f2fd;
+    color:#1565c0;
+
+    padding:7px 10px;
+
+    border-radius:16px;
+
+    font-size:11px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+
+/* ================================
+   VISIT BODY
+================================ */
+
+.visit-body{
+    padding:15px;
+}
+
+
+/* ================================
+   PROJECT
+================================ */
+
+.project-box{
+    background:#f5f7fa;
+
+    border-radius:10px;
+    padding:12px;
+
+    margin-bottom:12px;
+}
+
+.project-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.project-name{
+    font-size:16px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    line-height:1.4;
+}
+
+
+/* ================================
+   VISIT DETAILS
+================================ */
+
+.visit-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.visit-item{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px;
+}
+
+.visit-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.visit-value{
+    font-size:13px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    line-height:1.4;
+}
+
+
+/* ================================
+   VISIT TYPE
+================================ */
+
+.visit-type-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+
+    background:#eef4fa;
+
+    border-radius:9px;
+    padding:11px 12px;
+}
+
+.visit-type-label{
+    font-size:12px;
+    color:#666;
+}
+
+.visit-type-value{
+    font-size:13px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    text-align:right;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:17px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    font-size:13px;
+    color:#777;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .visit-header{
+        padding:13px;
+    }
+
+    .visit-body{
+        padding:13px;
+    }
+
+    .buyer-name{
+        font-size:16px;
+    }
+
+}
+
+
+@media(max-width:340px){
+
+    .visit-grid{
+        grid-template-columns:1fr;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="/executive/dashboard">Dashboard</a>
 
-<hr>
+<div class="container">
 
-<h1>Today's Site Visits</h1>
 
-<table>
+<!-- ================================
+     HEADER
+================================ -->
 
-<tr>
-<th>Buyer</th>
-<th>Phone</th>
-<th>Project</th>
-<th>Visit Date</th>
-<th>Executive</th>
-<th>Visit Type</th>
-<th>Status</th>
-</tr>
+
+<div class="page-header">
+
+
+    <a
+        href="javascript:history.back()"
+        class="back-btn"
+    >
+        ←
+    </a>
+
+
+    <h2>
+        🏢 Today's Site Visits
+    </h2>
+
+
+    <a
+        href="/executive/dashboard"
+        class="home-btn"
+    >
+        🏠
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+
+<div class="visit-summary">
+
+
+    <div class="summary-title">
+
+        📅 Site Visits Today
+
+    </div>
+
+
+    <div class="summary-count">
+
+        <%= visits ? visits.length : 0 %>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     VISIT CARDS
+================================ -->
+
+
+<% if (visits && visits.length > 0) { %>
+
+
+<div class="visit-list">
+
 
 <% visits.forEach(function(v){ %>
 
-<tr>
 
-<td>
-<%= v.buyerId ? v.buyerId.name : '' %>
-</td>
+<%
 
-<td>
-<%= v.buyerId && v.buyerId.phone
-? v.buyerId.phone.slice(0,2) + 'XXXX' + v.buyerId.phone.slice(-4)
-: '' %>
-</td>
+let statusIcon = '🆕'
 
-<td>
-<%= v.projectName || '' %>
-</td>
+let buyerStatus =
 
-<td>
-<%= v.scheduledVisitDate
-? new Date(v.scheduledVisitDate).toLocaleString('en-IN')
-: '' %>
-</td>
-
-<td>
-<%= v.executiveName || '' %>
-</td>
-
-<td>
-<%= v.visitType || '' %>
-</td>
-
-<td>
-<%= v.buyerId
+v.buyerId
 ? (v.buyerId.status || 'New Lead')
-: '' %>
-</td>
+: ''
 
-</tr>
+
+if(buyerStatus === 'Contacted'){
+
+    statusIcon = '📞'
+
+}
+
+else if(buyerStatus === 'Site Visit'){
+
+    statusIcon = '🏢'
+
+}
+
+else if(buyerStatus === 'Negotiation'){
+
+    statusIcon = '🤝'
+
+}
+
+else if(buyerStatus === 'Deal Closed'){
+
+    statusIcon = '✅'
+
+}
+
+else if(buyerStatus === 'Lost'){
+
+    statusIcon = '❌'
+
+}
+
+%>
+
+
+
+<div class="visit-card">
+
+
+<!-- ============================
+     BUYER + STATUS
+============================= -->
+
+
+<div class="visit-header">
+
+
+    <div>
+
+
+        <div class="buyer-name">
+
+            👤
+
+            <%= v.buyerId
+                ? (v.buyerId.name || 'Buyer')
+                : 'Buyer'
+            %>
+
+        </div>
+
+
+        <div class="buyer-phone">
+
+            📱
+
+            <%= v.buyerId &&
+                v.buyerId.phone
+
+                ? v.buyerId.phone.slice(
+                    0,
+                    2
+                  ) +
+                  'XXXX' +
+                  v.buyerId.phone.slice(
+                    -4
+                  )
+
+                : ''
+            %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="status-badge">
+
+        <%= statusIcon %>
+
+        <%= buyerStatus %>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ============================
+     VISIT BODY
+============================= -->
+
+
+<div class="visit-body">
+
+
+
+<!-- PROJECT -->
+
+
+<div class="project-box">
+
+
+    <div class="project-label">
+
+        🏢 Project
+
+    </div>
+
+
+    <div class="project-name">
+
+        <%= v.projectName ||
+            'Project not specified'
+        %>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- VISIT DETAILS -->
+
+
+<div class="visit-grid">
+
+
+
+    <!-- DATE / TIME -->
+
+
+    <div class="visit-item">
+
+
+        <div class="visit-label">
+
+            📅 Visit Date & Time
+
+        </div>
+
+
+        <div class="visit-value">
+
+            <%= v.scheduledVisitDate
+
+                ? new Date(
+                    v.scheduledVisitDate
+                  ).toLocaleString(
+                    'en-IN'
+                  )
+
+                : 'Not scheduled'
+            %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- EXECUTIVE -->
+
+
+    <div class="visit-item">
+
+
+        <div class="visit-label">
+
+            👤 Executive
+
+        </div>
+
+
+        <div class="visit-value">
+
+            <%= v.executiveName ||
+                '-'
+            %>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- VISIT TYPE -->
+
+
+<div class="visit-type-box">
+
+
+    <div class="visit-type-label">
+
+        🚗 Visit Type
+
+    </div>
+
+
+    <div class="visit-type-value">
+
+        <%= v.visitType ||
+            'Not specified'
+        %>
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 <% }) %>
 
-</table>
+
+</div>
+
+
+<% } else { %>
+
+
+
+<!-- ================================
+     NO VISITS
+================================ -->
+
+
+<div class="empty-state">
+
+
+    <div class="empty-icon">
+
+        🏢
+
+    </div>
+
+
+    <div class="empty-title">
+
+        No Site Visits Today
+
+    </div>
+
+
+    <div class="empty-text">
+
+        You have no site visits
+        scheduled for today.
+
+    </div>
+
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
 
 </body>
+
 </html>

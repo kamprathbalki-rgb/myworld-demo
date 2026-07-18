@@ -1,200 +1,1252 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <title>Edit Buyer Requirement</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<style>
+
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.home-btn{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+    width:30px;
+    text-align:right;
+}
+
+
+/* ================================
+   BUYER IDENTITY
+================================ */
+
+.buyer-card{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+.buyer-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.buyer-item{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:11px;
+}
+
+.buyer-label{
+    font-size:11px;
+    color:#777;
+    margin-bottom:5px;
+}
+
+.buyer-value{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.section-title{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:14px;
+}
+
+
+/* ================================
+   FORM FIELDS
+================================ */
+
+.form-field{
+    margin-bottom:14px;
+}
+
+.form-field:last-child{
+    margin-bottom:0;
+}
+
+.form-field label{
+    display:block;
+
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+
+    margin-bottom:6px;
+}
+
+.form-field input,
+.form-field select{
+    width:100%;
+
+    padding:11px;
+
+    border:1px solid #ddd;
+    border-radius:8px;
+
+    background:white;
+
+    font-size:15px;
+}
+
+.form-field input:focus,
+.form-field select:focus{
+    outline:none;
+    border-color:#1f4e79;
+}
+
+
+/* ================================
+   TWO COLUMN FIELDS
+================================ */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+
+/* ================================
+   POSSESSION OPTIONS
+================================ */
+
+.possession-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.option-card{
+    position:relative;
+}
+
+.option-card input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.option-card label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    min-height:48px;
+
+    padding:9px;
+
+    border:1px solid #ddd;
+    border-radius:9px;
+
+    background:#f5f7fa;
+
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+
+    text-align:center;
+
+    cursor:pointer;
+}
+
+.option-card input:checked + label{
+    background:#e3f2fd;
+    border-color:#1f4e79;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   LOCATION SEARCH
+================================ */
+
+.location-search{
+    margin-bottom:10px;
+}
+
+.location-search input{
+    width:100%;
+
+    padding:11px;
+
+    border:1px solid #ddd;
+    border-radius:8px;
+
+    font-size:14px;
+}
+
+
+/* ================================
+   LOCATION OPTIONS
+================================ */
+
+.location-list{
+    max-height:320px;
+    overflow-y:auto;
+
+    border:1px solid #ddd;
+    border-radius:10px;
+
+    background:white;
+}
+
+.location-option{
+    position:relative;
+
+    border-bottom:1px solid #eee;
+}
+
+.location-option:last-child{
+    border-bottom:none;
+}
+
+.location-option input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.location-option label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px;
+
+    cursor:pointer;
+}
+
+.location-check{
+    width:22px;
+    height:22px;
+
+    flex-shrink:0;
+
+    border:2px solid #bbb;
+    border-radius:6px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:13px;
+}
+
+.location-name{
+    font-size:14px;
+    font-weight:bold;
+    color:#333;
+}
+
+.location-details{
+    margin-top:3px;
+
+    font-size:11px;
+    color:#777;
+}
+
+.location-option input:checked + label{
+    background:#e3f2fd;
+}
+
+.location-option input:checked + label .location-check{
+    background:#1f4e79;
+    border-color:#1f4e79;
+    color:white;
+}
+
+.location-option input:checked + label .location-check::after{
+    content:'✓';
+}
+
+
+/* ================================
+   SELECTED LOCATION COUNT
+================================ */
+
+.location-summary{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:10px;
+
+    font-size:12px;
+    color:#666;
+}
+
+.selected-count{
+    background:#1f4e79;
+    color:white;
+
+    padding:4px 9px;
+    border-radius:12px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   SAVE BUTTON
+================================ */
+
+.save-btn{
+    width:100%;
+
+    border:none;
+    border-radius:10px;
+
+    padding:14px;
+
+    background:#1f4e79;
+    color:white;
+
+    font-size:16px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .form-section{
+        padding:14px;
+    }
+
+}
+
+
+@media(max-width:360px){
+
+    .buyer-row,
+    .form-grid,
+    .possession-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
 
-<a href="/executive/dashboard">Home</a> |
+<div class="container">
 
-<a href="/executive/logout">Logout</a>
 
-<hr>
+<!-- ================================
+     HEADER
+================================ -->
 
-<h1>Edit Buyer Requirement</h1>
 
-<form method="POST" action="/executive/buyer/update/<%= buyer._id %>">
+<div class="page-header">
 
-<label>Name</label>
+
+    <a
+        href="javascript:history.back()"
+        class="back-btn"
+    >
+        ←
+    </a>
+
+
+    <h2>
+        ✏️ Edit Requirement
+    </h2>
+
+
+    <a
+        href="/executive/dashboard"
+        class="home-btn"
+    >
+        🏠
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================
+     BUYER IDENTITY
+================================ -->
+
+
+<div class="buyer-card">
+
+
+    <div class="buyer-row">
+
+
+        <div class="buyer-item">
+
+
+            <div class="buyer-label">
+
+                👤 Buyer
+
+            </div>
+
+
+            <div class="buyer-value">
+
+                <%= buyer.name
+                    ? buyer.name.substring(0,1) +
+                      '*****'
+                    : ''
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="buyer-item">
+
+
+            <div class="buyer-label">
+
+                📱 Phone
+
+            </div>
+
+
+            <div class="buyer-value">
+
+                <%= buyer.phone
+                    ? buyer.phone.slice(0,2) +
+                      'XXXX' +
+                      buyer.phone.slice(-4)
+                    : ''
+                %>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     UPDATE FORM
+================================ -->
+
+
+<form
+    method="POST"
+    action="/executive/buyer/update/<%= buyer._id %>"
+>
+
+
+<!-- ================================
+     HIDDEN / READONLY IDENTITY
+================================ -->
+
+
 <input
-type="text"
-name="name"
-value="<%= buyer.name ? buyer.name.substring(0,1) + '*****' : '' %>"
-readonly
+    type="hidden"
+    name="name"
+    value="<%= buyer.name
+        ? buyer.name.substring(0,1) +
+          '*****'
+        : ''
+    %>"
 >
-<br><br>
 
-<label>Phone</label>
-<input
-type="text"
-name="phone"
-value="<%= buyer.phone ? buyer.phone.slice(0,2) + 'XXXX' + buyer.phone.slice(-4) : '' %>"
-readonly
->
-<br><br>
-
-<label>Minimum Budget</label>
-<input
-type="number"
-name="minBudget"
-value="<%= buyer.minBudget || '' %>"
-required
->
-<br><br>
-
-<label>Maximum Budget</label>
-<input
-type="number"
-name="maxBudget"
-value="<%= buyer.maxBudget || '' %>"
-required
->
-<br><br>
-
-<label>Required Possession</label><br>
 
 <input
-type="checkbox"
-name="requiredPossession"
-value="Immediate"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Immediate') ? 'checked' : '' %>
->
-Immediate
-
-<input
-type="checkbox"
-name="requiredPossession"
-value="Ready Possession"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Ready Possession') ? 'checked' : '' %>
->
-Ready Possession
-
-<input
-type="checkbox"
-name="requiredPossession"
-value="Under Construction"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Under Construction') ? 'checked' : '' %>
->
-Under Construction
-
-<input
-type="checkbox"
-name="requiredPossession"
-value="Possession Soon"
-<%= buyer.requiredPossession && buyer.requiredPossession.includes('Possession Soon') ? 'checked' : '' %>
->
-Possession Soon
-
-<br><br>
-
-<label>Required Flat Type</label>
-
-<select name="requiredFlatType" required>
-
-<option value="">Select</option>
-
-<%
-const flatTypes = [
-'Studio',
-'1 RK',
-'1 BHK',
-'1.5 BHK',
-'2 BHK',
-'2.5 BHK',
-'3 BHK',
-'3.5 BHK',
-'4 BHK',
-'4.5 BHK',
-'5 BHK',
-'5+ BHK',
-'Villa',
-'Plot',
-'Office',
-'Showroom',
-'Retail',
-'Shop'
-]
-%>
-
-<% flatTypes.forEach(function(type){ %>
-
-<option
-value="<%= type %>"
-<%= buyer.requiredFlatType === type ? 'selected' : '' %>
->
-<%= type %>
-</option>
-
-<% }) %>
-
-</select>
-
-<br><br>
-
-<label>Minimum Area</label>
-<input
-type="number"
-name="minArea"
-value="<%= buyer.minArea || '' %>"
-required
->
-<br><br>
-
-<label>Maximum Area</label>
-<input
-type="number"
-name="maxArea"
-value="<%= buyer.maxArea || '' %>"
-required
->
-<br><br>
-
-<label>Preferred Locations</label>
-<br><br>
-
-<select
-name="preferredLocations[]"
-multiple
-size="15"
-required
+    type="hidden"
+    name="phone"
+    value="<%= buyer.phone
+        ? buyer.phone.slice(0,2) +
+          'XXXX' +
+          buyer.phone.slice(-4)
+        : ''
+    %>"
 >
 
-<% locations.forEach(function(location){ %>
 
-<option
-value="<%= location.officeName %>"
-<%= buyer.preferredLocations &&
-buyer.preferredLocations.includes(location.officeName)
-? 'selected'
-: '' %>
+
+<!-- ================================
+     BUDGET
+================================ -->
+
+
+<div class="form-section">
+
+
+    <div class="section-title">
+
+        💰 Budget Requirement
+
+    </div>
+
+
+    <div class="form-grid">
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                Minimum Budget
+
+            </label>
+
+
+            <input
+                type="number"
+                name="minBudget"
+                value="<%= buyer.minBudget || '' %>"
+                placeholder="Minimum"
+                required
+            >
+
+
+        </div>
+
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                Maximum Budget
+
+            </label>
+
+
+            <input
+                type="number"
+                name="maxBudget"
+                value="<%= buyer.maxBudget || '' %>"
+                placeholder="Maximum"
+                required
+            >
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     POSSESSION
+================================ -->
+
+
+<div class="form-section">
+
+
+    <div class="section-title">
+
+        🔑 Required Possession
+
+    </div>
+
+
+    <div class="possession-grid">
+
+
+
+        <div class="option-card">
+
+
+            <input
+                type="checkbox"
+                id="possessionImmediate"
+                name="requiredPossession"
+                value="Immediate"
+                <%= buyer.requiredPossession &&
+                    buyer.requiredPossession.includes(
+                        'Immediate'
+                    )
+                    ? 'checked'
+                    : ''
+                %>
+            >
+
+
+            <label for="possessionImmediate">
+
+                ⚡ Immediate
+
+            </label>
+
+
+        </div>
+
+
+
+        <div class="option-card">
+
+
+            <input
+                type="checkbox"
+                id="possessionReady"
+                name="requiredPossession"
+                value="Ready Possession"
+                <%= buyer.requiredPossession &&
+                    buyer.requiredPossession.includes(
+                        'Ready Possession'
+                    )
+                    ? 'checked'
+                    : ''
+                %>
+            >
+
+
+            <label for="possessionReady">
+
+                🔑 Ready Possession
+
+            </label>
+
+
+        </div>
+
+
+
+        <div class="option-card">
+
+
+            <input
+                type="checkbox"
+                id="possessionConstruction"
+                name="requiredPossession"
+                value="Under Construction"
+                <%= buyer.requiredPossession &&
+                    buyer.requiredPossession.includes(
+                        'Under Construction'
+                    )
+                    ? 'checked'
+                    : ''
+                %>
+            >
+
+
+            <label for="possessionConstruction">
+
+                🏗️ Under Construction
+
+            </label>
+
+
+        </div>
+
+
+
+        <div class="option-card">
+
+
+            <input
+                type="checkbox"
+                id="possessionSoon"
+                name="requiredPossession"
+                value="Possession Soon"
+                <%= buyer.requiredPossession &&
+                    buyer.requiredPossession.includes(
+                        'Possession Soon'
+                    )
+                    ? 'checked'
+                    : ''
+                %>
+            >
+
+
+            <label for="possessionSoon">
+
+                🗓️ Possession Soon
+
+            </label>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROPERTY REQUIREMENT
+================================ -->
+
+
+<div class="form-section">
+
+
+    <div class="section-title">
+
+        🏠 Property Requirement
+
+    </div>
+
+
+
+    <div class="form-field">
+
+
+        <label>
+
+            Required Flat Type
+
+        </label>
+
+
+        <select
+            name="requiredFlatType"
+            required
+        >
+
+
+            <option value="">
+
+                Select Property Type
+
+            </option>
+
+
+            <%
+
+            const flatTypes = [
+
+                'Studio',
+                '1 RK',
+                '1 BHK',
+                '1.5 BHK',
+                '2 BHK',
+                '2.5 BHK',
+                '3 BHK',
+                '3.5 BHK',
+                '4 BHK',
+                '4.5 BHK',
+                '5 BHK',
+                '5+ BHK',
+                'Villa',
+                'Plot',
+                'Office',
+                'Showroom',
+                'Retail',
+                'Shop'
+
+            ]
+
+            %>
+
+
+            <% flatTypes.forEach(function(type){ %>
+
+
+            <option
+                value="<%= type %>"
+                <%= buyer.requiredFlatType === type
+                    ? 'selected'
+                    : ''
+                %>
+            >
+
+                <%= type %>
+
+            </option>
+
+
+            <% }) %>
+
+
+        </select>
+
+
+    </div>
+
+
+
+    <div class="form-grid">
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                📐 Minimum Area
+
+            </label>
+
+
+            <input
+                type="number"
+                name="minArea"
+                value="<%= buyer.minArea || '' %>"
+                placeholder="Minimum"
+                required
+            >
+
+
+        </div>
+
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                📐 Maximum Area
+
+            </label>
+
+
+            <input
+                type="number"
+                name="maxArea"
+                value="<%= buyer.maxArea || '' %>"
+                placeholder="Maximum"
+                required
+            >
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PREFERRED LOCATIONS
+================================ -->
+
+
+<div class="form-section">
+
+
+    <div class="section-title">
+
+        📍 Preferred Locations
+
+    </div>
+
+
+
+    <div class="location-summary">
+
+
+        <span>
+
+            Select one or more locations
+
+        </span>
+
+
+        <span
+            class="selected-count"
+            id="selectedLocationCount"
+        >
+
+            0 Selected
+
+        </span>
+
+
+    </div>
+
+
+
+    <!-- SEARCH -->
+
+
+    <div class="location-search">
+
+
+        <input
+            type="text"
+            id="locationSearch"
+            placeholder="🔍 Search locations..."
+        >
+
+
+    </div>
+
+
+
+    <!-- LOCATION LIST -->
+
+
+    <div
+        class="location-list"
+        id="locationList"
+    >
+
+
+        <% locations.forEach(function(location, index){ %>
+
+
+        <div
+            class="location-option"
+            data-search="<%= (
+                location.officeName +
+                ' ' +
+                location.divisionName +
+                ' ' +
+                location.district
+            ).toLowerCase() %>"
+        >
+
+
+            <input
+                type="checkbox"
+                id="location_<%= index %>"
+                name="preferredLocations[]"
+                value="<%= location.officeName %>"
+                <%= buyer.preferredLocations &&
+                    buyer.preferredLocations.includes(
+                        location.officeName
+                    )
+                    ? 'checked'
+                    : ''
+                %>
+            >
+
+
+            <label
+                for="location_<%= index %>"
+            >
+
+
+                <span class="location-check">
+
+                </span>
+
+
+                <span>
+
+
+                    <span class="location-name">
+
+                        <%= location.officeName %>
+
+                    </span>
+
+
+                    <span class="location-details">
+
+                        <%= location.divisionName %>,
+                        <%= location.district %>
+
+                    </span>
+
+
+                </span>
+
+
+            </label>
+
+
+        </div>
+
+
+        <% }) %>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     SAVE
+================================ -->
+
+
+<button
+    type="submit"
+    class="save-btn"
 >
-<%= location.officeName %>
-(
-<%= location.divisionName %>,
-<%= location.district %>
-)
-</option>
 
-<% }) %>
+    💾 Update Buyer Requirement
 
-</select>
-
-<br><br>
-
-<button type="submit">
-Update Buyer Requirement
 </button>
+
 
 </form>
 
-<br><br>
 
-<a href="/executive/dashboard">
-Back to Dashboard
-</a>
+</div>
+
+
+
+<!-- ================================
+     LOCATION UI JAVASCRIPT
+================================ -->
+
+
+<script>
+
+
+/* ================================
+   LOCATION SEARCH
+================================ */
+
+
+const locationSearch =
+document.getElementById(
+    'locationSearch'
+)
+
+
+const locationOptions =
+document.querySelectorAll(
+    '.location-option'
+)
+
+
+locationSearch.addEventListener(
+    'input',
+    function(){
+
+
+        const searchValue =
+
+        this.value
+        .toLowerCase()
+        .trim()
+
+
+        locationOptions.forEach(
+            function(option){
+
+
+                const searchText =
+
+                option.dataset.search
+
+
+                if(
+                    searchText.includes(
+                        searchValue
+                    )
+                ){
+
+                    option.style.display =
+                    'block'
+
+                }
+
+                else{
+
+                    option.style.display =
+                    'none'
+
+                }
+
+
+            }
+        )
+
+
+    }
+)
+
+
+
+/* ================================
+   SELECTED LOCATION COUNT
+================================ */
+
+
+const locationCheckboxes =
+
+document.querySelectorAll(
+    'input[name="preferredLocations[]"]'
+)
+
+
+const selectedLocationCount =
+
+document.getElementById(
+    'selectedLocationCount'
+)
+
+
+
+function updateLocationCount(){
+
+
+    const selected =
+
+    document.querySelectorAll(
+        'input[name="preferredLocations[]"]:checked'
+    ).length
+
+
+    selectedLocationCount.innerText =
+
+    selected +
+    (
+        selected === 1
+        ? ' Selected'
+        : ' Selected'
+    )
+
+
+}
+
+
+
+locationCheckboxes.forEach(
+    function(checkbox){
+
+
+        checkbox.addEventListener(
+            'change',
+            updateLocationCount
+        )
+
+
+    }
+)
+
+
+
+/* Initial count */
+
+updateLocationCount()
+
+
+</script>
+
 
 </body>
+
 </html>

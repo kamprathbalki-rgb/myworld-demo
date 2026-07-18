@@ -2,85 +2,678 @@
 <html>
 
 <head>
+
 <title>Lost Leads</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
-table{
-width:100%;
-border-collapse:collapse;
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
 }
 
-th,td{
-border:1px solid #ccc;
-padding:10px;
-text-align:left;
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
 }
 
-th{
-background:#f5f5f5;
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.header-spacer{
+    width:30px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.lost-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#c62828;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.summary-count{
+    background:#c62828;
+    color:white;
+
+    min-width:40px;
+    height:32px;
+
+    padding:0 12px;
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   LOST LEAD LIST
+================================ */
+
+.lost-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ================================
+   LOST LEAD CARD
+================================ */
+
+.lost-card{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+
+    border-left:5px solid #c62828;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+
+/* ================================
+   BUYER
+================================ */
+
+.buyer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding-bottom:12px;
+    margin-bottom:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+.buyer-name{
+    font-size:18px;
+    font-weight:bold;
+    color:#222;
+}
+
+.buyer-phone{
+    margin-top:6px;
+    font-size:14px;
+    color:#555;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.status-badge{
+    background:#ffebee;
+    color:#c62828;
+
+    padding:7px 10px;
+    border-radius:16px;
+
+    font-size:12px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+
+/* ================================
+   LOST VALUE
+================================ */
+
+.lost-value-box{
+    background:#fff5f5;
+
+    border-radius:10px;
+    padding:12px;
+
+    margin-bottom:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.lost-value-label{
+    font-size:13px;
+    color:#c62828;
+    font-weight:bold;
+}
+
+.lost-value{
+    font-size:17px;
+    font-weight:bold;
+    color:#c62828;
+}
+
+
+/* ================================
+   PROPERTY DETAILS
+================================ */
+
+.lost-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.detail-item{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px;
+}
+
+.detail-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.detail-value{
+    font-size:14px;
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+
+/* ================================
+   LOCATION
+================================ */
+
+.location-box{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px 12px;
+}
+
+.location-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.location-value{
+    font-size:13px;
+    line-height:1.5;
+
+    color:#333;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:17px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    font-size:13px;
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .lost-card{
+        padding:14px;
+    }
+
+    .buyer-name{
+        font-size:17px;
+    }
+
+    .lost-value{
+        font-size:16px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="/executive/dashboard">Dashboard</a>
 
-<hr>
+<div class="container">
 
-<h1>Lost Leads</h1>
 
-<table>
+<!-- ================================
+     HEADER
+================================ -->
 
-<tr>
-<th>Buyer</th>
-<th>Phone</th>
-<th>Budget</th>
-<th>Property Type</th>
-<th>Preferred Location</th>
-<th>Status</th>
-</tr>
+
+<div class="page-header">
+
+    <a
+        href="/executive/dashboard"
+        class="back-btn"
+    >
+        ←
+    </a>
+
+
+    <h2>
+        ❌ Lost Leads
+    </h2>
+
+
+    <div class="header-spacer"></div>
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+
+<div class="lost-summary">
+
+
+    <div class="summary-title">
+
+        ❌ Lost Leads
+
+    </div>
+
+
+    <div class="summary-count">
+
+        <%= buyers ? buyers.length : 0 %>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     LOST LEAD CARDS
+================================ -->
+
+
+<% if (buyers && buyers.length > 0) { %>
+
+
+<div class="lost-list">
+
 
 <% buyers.forEach(function(b){ %>
 
-<tr>
 
-<td>
-<%= b.name || '' %>
-</td>
+<div class="lost-card">
 
-<td>
-<%= b.phone
-? b.phone.slice(0,2) + 'XXXX' + b.phone.slice(-4)
-: '' %>
-</td>
 
-<td>
-<%= b.minBudget || '' %> - <%= b.maxBudget || '' %>
-</td>
+    <!-- ============================
+         BUYER + STATUS
+    ============================= -->
 
-<td>
-<%= b.requiredFlatType || '' %>
-</td>
 
-<td>
-<%= b.preferredLocations && b.preferredLocations.length
-? b.preferredLocations.join(', ')
-: '' %>
-</td>
+    <div class="buyer-row">
 
-<td>
-<%= b.status || '' %>
-</td>
 
-</tr>
+        <div>
+
+
+            <div class="buyer-name">
+
+                👤
+                <%= b.name || 'Buyer' %>
+
+            </div>
+
+
+            <div class="buyer-phone">
+
+                📱
+
+                <%= b.phone
+                    ? b.phone.slice(0,2) +
+                      'XXXX' +
+                      b.phone.slice(-4)
+                    : ''
+                %>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="status-badge">
+
+            ❌ Lost
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         LOST VALUE
+    ============================= -->
+
+
+    <div class="lost-value-box">
+
+
+        <div class="lost-value-label">
+
+            💸 Lost Value
+
+        </div>
+
+
+        <div class="lost-value">
+
+
+            <% if (b.dealValue) { %>
+
+
+                ₹ <%= Number(
+                    b.dealValue
+                ).toLocaleString(
+                    'en-IN'
+                ) %>
+
+
+            <% } else { %>
+
+
+                Not Recorded
+
+
+            <% } %>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         PROPERTY + BUDGET
+    ============================= -->
+
+
+    <div class="lost-details">
+
+
+        <div class="detail-item">
+
+
+            <div class="detail-label">
+
+                🏠 Property Type
+
+            </div>
+
+
+            <div class="detail-value">
+
+                <%= b.requiredFlatType ||
+                    'Not specified'
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="detail-item">
+
+
+            <div class="detail-label">
+
+                💵 Budget
+
+            </div>
+
+
+            <div class="detail-value">
+
+
+                <% if (
+                    b.minBudget ||
+                    b.maxBudget
+                ) { %>
+
+
+                    <%= b.minBudget || '0' %>
+                    -
+                    <%= b.maxBudget || '0' %>
+
+
+                <% } else { %>
+
+
+                    Not specified
+
+
+                <% } %>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         PREFERRED LOCATION
+    ============================= -->
+
+
+    <div class="location-box">
+
+
+        <div class="location-label">
+
+            📍 Preferred Location
+
+        </div>
+
+
+        <div class="location-value">
+
+
+            <%= b.preferredLocations &&
+                b.preferredLocations.length
+
+                ? b.preferredLocations.join(
+                    ', '
+                  )
+
+                : 'Not specified'
+            %>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
 
 <% }) %>
 
-</table>
+
+</div>
+
+
+<% } else { %>
+
+
+
+<!-- ================================
+     NO LOST LEADS
+================================ -->
+
+
+<div class="empty-state">
+
+
+    <div class="empty-icon">
+
+        👍
+
+    </div>
+
+
+    <div class="empty-title">
+
+        No Lost Leads
+
+    </div>
+
+
+    <div class="empty-text">
+
+        There are currently no lost leads.
+
+    </div>
+
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
 
 </body>
 

@@ -1,352 +1,1782 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
 
-<style>
-body {
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-</style>
-
 <title>Property Matches</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<style>
+
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
+
+    user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.home-btn{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+    width:30px;
+    text-align:right;
+}
+
+
+/* ================================
+   BUYER SUMMARY
+================================ */
+
+.buyer-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+.buyer-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:14px;
+}
+
+.buyer-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.buyer-item{
+    background:#f5f7fa;
+    border-radius:9px;
+    padding:10px;
+}
+
+.buyer-label{
+    font-size:11px;
+    color:#777;
+    margin-bottom:5px;
+}
+
+.buyer-value{
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+    line-height:1.4;
+}
+
+.buyer-location{
+    grid-column:1 / -1;
+}
+
+
+/* ================================
+   MATCH SUMMARY
+================================ */
+
+.match-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:13px 15px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.match-summary-title{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.match-count{
+    background:#1f4e79;
+    color:white;
+
+    min-width:40px;
+    height:32px;
+    padding:0 12px;
+
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MATCH LIST
+================================ */
+
+.match-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+
+/* ================================
+   PROPERTY CARD
+================================ */
+
+.property-card{
+    background:white;
+
+    border-radius:12px;
+    overflow:hidden;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.10);
+}
+
+.property-header{
+    padding:15px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+
+    border-bottom:1px solid #eee;
+}
+
+.project-name{
+    font-size:17px;
+    font-weight:bold;
+    color:#1f4e79;
+    line-height:1.3;
+}
+
+.builder-name{
+    margin-top:5px;
+    font-size:13px;
+    color:#666;
+}
+
+.property-location{
+    margin-top:7px;
+    font-size:13px;
+    color:#444;
+}
+
+
+/* ================================
+   MATCH GRADE
+================================ */
+
+.grade-badge{
+    padding:7px 9px;
+    border-radius:16px;
+
+    font-size:11px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.grade-excellent{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.grade-strong{
+    background:#e3f2fd;
+    color:#1565c0;
+}
+
+.grade-moderate{
+    background:#fff8e1;
+    color:#ef6c00;
+}
+
+.grade-weak{
+    background:#ffebee;
+    color:#c62828;
+}
+
+
+/* ================================
+   PROPERTY DETAILS
+================================ */
+
+.property-body{
+    padding:15px;
+}
+
+.property-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+
+    margin-bottom:15px;
+}
+
+.property-item{
+    background:#f5f7fa;
+    border-radius:9px;
+    padding:10px;
+}
+
+.property-label{
+    font-size:11px;
+    color:#777;
+    margin-bottom:5px;
+}
+
+.property-value{
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   MATCH SCORE
+================================ */
+
+.score-box{
+    background:#f5f7fa;
+
+    border-radius:10px;
+    padding:12px;
+
+    margin-bottom:15px;
+}
+
+.score-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:8px;
+}
+
+.score-label{
+    font-size:13px;
+    font-weight:bold;
+    color:#555;
+}
+
+.score-percentage{
+    font-size:18px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.score-bar{
+    height:8px;
+    background:#ddd;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.score-fill{
+    height:100%;
+    background:#1f4e79;
+    border-radius:8px;
+}
+
+.raw-score{
+    margin-top:7px;
+    font-size:11px;
+    color:#777;
+    text-align:right;
+}
+
+
+/* ================================
+   EXISTING VISIT
+================================ */
+
+.visit-info{
+    background:#eef4fa;
+
+    border-radius:10px;
+    padding:12px;
+
+    margin-bottom:15px;
+}
+
+.visit-info-title{
+    font-size:13px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:9px;
+}
+
+.visit-info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.visit-info-item{
+    font-size:12px;
+    line-height:1.5;
+}
+
+.visit-info-label{
+    color:#777;
+    display:block;
+}
+
+.visit-info-value{
+    font-weight:bold;
+    color:#333;
+}
+
+
+/* ================================
+   VISIT FORM
+================================ */
+
+.visit-form{
+    border-top:1px solid #eee;
+    padding-top:15px;
+}
+
+.form-title{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:12px;
+}
+
+.form-field{
+    margin-bottom:12px;
+}
+
+.form-field label{
+    display:block;
+
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+
+    margin-bottom:6px;
+}
+
+.form-field select,
+.form-field input{
+    width:100%;
+
+    padding:11px;
+
+    border:1px solid #ddd;
+    border-radius:8px;
+
+    background:white;
+
+    font-size:14px;
+}
+
+.save-btn{
+    width:100%;
+
+    border:none;
+    border-radius:9px;
+
+    padding:13px;
+
+    background:#1f4e79;
+    color:white;
+
+    font-size:15px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:17px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    font-size:13px;
+    color:#777;
+}
+
+
+/* ================================
+   MATCH SCORE LOGIC
+================================ */
+
+.score-logic{
+    margin-top:20px;
+
+    background:white;
+    border-radius:12px;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+
+    overflow:hidden;
+}
+
+.score-logic summary{
+    padding:15px;
+
+    font-size:14px;
+    font-weight:bold;
+    color:#1f4e79;
+
+    cursor:pointer;
+    list-style:none;
+}
+
+.score-logic summary::-webkit-details-marker{
+    display:none;
+}
+
+.score-logic-content{
+    padding:0 15px 15px;
+}
+
+.logic-title{
+    font-size:12px;
+    color:#777;
+
+    margin:10px 0;
+}
+
+.logic-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.logic-item{
+    background:#f5f7fa;
+
+    border-radius:8px;
+    padding:9px;
+
+    display:flex;
+    justify-content:space-between;
+
+    font-size:12px;
+}
+
+.logic-item strong{
+    color:#1f4e79;
+}
+
+.grade-list{
+    margin-top:12px;
+}
+
+.grade-row{
+    display:flex;
+    justify-content:space-between;
+
+    padding:9px 0;
+
+    border-bottom:1px solid #eee;
+
+    font-size:12px;
+}
+
+.grade-row:last-child{
+    border-bottom:none;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .property-header{
+        padding:13px;
+    }
+
+    .property-body{
+        padding:13px;
+    }
+
+    .project-name{
+        font-size:16px;
+    }
+
+}
+
+
+/* Very small mobile screens */
+
+@media(max-width:360px){
+
+    .buyer-grid,
+    .property-grid,
+    .visit-info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .buyer-location{
+        grid-column:auto;
+    }
+
+}
+
+</style>
 
 </head>
 
+
 <body>
 
-<a href="javascript:history.back()">Back</a> |
-<a href="/executive/dashboard">Home</a> |
-<a href="/executive/logout">Logout</a>
-<hr>
 
-<h1>Top Property Matches</h1>
+<div class="container">
 
-<table border="1" cellpadding="5" cellspacing="0">
 
-<tr>
-<td><b>Buyer</b></td>
-<td><%= buyer.name %></td>
+<!-- ================================
+     HEADER
+================================ -->
 
-<td><b>Budget</b></td>
-<td>
-<%= buyer.minBudget %> -
-<%= buyer.maxBudget %>
-</td>
 
-<td><b>Flat Type</b></td>
-<td><%= buyer.requiredFlatType %></td>
+<div class="page-header">
 
-<td><b>Area</b></td>
-<td>
-<%= buyer.minArea %> -
-<%= buyer.maxArea %>
-</td>
-</tr>
+    <a
+        href="javascript:history.back()"
+        class="back-btn"
+    >
+        ←
+    </a>
 
-<tr>
-<td><b>Location</b></td>
-<td><%= buyer.primaryLocation || '' %></td>
 
-<td><b>Possession</b></td>
-<td colspan="5">
-<%= buyer.requiredPossession ? buyer.requiredPossession.join(', ') : '' %>
-</td>
-</tr>
+    <h2>
+        🏠 Property Matches
+    </h2>
 
-</table>
 
-<br><br>
-<br><br>
+    <a
+        href="/executive/dashboard"
+        class="home-btn"
+    >
+        🏠
+    </a>
+
+</div>
 
 
 
-<table border="1" cellpadding="10" cellspacing="0">
+<!-- ================================
+     BUYER REQUIREMENT SUMMARY
+================================ -->
 
-<tr>
-<th>Project Name</th>
-<th>Builder Name</th>
-<th>Property Location</th>
-<th>Matched Flat Type</th>
-<th>Carpet Area</th>
-<th>Quoted Price</th>
-<th>Closing Price</th>
-<th>Score</th>
-<th>Percentage</th>
-<th>Grade</th>
-<th>Current Visit Status</th>
-<th>Scheduled Visit</th>
-<th>Updated By</th>
-<th>Last Updated</th>
-<th>Project Visit Tracking</th>
-</tr>
+
+<div class="buyer-summary">
+
+
+    <div class="buyer-title">
+
+        👤 <%= buyer.name || 'Buyer' %>
+
+    </div>
+
+
+    <div class="buyer-grid">
+
+
+        <div class="buyer-item">
+
+            <div class="buyer-label">
+                💰 Budget
+            </div>
+
+            <div class="buyer-value">
+
+                <%= buyer.minBudget || '-' %>
+                -
+                <%= buyer.maxBudget || '-' %>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="buyer-item">
+
+            <div class="buyer-label">
+                🏠 Flat Type
+            </div>
+
+            <div class="buyer-value">
+
+                <%= buyer.requiredFlatType || '-' %>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="buyer-item">
+
+            <div class="buyer-label">
+                📐 Area
+            </div>
+
+            <div class="buyer-value">
+
+                <%= buyer.minArea || '-' %>
+                -
+                <%= buyer.maxArea || '-' %>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="buyer-item">
+
+            <div class="buyer-label">
+                🔑 Possession
+            </div>
+
+            <div class="buyer-value">
+
+                <%= buyer.requiredPossession &&
+                    buyer.requiredPossession.length
+
+                    ? buyer.requiredPossession.join(', ')
+
+                    : '-'
+                %>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="buyer-item buyer-location">
+
+            <div class="buyer-label">
+                📍 Location
+            </div>
+
+            <div class="buyer-value">
+
+                <%= buyer.primaryLocation || '-' %>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     MATCH COUNT
+================================ -->
+
+
+<div class="match-summary">
+
+
+    <div class="match-summary-title">
+
+        🏆 Top Property Matches
+
+    </div>
+
+
+    <div class="match-count">
+
+        <%= matches ? matches.length : 0 %>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROPERTY MATCH CARDS
+================================ -->
+
+
+<% if (matches && matches.length > 0) { %>
+
+
+<div class="match-list">
+
 
 <% matches.forEach(function(m){ %>
 
-<%
-const maxScore = 140;
-
-const percentage = Math.round((m.score / maxScore) * 100);
-
-let grade = 'Weak Match';
-
-if (m.score >= 100) {
-    grade = 'Excellent Match';
-}
-else if (m.score >= 70) {
-    grade = 'Strong Match';
-}
-else if (m.score >= 40) {
-    grade = 'Moderate Match';
-}
-%>
-
-<tr>
-
 
 <%
-const existingVisit = visits.find(v =>
-    String(v.propertyId) === String(m.property._id)
+
+const maxScore = 140
+
+const percentage =
+Math.round(
+    (m.score / maxScore) * 100
 )
+
+
+let grade = 'Weak Match'
+
+let gradeClass = 'grade-weak'
+
+
+if(m.score >= 100){
+
+    grade = 'Excellent Match'
+
+    gradeClass =
+    'grade-excellent'
+
+}
+
+else if(m.score >= 70){
+
+    grade = 'Strong Match'
+
+    gradeClass =
+    'grade-strong'
+
+}
+
+else if(m.score >= 40){
+
+    grade = 'Moderate Match'
+
+    gradeClass =
+    'grade-moderate'
+
+}
+
+
+const existingVisit =
+visits.find(v =>
+
+    String(v.propertyId) ===
+    String(m.property._id)
+
+)
+
+
+const flatType =
+
+m.property.propertyMode === 'SINGLE'
+
+? m.property.singleFlatType
+
+: (
+    m.matchedConfig
+    ? m.matchedConfig.flatType
+    : ''
+)
+
+
+const carpetArea =
+
+m.property.propertyMode === 'SINGLE'
+
+? m.property.singleCarpetArea
+
+: (
+    m.matchedConfig
+    ? m.matchedConfig.carpetArea
+    : ''
+)
+
+
+const quotedPrice =
+
+m.property.propertyMode === 'SINGLE'
+
+? m.property.singleQuotedPrice
+
+: (
+    m.matchedConfig
+    ? m.matchedConfig.quotedPrice
+    : ''
+)
+
+
+const closingPrice =
+
+m.property.propertyMode === 'SINGLE'
+
+? m.property.singleClosingPrice
+
+: (
+    m.matchedConfig
+    ? m.matchedConfig.closingPrice
+    : ''
+)
+
 %>
 
-<td>
-<%= m.property.projectName || '' %>
-</td>
 
-<td>
-<%= m.property.builderName || '' %>
-</td>
 
-<td>
-<%= m.property.propertyLocation || '' %>
-</td>
+<div class="property-card">
 
-<td>
-<%= m.property.propertyMode === 'SINGLE'
-? m.property.singleFlatType
-: (m.matchedConfig ? m.matchedConfig.flatType : '') %>
-</td>
 
-<td>
-<%= m.property.propertyMode === 'SINGLE'
-? m.property.singleCarpetArea
-: (m.matchedConfig ? m.matchedConfig.carpetArea : '') %>
-</td>
+<!-- ============================
+     PROPERTY HEADER
+============================= -->
 
-<td>
-<%= m.property.propertyMode === 'SINGLE'
-? m.property.singleQuotedPrice
-: (m.matchedConfig ? m.matchedConfig.quotedPrice : '') %>
-</td>
 
-<td>
-<%= m.property.propertyMode === 'SINGLE'
-? m.property.singleClosingPrice
-: (m.matchedConfig ? m.matchedConfig.closingPrice : '') %>
-</td>
+<div class="property-header">
 
-<td>
-<%= m.score %> / 140
-</td>
 
-<td>
-<%= percentage %>%
-</td>
+    <div>
 
-<td>
-<%= grade %>
-</td>
 
-<td>
-<%= existingVisit ? existingVisit.visitType : 'No Visit' %>
-</td>
+        <div class="project-name">
 
-<td>
-<%= existingVisit && existingVisit.scheduledVisitDate
-? new Date(existingVisit.scheduledVisitDate).toLocaleString('en-IN')
-: '-' %>
-</td>
+            🏢
+            <%= m.property.projectName || 'Project' %>
 
-<td>
-<%= existingVisit ? existingVisit.executiveName : '-' %>
-</td>
+        </div>
 
-<td>
-<%= existingVisit
-? new Date(existingVisit.updatedAt).toLocaleString('en-IN')
-: '-' %>
-</td>
 
-<td>
+        <div class="builder-name">
 
-<form method="POST"
-action="/executive/project-visit/<%= buyer._id %>/<%= m.property._id %>">
+            <%= m.property.builderName || '' %>
 
-<select name="visitType" required>
+        </div>
 
-<option value="">Select Status</option>
 
-<option
-value="First Visit"
-<%= existingVisit && existingVisit.visitType === 'First Visit' ? 'selected' : '' %>>
-First Visit
-</option>
+        <div class="property-location">
 
-<option
-value="Revisit"
-<%= existingVisit && existingVisit.visitType === 'Revisit' ? 'selected' : '' %>>
-Revisit
-</option>
+            📍
+            <%= m.property.propertyLocation || '' %>
 
-<option
-value="Rejected"
-<%= existingVisit && existingVisit.visitType === 'Rejected' ? 'selected' : '' %>>
-Rejected
-</option>
+        </div>
 
-<option
-value="Shortlisted"
-<%= existingVisit && existingVisit.visitType === 'Shortlisted' ? 'selected' : '' %>>
-Shortlisted
-</option>
 
-<option
-value="Negotiation"
-<%= existingVisit && existingVisit.visitType === 'Negotiation' ? 'selected' : '' %>>
-Negotiation
-</option>
+    </div>
 
-</select>
 
-<br><br>
 
-<label>Schedule Site Visit</label>
+    <div class="
+        grade-badge
+        <%= gradeClass %>
+    ">
 
-<br>
+        <%= grade %>
 
-<input
-type="datetime-local"
-name="scheduledVisitDate"
-value="<%= existingVisit && existingVisit.scheduledVisitDate
-? new Date(existingVisit.scheduledVisitDate).toISOString().slice(0,16)
-: '' %>"
->
+    </div>
 
-<br><br>
 
-<input
-type="text"
-name="remarks"
-placeholder="Remarks"
-value="<%= existingVisit ? existingVisit.remarks : '' %>"
->
+</div>
 
-<br><br>
 
-<button type="submit">
-Save Visit
-</button>
 
-</form>
+<!-- ============================
+     PROPERTY BODY
+============================= -->
 
-</td>
 
-</tr>
+<div class="property-body">
+
+
+<!-- PROPERTY DETAILS -->
+
+
+<div class="property-grid">
+
+
+    <div class="property-item">
+
+        <div class="property-label">
+
+            🏠 Flat Type
+
+        </div>
+
+        <div class="property-value">
+
+            <%= flatType || '-' %>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="property-item">
+
+        <div class="property-label">
+
+            📐 Carpet Area
+
+        </div>
+
+        <div class="property-value">
+
+            <%= carpetArea || '-' %>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="property-item">
+
+        <div class="property-label">
+
+            💰 Quoted Price
+
+        </div>
+
+        <div class="property-value">
+
+            <%= quotedPrice || '-' %>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="property-item">
+
+        <div class="property-label">
+
+            🤝 Closing Price
+
+        </div>
+
+        <div class="property-value">
+
+            <%= closingPrice || '-' %>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ============================
+     MATCH SCORE
+============================= -->
+
+
+<div class="score-box">
+
+
+    <div class="score-top">
+
+
+        <div class="score-label">
+
+            🎯 Match Score
+
+        </div>
+
+
+        <div class="score-percentage">
+
+            <%= percentage %>%
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="score-bar">
+
+
+        <div
+            class="score-fill"
+            style="
+                width:<%= Math.min(
+                    percentage,
+                    100
+                ) %>%;
+            "
+        >
+        </div>
+
+
+    </div>
+
+
+
+    <div class="raw-score">
+
+        Score:
+        <%= m.score %>
+        /
+        140
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ============================
+     EXISTING VISIT INFORMATION
+============================= -->
+
+
+<% if(existingVisit){ %>
+
+
+<div class="visit-info">
+
+
+    <div class="visit-info-title">
+
+        🚗 Current Visit Information
+
+    </div>
+
+
+    <div class="visit-info-grid">
+
+
+        <div class="visit-info-item">
+
+            <span class="visit-info-label">
+
+                Status
+
+            </span>
+
+            <span class="visit-info-value">
+
+                <%= existingVisit.visitType ||
+                    'No Visit'
+                %>
+
+            </span>
+
+        </div>
+
+
+
+        <div class="visit-info-item">
+
+            <span class="visit-info-label">
+
+                Scheduled Visit
+
+            </span>
+
+            <span class="visit-info-value">
+
+                <%= existingVisit.scheduledVisitDate
+
+                    ? new Date(
+                        existingVisit.scheduledVisitDate
+                      ).toLocaleString(
+                        'en-IN'
+                      )
+
+                    : '-'
+                %>
+
+            </span>
+
+        </div>
+
+
+
+        <div class="visit-info-item">
+
+            <span class="visit-info-label">
+
+                Updated By
+
+            </span>
+
+            <span class="visit-info-value">
+
+                <%= existingVisit.executiveName ||
+                    '-'
+                %>
+
+            </span>
+
+        </div>
+
+
+
+        <div class="visit-info-item">
+
+            <span class="visit-info-label">
+
+                Last Updated
+
+            </span>
+
+            <span class="visit-info-value">
+
+                <%= existingVisit.updatedAt
+
+                    ? new Date(
+                        existingVisit.updatedAt
+                      ).toLocaleString(
+                        'en-IN'
+                      )
+
+                    : '-'
+                %>
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<% } %>
+
+
+
+<!-- ============================
+     PROJECT VISIT FORM
+============================= -->
+
+
+<div class="visit-form">
+
+
+    <div class="form-title">
+
+        🚗 Project Visit Tracking
+
+    </div>
+
+
+
+    <form
+        method="POST"
+        action="/executive/project-visit/<%= buyer._id %>/<%= m.property._id %>"
+    >
+
+
+
+        <!-- VISIT TYPE -->
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                📌 Visit Status
+
+            </label>
+
+
+            <select
+                name="visitType"
+                required
+            >
+
+
+                <option value="">
+
+                    Select Status
+
+                </option>
+
+
+                <option
+                    value="First Visit"
+                    <%= existingVisit &&
+                        existingVisit.visitType ===
+                        'First Visit'
+
+                        ? 'selected'
+
+                        : ''
+                    %>
+                >
+
+                    First Visit
+
+                </option>
+
+
+                <option
+                    value="Revisit"
+                    <%= existingVisit &&
+                        existingVisit.visitType ===
+                        'Revisit'
+
+                        ? 'selected'
+
+                        : ''
+                    %>
+                >
+
+                    Revisit
+
+                </option>
+
+
+                <option
+                    value="Rejected"
+                    <%= existingVisit &&
+                        existingVisit.visitType ===
+                        'Rejected'
+
+                        ? 'selected'
+
+                        : ''
+                    %>
+                >
+
+                    Rejected
+
+                </option>
+
+
+                <option
+                    value="Shortlisted"
+                    <%= existingVisit &&
+                        existingVisit.visitType ===
+                        'Shortlisted'
+
+                        ? 'selected'
+
+                        : ''
+                    %>
+                >
+
+                    Shortlisted
+
+                </option>
+
+
+                <option
+                    value="Negotiation"
+                    <%= existingVisit &&
+                        existingVisit.visitType ===
+                        'Negotiation'
+
+                        ? 'selected'
+
+                        : ''
+                    %>
+                >
+
+                    Negotiation
+
+                </option>
+
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- SCHEDULE SITE VISIT -->
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                📅 Schedule Site Visit
+
+            </label>
+
+
+            <input
+                type="datetime-local"
+                name="scheduledVisitDate"
+                value="<%= existingVisit &&
+                    existingVisit.scheduledVisitDate
+
+                    ? new Date(
+                        existingVisit.scheduledVisitDate
+                      ).toISOString().slice(
+                        0,
+                        16
+                      )
+
+                    : ''
+                %>"
+            >
+
+
+        </div>
+
+
+
+        <!-- REMARKS -->
+
+
+        <div class="form-field">
+
+
+            <label>
+
+                📝 Remarks
+
+            </label>
+
+
+            <input
+                type="text"
+                name="remarks"
+                placeholder="Remarks"
+                value="<%= existingVisit
+                    ? existingVisit.remarks
+                    : ''
+                %>"
+            >
+
+
+        </div>
+
+
+
+        <!-- SAVE -->
+
+
+        <button
+            type="submit"
+            class="save-btn"
+        >
+
+            💾 Save Visit
+
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 <% }) %>
 
-</table>
 
-</body>
+</div>
 
-<h2>Match Score Logic</h2>
 
-<p><strong>Maximum Match Score:</strong> 140</p>
+<% } else { %>
 
-<table border="1" cellpadding="5" cellspacing="0">
 
-<tr>
-<td>Price</td>
-<td>20</td>
 
-<td>Flat Type</td>
-<td>20</td>
+<!-- ================================
+     NO MATCHES
+================================ -->
 
-<td>Area</td>
-<td>20</td>
 
-<td>Possession</td>
-<td>15</td>
+<div class="empty-state">
 
-<td>Distance</td>
-<td>15</td>
-</tr>
 
-<tr>
-<td>Location</td>
-<td>20</td>
+    <div class="empty-icon">
 
-<td>Pincode</td>
-<td>15</td>
+        🏠
 
-<td>Division</td>
-<td>10</td>
+    </div>
 
-<td>District</td>
-<td>5</td>
 
-<td>Total</td>
-<td>140</td>
-</tr>
+    <div class="empty-title">
 
-</table>
+        No Property Matches
 
-<p><strong>Grade Score Meaning:</strong></p>
+    </div>
 
-<table border="1" cellpadding="5" cellspacing="0">
 
-<tr>
-<td>100+</td>
-<td>Excellent Match</td>
+    <div class="empty-text">
 
-<td>70-99</td>
-<td>Strong Match</td>
+        No matching properties were found
+        for this buyer's requirements.
 
-<td>40-69</td>
-<td>Moderate Match</td>
+    </div>
 
-<td>Below 40</td>
-<td>Weak Match</td>
-</tr>
 
-</table>
+</div>
+
+
+<% } %>
+
+
+
+<!-- ================================
+     MATCH SCORE LOGIC
+================================ -->
+
+
+<details class="score-logic">
+
+
+    <summary>
+
+        ℹ️ How Match Score Works
+
+    </summary>
+
+
+    <div class="score-logic-content">
+
+
+        <div class="logic-title">
+
+            Maximum Match Score: 140
+
+        </div>
+
+
+
+        <div class="logic-grid">
+
+
+            <div class="logic-item">
+
+                <span>Price</span>
+
+                <strong>20</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Flat Type</span>
+
+                <strong>20</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Area</span>
+
+                <strong>20</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Possession</span>
+
+                <strong>15</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Distance</span>
+
+                <strong>15</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Location</span>
+
+                <strong>20</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Pincode</span>
+
+                <strong>15</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Division</span>
+
+                <strong>10</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>District</span>
+
+                <strong>5</strong>
+
+            </div>
+
+
+            <div class="logic-item">
+
+                <span>Total</span>
+
+                <strong>140</strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="grade-list">
+
+
+            <div class="grade-row">
+
+                <span>🏆 100+</span>
+
+                <strong>
+                    Excellent Match
+                </strong>
+
+            </div>
+
+
+            <div class="grade-row">
+
+                <span>🟢 70 - 99</span>
+
+                <strong>
+                    Strong Match
+                </strong>
+
+            </div>
+
+
+            <div class="grade-row">
+
+                <span>🟡 40 - 69</span>
+
+                <strong>
+                    Moderate Match
+                </strong>
+
+            </div>
+
+
+            <div class="grade-row">
+
+                <span>🔴 Below 40</span>
+
+                <strong>
+                    Weak Match
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</details>
+
+
+</div>
+
+
+
+<!-- ================================
+     EXISTING CONTENT PROTECTION
+================================ -->
+
 
 <script>
 
-document.addEventListener('copy', function (e) {
-    e.preventDefault();
-});
 
-document.addEventListener('cut', function (e) {
-    e.preventDefault();
-});
+document.addEventListener(
+    'copy',
+    function(e){
 
-document.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-});
+        e.preventDefault()
 
-document.addEventListener('selectstart', function (e) {
-    e.preventDefault();
-});
+    }
+)
 
-document.addEventListener('dragstart', function (e) {
-    e.preventDefault();
-});
+
+document.addEventListener(
+    'cut',
+    function(e){
+
+        e.preventDefault()
+
+    }
+)
+
+
+document.addEventListener(
+    'contextmenu',
+    function(e){
+
+        e.preventDefault()
+
+    }
+)
+
+
+document.addEventListener(
+    'selectstart',
+    function(e){
+
+        e.preventDefault()
+
+    }
+)
+
+
+document.addEventListener(
+    'dragstart',
+    function(e){
+
+        e.preventDefault()
+
+    }
+)
+
 
 </script>
+
+
+</body>
 
 </html>

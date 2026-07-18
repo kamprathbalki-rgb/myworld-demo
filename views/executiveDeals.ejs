@@ -2,85 +2,658 @@
 <html>
 
 <head>
+
 <title>Closed Deals</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <style>
 
-table{
-width:100%;
-border-collapse:collapse;
+/* ================================
+   PAGE
+================================ */
+
+*{
+    box-sizing:border-box;
 }
 
-th,td{
-border:1px solid #ccc;
-padding:10px;
-text-align:left;
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:12px;
+    color:#222;
 }
 
-th{
-background:#f5f5f5;
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    background:#1f4e79;
+    color:white;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.page-header h2{
+    margin:0;
+    font-size:19px;
+}
+
+.back-btn{
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+    width:30px;
+}
+
+.header-spacer{
+    width:30px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.deal-summary{
+    background:white;
+
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#1f4e79;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.summary-count{
+    background:#1f4e79;
+    color:white;
+
+    min-width:40px;
+    height:32px;
+
+    padding:0 12px;
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   DEAL LIST
+================================ */
+
+.deal-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ================================
+   DEAL CARD
+================================ */
+
+.deal-card{
+    background:white;
+
+    border-radius:12px;
+    padding:15px;
+
+    border-left:5px solid #1f4e79;
+
+    box-shadow:0 1px 6px rgba(0,0,0,.10);
+}
+
+
+/* ================================
+   BUYER
+================================ */
+
+.buyer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding-bottom:12px;
+    margin-bottom:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+.buyer-name{
+    font-size:18px;
+    font-weight:bold;
+    color:#222;
+}
+
+.buyer-phone{
+    margin-top:6px;
+    font-size:14px;
+    color:#555;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.status-badge{
+    background:#e8f5e9;
+    color:#2e7d32;
+
+    padding:7px 10px;
+    border-radius:16px;
+
+    font-size:12px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+
+/* ================================
+   DEAL VALUE
+================================ */
+
+.deal-value-box{
+    background:#f5f7fa;
+
+    border-radius:10px;
+    padding:12px;
+
+    margin-bottom:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.deal-value-label{
+    font-size:13px;
+    color:#666;
+}
+
+.deal-value{
+    font-size:17px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   PROPERTY DETAILS
+================================ */
+
+.deal-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.detail-item{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px;
+}
+
+.detail-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.detail-value{
+    font-size:14px;
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+
+/* ================================
+   LOCATION
+================================ */
+
+.location-box{
+    background:#f5f7fa;
+
+    border-radius:9px;
+    padding:10px 12px;
+}
+
+.location-label{
+    font-size:11px;
+    color:#777;
+
+    margin-bottom:5px;
+}
+
+.location-value{
+    font-size:13px;
+    line-height:1.5;
+
+    color:#333;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state{
+    background:white;
+
+    border-radius:12px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:17px;
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    margin-bottom:6px;
+}
+
+.empty-text{
+    font-size:13px;
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:13px;
+    }
+
+    .page-header h2{
+        font-size:17px;
+    }
+
+    .deal-card{
+        padding:14px;
+    }
+
+    .buyer-name{
+        font-size:17px;
+    }
+
+    .deal-value{
+        font-size:16px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="/executive/dashboard">Dashboard</a>
 
-<hr>
+<div class="container">
 
-<h1>Closed Deals</h1>
 
-<table>
+<!-- ================================
+     HEADER
+================================ -->
 
-<tr>
-<th>Buyer</th>
-<th>Phone</th>
-<th>Budget</th>
-<th>Property Type</th>
-<th>Preferred Location</th>
-<th>Status</th>
-</tr>
+
+<div class="page-header">
+
+    <a
+        href="/executive/dashboard"
+        class="back-btn"
+    >
+        ←
+    </a>
+
+
+    <h2>
+        🏆 Closed Deals
+    </h2>
+
+
+    <div class="header-spacer"></div>
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+
+<div class="deal-summary">
+
+    <div class="summary-title">
+        🏆 Deals Closed
+    </div>
+
+
+    <div class="summary-count">
+        <%= buyers ? buyers.length : 0 %>
+    </div>
+
+</div>
+
+
+
+<!-- ================================
+     DEAL CARDS
+================================ -->
+
+
+<% if (buyers && buyers.length > 0) { %>
+
+
+<div class="deal-list">
+
 
 <% buyers.forEach(function(b){ %>
 
-<tr>
 
-<td>
-<%= b.name || '' %>
-</td>
+<div class="deal-card">
 
-<td>
-<%= b.phone
-? b.phone.slice(0,2) + 'XXXX' + b.phone.slice(-4)
-: '' %>
-</td>
 
-<td>
-<%= b.minBudget || '' %> - <%= b.maxBudget || '' %>
-</td>
+    <!-- ============================
+         BUYER + STATUS
+    ============================= -->
 
-<td>
-<%= b.requiredFlatType || '' %>
-</td>
 
-<td>
-<%= b.preferredLocations && b.preferredLocations.length
-? b.preferredLocations.join(', ')
-: '' %>
-</td>
+    <div class="buyer-row">
 
-<td>
-<%= b.status || '' %>
-</td>
 
-</tr>
+        <div>
+
+
+            <div class="buyer-name">
+
+                👤
+                <%= b.name || 'Buyer' %>
+
+            </div>
+
+
+            <div class="buyer-phone">
+
+                📱
+
+                <%= b.phone
+                    ? b.phone.slice(0,2) +
+                      'XXXX' +
+                      b.phone.slice(-4)
+                    : ''
+                %>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="status-badge">
+
+            ✅ Closed
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         DEAL VALUE
+    ============================= -->
+
+
+    <div class="deal-value-box">
+
+
+        <div class="deal-value-label">
+
+            💰 Deal Value
+
+        </div>
+
+
+        <div class="deal-value">
+
+            <% if (b.dealValue) { %>
+
+                ₹ <%= Number(
+                    b.dealValue
+                ).toLocaleString(
+                    'en-IN'
+                ) %>
+
+            <% } else { %>
+
+                Not Recorded
+
+            <% } %>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         PROPERTY + BUDGET
+    ============================= -->
+
+
+    <div class="deal-details">
+
+
+        <div class="detail-item">
+
+
+            <div class="detail-label">
+
+                🏠 Property Type
+
+            </div>
+
+
+            <div class="detail-value">
+
+                <%= b.requiredFlatType ||
+                    'Not specified'
+                %>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="detail-item">
+
+
+            <div class="detail-label">
+
+                💵 Budget
+
+            </div>
+
+
+            <div class="detail-value">
+
+                <% if (
+                    b.minBudget ||
+                    b.maxBudget
+                ) { %>
+
+                    <%= b.minBudget || '0' %>
+                    -
+                    <%= b.maxBudget || '0' %>
+
+                <% } else { %>
+
+                    Not specified
+
+                <% } %>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ============================
+         PREFERRED LOCATION
+    ============================= -->
+
+
+    <div class="location-box">
+
+
+        <div class="location-label">
+
+            📍 Preferred Location
+
+        </div>
+
+
+        <div class="location-value">
+
+            <%= b.preferredLocations &&
+                b.preferredLocations.length
+
+                ? b.preferredLocations.join(
+                    ', '
+                  )
+
+                : 'Not specified'
+            %>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
 
 <% }) %>
 
-</table>
+
+</div>
+
+
+<% } else { %>
+
+
+
+<!-- ================================
+     NO DEALS
+================================ -->
+
+
+<div class="empty-state">
+
+
+    <div class="empty-icon">
+
+        🏆
+
+    </div>
+
+
+    <div class="empty-title">
+
+        No Closed Deals Yet
+
+    </div>
+
+
+    <div class="empty-text">
+
+        Your successfully closed deals
+        will appear here.
+
+    </div>
+
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
 
 </body>
 
