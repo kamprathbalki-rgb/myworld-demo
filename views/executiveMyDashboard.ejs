@@ -538,6 +538,35 @@ color:#1f4e79;
     text-align:center;
 }
 
+.lead-contact-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.lead-contact-actions a{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+
+    padding:10px 5px;
+
+    background:#f5f7fa;
+    border-radius:8px;
+
+    text-decoration:none;
+    color:#1f4e79;
+
+    font-size:18px;
+    font-weight:bold;
+}
+
+.lead-contact-actions a span{
+    font-size:11px;
+}
+
 </style>
 
 </head>
@@ -963,9 +992,39 @@ value="<%= b.lostValue || '' %>"
 
     <div class="lead-modal-body">
 
-        <div class="lead-phone-card">
-            📱 <span id="buyerPhone"></span>
-        </div>
+<div class="lead-phone-card">
+
+    <div style="
+        margin-bottom:10px;
+        text-align:center;
+    ">
+        📱 <span id="buyerPhone"></span>
+    </div>
+
+    <div class="lead-contact-actions">
+
+        <a id="buyerCallLink" href="#">
+            📞
+            <span>Call</span>
+        </a>
+
+        <a id="buyerSmsLink" href="#">
+            💬
+            <span>SMS</span>
+        </a>
+
+        <a
+            id="buyerWhatsappLink"
+            href="#"
+            target="_blank"
+        >
+            🟢
+            <span>WhatsApp</span>
+        </a>
+
+    </div>
+
+</div>
 
 
         <form
@@ -1146,8 +1205,37 @@ document.getElementById('buyerActionForm').action =
 const card =
 this.closest('.buyer-card')
 
-document.getElementById('buyerPhone').innerText =
+const phone =
 card.querySelector('.buyer-phone').value
+
+document.getElementById('buyerPhone').innerText =
+phone
+
+
+// CALL
+document.getElementById('buyerCallLink').href =
+'tel:' + phone
+
+
+// SMS
+document.getElementById('buyerSmsLink').href =
+'sms:' + phone
+
+
+// WHATSAPP
+let whatsappPhone =
+phone.replace(/\D/g, '')
+
+// Add India country code for 10-digit numbers
+if(whatsappPhone.length === 10){
+
+    whatsappPhone =
+    '91' + whatsappPhone
+
+}
+
+document.getElementById('buyerWhatsappLink').href =
+'https://wa.me/' + whatsappPhone
 
 document.getElementById('status').value =
 card.querySelector('.buyer-status').value
@@ -1333,13 +1421,14 @@ border-radius:50%;
 background:#1f4e79;
 color:white;
 
-border:3px solid white;
-outline:2px solid #1f4e79;
+border:4px solid white;
 
-border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 3px 12px rgba(0,0,0,.3);
+
+box-shadow:
+0 0 0 2px rgba(31,78,121,.25),
+0 4px 12px rgba(0,0,0,.3);
 ">
 ☕
 </button>
@@ -1356,13 +1445,14 @@ border-radius:50%;
 background:#1f4e79;
 color:white;
 
-border:3px solid white;
-outline:2px solid #1f4e79;
+border:4px solid white;
 
-border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 3px 12px rgba(0,0,0,.3);
+
+box-shadow:
+0 0 0 2px rgba(31,78,121,.25),
+0 4px 12px rgba(0,0,0,.3);
 ">
 ⚙️
 </button>
@@ -1379,15 +1469,14 @@ border-radius:50%;
 background:#1f4e79;
 color:white;
 
-border:3px solid white;
-outline:2px solid #1f4e79;
+border:4px solid white;
 
-
-
-border:none;
 font-size:24px;
 z-index:2001;
-box-shadow:0 3px 12px rgba(0,0,0,.3);
+
+box-shadow:
+0 0 0 2px rgba(31,78,121,.25),
+0 4px 12px rgba(0,0,0,.3);
 ">
 🗺️
 </button>
