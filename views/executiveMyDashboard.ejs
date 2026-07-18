@@ -206,15 +206,133 @@ transform:scale(.98);
 }
 
 #buyerModal{
-left:0 !important;
-right:0 !important;
-bottom:0 !important;
-top:auto !important;
-transform:none !important;
-width:100% !important;
-max-width:none !important;
-max-height:90vh !important;
-border-radius:20px 20px 0 0 !important;
+    display:none;
+    position:fixed;
+
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    top:auto !important;
+
+    transform:none !important;
+
+    width:auto !important;
+    max-width:none !important;
+    max-height:85vh !important;
+
+    background:#f5f7fa;
+    border-radius:20px 20px 0 0 !important;
+
+    padding:0 !important;
+    overflow-y:auto;
+
+    box-shadow:0 -4px 20px rgba(0,0,0,.25);
+    z-index:9999;
+}
+
+.lead-modal-header{
+    background:#1f4e79;
+    color:white;
+    padding:15px 18px;
+    border-radius:20px 20px 0 0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.lead-modal-header h3{
+    margin:0;
+    font-size:18px;
+}
+
+.lead-modal-close{
+    background:rgba(255,255,255,.2);
+    color:white;
+    border:none;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.lead-modal-body{
+    padding:15px;
+}
+
+.lead-phone-card{
+    background:white;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-weight:bold;
+    font-size:16px;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+
+.lead-form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.lead-form-field{
+    margin-bottom:15px;
+}
+
+.lead-form-field label{
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:bold;
+    color:#1f4e79;
+}
+
+.lead-form-field input,
+.lead-form-field select{
+    width:100%;
+    box-sizing:border-box;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:white;
+    font-size:15px;
+}
+
+.lead-modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:5px;
+}
+
+.lead-modal-actions a{
+    text-decoration:none;
+}
+
+.lead-modal-actions button{
+    width:100%;
+    padding:12px 8px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    color:#1f4e79;
+    font-weight:bold;
+    box-shadow:0 1px 4px rgba(0,0,0,.1);
+}
+
+.lead-save-btn{
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#1f4e79;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
 @media(max-width:768px){
@@ -338,14 +456,49 @@ color:#1f4e79;
     margin-bottom:25px;
 }
 
-.lead-group-title{
-    margin:0 0 12px 0;
-    padding:10px 12px;
+.lead-group-details{
     background:white;
-    border-radius:8px;
-    border-left:4px solid #1f4e79;
+    border-radius:10px;
     box-shadow:0 1px 4px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.lead-group-title{
+    padding:14px 15px;
+    border-left:4px solid #1f4e79;
     font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    list-style:none;
+}
+
+.lead-group-title::-webkit-details-marker{
+    display:none;
+}
+
+.lead-group-count{
+    background:#1f4e79;
+    color:white;
+    min-width:28px;
+    height:28px;
+    padding:0 6px;
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:13px;
+}
+
+.lead-group-content{
+    padding:12px;
+    border-top:1px solid #eee;
 }
 
 .lead-group .buyer-list{
@@ -607,12 +760,27 @@ const groups = [
 
 <div class="lead-group">
 
-<h3 class="lead-group-title">
-    <%= group.title %>
-    (<%= group.leads.length %>)
-</h3>
+<details
+class="lead-group-details"
+<%= (
+    group.leads === leadGroups.overdue ||
+    group.leads === leadGroups.today
+) ? 'open' : '' %>
+>
 
-<div class="buyer-list">
+<summary class="lead-group-title">
+
+    <span>
+        <%= group.title %>
+    </span>
+
+    <span class="lead-group-count">
+        <%= group.leads.length %>
+    </span>
+
+</summary>
+
+<div class="buyer-list lead-group-content">
 
 <% group.leads.forEach(function(b){ %>
 
@@ -759,127 +927,188 @@ value="<%= b.lostValue || '' %>"
 
 </div>
 
+</details>
+
 </div>
 
 <% } %>
 
 <% }) %>
 
-<div id="buyerModal" style="
-display:none;
-position:fixed;
-top:5%;
-left:50%;
-transform:translateX(-50%);
-background:white;
-border-radius:12px;
-padding:15px;
-width:90%;
-max-width:380px;
-max-height:85vh;
-overflow-y:auto;
-box-shadow:0 4px 20px rgba(0,0,0,.25);
-z-index:9999;
-">
+<div id="buyerModal">
 
-<h3>Lead Actions</h3>
+    <div class="lead-modal-header">
 
-<form
-id="buyerActionForm"
-method="POST"
->
+        <h3>
+            👤 Lead Actions
+        </h3>
 
-<input type="hidden" id="selectedBuyerId">
+        <button
+            type="button"
+            class="lead-modal-close"
+            onclick="closeBuyerModal()"
+        >
+            ✕
+        </button>
 
-<button type="submit">
-Save
-</button>
+    </div>
 
-<div>
-<b>Phone:</b>
-<span id="buyerPhone"></span>
-</div>
 
-<br>
+    <div class="lead-modal-body">
 
-<label>Status</label><br>
+        <div class="lead-phone-card">
+            📱 <span id="buyerPhone"></span>
+        </div>
 
-<select
-id="status"
-name="status"
->
-<option value="New Lead">New Lead</option>
-<option value="Contacted">Contacted</option>
-<option value="Site Visit">Site Visit</option>
-<option value="Negotiation">Negotiation</option>
-<option value="Deal Closed">Deal Closed</option>
-<option value="Lost">Lost</option>
-</select>
 
-<br><br>
+        <form
+            id="buyerActionForm"
+            method="POST"
+        >
 
-<label>Deal / Lost Value</label><br>
+            <input
+                type="hidden"
+                id="selectedBuyerId"
+            >
 
-<input
-type="number"
-id="dealValue"
-name="dealValue"
->
 
-<br><br>
+            <div class="lead-form-field">
 
-<label>Next Follow Up</label><br>
+                <label>
+                    📊 Status
+                </label>
 
-<input
-type="datetime-local"
-id="nextFollowUp"
-name="nextFollowUp"
->
+                <select
+                    id="status"
+                    name="status"
+                >
+                    <option value="New Lead">
+                        🆕 New Lead
+                    </option>
 
-<br><br>
+                    <option value="Contacted">
+                        📞 Contacted
+                    </option>
 
-<label>Site Visit Date</label><br>
+                    <option value="Site Visit">
+                        🏢 Site Visit
+                    </option>
 
-<input
-type="datetime-local"
-id="siteVisitDate"
-name="siteVisitDate"
->
+                    <option value="Negotiation">
+                        🤝 Negotiation
+                    </option>
 
-<br><br>
+                    <option value="Deal Closed">
+                        ✅ Deal Closed
+                    </option>
 
-<label>Notes</label><br>
+                    <option value="Lost">
+                        ❌ Lost
+                    </option>
 
-<input
-type="text"
-id="followUpNotes"
-name="followUpNotes"
-style="width:100%;"
->
+                </select>
 
-<br><br>
+            </div>
 
-<a id="matchesBtn">
-<button type="button">
-Matches
-</button>
-</a>
 
-<br><br>
+            <div class="lead-form-field">
 
-<a id="editBtn">
-<button type="button">
-Edit Requirement
-</button>
-</a>
+                <label>
+                    💰 Deal / Lost Value
+                </label>
 
-<br><br>
+                <input
+                    type="number"
+                    id="dealValue"
+                    name="dealValue"
+                    placeholder="Enter value"
+                >
 
-</form>
+            </div>
 
-<button type="button" onclick="closeBuyerModal()">
-Close
-</button>
+
+            <div class="lead-form-grid">
+
+                <div class="lead-form-field">
+
+                    <label>
+                        ⏰ Next Follow Up
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="nextFollowUp"
+                        name="nextFollowUp"
+                    >
+
+                </div>
+
+
+                <div class="lead-form-field">
+
+                    <label>
+                        🏢 Site Visit
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="siteVisitDate"
+                        name="siteVisitDate"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="lead-form-field">
+
+                <label>
+                    📝 Notes
+                </label>
+
+                <input
+                    type="text"
+                    id="followUpNotes"
+                    name="followUpNotes"
+                    placeholder="Add notes"
+                >
+
+            </div>
+
+
+            <div class="lead-modal-actions">
+
+                <a id="matchesBtn">
+
+                    <button type="button">
+                        🏠 Matches
+                    </button>
+
+                </a>
+
+
+                <a id="editBtn">
+
+                    <button type="button">
+                        ✏️ Requirement
+                    </button>
+
+                </a>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="lead-save-btn"
+            >
+                💾 Save Changes
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
