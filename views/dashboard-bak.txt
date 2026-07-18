@@ -217,196 +217,6 @@ body{
     z-index:100;
 }
 
-/* ================================
-   DASHBOARD FLOATERS
-================================ */
-
-.dashboard-floaters{
-    position:fixed;
-
-    right:20px;
-    bottom:20px;
-
-    z-index:1000;
-
-    display:flex;
-    flex-direction:column;
-
-    gap:12px;
-}
-
-
-/* ================================
-   FLOATER ITEM
-================================ */
-
-.floater-item{
-    position:relative;
-
-    display:flex;
-
-    justify-content:flex-end;
-    align-items:center;
-}
-
-
-/* ================================
-   FLOATING BUTTON
-================================ */
-
-.floater-btn{
-    width:56px;
-    height:56px;
-
-    border:none;
-
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:24px;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 4px 12px rgba(0,0,0,.25),
-        0 0 0 3px white;
-}
-
-
-/* ADMIN */
-
-.admin-float-btn{
-    background:#555;
-    color:white;
-}
-
-
-/* BULK UPLOAD */
-
-.bulk-float-btn{
-    background:#1f4e79;
-    color:white;
-}
-
-
-/* WHATSAPP */
-
-.whatsapp-float-btn{
-    background:#25D366;
-    color:white;
-}
-
-
-/* ================================
-   FLOATING MENU
-================================ */
-
-.floater-menu{
-    display:none;
-
-    position:absolute;
-
-    right:70px;
-    bottom:0;
-
-    width:230px;
-
-    padding:8px;
-
-    background:white;
-
-    border-radius:12px;
-
-    box-shadow:
-        0 4px 18px
-        rgba(0,0,0,.20);
-}
-
-
-/* SHOW */
-
-.floater-menu.show{
-    display:block;
-}
-
-
-/* ================================
-   MENU TITLE
-================================ */
-
-.floater-menu-title{
-    padding:9px 10px;
-
-    color:#1f4e79;
-
-    font-size:13px;
-    font-weight:bold;
-
-    border-bottom:1px solid #eee;
-
-    margin-bottom:4px;
-}
-
-
-/* ================================
-   MENU LINKS
-================================ */
-
-.floater-menu a{
-    display:block;
-
-    padding:11px 10px;
-
-    color:#333;
-
-    text-decoration:none;
-
-    font-size:13px;
-    font-weight:bold;
-
-    border-radius:8px;
-}
-
-
-.floater-menu a:hover{
-    background:#f2f5f7;
-}
-
-
-/* ================================
-   MOBILE
-================================ */
-
-@media(max-width:600px){
-
-    .dashboard-floaters{
-        right:14px;
-        bottom:14px;
-
-        gap:10px;
-    }
-
-    .floater-btn{
-        width:52px;
-        height:52px;
-
-        font-size:22px;
-    }
-
-    .floater-menu{
-        right:62px;
-
-        width:220px;
-
-        max-width:
-        calc(100vw - 90px);
-    }
-
-}
-
 </style>
 
 </head>
@@ -440,6 +250,50 @@ Manage Properties, Buyers, Executives and Follow Ups
 </div>
 
 <br><br>
+
+<a href="/admin/office-location">
+Office Location
+</a>
+
+<br><br>
+
+<a href="/tenant-whatsapp">
+WhatsApp Setup
+</a>
+
+<br><br>
+
+<a href="/whatsapp-data/inventory">
+WhatsApp Inventory
+</a>
+
+|
+
+<a href="/whatsapp-data/requirements">
+WhatsApp Requirements
+</a>
+
+<br><br>
+
+<a href="/property/bulk-upload">
+Property Bulk-Upload
+</a>
+
+<a href="/buyer/bulk-upload">
+Buyer Bulk-Upload
+</a>
+
+<a href="/change-password">
+Change Password
+</a>
+
+<a href="/buyer/whatsapp-groups">
+WhtasApp Groups
+</a>
+
+<a href="/buyer/broadcasts">
+WhatsApp Broadcasts
+</a>
 
 <a href="/logout" class="logout">
 Logout
@@ -662,162 +516,6 @@ Investment Opportunities
 </div>
 
 </div>
-
-
-<!-- ================================
-     FLOATING QUICK MENU
-================================ -->
-
-<div class="dashboard-floaters">
-
-
-    <!-- ADMIN -->
-
-    <div class="floater-item">
-
-        <div
-            class="floater-menu"
-            id="adminMenu"
-        >
-
-            <div class="floater-menu-title">
-                ⚙️ Admin
-            </div>
-
-            <a href="/admin/office-location">
-                📍 Office Location
-            </a>
-
-            <a href="/change-password">
-                🔐 Change Password
-            </a>
-
-        </div>
-
-        <button
-            type="button"
-            class="floater-btn admin-float-btn"
-            onclick="toggleFloatMenu('adminMenu')"
-            title="Admin"
-        >
-            ⚙️
-        </button>
-
-    </div>
-
-
-    <!-- BULK UPLOAD -->
-
-    <div class="floater-item">
-
-        <div
-            class="floater-menu"
-            id="bulkMenu"
-        >
-
-            <div class="floater-menu-title">
-                📤 Bulk Upload
-            </div>
-
-            <a href="/property/bulk-upload">
-                🏠 Property Bulk-Upload
-            </a>
-
-            <a href="/buyer/bulk-upload">
-                👥 Buyer Bulk-Upload
-            </a>
-
-        </div>
-
-        <button
-            type="button"
-            class="floater-btn bulk-float-btn"
-            onclick="toggleFloatMenu('bulkMenu')"
-            title="Bulk Upload"
-        >
-            📤
-        </button>
-
-    </div>
-
-
-    <!-- WHATSAPP -->
-
-    <div class="floater-item">
-
-        <div
-            class="floater-menu"
-            id="whatsappMenu"
-        >
-
-            <div class="floater-menu-title">
-                💬 WhatsApp
-            </div>
-
-            <a href="/tenant-whatsapp">
-                ⚙️ WhatsApp Setup
-            </a>
-
-            <a href="/whatsapp-data/inventory">
-                🏠 WhatsApp Inventory
-            </a>
-
-            <a href="/whatsapp-data/requirements">
-                👥 WhatsApp Requirements
-            </a>
-
-            <a href="/buyer/whatsapp-groups">
-                👥 WhatsApp Groups
-            </a>
-
-            <a href="/buyer/broadcasts">
-                📢 WhatsApp Broadcasts
-            </a>
-
-        </div>
-
-        <button
-            type="button"
-            class="floater-btn whatsapp-float-btn"
-            onclick="toggleFloatMenu('whatsappMenu')"
-            title="WhatsApp"
-        >
-            💬
-        </button>
-
-    </div>
-
-
-</div>
-
-
-<script>
-
-function toggleFloatMenu(menuId){
-
-    const menus =
-    document.querySelectorAll(
-        '.floater-menu'
-    )
-
-    menus.forEach(function(menu){
-
-        if(menu.id !== menuId){
-            menu.classList.remove('show')
-        }
-
-    })
-
-
-    const selectedMenu =
-    document.getElementById(menuId)
-
-
-    selectedMenu.classList.toggle('show')
-
-}
-
-</script>
 
 </body>
 
