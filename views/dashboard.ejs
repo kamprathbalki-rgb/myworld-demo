@@ -30,12 +30,27 @@ body{
     margin:auto;
 }
 
+
+/* ================================
+   HEADER
+================================ */
+
 .header{
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
+    gap:15px;
     margin-bottom:20px;
+
+    position:sticky;
+    top:0;
+
+    background:#f5f7fa;
+
+    padding:10px 0;
+
+    z-index:100;
 }
 
 .header h1{
@@ -56,12 +71,52 @@ body{
     background:#c9302c;
 }
 
+.welcome{
+    background:white;
+    padding:15px 20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+
+/* ================================
+   SECTION
+================================ */
+
+.section-card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    margin-bottom:25px;
+}
+
+.section-title{
+    margin-top:0;
+    color:#1f4e79;
+}
+
+
+/* ================================
+   SUMMARY GRID
+================================ */
+
 .summary{
     display:grid;
     grid-template-columns:
     repeat(auto-fit,minmax(180px,1fr));
     gap:15px;
 }
+
+.summary a{
+    text-decoration:none;
+    color:inherit;
+}
+
+
+/* ================================
+   CARDS
+================================ */
 
 .card{
     background:white;
@@ -70,6 +125,12 @@ body{
     text-align:center;
     box-shadow:0 2px 8px rgba(0,0,0,.1);
     border:1px solid #ddd;
+
+    min-height:140px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
 }
 
 .card h3{
@@ -82,10 +143,64 @@ body{
 
 .card h2{
     margin-top:12px;
+    margin-bottom:0;
     color:#1f4e79;
     font-size:32px;
     font-weight:bold;
 }
+
+.summary .card:hover{
+    transform:translateY(-2px);
+    transition:.2s;
+    cursor:pointer;
+}
+
+
+/* ================================
+   PRIORITY CARDS
+================================ */
+
+.followup-card{
+    border-top:4px solid #dc3545;
+}
+
+.negotiation-card{
+    border-top:4px solid #6f42c1;
+}
+
+.visit-card{
+    border-top:4px solid #fd7e14;
+}
+
+.closed-card{
+    border-top:4px solid #28a745;
+}
+
+.token-card{
+    border-top:4px solid #ffc107;
+}
+
+
+/* ================================
+   SECONDARY CARDS
+================================ */
+
+.property-card{
+    border-top:4px solid #1f4e79;
+}
+
+.buyer-card{
+    border-top:4px solid #28a745;
+}
+
+.executive-card{
+    border-top:4px solid #6f42c1;
+}
+
+
+/* ================================
+   QUICK ACTIONS
+================================ */
 
 .actions{
     display:grid;
@@ -107,12 +222,23 @@ body{
     font-size:16px;
 }
 
+.action-btn:hover{
+    background:#163b5d;
+    transition:.2s;
+    transform:translateY(-2px);
+}
+
+
+/* ================================
+   TOOLS
+================================ */
+
 .navbar{
     display:grid;
     grid-template-columns:
     repeat(auto-fit,minmax(180px,1fr));
     gap:15px;
-    margin-top:30px;
+    margin-top:20px;
 }
 
 .navbar a{
@@ -127,95 +253,12 @@ body{
     font-size:16px;
 }
 
-.section-card{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
-    margin-bottom:25px;
-}
-
-.section-title{
-    margin-top:0;
-    color:#1f4e79;
-}
-
-.summary a{
-    text-decoration:none;
-    color:inherit;
-}
-
-.summary .card:hover{
-    transform:translateY(-2px);
-    transition:.2s;
-    cursor:pointer;
-}
-
-.welcome{
-    background:white;
-    padding:15px 20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
-    margin-bottom:20px;
-}
-
-.card{
-    background:white;
-    border-radius:10px;
-    padding:20px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
-    border:1px solid #ddd;
-    min-height:140px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
-
-.action-btn:hover{
-    background:#163b5d;
-    transition:.2s;
-    transform:translateY(-2px);
-}
-
 .navbar a:hover{
     background:#444;
     transition:.2s;
     transform:translateY(-2px);
 }
 
-.property-card{
-    border-top:4px solid #1f4e79;
-}
-
-.buyer-card{
-    border-top:4px solid #28a745;
-}
-
-.executive-card{
-    border-top:4px solid #6f42c1;
-}
-
-.visit-card{
-    border-top:4px solid #fd7e14;
-}
-
-.followup-card{
-    border-top:4px solid #dc3545;
-}
-
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-    position:sticky;
-    top:0;
-    background:#f5f7fa;
-    padding:10px 0;
-    z-index:100;
-}
 
 /* ================================
    DASHBOARD FLOATERS
@@ -370,7 +413,6 @@ body{
     border-radius:8px;
 }
 
-
 .floater-menu a:hover{
     background:#f2f5f7;
 }
@@ -381,6 +423,98 @@ body{
 ================================ */
 
 @media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+    .header{
+        position:relative;
+        padding:5px 0;
+        align-items:flex-start;
+    }
+
+    .header h1{
+        font-size:21px;
+    }
+
+    .header > div:first-child{
+        width:calc(100% - 85px);
+    }
+
+    .header > div:first-child p{
+        font-size:13px;
+    }
+
+    .welcome{
+        width:100%;
+        order:3;
+        padding:12px 15px;
+    }
+
+    .welcome h3{
+        font-size:15px;
+    }
+
+    .welcome p{
+        font-size:12px;
+    }
+
+    .logout{
+        padding:9px 12px;
+        font-size:13px;
+    }
+
+    .section-card{
+        padding:12px;
+    }
+
+    .summary{
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:10px;
+    }
+
+    .card{
+        min-height:115px;
+        padding:12px 8px;
+    }
+
+    .card h3{
+        font-size:11px;
+        letter-spacing:.4px;
+        line-height:1.4;
+    }
+
+    .card h2{
+        font-size:23px;
+        margin-top:9px;
+    }
+
+    .actions{
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:10px;
+    }
+
+    .action-btn{
+        padding:15px 8px;
+        font-size:13px;
+    }
+
+    .navbar{
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:10px;
+    }
+
+    .navbar a{
+        padding:15px 8px;
+        font-size:13px;
+    }
 
     .dashboard-floaters{
         right:14px;
@@ -407,25 +541,53 @@ body{
 
 }
 
+
+/* ================================
+   VERY SMALL MOBILE
+================================ */
+
+@media(max-width:360px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+}
+
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
+<!-- ================================
+     HEADER
+================================ -->
+
 <div class="header">
+
 
 <div>
 
-<h1>MyWorld Real Estate CRM</h1>
+<h1>
+MyWorld Real Estate CRM
+</h1>
 
 <p style="margin-top:5px;color:#666;">
 Dashboard
 </p>
 
 </div>
+
 
 <div class="welcome">
 
@@ -439,21 +601,30 @@ Manage Properties, Buyers, Executives and Follow Ups
 
 </div>
 
-<br><br>
 
 <a href="/logout" class="logout">
 Logout
 </a>
 
+
 </div>
 
-<h3>Subscription Status</h3>
+
+<!-- ================================
+     SUBSCRIPTION STATUS
+================================ -->
+
+<h3>
+Subscription Status
+</h3>
+
 
 <p>
 Plan:
 <%= tenant.subscriptionMonths || 0 %>
 Months
 </p>
+
 
 <p>
 Expiry:
@@ -463,203 +634,364 @@ Expiry:
 %>
 </p>
 
+
 <p>
 Days Remaining:
 <%= daysRemaining %>
 </p>
 
+
 <hr>
 
 
+<!-- ================================
+     PRIORITY DASHBOARD
+================================ -->
+
 <div class="section-card">
 
-<h2 class="section-title">
-System Summary
-</h2>
-
-<p style="
-margin-top:-5px;
-margin-bottom:20px;
-color:#666;
-">
-Live snapshot of your CRM
-</p>
 
 <div class="summary">
 
-<a href="/property/page">
-<div class="card property-card">
-<h3>Properties</h3>
-<h2><%= properties %></h2>
-</div>
-</a>
 
-<div style="
-border:1px solid #ddd;
-padding:15px;
-margin:10px;
-display:inline-block;
-min-width:150px;
-text-align:center;
-">
-    <h3>Available Properties</h3>
-    <h2>
-    <a href="/property/page">
-        <%= availableProperties || 0 %>
-    </a>
-</h2>
-</div>
-
-<div style="
-border:1px solid #ddd;
-padding:15px;
-margin:10px;
-display:inline-block;
-min-width:150px;
-text-align:center;
-">
-    <h3>Sold Properties</h3>
-<h2>
-    <a href="/property/sold">
-        <%= soldProperties || 0 %>
-    </a>
-</h2>
-</div>
-
-<div style="
-border:1px solid #ddd;
-padding:15px;
-margin:10px;
-display:inline-block;
-min-width:150px;
-text-align:center;
-">
-    <h3>Token Received</h3>
-
-<h2>
-    <a href="/property/token">
-        <%= tokenProperties || 0 %>
-    </a>
-</h2>
-
-</div>
-
-<a href="/buyer/page">
-<div class="card buyer-card">
-<h3>Buyers</h3>
-<h2><%= buyers %></h2>
-</div>
-</a>
-
-<a href="/executive/list">
-<div class="card executive-card">
-<h3>Executives</h3>
-<h2><%= executives %></h2>
-</div>
-</a>
-
-<a href="/dashboard/sitevisits">
-<div class="card visit-card">
-<h3>Today's Visits</h3>
-<h2><%= visits %></h2>
-</div>
-</a>
+<!-- TODAY'S FOLLOW UPS -->
 
 <a href="/dashboard/followups">
+
 <div class="card followup-card">
-<h3>Today's Follow Ups</h3>
-<h2><%= followUps %></h2>
+
+<h3>
+📞 Today's Follow Ups
+</h3>
+
+<h2>
+<%= followUps %>
+</h2>
+
 </div>
+
 </a>
 
-<div class="card">
-<h3>Contacted</h3>
-<h2><%= contacted %></h2>
-</div>
 
-<div class="card">
-<h3>Negotiation</h3>
-<h2><%= negotiation %></h2>
-</div>
+<!-- NEGOTIATION -->
 
-<div class="card">
-<h3>Pipeline (<%= pipelineCount %>)</h3>
-<h2>₹ <%= pipelineValue.toLocaleString('en-IN') %></h2>
-</div>
+<div class="card negotiation-card">
 
-<div class="card">
-<h3>Closed (<%= closedCount %>)</h3>
-<h2>₹ <%= closedValue.toLocaleString('en-IN') %></h2>
-</div>
+<h3>
+🤝 Negotiation
+</h3>
 
-<div class="card">
-<h3>Lost (<%= lostCount %>)</h3>
-<h2>₹ <%= lostValue.toLocaleString('en-IN') %></h2>
-</div>
+<h2>
+<%= negotiation %>
+</h2>
 
 </div>
 
+
+<!-- TODAY'S SITE VISITS -->
+
+<a href="/dashboard/sitevisits">
+
+<div class="card visit-card">
+
+<h3>
+🚗 Today's Site Visits
+</h3>
+
+<h2>
+<%= visits %>
+</h2>
+
 </div>
 
-<br><br>
+</a>
+
+
+<!-- CLOSED THIS MONTH -->
+
+<div class="card closed-card">
+
+<h3>
+🏆 Closed This Month
+(<%= closedCount %>)
+</h3>
+
+<h2>
+₹ <%= closedValue.toLocaleString('en-IN') %>
+</h2>
+
+</div>
+
+
+<!-- TOKEN RECEIVED -->
+
+<a href="/property/token">
+
+<div class="card token-card">
+
+<h3>
+🪙 Token Received
+</h3>
+
+<h2>
+<%= tokenProperties || 0 %>
+</h2>
+
+</div>
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+<!-- ================================
+     BUSINESS OVERVIEW
+================================ -->
 
 <div class="section-card">
+
+
+<h2 class="section-title">
+Business Overview
+</h2>
+
+
+<div class="summary">
+
+
+<!-- PROPERTIES -->
+
+<a href="/property/page">
+
+<div class="card property-card">
+
+<h3>
+Properties
+</h3>
+
+<h2>
+<%= properties %>
+</h2>
+
+</div>
+
+</a>
+
+
+<!-- SOLD PROPERTIES -->
+
+<a href="/property/sold">
+
+<div class="card">
+
+<h3>
+Sold Properties
+</h3>
+
+<h2>
+<%= soldProperties || 0 %>
+</h2>
+
+</div>
+
+</a>
+
+
+<!-- BUYERS -->
+
+<a href="/buyer/page">
+
+<div class="card buyer-card">
+
+<h3>
+Buyers
+</h3>
+
+<h2>
+<%= buyers %>
+</h2>
+
+</div>
+
+</a>
+
+
+<!-- EXECUTIVES -->
+
+<a href="/executive/list">
+
+<div class="card executive-card">
+
+<h3>
+Executives
+</h3>
+
+<h2>
+<%= executives %>
+</h2>
+
+</div>
+
+</a>
+
+
+<!-- CONTACTED -->
+
+<div class="card">
+
+<h3>
+Contacted
+</h3>
+
+<h2>
+<%= contacted %>
+</h2>
+
+</div>
+
+
+<!-- PIPELINE -->
+
+<div class="card">
+
+<h3>
+Pipeline
+(<%= pipelineCount %>)
+</h3>
+
+<h2>
+₹ <%= pipelineValue.toLocaleString('en-IN') %>
+</h2>
+
+</div>
+
+
+<!-- LOST -->
+
+<div class="card">
+
+<h3>
+Lost
+(<%= lostCount %>)
+</h3>
+
+<h2>
+₹ <%= lostValue.toLocaleString('en-IN') %>
+</h2>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- ================================
+     QUICK ACTIONS
+================================ -->
+
+<div class="section-card">
+
 
 <h2 class="section-title">
 Quick Actions
 </h2>
 
+
 <div class="actions">
 
-<a href="/property/add-builder" class="action-btn">
+
+<a
+href="/property/add-builder"
+class="action-btn"
+>
 Builder Project
 </a>
 
-<a href="/property/add-single" class="action-btn">
+
+<a
+href="/property/add-single"
+class="action-btn"
+>
 Single Property
 </a>
 
-<a href="/buyer/add" class="action-btn">
+
+<a
+href="/buyer/add"
+class="action-btn"
+>
 Buyer
 </a>
 
-<a href="/executive/add" class="action-btn">
+
+<a
+href="/executive/add"
+class="action-btn"
+>
 Executive
 </a>
 
-</div>
 
 </div>
+
+
+</div>
+
+
+<!-- ================================
+     TOOLS
+================================ -->
 
 <div class="section-card">
+
 
 <h2 class="section-title">
 Tools
 </h2>
 
+
 <div class="navbar">
 
-<a href="/attendance/admin">Attendance</a>
 
-<a href="/property/map-view">Map</a>
+<a href="/attendance/admin">
+Attendance
+</a>
+
+
+<a href="/property/map-view">
+Map
+</a>
+
 
 <a href="/dashboard/demand-prediction">
 Demand Prediction
 </a>
 
+
 <a href="/dashboard/intelligence">
 Market Intelligence
 </a>
+
 
 <a href="/dashboard/hot-locations">
 Hot Locations
 </a>
 
+
 <a href="/dashboard/investment-opportunities">
 Investment Opportunities
 </a>
 
+
 </div>
+
 
 </div>
 
@@ -671,121 +1003,145 @@ Investment Opportunities
 <div class="dashboard-floaters">
 
 
-    <!-- ADMIN -->
+<!-- ADMIN -->
 
-    <div class="floater-item">
-
-        <div
-            class="floater-menu"
-            id="adminMenu"
-        >
-
-            <div class="floater-menu-title">
-                ⚙️ Admin
-            </div>
-
-            <a href="/admin/office-location">
-                📍 Office Location
-            </a>
-
-            <a href="/change-password">
-                🔐 Change Password
-            </a>
-
-        </div>
-
-        <button
-            type="button"
-            class="floater-btn admin-float-btn"
-            onclick="toggleFloatMenu('adminMenu')"
-            title="Admin"
-        >
-            ⚙️
-        </button>
-
-    </div>
+<div class="floater-item">
 
 
-    <!-- BULK UPLOAD -->
-
-    <div class="floater-item">
-
-        <div
-            class="floater-menu"
-            id="bulkMenu"
-        >
-
-            <div class="floater-menu-title">
-                📤 Bulk Upload
-            </div>
-
-            <a href="/property/bulk-upload">
-                🏠 Property Bulk-Upload
-            </a>
-
-            <a href="/buyer/bulk-upload">
-                👥 Buyer Bulk-Upload
-            </a>
-
-        </div>
-
-        <button
-            type="button"
-            class="floater-btn bulk-float-btn"
-            onclick="toggleFloatMenu('bulkMenu')"
-            title="Bulk Upload"
-        >
-            📤
-        </button>
-
-    </div>
+<div
+class="floater-menu"
+id="adminMenu"
+>
 
 
-    <!-- WHATSAPP -->
+<div class="floater-menu-title">
+⚙️ Admin
+</div>
 
-    <div class="floater-item">
 
-        <div
-            class="floater-menu"
-            id="whatsappMenu"
-        >
+<a href="/admin/office-location">
+📍 Office Location
+</a>
 
-            <div class="floater-menu-title">
-                💬 WhatsApp
-            </div>
 
-            <a href="/tenant-whatsapp">
-                ⚙️ WhatsApp Setup
-            </a>
+<a href="/change-password">
+🔐 Change Password
+</a>
 
-            <a href="/whatsapp-data/inventory">
-                🏠 WhatsApp Inventory
-            </a>
 
-            <a href="/whatsapp-data/requirements">
-                👥 WhatsApp Requirements
-            </a>
+</div>
 
-            <a href="/buyer/whatsapp-groups">
-                👥 WhatsApp Groups
-            </a>
 
-            <a href="/buyer/broadcasts">
-                📢 WhatsApp Broadcasts
-            </a>
+<button
+type="button"
+class="floater-btn admin-float-btn"
+onclick="toggleFloatMenu('adminMenu')"
+title="Admin"
+>
+⚙️
+</button>
 
-        </div>
 
-        <button
-            type="button"
-            class="floater-btn whatsapp-float-btn"
-            onclick="toggleFloatMenu('whatsappMenu')"
-            title="WhatsApp"
-        >
-            💬
-        </button>
+</div>
 
-    </div>
+
+<!-- BULK UPLOAD -->
+
+<div class="floater-item">
+
+
+<div
+class="floater-menu"
+id="bulkMenu"
+>
+
+
+<div class="floater-menu-title">
+📤 Bulk Upload
+</div>
+
+
+<a href="/property/bulk-upload">
+🏠 Property Bulk-Upload
+</a>
+
+
+<a href="/buyer/bulk-upload">
+👥 Buyer Bulk-Upload
+</a>
+
+
+</div>
+
+
+<button
+type="button"
+class="floater-btn bulk-float-btn"
+onclick="toggleFloatMenu('bulkMenu')"
+title="Bulk Upload"
+>
+📤
+</button>
+
+
+</div>
+
+
+<!-- WHATSAPP -->
+
+<div class="floater-item">
+
+
+<div
+class="floater-menu"
+id="whatsappMenu"
+>
+
+
+<div class="floater-menu-title">
+💬 WhatsApp
+</div>
+
+
+<a href="/tenant-whatsapp">
+⚙️ WhatsApp Setup
+</a>
+
+
+<a href="/whatsapp-data/inventory">
+🏠 WhatsApp Inventory
+</a>
+
+
+<a href="/whatsapp-data/requirements">
+👥 WhatsApp Requirements
+</a>
+
+
+<a href="/buyer/whatsapp-groups">
+👥 WhatsApp Groups
+</a>
+
+
+<a href="/buyer/broadcasts">
+📢 WhatsApp Broadcasts
+</a>
+
+
+</div>
+
+
+<button
+type="button"
+class="floater-btn whatsapp-float-btn"
+onclick="toggleFloatMenu('whatsappMenu')"
+title="WhatsApp"
+>
+💬
+</button>
+
+
+</div>
 
 
 </div>
@@ -818,6 +1174,10 @@ function toggleFloatMenu(menuId){
 }
 
 </script>
+
+
+</div>
+
 
 </body>
 

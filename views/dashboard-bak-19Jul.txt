@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>MyWorld Dashboard</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.header h1{
+    margin:0;
+    color:#1f4e79;
+}
+
+.logout{
+    text-decoration:none;
+    background:#d9534f;
+    color:white;
+    padding:10px 16px;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.logout:hover{
+    background:#c9302c;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    border:1px solid #ddd;
+}
+
+.card h3{
+    margin:0;
+    color:#666;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.card h2{
+    margin-top:12px;
+    color:#1f4e79;
+    font-size:32px;
+    font-weight:bold;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.action-btn{
+    display:block;
+    text-align:center;
+    background:#1f4e79;
+    color:white;
+    padding:18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.navbar{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:30px;
+}
+
+.navbar a{
+    display:block;
+    text-align:center;
+    background:#555;
+    color:white;
+    padding:18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.section-card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    margin-bottom:25px;
+}
+
+.section-title{
+    margin-top:0;
+    color:#1f4e79;
+}
+
+.summary a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.summary .card:hover{
+    transform:translateY(-2px);
+    transition:.2s;
+    cursor:pointer;
+}
+
+.welcome{
+    background:white;
+    padding:15px 20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    border:1px solid #ddd;
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.action-btn:hover{
+    background:#163b5d;
+    transition:.2s;
+    transform:translateY(-2px);
+}
+
+.navbar a:hover{
+    background:#444;
+    transition:.2s;
+    transform:translateY(-2px);
+}
+
+.property-card{
+    border-top:4px solid #1f4e79;
+}
+
+.buyer-card{
+    border-top:4px solid #28a745;
+}
+
+.executive-card{
+    border-top:4px solid #6f42c1;
+}
+
+.visit-card{
+    border-top:4px solid #fd7e14;
+}
+
+.followup-card{
+    border-top:4px solid #dc3545;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    position:sticky;
+    top:0;
+    background:#f5f7fa;
+    padding:10px 0;
+    z-index:100;
+}
+
+/* ================================
+   DASHBOARD FLOATERS
+================================ */
+
+.dashboard-floaters{
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    z-index:1000;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:12px;
+}
+
+
+/* ================================
+   FLOATER ITEM
+================================ */
+
+.floater-item{
+    position:relative;
+
+    display:flex;
+
+    justify-content:flex-end;
+    align-items:center;
+}
+
+
+/* ================================
+   FLOATING BUTTON
+================================ */
+
+.floater-btn{
+    width:56px;
+    height:56px;
+
+    border:none;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.25),
+        0 0 0 3px white;
+}
+
+
+/* ADMIN */
+
+.admin-float-btn{
+    background:#555;
+    color:white;
+}
+
+
+/* BULK UPLOAD */
+
+.bulk-float-btn{
+    background:#1f4e79;
+    color:white;
+}
+
+
+/* WHATSAPP */
+
+.whatsapp-float-btn{
+    background:#25D366;
+    color:white;
+}
+
+
+/* ================================
+   FLOATING MENU
+================================ */
+
+.floater-menu{
+    display:none;
+
+    position:absolute;
+
+    right:70px;
+    bottom:0;
+
+    width:230px;
+
+    padding:8px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.20);
+}
+
+
+/* SHOW */
+
+.floater-menu.show{
+    display:block;
+}
+
+
+/* ================================
+   MENU TITLE
+================================ */
+
+.floater-menu-title{
+    padding:9px 10px;
+
+    color:#1f4e79;
+
+    font-size:13px;
+    font-weight:bold;
+
+    border-bottom:1px solid #eee;
+
+    margin-bottom:4px;
+}
+
+
+/* ================================
+   MENU LINKS
+================================ */
+
+.floater-menu a{
+    display:block;
+
+    padding:11px 10px;
+
+    color:#333;
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:bold;
+
+    border-radius:8px;
+}
+
+
+.floater-menu a:hover{
+    background:#f2f5f7;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .dashboard-floaters{
+        right:14px;
+        bottom:14px;
+
+        gap:10px;
+    }
+
+    .floater-btn{
+        width:52px;
+        height:52px;
+
+        font-size:22px;
+    }
+
+    .floater-menu{
+        right:62px;
+
+        width:220px;
+
+        max-width:
+        calc(100vw - 90px);
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div>
+
+<h1>MyWorld Real Estate CRM</h1>
+
+<p style="margin-top:5px;color:#666;">
+Dashboard
+</p>
+
+</div>
+
+<div class="welcome">
+
+<h3 style="margin:0;">
+Welcome to MyWorld CRM
+</h3>
+
+<p style="margin-top:8px;color:#666;">
+Manage Properties, Buyers, Executives and Follow Ups
+</p>
+
+</div>
+
+<br><br>
+
+<a href="/logout" class="logout">
+Logout
+</a>
+
+</div>
+
+<h3>Subscription Status</h3>
+
+<p>
+Plan:
+<%= tenant.subscriptionMonths || 0 %>
+Months
+</p>
+
+<p>
+Expiry:
+<%= tenant.subscriptionEndDate
+? tenant.subscriptionEndDate.toLocaleDateString()
+: 'Not Set'
+%>
+</p>
+
+<p>
+Days Remaining:
+<%= daysRemaining %>
+</p>
+
+<hr>
+
+
+<div class="section-card">
+
+<h2 class="section-title">
+System Summary
+</h2>
+
+<p style="
+margin-top:-5px;
+margin-bottom:20px;
+color:#666;
+">
+Live snapshot of your CRM
+</p>
+
+<div class="summary">
+
+<a href="/property/page">
+<div class="card property-card">
+<h3>Properties</h3>
+<h2><%= properties %></h2>
+</div>
+</a>
+
+<div style="
+border:1px solid #ddd;
+padding:15px;
+margin:10px;
+display:inline-block;
+min-width:150px;
+text-align:center;
+">
+    <h3>Sold Properties</h3>
+<h2>
+    <a href="/property/sold">
+        <%= soldProperties || 0 %>
+    </a>
+</h2>
+</div>
+
+<div style="
+border:1px solid #ddd;
+padding:15px;
+margin:10px;
+display:inline-block;
+min-width:150px;
+text-align:center;
+">
+    <h3>Token Received</h3>
+
+<h2>
+    <a href="/property/token">
+        <%= tokenProperties || 0 %>
+    </a>
+</h2>
+
+</div>
+
+<a href="/buyer/page">
+<div class="card buyer-card">
+<h3>Buyers</h3>
+<h2><%= buyers %></h2>
+</div>
+</a>
+
+<a href="/executive/list">
+<div class="card executive-card">
+<h3>Executives</h3>
+<h2><%= executives %></h2>
+</div>
+</a>
+
+<a href="/dashboard/sitevisits">
+<div class="card visit-card">
+<h3>Today's Visits</h3>
+<h2><%= visits %></h2>
+</div>
+</a>
+
+<a href="/dashboard/followups">
+<div class="card followup-card">
+<h3>Today's Follow Ups</h3>
+<h2><%= followUps %></h2>
+</div>
+</a>
+
+<div class="card">
+<h3>Contacted</h3>
+<h2><%= contacted %></h2>
+</div>
+
+<div class="card">
+<h3>Negotiation</h3>
+<h2><%= negotiation %></h2>
+</div>
+
+<div class="card">
+<h3>Pipeline (<%= pipelineCount %>)</h3>
+<h2>₹ <%= pipelineValue.toLocaleString('en-IN') %></h2>
+</div>
+
+<div class="card">
+<h3>Closed (<%= closedCount %>)</h3>
+<h2>₹ <%= closedValue.toLocaleString('en-IN') %></h2>
+</div>
+
+<div class="card">
+<h3>Lost (<%= lostCount %>)</h3>
+<h2>₹ <%= lostValue.toLocaleString('en-IN') %></h2>
+</div>
+
+</div>
+
+</div>
+
+<br><br>
+
+<div class="section-card">
+
+<h2 class="section-title">
+Quick Actions
+</h2>
+
+<div class="actions">
+
+<a href="/property/add-builder" class="action-btn">
+Builder Project
+</a>
+
+<a href="/property/add-single" class="action-btn">
+Single Property
+</a>
+
+<a href="/buyer/add" class="action-btn">
+Buyer
+</a>
+
+<a href="/executive/add" class="action-btn">
+Executive
+</a>
+
+</div>
+
+</div>
+
+<div class="section-card">
+
+<h2 class="section-title">
+Tools
+</h2>
+
+<div class="navbar">
+
+<a href="/attendance/admin">Attendance</a>
+
+<a href="/property/map-view">Map</a>
+
+<a href="/dashboard/demand-prediction">
+Demand Prediction
+</a>
+
+<a href="/dashboard/intelligence">
+Market Intelligence
+</a>
+
+<a href="/dashboard/hot-locations">
+Hot Locations
+</a>
+
+<a href="/dashboard/investment-opportunities">
+Investment Opportunities
+</a>
+
+</div>
+
+</div>
+
+
+<!-- ================================
+     FLOATING QUICK MENU
+================================ -->
+
+<div class="dashboard-floaters">
+
+
+    <!-- ADMIN -->
+
+    <div class="floater-item">
+
+        <div
+            class="floater-menu"
+            id="adminMenu"
+        >
+
+            <div class="floater-menu-title">
+                ⚙️ Admin
+            </div>
+
+            <a href="/admin/office-location">
+                📍 Office Location
+            </a>
+
+            <a href="/change-password">
+                🔐 Change Password
+            </a>
+
+        </div>
+
+        <button
+            type="button"
+            class="floater-btn admin-float-btn"
+            onclick="toggleFloatMenu('adminMenu')"
+            title="Admin"
+        >
+            ⚙️
+        </button>
+
+    </div>
+
+
+    <!-- BULK UPLOAD -->
+
+    <div class="floater-item">
+
+        <div
+            class="floater-menu"
+            id="bulkMenu"
+        >
+
+            <div class="floater-menu-title">
+                📤 Bulk Upload
+            </div>
+
+            <a href="/property/bulk-upload">
+                🏠 Property Bulk-Upload
+            </a>
+
+            <a href="/buyer/bulk-upload">
+                👥 Buyer Bulk-Upload
+            </a>
+
+        </div>
+
+        <button
+            type="button"
+            class="floater-btn bulk-float-btn"
+            onclick="toggleFloatMenu('bulkMenu')"
+            title="Bulk Upload"
+        >
+            📤
+        </button>
+
+    </div>
+
+
+    <!-- WHATSAPP -->
+
+    <div class="floater-item">
+
+        <div
+            class="floater-menu"
+            id="whatsappMenu"
+        >
+
+            <div class="floater-menu-title">
+                💬 WhatsApp
+            </div>
+
+            <a href="/tenant-whatsapp">
+                ⚙️ WhatsApp Setup
+            </a>
+
+            <a href="/whatsapp-data/inventory">
+                🏠 WhatsApp Inventory
+            </a>
+
+            <a href="/whatsapp-data/requirements">
+                👥 WhatsApp Requirements
+            </a>
+
+            <a href="/buyer/whatsapp-groups">
+                👥 WhatsApp Groups
+            </a>
+
+            <a href="/buyer/broadcasts">
+                📢 WhatsApp Broadcasts
+            </a>
+
+        </div>
+
+        <button
+            type="button"
+            class="floater-btn whatsapp-float-btn"
+            onclick="toggleFloatMenu('whatsappMenu')"
+            title="WhatsApp"
+        >
+            💬
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+function toggleFloatMenu(menuId){
+
+    const menus =
+    document.querySelectorAll(
+        '.floater-menu'
+    )
+
+    menus.forEach(function(menu){
+
+        if(menu.id !== menuId){
+            menu.classList.remove('show')
+        }
+
+    })
+
+
+    const selectedMenu =
+    document.getElementById(menuId)
+
+
+    selectedMenu.classList.toggle('show')
+
+}
+
+</script>
+
+</body>
+
+</html>
