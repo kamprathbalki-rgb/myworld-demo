@@ -1,57 +1,654 @@
-<h2>Admin Attendance Report</h2>
+<!DOCTYPE html>
 
-<a href="/dashboard">Back</a> |
-<a href="/logout">Logout</a>
+<html>
 
-<hr>
+<head>
 
-<table border="1" cellpadding="8">
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Admin Attendance Report
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:1500px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:24px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.back-btn{
+    background:#1f4e79;
+
+    color:white;
+}
+
+.logout-btn{
+    background:#d9534f;
+
+    color:white;
+}
+
+
+/* ================================
+   REPORT SECTION
+================================ */
+
+.section-card{
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-wrapper{
+    width:100%;
+
+    overflow-x:auto;
+
+    border:1px solid #eee;
+
+    border-radius:10px;
+}
+
+.report-table{
+    width:100%;
+
+    min-width:1300px;
+
+    border-collapse:collapse;
+}
+
+.report-table th{
+    padding:12px 10px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.3px;
+
+    white-space:nowrap;
+}
+
+.report-table td{
+    padding:12px 10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#444;
+
+    font-size:11px;
+
+    vertical-align:top;
+}
+
+.report-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.report-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+
+/* ================================
+   IMPORTANT COLUMNS
+================================ */
+
+.date-cell{
+    white-space:nowrap;
+
+    font-weight:bold;
+
+    color:#555;
+}
+
+.executive-cell{
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-state{
+    padding:30px;
+
+    text-align:center;
+
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:14px;
+
+        margin-bottom:15px;
+
+        align-items:flex-start;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        flex-direction:column;
+    }
+
+    .header-btn{
+        padding:8px 10px;
+
+        font-size:10px;
+
+        text-align:center;
+    }
+
+    .section-card{
+        padding:10px;
+
+        background:transparent;
+
+        box-shadow:none;
+    }
+
+    .section-title{
+        margin:0 0 12px;
+
+        font-size:16px;
+    }
+
+
+    /*
+    CONVERT TABLE TO CARDS
+    */
+
+    .table-wrapper{
+        overflow:visible;
+
+        border:none;
+    }
+
+    .report-table{
+        min-width:0;
+    }
+
+    .report-table thead{
+        display:none;
+    }
+
+    .report-table,
+    .report-table tbody,
+    .report-table tr,
+    .report-table td{
+        display:block;
+
+        width:100%;
+    }
+
+    .report-table tr{
+        margin-bottom:14px;
+
+        padding:14px;
+
+        background:white;
+
+        border:1px solid #e5e5e5;
+
+        border-left:
+        4px solid #1f4e79;
+
+        border-radius:10px;
+
+        box-shadow:
+        0 2px 7px rgba(0,0,0,.07);
+    }
+
+    .report-table td{
+        display:flex;
+
+        justify-content:space-between;
+        align-items:flex-start;
+
+        gap:15px;
+
+        padding:7px 0;
+
+        border-bottom:
+        1px solid #f0f0f0;
+
+        text-align:right;
+
+        font-size:11px;
+
+        line-height:1.5;
+    }
+
+    .report-table td:last-child{
+        border-bottom:none;
+    }
+
+    .report-table td::before{
+        content:
+        attr(data-label);
+
+        flex-shrink:0;
+
+        color:#777;
+
+        font-size:9px;
+
+        font-weight:bold;
+
+        text-transform:uppercase;
+
+        text-align:left;
+    }
+
+    .report-table .executive-cell{
+        padding-bottom:10px;
+
+        color:#1f4e79;
+
+        font-size:15px;
+    }
+
+    .report-table .date-cell{
+        color:#555;
+
+        font-size:12px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Admin Attendance Report
+</h1>
+
+<p>
+Detailed executive attendance and movement history
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+<a
+href="/dashboard/main"
+class="header-btn back-btn"
+>
+← Dashboard
+</a>
+
+<a
+href="/logout"
+class="header-btn logout-btn"
+>
+Logout
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     REPORT
+================================ -->
+
+<div class="section-card">
+
+
+<h2 class="section-title">
+Attendance Report
+</h2>
+
+
+<div class="table-wrapper">
+
+
+<table class="report-table">
+
+
+<thead>
+
 
 <tr>
+
 <th>Date</th>
+
 <th>Executive</th>
+
 <th>Login</th>
+
 <th>Logout</th>
+
 <th>Tea-1 Out</th>
+
 <th>Tea-1 In</th>
+
 <th>Lunch Out</th>
+
 <th>Lunch In</th>
+
 <th>Tea-2 Out</th>
+
 <th>Tea-2 In</th>
+
 <th>Site Out</th>
+
 <th>Site In</th>
+
 </tr>
+
+
+</thead>
+
+
+<tbody>
+
+
+<% if(records && records.length){ %>
+
 
 <% records.forEach(function(r){ %>
 
-<tr>
-<td><%= r.date || '' %></td>
-<td><%= r.executiveName || '' %></td>
 
-<td>
+<tr>
+
+
+<td
+data-label="Date"
+class="date-cell"
+>
+<%= r.date || '' %>
+</td>
+
+
+<td
+data-label="Executive"
+class="executive-cell"
+>
+<%= r.executiveName || '' %>
+</td>
+
+
+<td data-label="Login">
+
 <%= r.sessions && r.sessions.length > 0
     ? r.sessions.map(s => s.login).join(', ')
     : (r.loginTime || '') %>
+
 </td>
 
-<td>
+
+<td data-label="Logout">
+
 <%= r.sessions && r.sessions.length > 0
     ? r.sessions.map(s => s.logout).join(', ')
     : (r.logoutTime || '') %>
+
 </td>
 
-<td><%= r.morningTeaOut ? r.morningTeaOut.join(', ') : '' %></td>
-<td><%= r.morningTeaIn ? r.morningTeaIn.join(', ') : '' %></td>
 
-<td><%= r.lunchOut ? r.lunchOut.join(', ') : '' %></td>
-<td><%= r.lunchIn ? r.lunchIn.join(', ') : '' %></td>
+<td data-label="Tea-1 Out">
 
-<td><%= r.eveningTeaOut ? r.eveningTeaOut.join(', ') : '' %></td>
-<td><%= r.eveningTeaIn ? r.eveningTeaIn.join(', ') : '' %></td>
+<%= r.morningTeaOut
+    ? r.morningTeaOut.join(', ')
+    : '' %>
 
-<td><%= r.siteVisitOut ? r.siteVisitOut.join(', ') : '' %></td>
-<td><%= r.siteVisitIn ? r.siteVisitIn.join(', ') : '' %></td>
+</td>
+
+
+<td data-label="Tea-1 In">
+
+<%= r.morningTeaIn
+    ? r.morningTeaIn.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Lunch Out">
+
+<%= r.lunchOut
+    ? r.lunchOut.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Lunch In">
+
+<%= r.lunchIn
+    ? r.lunchIn.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Tea-2 Out">
+
+<%= r.eveningTeaOut
+    ? r.eveningTeaOut.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Tea-2 In">
+
+<%= r.eveningTeaIn
+    ? r.eveningTeaIn.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Site Out">
+
+<%= r.siteVisitOut
+    ? r.siteVisitOut.join(', ')
+    : '' %>
+
+</td>
+
+
+<td data-label="Site In">
+
+<%= r.siteVisitIn
+    ? r.siteVisitIn.join(', ')
+    : '' %>
+
+</td>
+
+
 </tr>
+
+
 <% }) %>
 
+
+<% } else { %>
+
+
+<tr>
+
+<td
+colspan="12"
+class="empty-state"
+>
+No attendance records found.
+</td>
+
+</tr>
+
+
+<% } %>
+
+
+</tbody>
+
+
 </table>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

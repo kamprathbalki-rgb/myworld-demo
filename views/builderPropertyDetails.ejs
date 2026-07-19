@@ -1,259 +1,1482 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Project Details
+</title>
+
 
 <style>
 
-body{
-    font-family:Arial,sans-serif;
-    margin:15px;
-    max-width:900px;
+*{
+    box-sizing:border-box;
 }
 
-.section{
-    background:#f8f8f8;
-    border:1px solid #ddd;
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:1200px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+
+    color:white;
+}
+
+.property-btn{
+    background:#1f4e79;
+
+    color:white;
+}
+
+.home-btn{
+    background:#555;
+
+    color:white;
+}
+
+
+/* ================================
+   SOLD BANNER
+================================ */
+
+.sold-banner{
+    margin-bottom:20px;
+
+    padding:12px 15px;
+
+    background:#dc3545;
+
+    color:white;
+
     border-radius:8px;
-    padding:15px;
+
+    text-align:center;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    letter-spacing:.5px;
+}
+
+
+/* ================================
+   PROJECT HERO
+================================ */
+
+.project-hero{
+    display:flex;
+
+    gap:20px;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.cover-photo{
+    width:260px;
+
+    max-height:190px;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+    border:1px solid #ddd;
+}
+
+.project-summary{
+    flex:1;
+}
+
+.project-summary h2{
+    margin:0 0 7px;
+
+    color:#1f4e79;
+
+    font-size:23px;
+}
+
+.project-summary p{
+    margin:5px 0;
+
+    color:#666;
+
+    font-size:13px;
+}
+
+
+/* ================================
+   STATUS BADGES
+================================ */
+
+.status-badge{
+    display:inline-block;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    text-transform:uppercase;
+}
+
+.status-sold{
+    background:#ffebee;
+
+    color:#c62828;
+}
+
+.status-token{
+    background:#fff3e0;
+
+    color:#e65100;
+}
+
+.status-available{
+    background:#e8f5e9;
+
+    color:#2e7d32;
+}
+
+
+/* ================================
+   SECTION
+================================ */
+
+.section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section h2{
+    margin:0 0 18px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+
+/* ================================
+   DETAILS GRID
+================================ */
+
+.details-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:0 30px;
+}
+
+.detail-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #f0f0f0;
+
+    font-size:13px;
+}
+
+.detail-label{
+    color:#777;
+
+    font-weight:bold;
+}
+
+.detail-value{
+    color:#333;
+
+    text-align:right;
+
+    word-break:break-word;
+}
+
+
+/* ================================
+   TABLES
+================================ */
+
+.table-wrapper{
+    width:100%;
+
+    overflow-x:auto;
+
+    border:1px solid #eee;
+
+    border-radius:10px;
+}
+
+.data-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:750px;
+}
+
+.configuration-table{
+    min-width:1100px;
+}
+
+.data-table th{
+    padding:12px 10px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.3px;
+
+    white-space:nowrap;
+}
+
+.data-table td{
+    padding:12px 10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#444;
+
+    font-size:12px;
+
+    vertical-align:top;
+}
+
+.data-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.data-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+
+/* ================================
+   HIGHLIGHTS
+================================ */
+
+.highlight-item{
     margin-bottom:15px;
+}
+
+.highlight-item:last-child{
+    margin-bottom:0;
+}
+
+.highlight-label{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#1f4e79;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.highlight-value{
+    color:#555;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* ================================
+   BOTTOM ACTION
+================================ */
+
+.bottom-action{
+    margin:20px 0 10px;
+
+    text-align:center;
+}
+
+.bottom-action a{
+    display:inline-block;
+
+    padding:11px 18px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+
+    .header-info p{
+        font-size:11px;
+    }
+
+
+    .header-actions{
+        margin-top:12px;
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:6px;
+    }
+
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+
+    .sold-banner{
+        margin-bottom:12px;
+
+        font-size:12px;
+    }
+
+
+    .project-hero{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+
+    .cover-photo{
+        width:100%;
+
+        max-height:230px;
+
+        margin-bottom:14px;
+    }
+
+
+    .project-summary h2{
+        font-size:19px;
+    }
+
+
+    .project-summary p{
+        font-size:12px;
+    }
+
+
+    .section{
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+
+    .section h2{
+        margin-bottom:10px;
+
+        font-size:16px;
+    }
+
+
+    .details-grid{
+        grid-template-columns:1fr;
+    }
+
+
+    .detail-row{
+        gap:12px;
+
+        padding:9px 0;
+
+        font-size:12px;
+    }
+
+
+    .detail-label{
+        flex:0 0 45%;
+    }
+
+
+    .detail-value{
+        flex:1;
+    }
+
+
+    /*
+    TABLES BECOME CARDS
+    */
+
+    .table-wrapper{
+        overflow:visible;
+
+        border:none;
+    }
+
+
+    .data-table,
+    .configuration-table{
+        min-width:0;
+    }
+
+
+    .data-table thead{
+        display:none;
+    }
+
+
+    .data-table,
+    .data-table tbody,
+    .data-table tr,
+    .data-table td{
+        display:block;
+
+        width:100%;
+    }
+
+
+    .data-table tr{
+        margin-bottom:12px;
+
+        padding:12px;
+
+        background:#fafafa;
+
+        border:1px solid #e5e5e5;
+
+        border-left:
+        4px solid #1f4e79;
+
+        border-radius:9px;
+    }
+
+
+    .data-table td{
+        display:flex;
+
+        justify-content:space-between;
+
+        gap:15px;
+
+        padding:7px 0;
+
+        border-bottom:
+        1px solid #eee;
+
+        text-align:right;
+
+        font-size:11px;
+    }
+
+
+    .data-table td:last-child{
+        border-bottom:none;
+    }
+
+
+    .data-table td::before{
+        content:
+        attr(data-label);
+
+        flex-shrink:0;
+
+        color:#777;
+
+        font-size:9px;
+
+        font-weight:bold;
+
+        text-transform:uppercase;
+
+        text-align:left;
+    }
+
+
+    .highlight-value{
+        font-size:12px;
+    }
+
 }
 
 </style>
 
-
-<title>Project Details</title>
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
 
-<a href="/property/page">Property List</a> |
+<div class="container">
 
-<a href="/dashboard">Home</a>
 
-<br><br>
+<!-- ================================
+     HEADER
+================================ -->
 
-<a href="javascript:history.back()">Back</a> |
+<div class="page-header">
 
-<a href="/property/page">Property List</a> |
 
-<a href="/dashboard">Home</a>
+<div class="header-info">
 
-<h1>Project Details</h1>
+<h1>
+Project Details
+</h1>
+
+<p>
+Property and project information
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/property/page"
+class="header-btn property-btn"
+>
+Property List
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     SOLD PROJECT
+================================ -->
 
 <% if(property.propertyStatus === 'Sold'){ %>
 
-<div style="
-background:red;
-color:white;
-padding:10px;
-font-weight:bold;
-margin-bottom:15px;
-">
+<div class="sold-banner">
+
 SOLD PROJECT
+
 </div>
 
 <% } %>
+
+
+
+<!-- ================================
+     PROJECT HERO
+================================ -->
+
+<div class="project-hero">
 
 
 <% if(property.coverPhoto){ %>
 
-<a
-    href="/uploads/properties/<%= property.coverPhoto %>"
-    target="_blank">
 
-    <img
-        src="/uploads/properties/<%= property.coverPhoto %>"
-        width="300">
+<a
+href="/uploads/properties/<%= property.coverPhoto %>"
+target="_blank"
+>
+
+<img
+src="/uploads/properties/<%= property.coverPhoto %>"
+class="cover-photo"
+alt="Project Cover Photo"
+>
 
 </a>
 
-<br><br>
 
 <% } %>
 
-<div class="section">
 
-<h2>Basic Information</h2>
+<div class="project-summary">
 
-<p><b>Project Name:</b> <%= property.projectName || '' %></p>
 
-<p><b>Builder Name:</b> <%= property.builderName || '' %></p>
+<h2>
 
-<p><b>City:</b> <%= property.city || '' %></p>
+<%= property.projectName || 'Project' %>
 
-<p><b>Project Status:</b> <%= property.projectStatus || '' %></p>
+</h2>
+
 
 <p>
-    <b>Property Status:</b>
 
-    <% if(property.propertyStatus === 'Sold'){ %>
-
-        <span style="color:red;font-weight:bold;">
-            SOLD
-        </span>
-
-    <% } else if(property.propertyStatus === 'Token Received'){ %>
-
-        <span style="color:orange;font-weight:bold;">
-            TOKEN RECEIVED
-        </span>
-
-    <% } else { %>
-
-        <span style="color:green;font-weight:bold;">
-            AVAILABLE
-        </span>
-
-    <% } %>
+<%= property.builderName || '' %>
 
 </p>
 
-<p><b>Property Type:</b>
-<%= property.propertyType ? property.propertyType.join(', ') : '' %>
+
+<p>
+
+<%= property.propertyLocation || '' %>
+
+<% if(property.city){ %>
+
+· <%= property.city %>
+
+<% } %>
+
 </p>
 
-<p><b>RERA Approved:</b> <%= property.reraApproved || '' %></p>
 
-<p><b>No. of Towers:</b> <%= property.numberOfTowers || '' %></p>
+<p>
+
+
+<% if(property.propertyStatus === 'Sold'){ %>
+
+
+<span class="
+status-badge
+status-sold
+">
+
+SOLD
+
+</span>
+
+
+<% } else if(property.propertyStatus === 'Token Received'){ %>
+
+
+<span class="
+status-badge
+status-token
+">
+
+TOKEN RECEIVED
+
+</span>
+
+
+<% } else { %>
+
+
+<span class="
+status-badge
+status-available
+">
+
+AVAILABLE
+
+</span>
+
+
+<% } %>
+
+
+</p>
+
 
 </div>
 
-<div class="section">
-
-<h2>Location Details</h2>
-
-<p><b>Property Location:</b> <%= property.propertyLocation || '' %></p>
-
-<p><b>Division Name:</b> <%= property.divisionName || '' %></p>
-
-<p><b>Pincode:</b> <%= property.pincode || '' %></p>
-
-<p><b>District:</b> <%= property.district || '' %></p>
-
-<p><b>State:</b> <%= property.stateName || '' %></p>
-
-<p><b>Direction:</b> <%= property.direction || '' %></p>
-
-<p><b>Landmark:</b> <%= property.locationLandmark || '' %></p>
-
-<p><b>Google Pin:</b> <%= property.googlePin || '' %></p>
 
 </div>
 
+
+
+<!-- ================================
+     BASIC INFORMATION
+================================ -->
+
 <div class="section">
 
-<h2>Tower Details</h2>
 
-<% if (property.towers && property.towers.length > 0) { %>
+<h2>
+Basic Information
+</h2>
 
-<div style="overflow-x:auto;">
 
-<table border="1" cellpadding="10" cellspacing="0">
+<div class="details-grid">
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Project Name
+</span>
+
+<span class="detail-value">
+<%= property.projectName || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Builder Name
+</span>
+
+<span class="detail-value">
+<%= property.builderName || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+City
+</span>
+
+<span class="detail-value">
+<%= property.city || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Project Status
+</span>
+
+<span class="detail-value">
+<%= property.projectStatus || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Property Status
+</span>
+
+<span class="detail-value">
+
+
+<% if(property.propertyStatus === 'Sold'){ %>
+
+<span class="
+status-badge
+status-sold
+">
+SOLD
+</span>
+
+
+<% } else if(property.propertyStatus === 'Token Received'){ %>
+
+<span class="
+status-badge
+status-token
+">
+TOKEN RECEIVED
+</span>
+
+
+<% } else { %>
+
+<span class="
+status-badge
+status-available
+">
+AVAILABLE
+</span>
+
+<% } %>
+
+
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Property Type
+</span>
+
+<span class="detail-value">
+
+<%= property.propertyType
+? property.propertyType.join(', ')
+: ''
+%>
+
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+RERA Approved
+</span>
+
+<span class="detail-value">
+<%= property.reraApproved || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+No. of Towers
+</span>
+
+<span class="detail-value">
+<%= property.numberOfTowers || '' %>
+</span>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     LOCATION DETAILS
+================================ -->
+
+<div class="section">
+
+
+<h2>
+Location Details
+</h2>
+
+
+<div class="details-grid">
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Property Location
+</span>
+
+<span class="detail-value">
+<%= property.propertyLocation || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Division Name
+</span>
+
+<span class="detail-value">
+<%= property.divisionName || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Pincode
+</span>
+
+<span class="detail-value">
+<%= property.pincode || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+District
+</span>
+
+<span class="detail-value">
+<%= property.district || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+State
+</span>
+
+<span class="detail-value">
+<%= property.stateName || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Direction
+</span>
+
+<span class="detail-value">
+<%= property.direction || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Landmark
+</span>
+
+<span class="detail-value">
+<%= property.locationLandmark || '' %>
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span class="detail-label">
+Google Pin
+</span>
+
+<span class="detail-value">
+<%= property.googlePin || '' %>
+</span>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     TOWER DETAILS
+================================ -->
+
+<div class="section">
+
+
+<h2>
+Tower Details
+</h2>
+
+
+<% if(
+property.towers &&
+property.towers.length > 0
+){ %>
+
+
+<div class="table-wrapper">
+
+
+<table class="data-table">
+
+
+<thead>
+
 <tr>
+
 <th>Tower Name</th>
+
 <th>No. of Floors</th>
+
 <th>Tower Status</th>
+
 <th>Inventory Status</th>
+
 <th>Possession Month</th>
+
 <th>Possession Year</th>
+
 </tr>
+
+</thead>
+
+
+<tbody>
+
 
 <% property.towers.forEach(function(t){ %>
 
+
 <tr>
-<td><%= t.towerName || '' %></td>
-<td><%= t.numberOfFloors || '' %></td>
-<td><%= t.towerStatus || '' %></td>
-<td><%= t.inventoryStatus || '' %></td>
-<td><%= t.possessionMonth || '' %></td>
-<td><%= t.possessionYear || '' %></td>
+
+
+<td data-label="Tower Name">
+<%= t.towerName || '' %>
+</td>
+
+
+<td data-label="No. of Floors">
+<%= t.numberOfFloors || '' %>
+</td>
+
+
+<td data-label="Tower Status">
+<%= t.towerStatus || '' %>
+</td>
+
+
+<td data-label="Inventory Status">
+<%= t.inventoryStatus || '' %>
+</td>
+
+
+<td data-label="Possession Month">
+<%= t.possessionMonth || '' %>
+</td>
+
+
+<td data-label="Possession Year">
+<%= t.possessionYear || '' %>
+</td>
+
+
 </tr>
+
 
 <% }) %>
 
+
+</tbody>
+
+
 </table>
 
+
 </div>
+
 
 <% } %>
 
+
 </div>
+
+
+
+<!-- ================================
+     CONFIGURATIONS
+================================ -->
 
 <div class="section">
 
-<h2>Configurations</h2>
 
-<% if (property.configurations && property.configurations.length > 0) { %>
+<h2>
+Configurations
+</h2>
 
-<table border="1" cellpadding="10" cellspacing="0">
+
+<% if(
+property.configurations &&
+property.configurations.length > 0
+){ %>
+
+
+<div class="table-wrapper">
+
+
+<table class="
+data-table
+configuration-table
+">
+
+
+<thead>
+
 
 <tr>
+
 <th>Type</th>
+
 <th>Area</th>
+
 <th>Quoted Price</th>
+
 <th>Closing Price</th>
+
 <th>Quoted ₹/SqFt</th>
+
 <th>Closing ₹/SqFt</th>
+
 <th>Furnished Status</th>
+
 <th>Parking Type</th>
+
 <th>Possession Status</th>
+
 <th>Available Units</th>
+
 </tr>
+
+
+</thead>
+
+
+<tbody>
+
 
 <% property.configurations.forEach(function(c){ %>
 
+
 <tr>
-<td><%= c.flatType || '' %></td>
-<td><%= c.carpetArea || '' %></td>
-<td><%= c.quotedPrice || '' %></td>
-<td><%= c.closingPrice || '' %></td>
-<td><%= c.quotedPricePerSqFt || 0 %></td>
-<td><%= c.closingPricePerSqFt || 0 %></td>
-<td><%= c.furnishedStatus || '' %></td>
 
-<td>
-<%= c.parkingType ? c.parkingType.join(', ') : '' %>
+
+<td data-label="Type">
+<%= c.flatType || '' %>
 </td>
 
-<td>
-<%= c.possessionStatus ? c.possessionStatus.join(', ') : '' %>
+
+<td data-label="Area">
+<%= c.carpetArea || '' %>
 </td>
 
-<td><%= c.availableUnits || '' %></td>
+
+<td data-label="Quoted Price">
+<%= c.quotedPrice || '' %>
+</td>
+
+
+<td data-label="Closing Price">
+<%= c.closingPrice || '' %>
+</td>
+
+
+<td data-label="Quoted ₹/SqFt">
+<%= c.quotedPricePerSqFt || 0 %>
+</td>
+
+
+<td data-label="Closing ₹/SqFt">
+<%= c.closingPricePerSqFt || 0 %>
+</td>
+
+
+<td data-label="Furnished Status">
+<%= c.furnishedStatus || '' %>
+</td>
+
+
+<td data-label="Parking Type">
+
+<%= c.parkingType
+? c.parkingType.join(', ')
+: ''
+%>
+
+</td>
+
+
+<td data-label="Possession Status">
+
+<%= c.possessionStatus
+? c.possessionStatus.join(', ')
+: ''
+%>
+
+</td>
+
+
+<td data-label="Available Units">
+<%= c.availableUnits || '' %>
+</td>
+
+
 </tr>
+
 
 <% }) %>
 
+
+</tbody>
+
+
 </table>
 
+
 </div>
+
 
 <% } %>
 
+
 </div>
+
+
+
+<!-- ================================
+     HIGHLIGHTS
+================================ -->
 
 <div class="section">
 
-<h2>Highlights</h2>
 
-<p><b>Amenities:</b>
-<%= property.amenities ? property.amenities.join(', ') : '' %>
-</p>
+<h2>
+Highlights
+</h2>
 
-<p><b>USP:</b> <%= property.usp || '' %></p>
 
-<p><b>Notes:</b> <%= property.notes || '' %></p>
+<div class="highlight-item">
+
+<span class="highlight-label">
+Amenities
+</span>
+
+<div class="highlight-value">
+
+<%= property.amenities
+? property.amenities.join(', ')
+: ''
+%>
 
 </div>
 
-<p>
-<a href="/property/page">← Back to Project List</a>
-</p>
+</div>
+
+
+<div class="highlight-item">
+
+<span class="highlight-label">
+USP
+</span>
+
+<div class="highlight-value">
+<%= property.usp || '' %>
+</div>
+
+</div>
+
+
+<div class="highlight-item">
+
+<span class="highlight-label">
+Notes
+</span>
+
+<div class="highlight-value">
+<%= property.notes || '' %>
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     BACK
+================================ -->
+
+<div class="bottom-action">
+
+
+<a href="/property/page">
+
+← Back to Project List
+
+</a>
+
+
+</div>
+
+
+</div>
+
 
 </body>
+
 </html>

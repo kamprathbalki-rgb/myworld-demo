@@ -1184,19 +1184,16 @@ async (req,res)=>{
 
 try{
 
-    // Today's date in YYYY-MM-DD format
     const today =
     new Date().toISOString().split('T')[0]
 
 
-    // Get all executives for this tenant
     const executives =
     await Executive.find({
         tenantId:req.session.tenantId
     })
 
 
-    // Get today's attendance records
     const attendanceRecords =
     await ExecutiveAttendance.find({
         tenantId:req.session.tenantId,
@@ -1204,135 +1201,246 @@ try{
     })
 
 
-    // Create status data for every executive
     const executiveStatus =
     executives.map(executive=>{
 
+
         const attendance =
-        attendanceRecords.find(record =>
+        attendanceRecords.find(record=>
             String(record.executiveId)
             ===
             String(executive._id)
         )
 
 
-        // Default status
-        let status = 'Not Checked In'
-        let statusClass = 'not-checked-in'
-        let icon = '⚪'
-        let lastActivity = '-'
-        let lastActivityTime = '-'
+        let status =
+        'Not Checked In'
+
+        let statusClass =
+        'not-checked-in'
+
+        let icon =
+        '⚪'
+
+        let lastActivity =
+        '-'
+
+        let lastActivityTime =
+        '-'
 
 
-        if(
-            attendance &&
-            attendance.activityLog &&
-            attendance.activityLog.length
-        ){
+        /*
+        If attendance exists and there
+        is at least one login, default
+        status is At Office.
+        */
 
-            const latestActivity =
-            attendance.activityLog[
-                attendance.activityLog.length - 1
-            ]
+        if(attendance){
 
-            lastActivity =
-            latestActivity.action || '-'
+            if(
+                attendance.loginTimes &&
+                attendance.loginTimes.length > 0
+            ){
 
-            lastActivityTime =
-            latestActivity.time || '-'
+                status = 'At Office'
 
+                statusClass =
+                'at-office'
 
-            switch(latestActivity.action){
+                icon = '🟢'
 
+                lastActivity =
+                'Login'
 
-                case 'login':
+                lastActivityTime =
+                attendance.loginTimes[
+                    attendance.loginTimes.length - 1
+                ]
 
-                    status = 'At Office'
-                    statusClass = 'at-office'
-                    icon = '🟢'
-
-                    break
-
-
-                case 'teaOut':
-
-                    status = 'Tea Break'
-                    statusClass = 'on-break'
-                    icon = '🟡'
-
-                    break
+            }
 
 
-                case 'teaIn':
+            /*
+            Check latest activity.
 
-                    status = 'At Office'
-                    statusClass = 'at-office'
-                    icon = '🟢'
+            Existing login records may
+            not contain an action field,
+            so only override the status
+            when an action exists.
+            */
 
-                    break
+            if(
+                attendance.activityLog &&
+                attendance.activityLog.length
+            ){
 
-
-                case 'lunchOut':
-
-                    status = 'Lunch Break'
-                    statusClass = 'on-break'
-                    icon = '🟠'
-
-                    break
-
-
-                case 'lunchIn':
-
-                    status = 'At Office'
-                    statusClass = 'at-office'
-                    icon = '🟢'
-
-                    break
+                const latestActivity =
+                attendance.activityLog[
+                    attendance.activityLog.length - 1
+                ]
 
 
-                case 'meetingOut':
+                if(latestActivity.time){
 
-                    status = 'Meeting / With Client'
-                    statusClass = 'meeting'
-                    icon = '🟣'
+                    lastActivityTime =
+                    latestActivity.time
 
-                    break
-
-
-                case 'meetingIn':
-
-                    status = 'At Office'
-                    statusClass = 'at-office'
-                    icon = '🟢'
-
-                    break
+                }
 
 
-                case 'siteVisitOut':
+                if(latestActivity.action){
 
-                    status = 'At Site'
-                    statusClass = 'at-site'
-                    icon = '🔵'
-
-                    break
+                    lastActivity =
+                    latestActivity.action
 
 
-                case 'siteVisitIn':
-
-                    status = 'At Office'
-                    statusClass = 'at-office'
-                    icon = '🟢'
-
-                    break
+                    switch(
+                        latestActivity.action
+                    ){
 
 
-                case 'logout':
+                        case 'login':
 
-                    status = 'Logged Out'
-                    statusClass = 'logged-out'
-                    icon = '⚪'
+                            status =
+                            'At Office'
 
-                    break
+                            statusClass =
+                            'at-office'
+
+                            icon =
+                            '🟢'
+
+                            break
+
+
+                        case 'teaOut':
+
+                            status =
+                            'Tea Break'
+
+                            statusClass =
+                            'on-break'
+
+                            icon =
+                            '🟡'
+
+                            break
+
+
+                        case 'teaIn':
+
+                            status =
+                            'At Office'
+
+                            statusClass =
+                            'at-office'
+
+                            icon =
+                            '🟢'
+
+                            break
+
+
+                        case 'lunchOut':
+
+                            status =
+                            'Lunch Break'
+
+                            statusClass =
+                            'on-break'
+
+                            icon =
+                            '🟠'
+
+                            break
+
+
+                        case 'lunchIn':
+
+                            status =
+                            'At Office'
+
+                            statusClass =
+                            'at-office'
+
+                            icon =
+                            '🟢'
+
+                            break
+
+
+                        case 'meetingOut':
+
+                            status =
+                            'Meeting / With Client'
+
+                            statusClass =
+                            'meeting'
+
+                            icon =
+                            '🟣'
+
+                            break
+
+
+                        case 'meetingIn':
+
+                            status =
+                            'At Office'
+
+                            statusClass =
+                            'at-office'
+
+                            icon =
+                            '🟢'
+
+                            break
+
+
+                        case 'siteVisitOut':
+
+                            status =
+                            'At Site'
+
+                            statusClass =
+                            'at-site'
+
+                            icon =
+                            '🔵'
+
+                            break
+
+
+                        case 'siteVisitIn':
+
+                            status =
+                            'At Office'
+
+                            statusClass =
+                            'at-office'
+
+                            icon =
+                            '🟢'
+
+                            break
+
+
+                        case 'logout':
+
+                            status =
+                            'Logged Out'
+
+                            statusClass =
+                            'logged-out'
+
+                            icon =
+                            '⚪'
+
+                            break
+
+                    }
+
+                }
 
             }
 
@@ -1341,7 +1449,8 @@ try{
 
         return{
 
-            id:executive._id,
+            id:
+            executive._id,
 
             name:
             executive.name ||
@@ -1366,7 +1475,8 @@ try{
     res.render(
         'executiveStatus',
         {
-            executives:executiveStatus
+            executives:
+            executiveStatus
         }
     )
 
@@ -1385,5 +1495,8 @@ try{
 }
 
 })
+
+
+module.exports = router
 
 module.exports = router

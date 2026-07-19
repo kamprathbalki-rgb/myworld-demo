@@ -1,47 +1,764 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Add Buyer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:1000px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+.logout-btn{
+    background:#d9534f;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+.section-note{
+    margin:-5px 0 18px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   FORM GRID
+================================ */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:16px 20px;
+}
+
+.form-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.form-group.full-width{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    color:#555;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+
+    min-height:42px;
+
+    padding:9px 10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    background:white;
+
+    color:#333;
+
+    font-family:Arial,sans-serif;
+
+    font-size:13px;
+}
+
+.form-control:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+
+    box-shadow:
+    0 0 0 2px rgba(31,78,121,.08);
+}
+
+
+/* ================================
+   CHECKBOXES
+================================ */
+
+.checkbox-grid{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+}
+
+.checkbox-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:9px 11px;
+
+    background:#f8fafc;
+
+    border:1px solid #ddd;
+
+    border-radius:7px;
+
+    color:#555;
+
+    font-size:12px;
+
+    cursor:pointer;
+}
+
+.checkbox-item input{
+    margin:0;
+}
+
+
+/* ================================
+   REQUIREMENT TABS
+================================ */
+
+.requirement-tabs{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:8px;
+
+    margin-bottom:18px;
+}
+
+.tab-btn{
+    min-height:44px;
+
+    padding:9px 12px;
+
+    border:1px solid #1f4e79;
+
+    border-radius:7px;
+
+    background:white;
+
+    color:#1f4e79;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    line-height:1.4;
+}
+
+.tab-btn:hover{
+    background:#eef5fb;
+}
+
+.tab-btn.active{
+    background:#1f4e79;
+
+    color:white;
+}
+
+.requirement-panel{
+    padding:18px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e6ea;
+
+    border-radius:9px;
+}
+
+.requirement-panel h3{
+    margin:0 0 16px;
+
+    color:#1f4e79;
+
+    font-size:15px;
+}
+
+
+/* ================================
+   LOCATION PRIORITY
+================================ */
+
+.location-priority{
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:22px;
+    height:22px;
+
+    margin-right:5px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    border-radius:50%;
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+.required-mark{
+    color:#dc3545;
+}
+
+
+/* ================================
+   GEO
+================================ */
+
+.geo-note{
+    margin-bottom:15px;
+
+    padding:10px 12px;
+
+    background:#f8fafc;
+
+    border-left:4px solid #1f4e79;
+
+    color:#666;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:5px;
+}
+
+.save-btn{
+    min-width:150px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn:hover{
+    background:#218838;
+}
+
+.cancel-btn{
+    display:inline-block;
+
+    min-width:100px;
+
+    padding:12px 18px;
+
+    background:#6c757d;
+
+    color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+    .form-section{
+        margin-bottom:12px;
+
+        padding:14px;
+    }
+
+    .section-title{
+        margin-bottom:14px;
+
+        font-size:16px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+
+        gap:13px;
+    }
+
+    .form-group.full-width{
+        grid-column:auto;
+    }
+
+    .form-control{
+        min-height:44px;
+
+        font-size:14px;
+    }
+
+    .checkbox-grid{
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:7px;
+    }
+
+    .checkbox-item{
+        padding:9px 7px;
+
+        font-size:10px;
+    }
+
+    .requirement-tabs{
+        grid-template-columns:1fr;
+
+        gap:7px;
+    }
+
+    .tab-btn{
+        font-size:11px;
+    }
+
+    .requirement-panel{
+        padding:13px;
+    }
+
+    .form-actions{
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:8px;
+    }
+
+    .save-btn,
+    .cancel-btn{
+        width:100%;
+
+        min-width:0;
+
+        text-align:center;
+    }
+
+}
+
+
+/* ================================
+   VERY SMALL MOBILE
+================================ */
+
+@media(max-width:380px){
+
+    .checkbox-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
 
-<a href="/dashboard">Home</a> |
+<div class="container">
 
-<a href="/logout">Logout</a>
 
-<hr>
+<!-- ================================
+     HEADER
+================================ -->
 
-<h1>Add Buyer</h1>
+<div class="page-header">
 
-<form method="POST" action="/buyer/save">
 
-<hr>
+<div class="header-info">
 
-<h2>Basic Buyer Details</h2>
+<h1>
+Add Buyer
+</h1>
 
-<label>Name</label>
-<input type="text" name="name"><br><br>
+<p>
+Create a new buyer requirement
+</p>
 
-<label>Phone</label>
-<input type="text" name="phone"><br><br>
+</div>
 
-<label>Email</label>
-<input type="text" name="email"><br><br>
 
-<hr>
+<div class="header-actions">
 
-<h2>Budget & Requirement</h2>
 
-<label>Min Budget</label>
-<input type="number" name="minBudget"><br><br>
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
 
-<label>Max Budget</label>
-<input type="number" name="maxBudget"><br><br>
 
-<div class="mb-3">
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+<a
+href="/logout"
+class="header-btn logout-btn"
+>
+Logout
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     BUYER FORM
+================================ -->
+
+<form
+method="POST"
+action="/buyer/save"
+>
+
+
+<!-- ================================
+     BASIC BUYER DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Basic Buyer Details
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Name
+</label>
+
+<input
+type="text"
+name="name"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Phone
+</label>
+
+<input
+type="text"
+name="phone"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group full-width">
+
+<label>
+Email
+</label>
+
+<input
+type="text"
+name="email"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     BUDGET & REQUIREMENT
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Budget & Requirement
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Min Budget
+</label>
+
+<input
+type="number"
+name="minBudget"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Max Budget
+</label>
+
+<input
+type="number"
+name="maxBudget"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group full-width">
 
 <label>
 Transaction Type
@@ -49,7 +766,8 @@ Transaction Type
 
 <select
 name="transactionType"
-class="form-control">
+class="form-control"
+>
 
 <option value="SALE">
 Sale
@@ -68,214 +786,867 @@ Lease
 </div>
 
 
-<label>Required Possession</label><br>
+<div class="form-group full-width">
 
-<input type="checkbox" name="requiredPossession" value="Immediate">
+
+<label>
+Required Possession
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Immediate"
+>
+
 Immediate
 
-<input type="checkbox" name="requiredPossession" value="Ready Possession">
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Ready Possession"
+>
+
 Ready Possession
 
-<input type="checkbox" name="requiredPossession" value="Under Construction">
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Under Construction"
+>
+
 Under Construction
 
-<input type="checkbox" name="requiredPossession" value="Possession Soon">
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="requiredPossession"
+value="Possession Soon"
+>
+
 Possession Soon
 
-<br><br>
+</label>
 
-<button type="button" onclick="showBuyerTab('apartmentBuyerTab')">
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROPERTY REQUIREMENT
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Property Requirement
+</h2>
+
+
+<div class="requirement-tabs">
+
+
+<button
+type="button"
+id="apartmentTabButton"
+class="tab-btn active"
+onclick="showBuyerTab('apartmentBuyerTab')"
+>
 Apartment (BHK)
 </button>
 
-<button type="button" onclick="showBuyerTab('otherBuyerTab')">
+
+<button
+type="button"
+id="otherTabButton"
+class="tab-btn"
+onclick="showBuyerTab('otherBuyerTab')"
+>
 Villa / Plot / Office / Showroom / Retail / Shop
 </button>
 
-<br><br>
-
-<!-- TAB 1 -->
-
-<div id="apartmentBuyerTab">
-
-<h3>Apartment Requirement</h3>
-
-<label>Required Flat Type</label>
-
-<select name="apartmentFlatType">
-    <option value="">Select</option>
-    <option>Studio</option>
-    <option>1 RK</option>
-    <option>1 BHK</option>
-    <option>1.5 BHK</option>
-    <option>2 BHK</option>
-    <option>2.5 BHK</option>
-    <option>3 BHK</option>
-    <option>3.5 BHK</option>
-    <option>4 BHK</option>
-    <option>4.5 BHK</option>
-    <option>5 BHK</option>
-    <option>5+ BHK</option>
-</select><br><br>
-
-<label>Min Carpet Area</label>
-<input type="number" name="apartmentMinArea"><br><br>
-
-<label>Max Carpet Area</label>
-<input type="number" name="apartmentMaxArea"><br><br>
 
 </div>
 
-<!-- TAB 2 -->
 
-<div id="otherBuyerTab" style="display:none;">
 
-<h3>Villa / Plot / Commercial Requirement</h3>
+<!-- APARTMENT TAB -->
 
-<label>Required Type</label>
+<div
+id="apartmentBuyerTab"
+class="requirement-panel"
+>
 
-<select name="otherFlatType">
-    <option value="">Select</option>
-    <option>Villa</option>
-    <option>Plot</option>
-    <option>Office</option>
-    <option>Showroom</option>
-    <option>Retail</option>
-    <option>Shop</option>
-</select><br><br>
 
-<label>Min Area</label>
-<input type="number" name="otherMinArea"><br><br>
+<h3>
+Apartment Requirement
+</h3>
 
-<label>Max Area</label>
-<input type="number" name="otherMaxArea"><br><br>
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Required Flat Type
+</label>
+
+<select
+name="apartmentFlatType"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+Studio
+</option>
+
+<option>
+1 RK
+</option>
+
+<option>
+1 BHK
+</option>
+
+<option>
+1.5 BHK
+</option>
+
+<option>
+2 BHK
+</option>
+
+<option>
+2.5 BHK
+</option>
+
+<option>
+3 BHK
+</option>
+
+<option>
+3.5 BHK
+</option>
+
+<option>
+4 BHK
+</option>
+
+<option>
+4.5 BHK
+</option>
+
+<option>
+5 BHK
+</option>
+
+<option>
+5+ BHK
+</option>
+
+</select>
 
 </div>
 
-<p>
+
+<div class="form-group">
+
+<label>
+Min Carpet Area
+</label>
+
+<input
+type="number"
+name="apartmentMinArea"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Max Carpet Area
+</label>
+
+<input
+type="number"
+name="apartmentMaxArea"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- OTHER PROPERTY TAB -->
+
+<div
+id="otherBuyerTab"
+class="requirement-panel"
+style="display:none;"
+>
+
+
+<h3>
+Villa / Plot / Commercial Requirement
+</h3>
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Required Type
+</label>
+
+<select
+name="otherFlatType"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+Villa
+</option>
+
+<option>
+Plot
+</option>
+
+<option>
+Office
+</option>
+
+<option>
+Showroom
+</option>
+
+<option>
+Retail
+</option>
+
+<option>
+Shop
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Min Area
+</label>
+
+<input
+type="number"
+name="otherMinArea"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Max Area
+</label>
+
+<input
+type="number"
+name="otherMaxArea"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     LOCATION PREFERENCES
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Location Preferences
+</h2>
+
+
+<p class="section-note">
+
 Select up to 3 preferred locations in order of priority.
+
 </p>
 
-<hr>
 
-<h2>Location Preferences</h2>
+<div class="form-grid">
 
-<label>1st Preference (Required)</label>
 
-<select name="preferredLocation1" required>
-    <option value="">Select Location</option>
+<!-- FIRST PREFERENCE -->
 
-    <% locations.forEach(function(location){ %>
-        <option value="<%= location.officeName %>">
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+<div class="form-group full-width">
+
+
+<label>
+
+<span class="location-priority">
+1
+</span>
+
+1st Preference
+
+<span class="required-mark">
+*
+</span>
+
+</label>
+
+
+<select
+name="preferredLocation1"
+class="form-control"
+required
+>
+
+
+<option value="">
+Select Location
+</option>
+
+
+<% locations.forEach(function(location){ %>
+
+
+<option
+value="<%= location.officeName %>"
+data-lat="<%= location.lat || '' %>"
+data-lng="<%= location.lng || '' %>"
+>
+
+<%= location.officeName %>
+
+(
+
+<%= location.divisionName %>,
+
+<%= location.district %>
+
+)
+
+</option>
+
+
+<% }) %>
+
 
 </select>
 
-<br><br>
 
-<label>2nd Preference (Optional)</label>
+</div>
 
-<select name="preferredLocation2">
-    <option value="">Not Required</option>
 
-    <% locations.forEach(function(location){ %>
-        <option value="<%= location.officeName %>">
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+
+<!-- SECOND PREFERENCE -->
+
+<div class="form-group full-width">
+
+
+<label>
+
+<span class="location-priority">
+2
+</span>
+
+2nd Preference
+
+(Optional)
+
+</label>
+
+
+<select
+name="preferredLocation2"
+class="form-control"
+>
+
+
+<option value="">
+Not Required
+</option>
+
+
+<% locations.forEach(function(location){ %>
+
+
+<option value="<%= location.officeName %>">
+
+<%= location.officeName %>
+
+(
+
+<%= location.divisionName %>,
+
+<%= location.district %>
+
+)
+
+</option>
+
+
+<% }) %>
+
 
 </select>
 
-<br><br>
 
-<label>3rd Preference (Optional)</label>
+</div>
 
-<select name="preferredLocation3">
-    <option value="">Not Required</option>
 
-    <% locations.forEach(function(location){ %>
-        <option value="<%= location.officeName %>">
-            <%= location.officeName %>
-            (
-            <%= location.divisionName %>,
-            <%= location.district %>
-            )
-        </option>
-    <% }) %>
+
+<!-- THIRD PREFERENCE -->
+
+<div class="form-group full-width">
+
+
+<label>
+
+<span class="location-priority">
+3
+</span>
+
+3rd Preference
+
+(Optional)
+
+</label>
+
+
+<select
+name="preferredLocation3"
+class="form-control"
+>
+
+
+<option value="">
+Not Required
+</option>
+
+
+<% locations.forEach(function(location){ %>
+
+
+<option value="<%= location.officeName %>">
+
+<%= location.officeName %>
+
+(
+
+<%= location.divisionName %>,
+
+<%= location.district %>
+
+)
+
+</option>
+
+
+<% }) %>
+
 
 </select>
 
-<br><br>
 
-<br><br>
+</div>
 
-<hr>
 
-<h2>Geo Preference (Optional)</h2>
+</div>
 
-<label>Longitude</label>
-<input type="text" name="lng"><br><br>
 
-<label>Latitude</label>
-<input type="text" name="lat"><br><br>
+</div>
 
-<label>Radius (meters)</label>
-<input type="number" name="radius"><br><br>
 
-<hr>
 
-<button type="submit">Save Buyer</button>
+<!-- ================================
+     GEO PREFERENCE
+================================ -->
+
+<div class="form-section">
+
+<h2 class="section-title">
+Geo Preference
+</h2>
+
+<div class="geo-note">
+
+Coordinates are automatically selected from the buyer's 1st location preference.
+You can change them manually if a more precise preferred location is required.
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+Longitude
+</label>
+
+<input
+type="number"
+step="any"
+name="lng"
+id="buyerLng"
+class="form-control"
+placeholder="Auto-filled from 1st Preference"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Latitude
+</label>
+
+<input
+type="number"
+step="any"
+name="lat"
+id="buyerLat"
+class="form-control"
+placeholder="Auto-filled from 1st Preference"
+>
+
+</div>
+
+
+<div class="form-group full-width">
+
+<label>
+Radius (meters)
+</label>
+
+<input
+type="number"
+name="radius"
+class="form-control"
+placeholder="Example: 5000"
+>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ================================
+     FORM ACTIONS
+================================ -->
+
+<div class="form-actions">
+
+
+<a
+href="javascript:history.back()"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="save-btn"
+>
+Save Buyer
+</button>
+
+
+</div>
+
 
 </form>
 
+
+</div>
+
+
+
+<!-- ================================
+     REQUIREMENT TAB SCRIPT
+================================ -->
+
 <script>
-function showBuyerTab(tabId) {
-    document.getElementById('apartmentBuyerTab').style.display = 'none';
-    document.getElementById('otherBuyerTab').style.display = 'none';
-    document.getElementById(tabId).style.display = 'block';
+
+function showBuyerTab(tabId){
+
+    document
+    .getElementById(
+        'apartmentBuyerTab'
+    )
+    .style
+    .display =
+    'none'
+
+
+    document
+    .getElementById(
+        'otherBuyerTab'
+    )
+    .style
+    .display =
+    'none'
+
+
+    document
+    .getElementById(
+        'apartmentTabButton'
+    )
+    .classList
+    .remove(
+        'active'
+    )
+
+
+    document
+    .getElementById(
+        'otherTabButton'
+    )
+    .classList
+    .remove(
+        'active'
+    )
+
+
+    document
+    .getElementById(
+        tabId
+    )
+    .style
+    .display =
+    'block'
+
+
+    if(
+        tabId ===
+        'apartmentBuyerTab'
+    ){
+
+        document
+        .getElementById(
+            'apartmentTabButton'
+        )
+        .classList
+        .add(
+            'active'
+        )
+
+    }else{
+
+        document
+        .getElementById(
+            'otherTabButton'
+        )
+        .classList
+        .add(
+            'active'
+        )
+
+    }
+
 }
+
 </script>
 
+
+
+<!-- ================================
+     LOCATION VALIDATION
+================================ -->
+
 <script>
 
-function validateLocations() {
+function validateLocations(){
 
-    const p1 = document.querySelector('[name="preferredLocation1"]').value
-    const p2 = document.querySelector('[name="preferredLocation2"]').value
-    const p3 = document.querySelector('[name="preferredLocation3"]').value
+    const p1 =
+    document.querySelector(
+        '[name="preferredLocation1"]'
+    ).value
 
-    const values = [p1, p2, p3].filter(v => v)
 
-    const unique = new Set(values)
+    const p2 =
+    document.querySelector(
+        '[name="preferredLocation2"]'
+    ).value
 
-    if (values.length !== unique.size) {
-        alert('Please select different locations')
+
+    const p3 =
+    document.querySelector(
+        '[name="preferredLocation3"]'
+    ).value
+
+
+    const values =
+    [p1,p2,p3]
+    .filter(
+        v => v
+    )
+
+
+    const unique =
+    new Set(
+        values
+    )
+
+
+    if(
+        values.length !==
+        unique.size
+    ){
+
+        alert(
+            'Please select different locations'
+        )
+
         return false
+
     }
+
 
     return true
+
 }
 
-document.querySelector('form')
-.addEventListener('submit', function(e){
 
-    if (!validateLocations()) {
+document
+.querySelector('form')
+.addEventListener(
+'submit',
+function(e){
+
+    if(
+        !validateLocations()
+    ){
+
         e.preventDefault()
+
     }
 
-})
+}
+)
 
 </script>
 
+<script>
+
+const primaryLocationSelect =
+document.querySelector(
+    '[name="preferredLocation1"]'
+)
+
+const buyerLatInput =
+document.getElementById(
+    'buyerLat'
+)
+
+const buyerLngInput =
+document.getElementById(
+    'buyerLng'
+)
+
+
+primaryLocationSelect.addEventListener(
+'change',
+function(){
+
+    const selectedOption =
+    this.options[
+        this.selectedIndex
+    ]
+
+    const lat =
+    selectedOption.dataset.lat || ''
+
+    const lng =
+    selectedOption.dataset.lng || ''
+
+
+    buyerLatInput.value = lat
+
+    buyerLngInput.value = lng
+
+}
+)
+
+</script>
+
+
 </body>
+
 </html>

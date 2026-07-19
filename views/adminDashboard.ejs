@@ -1,96 +1,687 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-<title>Main Admin Dashboard</title>
+<meta charset="UTF-8">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Admin Dashboard
+</title>
+
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
+
 body{
-background:#f4f6f9;
-font-family:Arial;
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
 }
 
-.dashboard-title{
-margin:20px 0;
+
+.container{
+    max-width:1200px;
+
+    margin:auto;
 }
 
-.card{
-border:none;
-border-radius:10px;
-box-shadow:0 3px 6px rgba(0,0,0,0.1);
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
 }
 
-.card-title{
-font-size:14px;
-color:#777;
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
 }
 
-.card-value{
-font-size:28px;
-font-weight:bold;
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+
+.back-btn{
+    display:inline-block;
+
+    padding:10px 16px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+.back-btn:hover{
+    background:#163b5d;
+}
+
+
+/* ================================
+   SECTION
+================================ */
+
+.section-card{
+    background:white;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+
+.section-title{
+    margin:0 0 18px;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+
+/* ================================
+   DASHBOARD GRID
+================================ */
+
+.dashboard-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        3,
+        1fr
+    );
+
+    gap:15px;
+}
+
+
+/* ================================
+   METRIC CARD
+================================ */
+
+.metric-card{
+    position:relative;
+
+    min-height:145px;
+
+    padding:20px;
+
+    background:white;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.06);
+
+    transition:
+    transform .2s,
+    box-shadow .2s;
+}
+
+
+.metric-card:hover{
+    transform:
+    translateY(-2px);
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.10);
+}
+
+
+/* ================================
+   ICON
+================================ */
+
+.metric-icon{
+    margin-bottom:8px;
+
+    font-size:24px;
+}
+
+
+/* ================================
+   LABEL
+================================ */
+
+.metric-label{
+    color:#666;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+}
+
+
+/* ================================
+   VALUE
+================================ */
+
+.metric-value{
+    margin-top:10px;
+
+    color:#1f4e79;
+
+    font-size:30px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   CARD ACCENTS
+================================ */
+
+.properties-card{
+    border-top:
+    4px solid #1f4e79;
+}
+
+
+.buyers-card{
+    border-top:
+    4px solid #28a745;
+}
+
+
+.visits-card{
+    border-top:
+    4px solid #fd7e14;
+}
+
+
+.deals-card{
+    border-top:
+    4px solid #6f42c1;
+}
+
+
+.revenue-card{
+    border-top:
+    4px solid #dc3545;
+}
+
+
+.executive-card{
+    border-top:
+    4px solid #17a2b8;
+}
+
+
+/* ================================
+   SPECIAL VALUES
+================================ */
+
+.revenue-value{
+    color:#28a745;
+
+    font-size:26px;
+}
+
+
+.executive-value{
+    color:#333;
+
+    font-size:23px;
+
+    word-break:break-word;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+.page-footer{
+    margin-top:20px;
+
+    padding:12px;
+
+    text-align:center;
+
+    color:#999;
+
+    font-size:11px;
+}
+
+
+/* ================================
+   TABLET
+================================ */
+
+@media(max-width:900px){
+
+    .dashboard-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .page-header{
+        padding:14px;
+
+        margin-bottom:15px;
+    }
+
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+
+    .header-info p{
+        font-size:11px;
+
+        line-height:1.4;
+    }
+
+
+    .back-btn{
+        padding:9px 11px;
+
+        font-size:11px;
+
+        white-space:nowrap;
+    }
+
+
+    .section-card{
+        padding:12px;
+    }
+
+
+    .section-title{
+        margin-bottom:12px;
+
+        font-size:16px;
+    }
+
+
+    .dashboard-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:10px;
+    }
+
+
+    .metric-card{
+        min-height:125px;
+
+        padding:13px 8px;
+    }
+
+
+    .metric-icon{
+        margin-bottom:6px;
+
+        font-size:21px;
+    }
+
+
+    .metric-label{
+        font-size:10px;
+
+        letter-spacing:.3px;
+
+        line-height:1.4;
+    }
+
+
+    .metric-value{
+        margin-top:8px;
+
+        font-size:23px;
+    }
+
+
+    .revenue-value{
+        font-size:18px;
+    }
+
+
+    .executive-value{
+        font-size:17px;
+    }
+
+}
+
+
+/* ================================
+   VERY SMALL MOBILE
+================================ */
+
+@media(max-width:360px){
+
+    .metric-card{
+        min-height:115px;
+
+        padding:10px 6px;
+    }
+
+
+    .metric-value{
+        font-size:20px;
+    }
+
+
+    .revenue-value{
+        font-size:16px;
+    }
+
+
+    .executive-value{
+        font-size:15px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
-<h2 class="dashboard-title">Admin Dashboard</h2>
 
-<div class="row g-4">
+<!-- ================================
+     HEADER
+================================ -->
 
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Total Properties</div>
-<div class="card-value text-primary"><%= propertyCount %></div>
-</div>
-</div>
+<div class="page-header">
 
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Total Buyers</div>
-<div class="card-value text-success"><%= buyerCount %></div>
-</div>
-</div>
 
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Total Visits</div>
-<div class="card-value text-warning"><%= visitCount %></div>
-</div>
-</div>
+<div class="header-info">
 
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Deals Closed</div>
-<div class="card-value text-info"><%= dealsClosed %></div>
-</div>
-</div>
+<h1>
+MyWorld Admin Dashboard
+</h1>
 
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Total Revenue</div>
-<div class="card-value text-danger">₹ <%= revenue %></div>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="card p-3">
-<div class="card-title">Top Executive</div>
-<div class="card-value text-dark"><%= topExecutive %></div>
-</div>
-</div>
+<p>
+Business performance overview
+</p>
 
 </div>
 
+
+<a
+href="/dashboard/main"
+class="back-btn"
+>
+← Dashboard
+</a>
+
+
 </div>
+
+
+
+<!-- ================================
+     BUSINESS OVERVIEW
+================================ -->
+
+<div class="section-card">
+
+
+<h2 class="section-title">
+Business Overview
+</h2>
+
+
+<div class="dashboard-grid">
+
+
+
+<!-- TOTAL PROPERTIES -->
+
+<div class="
+metric-card
+properties-card
+">
+
+<div class="metric-icon">
+🏠
+</div>
+
+<div class="metric-label">
+Total Properties
+</div>
+
+<div class="metric-value">
+<%= propertyCount %>
+</div>
+
+</div>
+
+
+
+<!-- TOTAL BUYERS -->
+
+<div class="
+metric-card
+buyers-card
+">
+
+<div class="metric-icon">
+👥
+</div>
+
+<div class="metric-label">
+Total Buyers
+</div>
+
+<div class="metric-value">
+<%= buyerCount %>
+</div>
+
+</div>
+
+
+
+<!-- TOTAL VISITS -->
+
+<div class="
+metric-card
+visits-card
+">
+
+<div class="metric-icon">
+🚗
+</div>
+
+<div class="metric-label">
+Total Visits
+</div>
+
+<div class="metric-value">
+<%= visitCount %>
+</div>
+
+</div>
+
+
+
+<!-- DEALS CLOSED -->
+
+<div class="
+metric-card
+deals-card
+">
+
+<div class="metric-icon">
+🏆
+</div>
+
+<div class="metric-label">
+Deals Closed
+</div>
+
+<div class="metric-value">
+<%= dealsClosed %>
+</div>
+
+</div>
+
+
+
+<!-- TOTAL REVENUE -->
+
+<div class="
+metric-card
+revenue-card
+">
+
+<div class="metric-icon">
+💰
+</div>
+
+<div class="metric-label">
+Total Revenue
+</div>
+
+<div class="
+metric-value
+revenue-value
+">
+₹ <%= revenue %>
+</div>
+
+</div>
+
+
+
+<!-- TOP EXECUTIVE -->
+
+<div class="
+metric-card
+executive-card
+">
+
+<div class="metric-icon">
+⭐
+</div>
+
+<div class="metric-label">
+Top Executive
+</div>
+
+<div class="
+metric-value
+executive-value
+">
+<%= topExecutive %>
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     FOOTER
+================================ -->
+
+<div class="page-footer">
+
+MyWorld Real Estate CRM
+
+</div>
+
+
+</div>
+
 
 </body>
+
 </html>

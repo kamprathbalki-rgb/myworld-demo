@@ -1,51 +1,597 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<title>Executive Attendance</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Executive Attendance
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:24px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.home-btn{
+    background:#1f4e79;
+
+    color:white;
+}
+
+.logout-btn{
+    background:#d9534f;
+
+    color:white;
+}
+
+
+/* ================================
+   SECTION
+================================ */
+
+.section-card{
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-wrapper{
+    width:100%;
+
+    overflow-x:auto;
+
+    border:1px solid #eee;
+
+    border-radius:10px;
+}
+
+.attendance-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:650px;
+}
+
+.attendance-table th{
+    padding:13px 12px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.4px;
+}
+
+.attendance-table td{
+    padding:13px 12px;
+
+    border-bottom:1px solid #eee;
+
+    font-size:13px;
+
+    color:#444;
+}
+
+.attendance-table tr:last-child td{
+    border-bottom:none;
+}
+
+.attendance-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+
+/* ================================
+   EXECUTIVE
+================================ */
+
+.executive-name{
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+
+/* ================================
+   DATE
+================================ */
+
+.date-value{
+    white-space:nowrap;
+}
+
+
+/* ================================
+   TIME
+================================ */
+
+.time-value{
+    white-space:nowrap;
+
+    color:#555;
+}
+
+
+/* ================================
+   VIEW LOG
+================================ */
+
+.log-btn{
+    display:inline-block;
+
+    padding:7px 11px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:6px;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.log-btn:hover{
+    background:#163b5d;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-state{
+    padding:30px;
+
+    text-align:center;
+
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        padding:14px;
+
+        margin-bottom:15px;
+
+        align-items:flex-start;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        flex-direction:column;
+    }
+
+    .header-btn{
+        padding:8px 10px;
+
+        font-size:10px;
+
+        text-align:center;
+    }
+
+    .section-card{
+        padding:12px;
+    }
+
+    .section-title{
+        font-size:16px;
+
+        margin-bottom:12px;
+    }
+
+
+    /*
+    MOBILE CARD VIEW
+    */
+
+    .table-wrapper{
+        overflow:visible;
+
+        border:none;
+    }
+
+    .attendance-table{
+        min-width:0;
+    }
+
+    .attendance-table thead{
+        display:none;
+    }
+
+    .attendance-table,
+    .attendance-table tbody,
+    .attendance-table tr,
+    .attendance-table td{
+        display:block;
+
+        width:100%;
+    }
+
+    .attendance-table tr{
+        margin-bottom:12px;
+
+        padding:14px;
+
+        background:white;
+
+        border:1px solid #e5e5e5;
+
+        border-left:4px solid #1f4e79;
+
+        border-radius:10px;
+
+        box-shadow:
+        0 2px 6px rgba(0,0,0,.06);
+    }
+
+    .attendance-table td{
+        display:flex;
+
+        justify-content:space-between;
+        align-items:center;
+
+        gap:12px;
+
+        padding:7px 0;
+
+        border-bottom:1px solid #f0f0f0;
+
+        text-align:right;
+    }
+
+    .attendance-table td:last-child{
+        border-bottom:none;
+
+        padding-top:10px;
+    }
+
+    .attendance-table td::before{
+        content:attr(data-label);
+
+        color:#777;
+
+        font-size:10px;
+
+        font-weight:bold;
+
+        text-transform:uppercase;
+
+        text-align:left;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<a href="/dashboard/main">Home</a> |
-<a href="/logout">Logout</a>
 
-<hr>
+<div class="container">
 
-<h1>Executive Attendance</h1>
 
-<table border="1" cellpadding="5">
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Executive Attendance
+</h1>
+
+<p>
+Attendance and activity records
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+<a
+href="/dashboard/main"
+class="header-btn home-btn"
+>
+← Dashboard
+</a>
+
+<a
+href="/logout"
+class="header-btn logout-btn"
+>
+Logout
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ATTENDANCE
+================================ -->
+
+<div class="section-card">
+
+
+<h2 class="section-title">
+Attendance Records
+</h2>
+
+
+<div class="table-wrapper">
+
+
+<table class="attendance-table">
+
+
+<thead>
 
 <tr>
-<th>Executive</th>
-<th>Date</th>
-<th>Login</th>
-<th>Logout</th>
-<th>Log</th>
+
+<th>
+Executive
+</th>
+
+<th>
+Date
+</th>
+
+<th>
+Login
+</th>
+
+<th>
+Logout
+</th>
+
+<th>
+Log
+</th>
+
 </tr>
+
+</thead>
+
+
+<tbody>
+
+
+<% if(records && records.length){ %>
+
 
 <% records.forEach(function(r){ %>
 
+
 <tr>
 
-<td><%= r.executiveName %></td>
 
-<td><%= r.date %></td>
+<td
+data-label="Executive"
+class="executive-name"
+>
+<%= r.executiveName %>
+</td>
 
-<td><%= r.loginTime || '' %></td>
 
-<td><%= r.logoutTime || '' %></td>
+<td
+data-label="Date"
+class="date-value"
+>
+<%= r.date %>
+</td>
 
-<td>
-<a href="/attendance/log/<%= r._id %>">
+
+<td
+data-label="Login"
+class="time-value"
+>
+<%= r.loginTime || '' %>
+</td>
+
+
+<td
+data-label="Logout"
+class="time-value"
+>
+<%= r.logoutTime || '' %>
+</td>
+
+
+<td data-label="Activity">
+
+<a
+href="/attendance/log/<%= r._id %>"
+class="log-btn"
+>
 View Log
 </a>
+
+</td>
+
+
+</tr>
+
+
+<% }) %>
+
+
+<% } else { %>
+
+
+<tr>
+
+<td
+colspan="5"
+class="empty-state"
+>
+No attendance records found.
 </td>
 
 </tr>
 
-<% }) %>
+
+<% } %>
+
+
+</tbody>
+
 
 </table>
 
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
 </body>
+
 </html>

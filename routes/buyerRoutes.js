@@ -362,11 +362,11 @@ for (const locationName of preferredLocations.slice(1)) {
 const primaryLocationData =
     locationData[0]
 
-            const buyerLat =
-                primaryLocationData?.lat || 0
+const buyerLat =
+Number(primaryLocationData?.lat) || 0
 
-            const buyerLng =
-                primaryLocationData?.lng || 0
+const buyerLng =
+Number(primaryLocationData?.lng) || 0
 
             const matchedExecutive =
                 await Executive.findOne({
@@ -508,16 +508,19 @@ locationData.map(
                 ? matchedExecutive.name
                 : "",
 
-                preferredLocation: {
+preferredLocation: {
+    type: "Point",
 
-                    type: "Point",
+    /*
+    GeoJSON order:
+    [longitude, latitude]
+    */
 
-                    coordinates: [
-                        buyerLat,
-                        buyerLng
-                    ]
-
-                }
+    coordinates: [
+        buyerLng,
+        buyerLat
+    ]
+}
 
             })
 
@@ -894,11 +897,21 @@ locationData.find(
     l => l.officeName === primaryLocation
 )
 
+const submittedLat =
+parseFloat(req.body.lat)
+
+const submittedLng =
+parseFloat(req.body.lng)
+
 const buyerLat =
-primaryLocationData?.lat || 0
+Number.isFinite(submittedLat)
+? submittedLat
+: Number(primaryLocationData?.lat) || 0
 
 const buyerLng =
-primaryLocationData?.lng || 0
+Number.isFinite(submittedLng)
+? submittedLng
+: Number(primaryLocationData?.lng) || 0
 
 const matchedExecutive = await Executive.findOne({
     tenantId: req.session.tenantId,
@@ -990,8 +1003,8 @@ req.body.transactionType,
 preferredLocation: {
     type: "Point",
     coordinates: [
-        buyerLat,
-        buyerLng
+        buyerLng,
+        buyerLat
     ]
 }
 

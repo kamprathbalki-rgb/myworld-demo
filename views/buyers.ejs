@@ -1,380 +1,1771 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<title>Buyers</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Buyers
+</title>
+
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:1600px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+.logout-btn{
+    background:#d9534f;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.summary-section{
+    margin-bottom:20px;
+
+    padding:18px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 15px;
+
+    color:#1f4e79;
+
+    font-size:17px;
+}
+
 .summary{
-display:flex;
-gap:15px;
-margin-top:15px;
-margin-bottom:20px;
-flex-wrap:wrap;
+    display:grid;
+
+    grid-template-columns:
+    repeat(6,1fr);
+
+    gap:10px;
 }
 
-.card{
-border:1px solid #ccc;
-padding:15px;
-width:140px;
-text-align:center;
+.summary a{
+    color:inherit;
+
+    text-decoration:none;
 }
 
-.card h3{
-margin:0;
-font-size:14px;
+.summary-card{
+    min-height:105px;
+
+    padding:14px 8px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    background:white;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 2px 6px rgba(0,0,0,.06);
+
+    transition:.2s;
 }
 
-.card h2{
-margin:10px 0 0 0;
+.summary-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.10);
+}
+
+.summary-card h3{
+    margin:0;
+
+    color:#666;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.4px;
+}
+
+.summary-card h2{
+    margin:8px 0 0;
+
+    color:#1f4e79;
+
+    font-size:26px;
+}
+
+.new-card{
+    border-top:4px solid #1f4e79;
+}
+
+.contacted-card{
+    border-top:4px solid #17a2b8;
+}
+
+.visit-card{
+    border-top:4px solid #fd7e14;
+}
+
+.negotiation-card{
+    border-top:4px solid #6f42c1;
+}
+
+.closed-card{
+    border-top:4px solid #28a745;
+}
+
+.lost-card{
+    border-top:4px solid #dc3545;
+}
+
+
+/* ================================
+   FILTER SECTION
+================================ */
+
+.filter-section{
+    margin-bottom:20px;
+
+    padding:15px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.filter-form{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    align-items:center;
+}
+
+.search-input{
+    flex:1;
+
+    min-width:230px;
+}
+
+.filter-form input,
+.filter-form select{
+    height:40px;
+
+    padding:8px 10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    background:white;
+
+    font-family:Arial,sans-serif;
+
+    font-size:12px;
+}
+
+.filter-form input:focus,
+.filter-form select:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+}
+
+.filter-btn{
+    height:40px;
+
+    padding:0 15px;
+
+    border:none;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.search-btn{
+    background:#1f4e79;
+
+    color:white;
+}
+
+.clear-btn{
+    background:#6c757d;
+
+    color:white;
+}
+
+
+/* ================================
+   BUYER SECTION
+================================ */
+
+.buyer-section{
+    padding:18px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-wrapper{
+    width:100%;
+
+    overflow-x:auto;
+
+    border:1px solid #eee;
+
+    border-radius:10px;
+}
+
+.buyer-table{
+    width:100%;
+
+    min-width:2200px;
+
+    border-collapse:collapse;
+}
+
+.buyer-table th{
+    padding:11px 9px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.3px;
+
+    white-space:nowrap;
+}
+
+.buyer-table td{
+    padding:10px 9px;
+
+    border-bottom:1px solid #eee;
+
+    color:#444;
+
+    font-size:11px;
+
+    vertical-align:top;
+}
+
+.buyer-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.buyer-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+
+/* ================================
+   BUYER NAME
+================================ */
+
+.buyer-name{
+    color:#1f4e79;
+
+    font-weight:bold;
+}
+
+.phone-value{
+    white-space:nowrap;
+}
+
+
+/* ================================
+   FORM CONTROLS
+================================ */
+
+.inline-form{
+    margin:0;
+}
+
+.table-select,
+.table-input{
+    width:100%;
+
+    min-width:120px;
+
+    padding:7px;
+
+    border:1px solid #ccc;
+
+    border-radius:5px;
+
+    background:white;
+
+    font-family:Arial,sans-serif;
+
+    font-size:11px;
+}
+
+.followup-input{
+    min-width:180px;
+}
+
+.notes-input{
+    min-width:160px;
+}
+
+.reassign-select{
+    min-width:150px;
+
+    margin-bottom:5px;
+}
+
+
+/* ================================
+   BUTTONS & LINKS
+================================ */
+
+.action-link{
+    display:inline-block;
+
+    padding:6px 9px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:5px;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.edit-link{
+    background:#6f42c1;
+}
+
+.save-btn,
+.reassign-btn{
+    margin-top:5px;
+
+    padding:6px 9px;
+
+    border:none;
+
+    border-radius:5px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+.delete-btn{
+    padding:6px 9px;
+
+    border:none;
+
+    border-radius:5px;
+
+    background:#dc3545;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   ASSIGNED EXECUTIVE
+================================ */
+
+.assigned-executive{
+    font-weight:bold;
+
+    color:#555;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-state{
+    padding:30px;
+
+    text-align:center;
+
+    color:#777;
+}
+
+
+/* ================================
+   TABLET
+================================ */
+
+@media(max-width:1000px){
+
+    .summary{
+        grid-template-columns:
+        repeat(3,1fr);
+    }
+
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+
+    .header-info p{
+        font-size:11px;
+    }
+
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+
+    /* SUMMARY */
+
+    .summary-section{
+        padding:12px;
+
+        margin-bottom:12px;
+    }
+
+
+    .summary{
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:8px;
+    }
+
+
+    .summary-card{
+        min-height:85px;
+
+        padding:9px 5px;
+    }
+
+
+    .summary-card h3{
+        font-size:9px;
+
+        letter-spacing:.2px;
+    }
+
+
+    .summary-card h2{
+        margin-top:5px;
+
+        font-size:21px;
+    }
+
+
+    /* FILTERS */
+
+    .filter-section{
+        padding:12px;
+
+        margin-bottom:12px;
+    }
+
+
+    .filter-form{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:7px;
+    }
+
+
+    .search-input{
+        grid-column:1 / -1;
+
+        min-width:0;
+    }
+
+
+    .filter-form input,
+    .filter-form select{
+        width:100%;
+
+        min-width:0;
+
+        height:38px;
+
+        font-size:11px;
+    }
+
+
+    .filter-btn{
+        width:100%;
+
+        height:38px;
+
+        padding:0 8px;
+
+        font-size:11px;
+    }
+
+
+    /* BUYER CARDS */
+
+    .buyer-section{
+        padding:0;
+
+        background:transparent;
+
+        box-shadow:none;
+    }
+
+
+    .buyer-section .section-title{
+        padding:0 2px;
+    }
+
+
+    .table-wrapper{
+        overflow:visible;
+
+        border:none;
+    }
+
+
+    .buyer-table{
+        min-width:0;
+    }
+
+
+    .buyer-table thead{
+        display:none;
+    }
+
+
+    .buyer-table,
+    .buyer-table tbody,
+    .buyer-table tr,
+    .buyer-table td{
+        display:block;
+
+        width:100%;
+    }
+
+
+    .buyer-table tr{
+        margin-bottom:14px;
+
+        padding:14px;
+
+        background:white;
+
+        border:1px solid #e5e5e5;
+
+        border-left:
+        4px solid #1f4e79;
+
+        border-radius:10px;
+
+        box-shadow:
+        0 2px 7px rgba(0,0,0,.07);
+    }
+
+
+    .buyer-table td{
+        display:flex;
+
+        justify-content:space-between;
+        align-items:flex-start;
+
+        gap:15px;
+
+        padding:8px 0;
+
+        border-bottom:
+        1px solid #f0f0f0;
+
+        text-align:right;
+
+        font-size:11px;
+
+        line-height:1.5;
+    }
+
+
+    .buyer-table td:last-child{
+        border-bottom:none;
+    }
+
+
+    .buyer-table td::before{
+        content:
+        attr(data-label);
+
+        flex:0 0 37%;
+
+        color:#777;
+
+        font-size:9px;
+
+        font-weight:bold;
+
+        text-transform:uppercase;
+
+        text-align:left;
+    }
+
+
+    .buyer-table .buyer-name{
+        font-size:15px;
+
+        color:#1f4e79;
+    }
+
+
+    .buyer-table td form{
+        flex:1;
+
+        text-align:right;
+    }
+
+
+    .table-select,
+    .table-input{
+        width:100%;
+
+        min-width:0;
+
+        font-size:11px;
+    }
+
+
+    .followup-input,
+    .notes-input,
+    .reassign-select{
+        min-width:0;
+    }
+
+
+    .action-link{
+        font-size:10px;
+    }
+
+
+    .mobile-actions{
+        display:flex;
+
+        justify-content:flex-end;
+
+        flex-wrap:wrap;
+
+        gap:5px;
+    }
+
+}
+
+
+/* ================================
+   VERY SMALL MOBILE
+================================ */
+
+@media(max-width:380px){
+
+    .summary{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="javascript:history.back()">Back</a> |
-<a href="/dashboard">Home</a> |
-<a href="/logout">Logout</a>
 
-<hr>
+<div class="container">
 
-<h1>Buyer List</h1>
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Buyer List
+</h1>
+
+<p>
+Manage buyers, follow-ups and assignments
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+<a
+href="/logout"
+class="header-btn logout-btn"
+>
+Logout
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     BUYER PIPELINE SUMMARY
+================================ -->
+
+<div class="summary-section">
+
+
+<h2 class="section-title">
+Buyer Pipeline
+</h2>
 
 
 <div class="summary">
 
-<a href="/buyer/page?status=New Lead" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>New Leads</h3>
-<h2><%= newLeads %></h2>
+
+<a href="/buyer/page?status=New Lead">
+
+<div class="
+summary-card
+new-card
+">
+
+<h3>
+New Leads
+</h3>
+
+<h2>
+<%= newLeads %>
+</h2>
+
 </div>
+
 </a>
 
-<a href="/buyer/page?status=Contacted" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>Contacted</h3>
-<h2><%= contacted %></h2>
+
+
+<a href="/buyer/page?status=Contacted">
+
+<div class="
+summary-card
+contacted-card
+">
+
+<h3>
+Contacted
+</h3>
+
+<h2>
+<%= contacted %>
+</h2>
+
 </div>
+
 </a>
 
-<a href="/buyer/page?status=Site Visit" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>Site Visits</h3>
-<h2><%= siteVisits %></h2>
+
+
+<a href="/buyer/page?status=Site Visit">
+
+<div class="
+summary-card
+visit-card
+">
+
+<h3>
+Site Visits
+</h3>
+
+<h2>
+<%= siteVisits %>
+</h2>
+
 </div>
+
 </a>
 
-<a href="/buyer/page?status=Negotiation" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>Negotiation</h3>
-<h2><%= negotiations %></h2>
+
+
+<a href="/buyer/page?status=Negotiation">
+
+<div class="
+summary-card
+negotiation-card
+">
+
+<h3>
+Negotiation
+</h3>
+
+<h2>
+<%= negotiations %>
+</h2>
+
 </div>
+
 </a>
 
-<a href="/buyer/page?status=Deal Closed" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>Closed</h3>
-<h2><%= closedDeals %></h2>
+
+
+<a href="/buyer/page?status=Deal Closed">
+
+<div class="
+summary-card
+closed-card
+">
+
+<h3>
+Closed
+</h3>
+
+<h2>
+<%= closedDeals %>
+</h2>
+
 </div>
+
 </a>
 
-<a href="/buyer/page?status=Lost" style="text-decoration:none;color:black;">
-<div class="card">
-<h3>Lost</h3>
-<h2><%= lostDeals %></h2>
+
+
+<a href="/buyer/page?status=Lost">
+
+<div class="
+summary-card
+lost-card
+">
+
+<h3>
+Lost
+</h3>
+
+<h2>
+<%= lostDeals %>
+</h2>
+
 </div>
+
 </a>
 
+
 </div>
 
-<br>
 
-<form method="GET" action="/buyer/page">
+</div>
+
+
+
+<!-- ================================
+     SEARCH & FILTER
+================================ -->
+
+<div class="filter-section">
+
+
+<form
+method="GET"
+action="/buyer/page"
+class="filter-form"
+>
+
 
 <input
 type="text"
 name="search"
+class="search-input"
 placeholder="Search Name / Phone / Location"
 value="<%= search || '' %>"
 >
 
-<button type="submit">
+
+<button
+type="submit"
+class="
+filter-btn
+search-btn
+"
+>
 Search
 </button>
 
+
 <button
 type="button"
-onclick="window.location='/buyer/page'">
-Clear Search
+class="
+filter-btn
+clear-btn
+"
+onclick="window.location='/buyer/page'"
+>
+Clear
 </button>
 
 
 
-<select name="status" onchange="this.form.submit()">
+<select
+name="status"
+onchange="this.form.submit()"
+>
 
-<option value="">All Status</option>
 
-<option value="New Lead">New Lead</option>
+<option value="">
+All Status
+</option>
 
-<option value="Contacted">Contacted</option>
 
-<option value="Site Visit">Site Visit</option>
+<option
+value="New Lead"
+<%= status === 'New Lead'
+? 'selected'
+: '' %>
+>
+New Lead
+</option>
 
-<option value="Negotiation">Negotiation</option>
 
-<option value="Deal Closed">Deal Closed</option>
+<option
+value="Contacted"
+<%= status === 'Contacted'
+? 'selected'
+: '' %>
+>
+Contacted
+</option>
 
-<option value="Lost">Lost</option>
+
+<option
+value="Site Visit"
+<%= status === 'Site Visit'
+? 'selected'
+: '' %>
+>
+Site Visit
+</option>
+
+
+<option
+value="Negotiation"
+<%= status === 'Negotiation'
+? 'selected'
+: '' %>
+>
+Negotiation
+</option>
+
+
+<option
+value="Deal Closed"
+<%= status === 'Deal Closed'
+? 'selected'
+: '' %>
+>
+Deal Closed
+</option>
+
+
+<option
+value="Lost"
+<%= status === 'Lost'
+? 'selected'
+: '' %>
+>
+Lost
+</option>
+
 
 </select>
 
+
+
 <select
 name="transactionType"
-onchange="this.form.submit()">
+onchange="this.form.submit()"
+>
+
 
 <option value="">
 All Transactions
 </option>
 
+
 <option
 value="SALE"
 <%= transactionType === 'SALE'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Sale
 </option>
+
 
 <option
 value="RENT"
 <%= transactionType === 'RENT'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Rent
 </option>
+
 
 <option
 value="LEASE"
 <%= transactionType === 'LEASE'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Lease
 </option>
 
+
 </select>
+
 
 </form>
 
-<br>
 
-<table border="1">
+</div>
+
+
+
+<!-- ================================
+     BUYER RECORDS
+================================ -->
+
+<div class="buyer-section">
+
+
+<h2 class="section-title">
+Buyer Records
+</h2>
+
+
+<div class="table-wrapper">
+
+
+<table class="buyer-table">
+
+
+<thead>
+
 
 <tr>
+
 <th>Name</th>
+
 <th>Phone</th>
+
 <th>Transaction</th>
+
 <th>Budget</th>
+
 <th>Required Possession</th>
+
 <th>Required Flat Type</th>
+
 <th>Preferred Locations</th>
+
 <th>Primary Location</th>
+
 <th>Assignment Type</th>
+
 <th>Status</th>
+
 <th>Visit Status</th>
+
 <th>Last Activity</th>
+
 <th>Follow Up</th>
+
 <th>Notes</th>
+
 <th>Matches</th>
+
 <th>Actions</th>
+
 <th>Assigned Executive</th>
+
 <th>Reassign</th>
+
 </tr>
+
+
+</thead>
+
+
+<tbody>
+
+
+<% if(buyers && buyers.length){ %>
+
 
 <% buyers.forEach(function(b){ %>
 
+
 <tr>
 
-<td><%= b.name %></td>
 
-<td><%= b.phone %></td>
+<td
+data-label="Name"
+class="buyer-name"
+>
+<%= b.name %>
+</td>
 
-<td>
+
+<td
+data-label="Phone"
+class="phone-value"
+>
+<%= b.phone %>
+</td>
+
+
+<td data-label="Transaction">
+
 <%= b.transactionType || 'SALE' %>
+
 </td>
 
-<td>
-<%= b.minBudget %> - <%= b.maxBudget %>
+
+<td data-label="Budget">
+
+<%= b.minBudget %>
+-
+<%= b.maxBudget %>
+
 </td>
 
-<td>
-<%= b.requiredPossession && b.requiredPossession.length > 0
+
+<td data-label="Required Possession">
+
+<%= b.requiredPossession &&
+b.requiredPossession.length > 0
 ? b.requiredPossession.join(', ')
-: '' %>
+: ''
+%>
+
 </td>
 
-<td>
+
+<td data-label="Required Flat Type">
+
 <%= b.requiredFlatType || '' %>
+
 </td>
 
-<td>
-<%= b.preferredLocations && b.preferredLocations.length > 0
+
+<td data-label="Preferred Locations">
+
+<%= b.preferredLocations &&
+b.preferredLocations.length > 0
 ? b.preferredLocations.join(', ')
-: '' %>
+: ''
+%>
+
 </td>
 
-<td>
+
+<td data-label="Primary Location">
+
 <%= b.primaryLocation || '' %>
+
 </td>
 
-<td>
+
+<td data-label="Assignment Type">
+
 <%= b.assignmentType || 'AUTO' %>
+
 </td>
 
-<td>
 
-<form method="POST" action="/buyer/status/<%= b._id %>">
 
-<select name="status" onchange="this.form.submit()">
+<!-- STATUS -->
 
-<option value="New Lead" <%= b.status=="New Lead" ? "selected" : "" %>>
+<td data-label="Status">
+
+
+<form
+method="POST"
+action="/buyer/status/<%= b._id %>"
+class="inline-form"
+>
+
+
+<select
+name="status"
+class="table-select"
+onchange="this.form.submit()"
+>
+
+
+<option
+value="New Lead"
+<%= b.status=="New Lead"
+? "selected"
+: ""
+%>
+>
 New Lead
 </option>
 
-<option value="Contacted" <%= b.status=="Contacted" ? "selected" : "" %>>
+
+<option
+value="Contacted"
+<%= b.status=="Contacted"
+? "selected"
+: ""
+%>
+>
 Contacted
 </option>
 
-<option value="Site Visit" <%= b.status=="Site Visit" ? "selected" : "" %>>
+
+<option
+value="Site Visit"
+<%= b.status=="Site Visit"
+? "selected"
+: ""
+%>
+>
 Site Visit
 </option>
 
-<option value="Negotiation" <%= b.status=="Negotiation" ? "selected" : "" %>>
+
+<option
+value="Negotiation"
+<%= b.status=="Negotiation"
+? "selected"
+: ""
+%>
+>
 Negotiation
 </option>
 
-<option value="Deal Closed" <%= b.status=="Deal Closed" ? "selected" : "" %>>
+
+<option
+value="Deal Closed"
+<%= b.status=="Deal Closed"
+? "selected"
+: ""
+%>
+>
 Deal Closed
 </option>
 
-<option value="Lost" <%= b.status=="Lost" ? "selected" : "" %>>
+
+<option
+value="Lost"
+<%= b.status=="Lost"
+? "selected"
+: ""
+%>
+>
 Lost
 </option>
 
+
 </select>
+
 
 </form>
 
+
 </td>
 
-<td>
+
+
+<!-- VISIT STATUS -->
+
+<td data-label="Visit Status">
+
 <%= b.latestVisitStatus || 'No Visit' %>
+
 </td>
 
-<td>
+
+
+<!-- LAST ACTIVITY -->
+
+<td data-label="Last Activity">
+
 <%= b.lastActivity
-? new Date(b.lastActivity).toLocaleString('en-IN')
-: '-' %>
+? new Date(
+    b.lastActivity
+).toLocaleString('en-IN')
+: '-'
+%>
+
 </td>
 
-<td>
 
-<form method="POST" action="/buyer/followup/<%= b._id %>">
+
+<!-- FOLLOW UP -->
+
+<td data-label="Follow Up">
+
+
+<form
+method="POST"
+action="/buyer/followup/<%= b._id %>"
+class="inline-form"
+>
+
 
 <input
 type="datetime-local"
 name="nextFollowUp"
+class="
+table-input
+followup-input
+"
 value="<%= b.nextFollowUp
 ? new Date(
     new Date(b.nextFollowUp).getTime()
     - new Date(b.nextFollowUp).getTimezoneOffset() * 60000
 ).toISOString().slice(0,16)
-: '' %>"
+: ''
+%>"
 >
+
 
 </td>
 
-<td>
+
+
+<!-- NOTES -->
+
+<td data-label="Notes">
+
 
 <input
 type="text"
 name="followUpNotes"
+class="
+table-input
+notes-input
+"
 value="<%= b.followUpNotes || '' %>"
 >
 
-<button type="submit">
+
+<button
+type="submit"
+class="save-btn"
+>
 Save
 </button>
 
+
 </form>
+
 
 </td>
 
-<td>
 
-<a href="/buyer/matches/<%= b._id %>">
+
+<!-- MATCHES -->
+
+<td data-label="Matches">
+
+
+<a
+href="/buyer/matches/<%= b._id %>"
+class="action-link"
+>
 View Matches
 </a>
 
+
 </td>
 
-<td>
 
-<a href="/buyer/edit/<%= b._id %>">Edit</a>
 
-|
+<!-- ACTIONS -->
+
+<td data-label="Actions">
+
+
+<div class="mobile-actions">
+
+
+<a
+href="/buyer/edit/<%= b._id %>"
+class="
+action-link
+edit-link
+"
+>
+Edit
+</a>
+
 
 <form
 method="GET"
 action="/buyer/delete/<%= b._id %>"
 onsubmit="return confirm('Are you sure you want to delete this buyer?')"
-style="display:inline;"
+class="inline-form"
 >
 
-<button type="submit">
+
+<button
+type="submit"
+class="delete-btn"
+>
 Delete
 </button>
 
+
 </form>
 
+
+</div>
+
+
 </td>
 
-<td>
-<%= b.assignedExecutiveName || 'Not Assigned' %>
+
+
+<!-- ASSIGNED EXECUTIVE -->
+
+<td
+data-label="Assigned Executive"
+class="assigned-executive"
+>
+
+<%= b.assignedExecutiveName ||
+'Not Assigned'
+%>
+
 </td>
 
-<td>
 
-<form method="POST" action="/buyer/reassign/<%= b._id %>">
 
-<select name="executiveId" required>
+<!-- REASSIGN -->
 
-<option value="">Select Executive</option>
+<td data-label="Reassign">
+
+
+<form
+method="POST"
+action="/buyer/reassign/<%= b._id %>"
+class="inline-form"
+>
+
+
+<select
+name="executiveId"
+class="
+table-select
+reassign-select
+"
+required
+>
+
+
+<option value="">
+Select Executive
+</option>
+
 
 <% executives.forEach(function(exec){ %>
 
+
 <option value="<%= exec._id %>">
+
 <%= exec.name %>
+
 </option>
 
+
 <% }) %>
+
 
 </select>
 
-<button type="submit">
+
+<button
+type="submit"
+class="reassign-btn"
+>
 Reassign
 </button>
 
+
 </form>
+
 
 </td>
 
+
 </tr>
+
 
 <% }) %>
 
+
+<% } else { %>
+
+
+<tr>
+
+
+<td
+colspan="18"
+class="empty-state"
+>
+No buyers found.
+</td>
+
+
+</tr>
+
+
+<% } %>
+
+
+</tbody>
+
+
 </table>
 
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
 </body>
+
 </html>
