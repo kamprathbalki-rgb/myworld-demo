@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Executive Status
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+
+.container{
+    max-width:1100px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+
+.page-header h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+
+.back-btn{
+    padding:10px 15px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   STATUS LEGEND
+================================ */
+
+.status-legend{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-bottom:20px;
+
+    padding:12px;
+
+    background:white;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+
+.legend-item{
+    padding:7px 10px;
+
+    background:#f5f7fa;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   EXECUTIVE GRID
+================================ */
+
+.executive-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(230px,1fr)
+    );
+
+    gap:15px;
+}
+
+
+/* ================================
+   EXECUTIVE CARD
+================================ */
+
+.executive-card{
+    background:white;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.10);
+
+    border-left:
+    5px solid #bbb;
+}
+
+
+.executive-name{
+    margin:0 0 15px;
+
+    color:#333;
+
+    font-size:17px;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.executive-status{
+    display:inline-block;
+
+    padding:7px 11px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+
+/* AT OFFICE */
+
+.at-office{
+    border-left-color:#28a745;
+}
+
+
+.at-office .executive-status{
+    background:#e8f5e9;
+
+    color:#2e7d32;
+}
+
+
+/* AT SITE */
+
+.at-site{
+    border-left-color:#2196f3;
+}
+
+
+.at-site .executive-status{
+    background:#e3f2fd;
+
+    color:#1565c0;
+}
+
+
+/* BREAK */
+
+.on-break{
+    border-left-color:#ff9800;
+}
+
+
+.on-break .executive-status{
+    background:#fff3e0;
+
+    color:#e65100;
+}
+
+
+/* MEETING */
+
+.meeting{
+    border-left-color:#7b1fa2;
+}
+
+
+.meeting .executive-status{
+    background:#f3e5f5;
+
+    color:#7b1fa2;
+}
+
+
+/* LOGGED OUT */
+
+.logged-out{
+    border-left-color:#999;
+}
+
+
+.logged-out .executive-status{
+    background:#eee;
+
+    color:#555;
+}
+
+
+/* NOT CHECKED IN */
+
+.not-checked-in{
+    border-left-color:#ccc;
+}
+
+
+.not-checked-in .executive-status{
+    background:#f5f5f5;
+
+    color:#777;
+}
+
+
+/* ================================
+   LAST ACTIVITY
+================================ */
+
+.last-activity{
+    margin-top:15px;
+
+    padding-top:12px;
+
+    border-top:1px solid #eee;
+
+    color:#777;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-state{
+    padding:30px;
+
+    background:white;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    color:#777;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .page-header{
+        margin-bottom:15px;
+    }
+
+
+    .page-header h1{
+        font-size:20px;
+    }
+
+
+    .back-btn{
+        padding:9px 11px;
+
+        font-size:12px;
+    }
+
+
+    .status-legend{
+        padding:10px;
+
+        gap:6px;
+    }
+
+
+    .legend-item{
+        padding:6px 8px;
+
+        font-size:10px;
+    }
+
+
+    .executive-grid{
+        grid-template-columns:1fr;
+
+        gap:10px;
+    }
+
+
+    .executive-card{
+        padding:15px;
+    }
+
+
+    .executive-name{
+        font-size:16px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<h1>
+👥 Executive Status
+</h1>
+
+
+<a
+href="/dashboard/main"
+class="back-btn"
+>
+← Dashboard
+</a>
+
+
+</div>
+
+
+
+<!-- ================================
+     STATUS LEGEND
+================================ -->
+
+<div class="status-legend">
+
+
+<div class="legend-item">
+🟢 At Office
+</div>
+
+
+<div class="legend-item">
+🔵 At Site
+</div>
+
+
+<div class="legend-item">
+🟡 Tea Break
+</div>
+
+
+<div class="legend-item">
+🟠 Lunch Break
+</div>
+
+
+<div class="legend-item">
+🟣 Meeting
+</div>
+
+
+<div class="legend-item">
+⚪ Logged Out
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     EXECUTIVES
+================================ -->
+
+<% if(executives && executives.length){ %>
+
+
+<div class="executive-grid">
+
+
+<% executives.forEach(function(executive){ %>
+
+
+<div class="
+executive-card
+<%= executive.statusClass %>
+">
+
+
+<h3 class="executive-name">
+
+<%= executive.name %>
+
+</h3>
+
+
+<div class="executive-status">
+
+<%= executive.icon %>
+
+<%= executive.status %>
+
+</div>
+
+
+<div class="last-activity">
+
+Last Activity:
+
+<strong>
+<%= executive.lastActivity %>
+</strong>
+
+<br>
+
+Time:
+
+<strong>
+<%= executive.lastActivityTime %>
+</strong>
+
+</div>
+
+
+</div>
+
+
+<% }) %>
+
+
+</div>
+
+
+<% } else { %>
+
+
+<div class="empty-state">
+
+No executives found.
+
+</div>
+
+
+<% } %>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -558,36 +558,430 @@ body{
 
 }
 
+/* ================================
+   PRIORITY DASHBOARD ENHANCEMENT
+================================ */
+
+.priority-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.priority-grid a{
+    text-decoration:none;
+    color:inherit;
+}
+
+
+/* FIRST THREE OPERATIONAL CARDS */
+
+.priority-operational{
+    min-height:175px;
+    padding:24px 20px;
+
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:white;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.priority-operational h3{
+    margin:0;
+
+    font-size:14px;
+
+    color:#555;
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+.priority-operational h2{
+    margin:12px 0 7px;
+
+    font-size:42px;
+
+    color:#1f4e79;
+}
+
+.priority-story{
+    margin:0;
+
+    font-size:12px;
+
+    color:#777;
+
+    text-align:center;
+}
+
+
+/* FOLLOW UP */
+
+.priority-followup{
+    border-top:5px solid #dc3545;
+}
+
+
+/* NEGOTIATION */
+
+.priority-negotiation{
+    border-top:5px solid #6f42c1;
+}
+
+
+/* SITE VISIT */
+
+.priority-visit{
+    border-top:5px solid #fd7e14;
+}
+
+
+/* RESULT ROW */
+
+.priority-results{
+    grid-column:1 / -1;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+
+/* RESULT CARDS */
+
+.priority-result-card{
+    min-height:125px;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.priority-result-info h3{
+    margin:0 0 7px;
+
+    color:#555;
+
+    font-size:13px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+}
+
+.priority-result-info p{
+    margin:0;
+
+    color:#777;
+
+    font-size:12px;
+}
+
+.priority-result-value{
+    text-align:right;
+}
+
+.priority-result-count{
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#1f4e79;
+}
+
+.priority-result-money{
+    margin-top:5px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#28a745;
+}
+
+
+/* CLOSED */
+
+.priority-closed{
+    border-left:5px solid #28a745;
+}
+
+
+/* TOKEN */
+
+.priority-token{
+    border-left:5px solid #ffc107;
+}
+
+
+/* HOVER */
+
+.priority-operational:hover,
+.priority-result-card:hover{
+    transform:translateY(-2px);
+
+    transition:.2s;
+
+    cursor:pointer;
+}
+
+
+/* ================================
+   PRIORITY MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .priority-grid{
+        grid-template-columns:1fr;
+
+        gap:10px;
+    }
+
+    .priority-operational{
+        min-height:135px;
+
+        padding:18px;
+    }
+
+    .priority-operational h3{
+        font-size:12px;
+    }
+
+    .priority-operational h2{
+        margin:8px 0 5px;
+
+        font-size:36px;
+    }
+
+    .priority-story{
+        font-size:11px;
+    }
+
+    .priority-results{
+        grid-column:auto;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .priority-result-card{
+        min-height:125px;
+
+        padding:13px;
+
+        display:block;
+
+        text-align:center;
+
+        border-left:none;
+    }
+
+    .priority-closed{
+        border-top:4px solid #28a745;
+    }
+
+    .priority-token{
+        border-top:4px solid #ffc107;
+    }
+
+    .priority-result-info h3{
+        font-size:11px;
+
+        line-height:1.4;
+    }
+
+    .priority-result-info p{
+        font-size:10px;
+    }
+
+    .priority-result-value{
+        margin-top:9px;
+
+        text-align:center;
+    }
+
+    .priority-result-count{
+        font-size:25px;
+    }
+
+    .priority-result-money{
+        font-size:13px;
+    }
+
+}
+
+/* ================================
+   ADMIN SUBSCRIPTION INFO
+================================ */
+
+.admin-subscription{
+    margin-top:6px;
+    padding:10px;
+
+    border-top:1px solid #eee;
+
+    background:#f8f9fa;
+
+    border-radius:8px;
+}
+
+.admin-subscription-title{
+    margin-bottom:9px;
+
+    color:#1f4e79;
+
+    font-size:12px;
+    font-weight:bold;
+}
+
+.admin-subscription-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:5px 0;
+
+    color:#666;
+
+    font-size:11px;
+}
+
+.admin-subscription-row strong{
+    color:#333;
+
+    text-align:right;
+}
+
+
+/* ================================
+   SUBSCRIPTION FOOTER
+================================ */
+
+.subscription-footer{
+    margin-top:20px;
+    margin-bottom:90px;
+
+    padding:10px 15px;
+
+    border-radius:8px;
+
+    text-align:center;
+
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+/* ACTIVE */
+
+.subscription-active{
+    background:#e8f5e9;
+    color:#2e7d32;
+    border:1px solid #c8e6c9;
+}
+
+
+/* LESS THAN OR EQUAL TO 30 DAYS */
+
+.subscription-warning{
+    background:#fff8e1;
+    color:#8a6d00;
+    border:1px solid #ffe082;
+}
+
+
+/* 1 TO 3 DAYS */
+
+.subscription-urgent{
+    background:#ffebee;
+    color:#c62828;
+    border:1px solid #ffcdd2;
+}
+
+
+/* EXPIRED */
+
+.subscription-expired{
+    background:#ffebee;
+    color:#b71c1c;
+    border:1px solid #ef9a9a;
+}
+
+/* ================================
+   DASHBOARD DATE & TIME
+================================ */
+
+.dashboard-datetime{
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    margin-top:10px;
+
+    padding-top:10px;
+
+    border-top:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .dashboard-datetime{
+        gap:12px;
+
+        font-size:12px;
+    }
+
+}
+
 </style>
 
 </head>
 
-
 <body>
 
-
 <div class="container">
-
 
 <!-- ================================
      HEADER
 ================================ -->
 
 <div class="header">
-
-
-<div>
-
-<h1>
-MyWorld Real Estate CRM
-</h1>
-
-<p style="margin-top:5px;color:#666;">
-Dashboard
-</p>
-
-</div>
-
 
 <div class="welcome">
 
@@ -599,50 +993,25 @@ Welcome to MyWorld CRM
 Manage Properties, Buyers, Executives and Follow Ups
 </p>
 
+<div class="dashboard-datetime">
+
+    <span>
+        📅 <span id="dashboardDate"></span>
+    </span>
+
+    <span>
+        🕐 <span id="dashboardTime"></span>
+    </span>
+
 </div>
 
+</div>
 
 <a href="/logout" class="logout">
 Logout
 </a>
 
-
 </div>
-
-
-<!-- ================================
-     SUBSCRIPTION STATUS
-================================ -->
-
-<h3>
-Subscription Status
-</h3>
-
-
-<p>
-Plan:
-<%= tenant.subscriptionMonths || 0 %>
-Months
-</p>
-
-
-<p>
-Expiry:
-<%= tenant.subscriptionEndDate
-? tenant.subscriptionEndDate.toLocaleDateString()
-: 'Not Set'
-%>
-</p>
-
-
-<p>
-Days Remaining:
-<%= daysRemaining %>
-</p>
-
-
-<hr>
-
 
 <!-- ================================
      PRIORITY DASHBOARD
@@ -650,15 +1019,18 @@ Days Remaining:
 
 <div class="section-card">
 
+<div class="priority-grid">
 
-<div class="summary">
-
-
-<!-- TODAY'S FOLLOW UPS -->
+<!-- ================================
+     TODAY'S FOLLOW UPS
+================================ -->
 
 <a href="/dashboard/followups">
 
-<div class="card followup-card">
+<div class="
+    priority-operational
+    priority-followup
+">
 
 <h3>
 📞 Today's Follow Ups
@@ -668,14 +1040,24 @@ Days Remaining:
 <%= followUps %>
 </h2>
 
+<p class="priority-story">
+Needs attention today
+</p>
+
 </div>
 
 </a>
 
 
-<!-- NEGOTIATION -->
 
-<div class="card negotiation-card">
+<!-- ================================
+     NEGOTIATION
+================================ -->
+
+<div class="
+    priority-operational
+    priority-negotiation
+">
 
 <h3>
 🤝 Negotiation
@@ -685,14 +1067,24 @@ Days Remaining:
 <%= negotiation %>
 </h2>
 
+<p class="priority-story">
+Active opportunities
+</p>
+
 </div>
 
 
-<!-- TODAY'S SITE VISITS -->
+
+<!-- ================================
+     TODAY'S SITE VISITS
+================================ -->
 
 <a href="/dashboard/sitevisits">
 
-<div class="card visit-card">
+<div class="
+    priority-operational
+    priority-visit
+">
 
 <h3>
 🚗 Today's Site Visits
@@ -702,40 +1094,88 @@ Days Remaining:
 <%= visits %>
 </h2>
 
+<p class="priority-story">
+Visits scheduled today
+</p>
+
 </div>
 
 </a>
 
 
+
+<!-- ================================
+     RESULT CARDS
+================================ -->
+
+<div class="priority-results">
+
+
 <!-- CLOSED THIS MONTH -->
 
-<div class="card closed-card">
+<div class="
+    priority-result-card
+    priority-closed
+">
+
+<div class="priority-result-info">
 
 <h3>
 🏆 Closed This Month
-(<%= closedCount %>)
 </h3>
 
-<h2>
-₹ <%= closedValue.toLocaleString('en-IN') %>
-</h2>
+<p>
+Successful conversions
+</p>
 
 </div>
+
+
+<div class="priority-result-value">
+
+<div class="priority-result-count">
+<%= closedCount %>
+</div>
+
+<div class="priority-result-money">
+₹ <%= closedValue.toLocaleString('en-IN') %>
+</div>
+
+</div>
+
+</div>
+
 
 
 <!-- TOKEN RECEIVED -->
 
 <a href="/property/token">
 
-<div class="card token-card">
+<div class="
+    priority-result-card
+    priority-token
+">
+
+<div class="priority-result-info">
 
 <h3>
 🪙 Token Received
 </h3>
 
-<h2>
+<p>
+Properties with token
+</p>
+
+</div>
+
+
+<div class="priority-result-value">
+
+<div class="priority-result-count">
 <%= tokenProperties || 0 %>
-</h2>
+</div>
+
+</div>
 
 </div>
 
@@ -747,6 +1187,8 @@ Days Remaining:
 
 </div>
 
+
+</div>
 
 <!-- ================================
      BUSINESS OVERVIEW
@@ -813,25 +1255,6 @@ Buyers
 
 <h2>
 <%= buyers %>
-</h2>
-
-</div>
-
-</a>
-
-
-<!-- EXECUTIVES -->
-
-<a href="/executive/list">
-
-<div class="card executive-card">
-
-<h3>
-Executives
-</h3>
-
-<h2>
-<%= executives %>
 </h2>
 
 </div>
@@ -930,14 +1353,12 @@ class="action-btn"
 Buyer
 </a>
 
-
 <a
-href="/executive/add"
+href="/dashboard/executive-status"
 class="action-btn"
 >
-Executive
+👥 Executive Status
 </a>
-
 
 </div>
 
@@ -995,6 +1416,55 @@ Investment Opportunities
 
 </div>
 
+<!-- ================================
+     SUBSCRIPTION STATUS FOOTER
+================================ -->
+
+<% if (daysRemaining <= 0) { %>
+
+<div class="
+subscription-footer
+subscription-expired
+">
+🔴 Subscription Expired
+</div>
+
+
+<% } else if (daysRemaining <= 3) { %>
+
+<div class="
+subscription-footer
+subscription-urgent
+">
+🔴 Subscription expires in
+<%= daysRemaining %>
+day<%= daysRemaining === 1 ? '' : 's' %>
+</div>
+
+
+<% } else if (daysRemaining <= 30) { %>
+
+<div class="
+subscription-footer
+subscription-warning
+">
+🟡 Subscription Active ·
+<%= daysRemaining %>
+days remaining
+</div>
+
+
+<% } else { %>
+
+<div class="
+subscription-footer
+subscription-active
+">
+🟢 Subscription Active
+</div>
+
+<% } %>
+
 
 <!-- ================================
      FLOATING QUICK MENU
@@ -1013,24 +1483,59 @@ class="floater-menu"
 id="adminMenu"
 >
 
-
 <div class="floater-menu-title">
 ⚙️ Admin
 </div>
-
 
 <a href="/admin/office-location">
 📍 Office Location
 </a>
 
-
 <a href="/change-password">
 🔐 Change Password
 </a>
 
+<a href="/executive/list">
+👥 Executives (<%= executives %>)
+</a>
+
+<a href="/executive/add">
+➕ Add Executive
+</a>
+
+<div class="admin-subscription">
+
+<div class="admin-subscription-title">
+💳 Subscription
+</div>
+
+<div class="admin-subscription-row">
+<span>Plan</span>
+<strong>
+<%= tenant.subscriptionMonths || 0 %> Months
+</strong>
+</div>
+
+<div class="admin-subscription-row">
+<span>Expiry</span>
+<strong>
+<%= tenant.subscriptionEndDate
+? tenant.subscriptionEndDate.toLocaleDateString()
+: 'Not Set'
+%>
+</strong>
+</div>
+
+<div class="admin-subscription-row">
+<span>Days Remaining</span>
+<strong>
+<%= daysRemaining %>
+</strong>
+</div>
 
 </div>
 
+</div>
 
 <button
 type="button"
@@ -1041,9 +1546,7 @@ title="Admin"
 ⚙️
 </button>
 
-
 </div>
-
 
 <!-- BULK UPLOAD -->
 
@@ -1147,6 +1650,30 @@ title="WhatsApp"
 </div>
 
 
+<% if (daysRemaining >= 1 && daysRemaining <= 3) { %>
+
+<script>
+
+window.addEventListener(
+'load',
+function(){
+
+    alert(
+        'Subscription Alert\n\n' +
+        'Your subscription will expire in ' +
+        '<%= daysRemaining %> ' +
+        'day<%= daysRemaining === 1 ? "" : "s" %>.\n\n' +
+        'Please renew your subscription to avoid interruption.'
+    )
+
+}
+)
+
+</script>
+
+<% } %>
+
+
 <script>
 
 function toggleFloatMenu(menuId){
@@ -1164,10 +1691,8 @@ function toggleFloatMenu(menuId){
 
     })
 
-
     const selectedMenu =
     document.getElementById(menuId)
-
 
     selectedMenu.classList.toggle('show')
 
@@ -1175,9 +1700,60 @@ function toggleFloatMenu(menuId){
 
 </script>
 
-
 </div>
 
+<script>
+
+function updateDashboardDateTime(){
+
+    const now = new Date()
+
+
+    const dateOptions = {
+        weekday:'short',
+        day:'2-digit',
+        month:'short',
+        year:'numeric'
+    }
+
+
+    const timeOptions = {
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit',
+        hour12:true
+    }
+
+
+    document.getElementById(
+        'dashboardDate'
+    ).textContent =
+    now.toLocaleDateString(
+        'en-IN',
+        dateOptions
+    )
+
+
+    document.getElementById(
+        'dashboardTime'
+    ).textContent =
+    now.toLocaleTimeString(
+        'en-IN',
+        timeOptions
+    )
+
+}
+
+
+updateDashboardDateTime()
+
+
+setInterval(
+    updateDashboardDateTime,
+    1000
+)
+
+</script>
 
 </body>
 

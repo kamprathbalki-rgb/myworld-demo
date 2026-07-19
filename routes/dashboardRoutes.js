@@ -1172,5 +1172,218 @@ probability:probability.toFixed(1)
 
 })
 
+// ==========================================
+// EXECUTIVE CURRENT STATUS
+// ==========================================
+
+router.get(
+'/executive-status',
+isLoggedIn,
+isAdmin,
+async (req,res)=>{
+
+try{
+
+    // Today's date in YYYY-MM-DD format
+    const today =
+    new Date().toISOString().split('T')[0]
+
+
+    // Get all executives for this tenant
+    const executives =
+    await Executive.find({
+        tenantId:req.session.tenantId
+    })
+
+
+    // Get today's attendance records
+    const attendanceRecords =
+    await ExecutiveAttendance.find({
+        tenantId:req.session.tenantId,
+        date:today
+    })
+
+
+    // Create status data for every executive
+    const executiveStatus =
+    executives.map(executive=>{
+
+        const attendance =
+        attendanceRecords.find(record =>
+            String(record.executiveId)
+            ===
+            String(executive._id)
+        )
+
+
+        // Default status
+        let status = 'Not Checked In'
+        let statusClass = 'not-checked-in'
+        let icon = '⚪'
+        let lastActivity = '-'
+        let lastActivityTime = '-'
+
+
+        if(
+            attendance &&
+            attendance.activityLog &&
+            attendance.activityLog.length
+        ){
+
+            const latestActivity =
+            attendance.activityLog[
+                attendance.activityLog.length - 1
+            ]
+
+            lastActivity =
+            latestActivity.action || '-'
+
+            lastActivityTime =
+            latestActivity.time || '-'
+
+
+            switch(latestActivity.action){
+
+
+                case 'login':
+
+                    status = 'At Office'
+                    statusClass = 'at-office'
+                    icon = '🟢'
+
+                    break
+
+
+                case 'teaOut':
+
+                    status = 'Tea Break'
+                    statusClass = 'on-break'
+                    icon = '🟡'
+
+                    break
+
+
+                case 'teaIn':
+
+                    status = 'At Office'
+                    statusClass = 'at-office'
+                    icon = '🟢'
+
+                    break
+
+
+                case 'lunchOut':
+
+                    status = 'Lunch Break'
+                    statusClass = 'on-break'
+                    icon = '🟠'
+
+                    break
+
+
+                case 'lunchIn':
+
+                    status = 'At Office'
+                    statusClass = 'at-office'
+                    icon = '🟢'
+
+                    break
+
+
+                case 'meetingOut':
+
+                    status = 'Meeting / With Client'
+                    statusClass = 'meeting'
+                    icon = '🟣'
+
+                    break
+
+
+                case 'meetingIn':
+
+                    status = 'At Office'
+                    statusClass = 'at-office'
+                    icon = '🟢'
+
+                    break
+
+
+                case 'siteVisitOut':
+
+                    status = 'At Site'
+                    statusClass = 'at-site'
+                    icon = '🔵'
+
+                    break
+
+
+                case 'siteVisitIn':
+
+                    status = 'At Office'
+                    statusClass = 'at-office'
+                    icon = '🟢'
+
+                    break
+
+
+                case 'logout':
+
+                    status = 'Logged Out'
+                    statusClass = 'logged-out'
+                    icon = '⚪'
+
+                    break
+
+            }
+
+        }
+
+
+        return{
+
+            id:executive._id,
+
+            name:
+            executive.name ||
+            executive.executiveName ||
+            'Executive',
+
+            status,
+
+            statusClass,
+
+            icon,
+
+            lastActivity,
+
+            lastActivityTime
+
+        }
+
+    })
+
+
+    res.render(
+        'executiveStatus',
+        {
+            executives:executiveStatus
+        }
+    )
+
+
+}catch(error){
+
+    console.error(
+        'Executive Status Error:',
+        error
+    )
+
+    res.status(500).send(
+        'Unable to load executive status'
+    )
+
+}
+
+})
 
 module.exports = router
