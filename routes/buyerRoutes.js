@@ -755,6 +755,8 @@ req.body.transactionType,
         ]
     },
 
+    buyerNotes: req.body.buyerNotes,
+
     status: req.body.status,
     followUpNotes: req.body.followUpNotes
 }
@@ -986,6 +988,8 @@ req.body.transactionType,
     */
 
     preferredLocations: selectedLocations,
+
+    buyerNotes: req.body.buyerNotes,
 
     /*
     Auto-filled from locationmasters

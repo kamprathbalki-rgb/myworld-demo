@@ -571,6 +571,146 @@ body{
 
 }
 
+/* ================================
+   LOCATION SEARCH
+================================ */
+
+.location-results{
+
+    margin-top:10px;
+
+    max-height:250px;
+
+    overflow-y:auto;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    background:#fff;
+
+    display:none;
+
+}
+
+.location-item{
+
+    padding:10px 14px;
+
+    border-bottom:1px solid #eee;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.location-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.location-item:hover{
+
+    background:#eef5fb;
+
+}
+
+.location-item strong{
+
+    color:#1f4e79;
+
+}
+
+.location-item small{
+
+    display:block;
+
+    color:#777;
+
+    margin-top:3px;
+
+}
+
+.selected-locations{
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.selected-location{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 15px;
+
+    background:#f8fafc;
+
+    border:1px solid #d7e3ef;
+
+    border-left:5px solid #1f4e79;
+
+    border-radius:8px;
+
+}
+
+.selected-location .priority{
+
+    font-weight:bold;
+
+    color:#1f4e79;
+
+    margin-right:10px;
+
+}
+
+.remove-location{
+
+    color:#dc3545;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    user-select:none;
+
+}
+
+.remove-location:hover{
+
+    color:#b02a37;
+
+}
+
+.empty-selection{
+
+    padding:15px;
+
+    text-align:center;
+
+    color:#888;
+
+    border:2px dashed #ddd;
+
+    border-radius:8px;
+
+    background:#fafafa;
+
+}
+
 </style>
 
 </head>
@@ -1112,16 +1252,11 @@ class="form-control"
 
 </div>
 
+</div>
 
 </div>
 
-
 </div>
-
-
-</div>
-
-
 
 <!-- ================================
      LOCATION PREFERENCES
@@ -1129,204 +1264,77 @@ class="form-control"
 
 <div class="form-section">
 
+    <h2 class="section-title">
+        Location Preferences
+    </h2>
 
-<h2 class="section-title">
-Location Preferences
-</h2>
+    <p class="section-note">
+        Search and select up to 3 preferred locations.
+    </p>
 
+    <!-- Hidden values sent to backend -->
+    <input type="hidden" id="preferredLocation1" name="preferredLocation1">
+    <input type="hidden" id="preferredLocation2" name="preferredLocation2">
+    <input type="hidden" id="preferredLocation3" name="preferredLocation3">
 
-<p class="section-note">
+    <!-- Search -->
+    <div class="form-group full-width">
 
-Select up to 3 preferred locations in order of priority.
+        <label>
+            Search Location
+        </label>
 
-</p>
+        <input
+            type="text"
+            id="locationSearch"
+            class="form-control"
+            placeholder="Type location name..."
+            autocomplete="off">
 
+    </div>
 
-<div class="form-grid">
+    <!-- Search Results -->
 
+    <div
+        id="locationResults"
+        class="location-results">
 
-<!-- FIRST PREFERENCE -->
+    </div>
 
-<div class="form-group full-width">
+    <!-- Selected Locations -->
 
+    <div
+        id="selectedLocations"
+        class="selected-locations">
 
-<label>
+        <div class="empty-selection">
+            No locations selected
+        </div>
 
-<span class="location-priority">
-1
-</span>
+    </div>
 
-1st Preference
+    <div class="section-note">
+        Maximum 3 locations can be selected.<br>
+        First selected = 1st Preference<br>
+        Second selected = 2nd Preference<br>
+        Third selected = 3rd Preference
+    </div>
 
-<span class="required-mark">
-*
-</span>
+    <div class="form-group full-width">
 
-</label>
+        <label>
+            Buyer Notes
+        </label>
 
+        <textarea
+            name="buyerNotes"
+            class="form-control"
+            rows="4"
+            placeholder="Enter buyer notes..."></textarea>
 
-<select
-name="preferredLocation1"
-class="form-control"
-required
->
-
-
-<option value="">
-Select Location
-</option>
-
-
-<% locations.forEach(function(location){ %>
-
-
-<option
-value="<%= location.officeName %>"
-data-lat="<%= location.lat || '' %>"
-data-lng="<%= location.lng || '' %>"
->
-
-<%= location.officeName %>
-
-(
-
-<%= location.divisionName %>,
-
-<%= location.district %>
-
-)
-
-</option>
-
-
-<% }) %>
-
-
-</select>
-
+    </div>
 
 </div>
-
-
-
-<!-- SECOND PREFERENCE -->
-
-<div class="form-group full-width">
-
-
-<label>
-
-<span class="location-priority">
-2
-</span>
-
-2nd Preference
-
-(Optional)
-
-</label>
-
-
-<select
-name="preferredLocation2"
-class="form-control"
->
-
-
-<option value="">
-Not Required
-</option>
-
-
-<% locations.forEach(function(location){ %>
-
-
-<option value="<%= location.officeName %>">
-
-<%= location.officeName %>
-
-(
-
-<%= location.divisionName %>,
-
-<%= location.district %>
-
-)
-
-</option>
-
-
-<% }) %>
-
-
-</select>
-
-
-</div>
-
-
-
-<!-- THIRD PREFERENCE -->
-
-<div class="form-group full-width">
-
-
-<label>
-
-<span class="location-priority">
-3
-</span>
-
-3rd Preference
-
-(Optional)
-
-</label>
-
-
-<select
-name="preferredLocation3"
-class="form-control"
->
-
-
-<option value="">
-Not Required
-</option>
-
-
-<% locations.forEach(function(location){ %>
-
-
-<option value="<%= location.officeName %>">
-
-<%= location.officeName %>
-
-(
-
-<%= location.divisionName %>,
-
-<%= location.district %>
-
-)
-
-</option>
-
-
-<% }) %>
-
-
-</select>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
 
 
 <!-- ================================
@@ -1646,6 +1654,82 @@ function(){
 
 </script>
 
+<script>
+
+const allLocations = [
+
+<% locations.forEach(function(location){ %>
+
+{
+    officeName: "<%= location.officeName %>",
+    divisionName: "<%= location.divisionName %>",
+    district: "<%= location.district %>",
+    lat: "<%= location.lat || '' %>",
+    lng: "<%= location.lng || '' %>"
+},
+
+<% }) %>
+
+];
+
+const searchBox = document.getElementById("locationSearch");
+const resultsBox = document.getElementById("locationResults");
+const selectedBox = document.getElementById("selectedLocations");
+
+let selectedLocations = [];
+
+searchBox.addEventListener("input", function(){
+
+    const keyword = this.value.trim().toLowerCase();
+
+    resultsBox.innerHTML = "";
+
+    if(keyword === ""){
+
+        resultsBox.style.display = "none";
+
+        return;
+
+    }
+
+    const matches = allLocations.filter(location =>
+
+        location.officeName.toLowerCase().includes(keyword) ||
+
+        location.divisionName.toLowerCase().includes(keyword) ||
+
+        location.district.toLowerCase().includes(keyword)
+
+    );
+
+    if(matches.length === 0){
+
+        resultsBox.style.display = "none";
+
+        return;
+
+    }
+
+    resultsBox.style.display = "block";
+
+    matches.forEach(location =>{
+
+        const div = document.createElement("div");
+
+        div.className = "location-item";
+
+        div.innerHTML = `
+            <strong>${location.officeName}</strong>
+            <small>${location.divisionName}, ${location.district}</small>
+        `;
+
+        resultsBox.appendChild(div);
+
+    });
+
+});
+
+</script>
 
 </body>
 

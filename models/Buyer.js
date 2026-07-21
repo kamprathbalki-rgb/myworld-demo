@@ -79,6 +79,8 @@ primaryLocation: {
     default: ""
 },
 
+buyerNotes: String,
+
 assignmentType: {
     type: String,
     default: "AUTO"
