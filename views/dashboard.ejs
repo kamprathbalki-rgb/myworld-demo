@@ -428,29 +428,29 @@ body{
         padding:10px;
     }
 
-    .header{
-        position:relative;
-        padding:5px 0;
-        align-items:flex-start;
-    }
+.header{
+    position:relative;
+    padding:5px 0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
 
     .header h1{
         font-size:21px;
-    }
-
-    .header > div:first-child{
-        width:calc(100% - 85px);
     }
 
     .header > div:first-child p{
         font-size:13px;
     }
 
-    .welcome{
-        width:100%;
-        order:3;
-        padding:12px 15px;
-    }
+.welcome{
+    flex:1 1 100%;
+    width:100%;
+    max-width:100%;
+    order:3;
+    padding:12px 15px;
+}
 
     .welcome h3{
         font-size:15px;
@@ -727,6 +727,17 @@ body{
     color:#28a745;
 }
 
+/* FOLLOWUPS */
+
+.priority-followup{
+    border-left:5px solid #dc3545;
+}
+
+/* SITE VISITS */
+
+.priority-visit{
+    border-left:5px solid #fd7e14;
+}
 
 /* CLOSED */
 
@@ -965,12 +976,13 @@ body{
 
 @media(max-width:600px){
 
-    .dashboard-datetime{
-        gap:12px;
-
-        font-size:12px;
+    .header > div:first-child{
+        width:100%;
     }
 
+    .header > div:first-child p{
+        font-size:13px;
+    }
 }
 
 .logout-float-btn{
@@ -1033,33 +1045,6 @@ Manage Properties, Buyers, Executives and Follow Ups
 
 <div class="priority-grid">
 
-<!-- ================================
-     TODAY'S FOLLOW UPS
-================================ -->
-
-<a href="/dashboard/followups">
-
-<div class="
-    priority-operational
-    priority-followup
-">
-
-<h3>
-📞 Today's Follow Ups
-</h3>
-
-<h2>
-<%= followUps %>
-</h2>
-
-<p class="priority-story">
-Needs attention today
-</p>
-
-</div>
-
-</a>
-
 
 
 <!-- ================================
@@ -1087,41 +1072,55 @@ Active opportunities
 </div>
 
 
-
-<!-- ================================
-     TODAY'S SITE VISITS
-================================ -->
-
-<a href="/dashboard/sitevisits">
-
-<div class="
-    priority-operational
-    priority-visit
-">
-
-<h3>
-🚗 Today's Site Visits
-</h3>
-
-<h2>
-<%= visits %>
-</h2>
-
-<p class="priority-story">
-Visits scheduled today
-</p>
-
-</div>
-
-</a>
-
-
-
 <!-- ================================
      RESULT CARDS
 ================================ -->
 
 <div class="priority-results">
+
+<a href="/dashboard/followups">
+
+<div class="
+    priority-result-card
+    priority-followup
+">
+
+    <div class="priority-result-info">
+        <h3>📞 Today's Follow Ups</h3>
+        <p>Needs attention today</p>
+    </div>
+
+    <div class="priority-result-value">
+        <div class="priority-result-count">
+            <%= followUps %>
+        </div>
+    </div>
+
+</div>
+
+</a>
+
+<a href="/dashboard/sitevisits">
+
+<div class="
+    priority-result-card
+    priority-visit
+">
+
+    <div class="priority-result-info">
+        <h3>🚗 Today's Site Visits</h3>
+        <p>Visits scheduled today</p>
+    </div>
+
+    <div class="priority-result-value">
+        <div class="priority-result-count">
+            <%= visits %>
+        </div>
+    </div>
+
+</div>
+
+</a>
 
 
 <!-- CLOSED THIS MONTH -->
