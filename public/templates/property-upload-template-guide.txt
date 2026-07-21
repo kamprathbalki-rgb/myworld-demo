@@ -11,6 +11,7 @@
 | Property Type       | Apartment / Villa / Plot / Office / Showroom / Retail / Shop        |
 | Project Status      | New Launch / Under Construction / Ready Possession / Resale         |
 | Property Status     | Available / Blocked / Token Received / Agreement Done / Sold        |
+| Transaction Type    | Sale / Rent / Lease                                                 |
 | RERA Approved       | Yes / No                                                            |
 | Flat Type           | 1 BHK, 2 BHK, 3 BHK, Villa, Plot, Office etc                        |
 | Carpet Area SqFt    | Number only                                                         |

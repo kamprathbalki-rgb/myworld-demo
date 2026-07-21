@@ -326,6 +326,14 @@ body{
 
 }
 
+
+.download-section{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}
+.download-btn{display:inline-block;padding:12px 18px;background:#1f4e79;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold}
+.download-btn:hover{background:#16395b}
+@media(max-width:700px){
+.download-section{display:grid;grid-template-columns:1fr;gap:8px}
+.download-btn{text-align:center}
+}
 </style>
 
 </head>
@@ -381,6 +389,21 @@ Home
 
 </div>
 
+<div class="download-section">
+
+    <a href="/templates/buyer-upload-template.csv"
+       class="download-btn"
+       download>
+        ⬇ Download CSV Template
+    </a>
+
+    <a href="/templates/buyer-upload-guide.pdf"
+       class="download-btn"
+       target="_blank">
+        📖 Download Upload Guide
+    </a>
+
+</div>
 
 
 <!-- ================================

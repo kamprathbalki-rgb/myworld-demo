@@ -1,4 +1,29 @@
+<style>
+body{font-family:Arial,sans-serif;background:#f5f7fa;padding:20px}
+.download-section{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}
+.download-btn{display:inline-block;padding:12px 18px;background:#1f4e79;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold}
+.download-btn:hover{background:#16395b}
+input[type=file]{margin:15px 0}
+button{padding:10px 18px}
+</style>
+
 <h1>Bulk Upload Properties</h1>
+
+<div class="download-section">
+
+    <a href="/templates/property-upload-template.csv"
+       class="download-btn"
+       download>
+        ⬇ Download CSV Template
+    </a>
+
+    <a href="/templates/property-upload-guide.pdf"
+       class="download-btn"
+       target="_blank">
+        📖 Download Upload Guide
+    </a>
+
+</div>
 
 <form
     method="POST"
