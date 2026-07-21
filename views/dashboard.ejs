@@ -562,9 +562,13 @@ body{
    PRIORITY DASHBOARD ENHANCEMENT
 ================================ */
 
+.priority-negotiation-full{
+    grid-column:1 / -1;
+}
+
 .priority-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:15px;
 }
 
@@ -969,6 +973,18 @@ body{
 
 }
 
+.logout-float-btn{
+    width:48px;
+    height:48px;
+    font-size:20px;
+    background:#d9534f;
+    color:white;
+}
+
+.logout-float-btn:hover{
+    background:#c9302c;
+}
+
 </style>
 
 </head>
@@ -1006,10 +1022,6 @@ Manage Properties, Buyers, Executives and Follow Ups
 </div>
 
 </div>
-
-<a href="/logout" class="logout">
-Logout
-</a>
 
 </div>
 
@@ -1057,6 +1069,7 @@ Needs attention today
 <div class="
     priority-operational
     priority-negotiation
+    priority-negotiation-full
 ">
 
 <h3>
@@ -1646,6 +1659,19 @@ title="WhatsApp"
 
 </div>
 
+<div class="floater-item">
+
+<a
+    href="/logout"
+    class="floater-btn logout-float-btn"
+    title="Logout"
+    onclick="return confirm('Logout from MyWorld CRM?');"
+    style="text-decoration:none;"
+>
+    🚪
+</a>
+
+</div>
 
 </div>
 
