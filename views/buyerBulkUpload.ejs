@@ -1,34 +1,474 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Buyer Bulk Upload</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Buyer Bulk Upload</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:700px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   UPLOAD CARD
+================================ */
+
+.upload-card{
+    padding:25px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.upload-title{
+    margin:0 0 8px;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+.upload-note{
+    margin:0 0 22px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+
+/* ================================
+   FILE INPUT
+================================ */
+
+.file-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-bottom:20px;
+}
+
+.file-group label{
+    color:#555;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.file-input{
+    width:100%;
+
+    min-height:48px;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:7px;
+
+    background:#f8fafc;
+
+    font-size:13px;
+}
+
+.file-help{
+    color:#888;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+}
+
+.cancel-btn{
+    display:inline-block;
+
+    min-width:110px;
+
+    padding:12px 18px;
+
+    background:#6c757d;
+
+    color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.upload-btn{
+    min-width:150px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.upload-btn:hover{
+    background:#218838;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+    .upload-card{
+        padding:16px;
+    }
+
+    .upload-title{
+        font-size:16px;
+    }
+
+    .file-input{
+        font-size:12px;
+    }
+
+    .form-actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:8px;
+    }
+
+    .cancel-btn,
+    .upload-btn{
+        width:100%;
+
+        min-width:0;
+
+        text-align:center;
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-<h2>Buyer Bulk Upload</h2>
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Buyer Bulk Upload
+</h1>
+
+<p>
+Import multiple buyer requirements
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     UPLOAD FORM
+================================ -->
+
+<div class="upload-card">
+
+
+<h2 class="upload-title">
+Upload Buyer File
+</h2>
+
+
+<p class="upload-note">
+
+Select the buyer data file to import.
+Supported file formats are CSV and Excel XLSX.
+
+</p>
+
 
 <form
-    action="/buyer/bulk-upload"
-    method="POST"
-    enctype="multipart/form-data">
+action="/buyer/bulk-upload"
+method="POST"
+enctype="multipart/form-data"
+>
 
-    <input
-        type="file"
-        name="excelFile"
-        accept=".csv,.xlsx"
-        required>
 
-    <button type="submit">
-        Upload
-    </button>
+<div class="file-group">
+
+
+<label>
+Buyer Upload File
+</label>
+
+
+<input
+type="file"
+name="excelFile"
+accept=".csv,.xlsx"
+required
+class="file-input"
+>
+
+
+<div class="file-help">
+
+Choose a .csv or .xlsx file containing the buyer data.
+
+</div>
+
+
+</div>
+
+
+
+<div class="form-actions">
+
+
+<a
+href="/dashboard"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="upload-btn"
+>
+Upload Buyers
+</button>
+
+
+</div>
+
 
 </form>
 
-<br>
 
-<a href="/dashboard">
-    Dashboard
-</a>
+</div>
+
+
+</div>
+
 
 </body>
+
 </html>

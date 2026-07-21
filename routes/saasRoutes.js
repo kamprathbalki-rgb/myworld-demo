@@ -270,18 +270,25 @@ await Tenant.findByIdAndUpdate(
     req.params.id,
     {
 
-        name:req.body.name,
+        name: req.body.name,
 
-        email:req.body.email,
+        email: req.body.email,
 
-        stateName:req.body.stateName,
+        stateName: req.body.stateName,
 
-        primaryDistrict:req.body.primaryDistrict,
+        primaryDistrict: req.body.primaryDistrict,
 
-        adminName:req.body.adminName,
+        adminName: req.body.adminName,
 
-        isActive:
-            req.body.isActive === 'true'
+        adminEmail: req.body.adminEmail,
+
+        companyType: req.body.companyType,
+
+        credits: Number(req.body.credits),
+
+        usedCredits: Number(req.body.usedCredits),
+
+        isActive: req.body.isActive === 'true'
 
     }
 )

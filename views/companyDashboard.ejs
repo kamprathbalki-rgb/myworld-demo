@@ -1,46 +1,380 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Company Dashboard</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    padding:18px 20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.page-header h1{
+    margin:0;
+    color:#1f4e79;
+    font-size:25px;
+}
+
+.page-header p{
+    margin:6px 0 0;
+    color:#777;
+    font-size:13px;
+}
+
+.logout-btn{
+    display:inline-block;
+    padding:10px 14px;
+    background:#d9534f;
+    color:white;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.dashboard-card{
+    padding:20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.dashboard-card h2{
+    margin:0 0 15px;
+    padding-bottom:10px;
+    border-bottom:1px solid #eee;
+    color:#1f4e79;
+    font-size:17px;
+}
+
+.link-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.dashboard-link{
+    display:block;
+    padding:11px 10px;
+    background:#f8fafc;
+    border:1px solid #e1e5e9;
+    border-radius:7px;
+    color:#1f4e79;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.dashboard-link:hover{
+    background:#eef5fb;
+    border-color:#1f4e79;
+}
+
+.ai-card{
+    grid-column:1 / -1;
+}
+
+.ai-card .link-grid{
+    grid-template-columns:repeat(3,1fr);
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+        padding:14px;
+        margin-bottom:12px;
+    }
+
+    .page-header h1{
+        font-size:20px;
+    }
+
+    .page-header p{
+        font-size:11px;
+    }
+
+    .logout-btn{
+        display:block;
+        width:100%;
+        margin-top:12px;
+        text-align:center;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .dashboard-card{
+        padding:14px;
+    }
+
+    .dashboard-card h2{
+        font-size:15px;
+    }
+
+    .link-grid,
+    .ai-card .link-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .ai-card{
+        grid-column:auto;
+    }
+
+    .dashboard-link{
+        padding:10px 7px;
+        font-size:10px;
+        text-align:center;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .link-grid,
+    .ai-card .link-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<h2>Company Dashboard</h2>
+<div class="container">
 
-<h3>Buyers</h3>
-<a href="/buyer/add">Add Buyer</a><br>
-<a href="/buyer/page">Buyer Page</a><br>
-<a href="/buyer/list">Buyer List</a><br>
 
-<h3>Properties</h3>
-<a href="/property/add">Add Property</a><br>
-<a href="/property/page">Property Page</a><br>
-<a href="/property/list">Property List</a><br>
-<a href="/property/map-view">Property Map</a><br>
+<div class="page-header">
 
-<h3>Visits</h3>
-<a href="/visit/list">Visit List</a><br>
+<div>
 
-<h3>Dashboard</h3>
-<a href="/dashboard/main">Main Dashboard</a><br>
-<a href="/dashboard/admin-dashboard">Admin Dashboard</a><br>
-<a href="/dashboard/analytics">Analytics</a><br>
-<a href="/dashboard/sales-funnel">Sales Funnel</a><br>
-<a href="/dashboard/conversion-metrics">Conversion Metrics</a><br>
-<a href="/dashboard/executive-performance">Executive Performance</a><br>
-<a href="/dashboard/revenue-dashboard">Revenue Dashboard</a><br>
+<h1>
+Company Dashboard
+</h1>
 
-<h3>AI Intelligence</h3>
-<a href="/dashboard/intelligence">Real Estate Intelligence</a><br>
-<a href="/dashboard/hot-locations">Hot Locations</a><br>
-<a href="/dashboard/investment-opportunities">Investment Finder</a><br>
-<a href="/dashboard/price-estimator">Price Estimator</a><br>
-<a href="/dashboard/deal-predictor">Deal Predictor</a><br>
+<p>
+Access company operations, dashboards and intelligence
+</p>
 
-<br><br>
+</div>
 
-<a href="/logout">Logout</a>
+<a
+href="/logout"
+class="logout-btn"
+>
+Logout
+</a>
+
+</div>
+
+
+
+<div class="dashboard-grid">
+
+
+<div class="dashboard-card">
+
+<h2>
+Buyers
+</h2>
+
+<div class="link-grid">
+
+<a href="/buyer/add" class="dashboard-link">
+Add Buyer
+</a>
+
+<a href="/buyer/page" class="dashboard-link">
+Buyer Page
+</a>
+
+<a href="/buyer/list" class="dashboard-link">
+Buyer List
+</a>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-card">
+
+<h2>
+Properties
+</h2>
+
+<div class="link-grid">
+
+<a href="/property/add" class="dashboard-link">
+Add Property
+</a>
+
+<a href="/property/page" class="dashboard-link">
+Property Page
+</a>
+
+<a href="/property/list" class="dashboard-link">
+Property List
+</a>
+
+<a href="/property/map-view" class="dashboard-link">
+Property Map
+</a>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-card">
+
+<h2>
+Visits
+</h2>
+
+<div class="link-grid">
+
+<a href="/visit/list" class="dashboard-link">
+Visit List
+</a>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-card">
+
+<h2>
+Dashboard
+</h2>
+
+<div class="link-grid">
+
+<a href="/dashboard/main" class="dashboard-link">
+Main Dashboard
+</a>
+
+<a href="/dashboard/admin-dashboard" class="dashboard-link">
+Admin Dashboard
+</a>
+
+<a href="/dashboard/analytics" class="dashboard-link">
+Analytics
+</a>
+
+<a href="/dashboard/sales-funnel" class="dashboard-link">
+Sales Funnel
+</a>
+
+<a href="/dashboard/conversion-metrics" class="dashboard-link">
+Conversion Metrics
+</a>
+
+<a href="/dashboard/executive-performance" class="dashboard-link">
+Executive Performance
+</a>
+
+<a href="/dashboard/revenue-dashboard" class="dashboard-link">
+Revenue Dashboard
+</a>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-card ai-card">
+
+<h2>
+AI Intelligence
+</h2>
+
+<div class="link-grid">
+
+<a href="/dashboard/intelligence" class="dashboard-link">
+Real Estate Intelligence
+</a>
+
+<a href="/dashboard/hot-locations" class="dashboard-link">
+Hot Locations
+</a>
+
+<a href="/dashboard/investment-opportunities" class="dashboard-link">
+Investment Finder
+</a>
+
+<a href="/dashboard/price-estimator" class="dashboard-link">
+Price Estimator
+</a>
+
+<a href="/dashboard/deal-predictor" class="dashboard-link">
+Deal Predictor
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
 
 </body>
+
 </html>

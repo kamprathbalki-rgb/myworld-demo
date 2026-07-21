@@ -405,6 +405,52 @@ action="/saas/company/<%= tenant._id %>"
             >
         </div>
 
+<div class="field">
+
+    <label>Company Type</label>
+
+    <select name="companyType">
+
+        <option value="Builder"
+            <%= tenant.companyType === 'Builder' ? 'selected' : '' %>>
+            Builder
+        </option>
+
+        <option value="Real Estate Agency"
+            <%= tenant.companyType === 'Real Estate Agency' ? 'selected' : '' %>>
+            Real Estate Agency
+        </option>
+
+        <option value="Developer"
+            <%= tenant.companyType === 'Developer' ? 'selected' : '' %>>
+            Developer
+        </option>
+
+        <option value="Channel Partner"
+            <%= tenant.companyType === 'Channel Partner' ? 'selected' : '' %>>
+            Channel Partner
+        </option>
+
+        <option value="Broker"
+            <%= tenant.companyType === 'Broker' ? 'selected' : '' %>>
+            Broker
+        </option>
+
+        <option value="Property Consultant"
+            <%= tenant.companyType === 'Property Consultant' ? 'selected' : '' %>>
+            Property Consultant
+        </option>
+
+        <option value="Individual"
+            <%= tenant.companyType === 'Individual' ? 'selected' : '' %>>
+            Individual
+        </option>
+
+    </select>
+
+</div>
+
+
     </div>
 
 </div>
@@ -469,6 +515,45 @@ action="/saas/company/<%= tenant._id %>"
             >
 
         </div>
+
+<div class="field">
+
+    <label>Total Credits</label>
+
+    <input
+        type="number"
+        name="credits"
+        value="<%= tenant.credits || 0 %>"
+        min="0"
+    >
+
+</div>
+
+<div class="field">
+
+    <label>Used Credits</label>
+
+    <input
+        type="number"
+        name="usedCredits"
+        value="<%= tenant.usedCredits || 0 %>"
+        min="0"
+        readonly
+    >
+
+</div>
+
+<div class="field">
+
+    <label>Available Credits</label>
+
+    <input
+        type="number"
+        value="<%= tenant.availableCredits %>"
+        readonly
+    >
+
+</div>
 
         <div class="field">
 

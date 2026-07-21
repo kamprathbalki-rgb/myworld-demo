@@ -1,90 +1,904 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Edit Property</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    padding:18px 20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+    color:#1f4e79;
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+    color:#777;
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:7px;
+    color:white;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section{
+    margin-bottom:18px;
+    padding:20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+    padding-bottom:10px;
+    border-bottom:1px solid #eee;
+    color:#1f4e79;
+    font-size:18px;
+}
+
+.section-note{
+    margin:-5px 0 18px;
+    color:#777;
+    font-size:12px;
+    line-height:1.5;
+}
+
+
+/* ================================
+   FORM GRID
+================================ */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px 20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group.full-width{
+    grid-column:1 / -1;
+}
+
+.form-group > label{
+    color:#555;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+    min-height:42px;
+    padding:9px 10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    background:white;
+    color:#333;
+    font-family:Arial,sans-serif;
+    font-size:13px;
+}
+
+.form-control:focus{
+    outline:none;
+    border-color:#1f4e79;
+    box-shadow:0 0 0 2px rgba(31,78,121,.08);
+}
+
+textarea.form-control{
+    min-height:100px;
+    resize:vertical;
+}
+
+
+/* ================================
+   CHECKBOXES
+================================ */
+
+.checkbox-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+
+.checkbox-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:9px 12px;
+    background:#f8fafc;
+    border:1px solid #ddd;
+    border-radius:7px;
+    color:#555;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.checkbox-item input{
+    width:auto;
+    margin:0;
+}
+
+
+/* ================================
+   COVER PHOTO
+================================ */
+
+.cover-photo-box{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:12px;
+    background:#f8fafc;
+    border:1px solid #eee;
+    border-radius:8px;
+}
+
+.cover-photo{
+    width:150px;
+    max-width:100%;
+    height:110px;
+    object-fit:cover;
+    border-radius:7px;
+    border:1px solid #ddd;
+}
+
+.cover-photo-info{
+    flex:1;
+}
+
+.cover-photo-info p{
+    margin:0 0 8px;
+    color:#777;
+    font-size:11px;
+}
+
+.file-input{
+    padding:8px;
+    background:white;
+}
+
+
+/* ================================
+   DETAILS
+================================ */
+
+.details-section{
+    margin-bottom:18px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.details-section > summary{
+    padding:17px 20px;
+    color:#1f4e79;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.details-section > summary:hover{
+    background:#f8fafc;
+}
+
+.details-content{
+    padding:5px 20px 20px;
+    border-top:1px solid #eee;
+}
+
+
+/* ================================
+   CONFIGURATION TABS
+================================ */
+
+.tab-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.tab-btn{
+    min-height:44px;
+    padding:10px;
+    border:1px solid #1f4e79;
+    border-radius:7px;
+    background:white;
+    color:#1f4e79;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.tab-btn:hover{
+    background:#eef5fb;
+}
+
+.tab-btn.active{
+    background:#1f4e79;
+    color:white;
+}
+
+
+/* ================================
+   CONFIGURATION TABLE
+================================ */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    border:1px solid #eee;
+    border-radius:9px;
+}
+
+.configuration-table{
+    width:100%;
+    min-width:750px;
+    border-collapse:collapse;
+}
+
+.configuration-table th{
+    padding:11px 9px;
+    background:#1f4e79;
+    color:white;
+    text-align:left;
+    font-size:10px;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+
+.configuration-table td{
+    padding:8px;
+    border-bottom:1px solid #eee;
+    font-size:12px;
+}
+
+.configuration-table tr:last-child td{
+    border-bottom:none;
+}
+
+.configuration-table input{
+    width:100%;
+    min-width:100px;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:12px;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:5px;
+}
+
+.cancel-btn{
+    display:inline-block;
+    min-width:110px;
+    padding:12px 18px;
+    background:#6c757d;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.save-btn{
+    min-width:180px;
+    padding:12px 20px;
+    border:none;
+    border-radius:7px;
+    background:#28a745;
+    color:white;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.save-btn:hover{
+    background:#218838;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+        padding:14px;
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:6px;
+        margin-top:12px;
+    }
+
+    .header-btn{
+        padding:9px 5px;
+        text-align:center;
+        font-size:10px;
+    }
+
+    .form-section{
+        margin-bottom:12px;
+        padding:14px;
+    }
+
+    .section-title{
+        margin-bottom:14px;
+        font-size:16px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+        gap:13px;
+    }
+
+    .form-group.full-width{
+        grid-column:auto;
+    }
+
+    .form-control{
+        min-height:44px;
+        font-size:14px;
+    }
+
+    .checkbox-grid{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:7px;
+    }
+
+    .checkbox-item{
+        padding:9px 7px;
+        font-size:11px;
+    }
+
+    .cover-photo-box{
+        display:block;
+    }
+
+    .cover-photo{
+        width:100%;
+        height:180px;
+        margin-bottom:12px;
+    }
+
+    .details-section{
+        margin-bottom:12px;
+    }
+
+    .details-section > summary{
+        padding:15px;
+        font-size:14px;
+    }
+
+    .details-content{
+        padding:5px 14px 14px;
+    }
+
+    .tab-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .configuration-table{
+        min-width:650px;
+    }
+
+    .configuration-table th{
+        font-size:9px;
+    }
+
+    .configuration-table td{
+        padding:6px;
+    }
+
+    .configuration-table input{
+        min-width:90px;
+        padding:7px;
+    }
+
+    .form-actions{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .cancel-btn,
+    .save-btn{
+        width:100%;
+        min-width:0;
+        text-align:center;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .checkbox-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<h1>Edit Property</h1>
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+<div class="header-info">
+
+<h1>
+Edit Property
+</h1>
+
+<p>
+Update property and project information
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+</div>
+
+</div>
+
+
 
 <form
-    method="POST"
-    action="/property/update/<%= property._id %>"
-    enctype="multipart/form-data">
+method="POST"
+action="/property/update/<%= property._id %>"
+enctype="multipart/form-data"
+>
 
-<hr>
 
-<h2>Basic Project Information</h2>
+<!-- ================================
+     BASIC PROJECT INFORMATION
+================================ -->
 
-<label>Project Name</label>
-<input type="text" name="projectName" value="<%= property.projectName || '' %>"><br><br>
+<div class="form-section">
 
-<label>Builder Name</label>
-<input type="text" name="builderName" value="<%= property.builderName || '' %>"><br><br>
+<h2 class="section-title">
+Basic Project Information
+</h2>
 
-<label>Project Type</label><br>
 
-<input type="checkbox" name="projectType" value="Residential"
-<%= property.projectType && property.projectType.includes('Residential') ? 'checked' : '' %>>
-<label>Residential</label><br>
+<div class="form-grid">
 
-<input type="checkbox" name="projectType" value="Commercial"
-<%= property.projectType && property.projectType.includes('Commercial') ? 'checked' : '' %>>
-<label>Commercial</label><br>
 
-<input type="checkbox" name="projectType" value="Mixed Use"
-<%= property.projectType && property.projectType.includes('Mixed Use') ? 'checked' : '' %>>
-<label>Mixed Use</label><br><br>
+<div class="form-group">
 
-<label>Property Type</label><br>
+<label>
+Project Name
+</label>
 
-<input type="checkbox" name="propertyType" value="Apartment"
-<%= property.propertyType && property.propertyType.includes('Apartment') ? 'checked' : '' %>>
-<label>Apartment</label><br>
+<input
+type="text"
+name="projectName"
+value="<%= property.projectName || '' %>"
+class="form-control"
+>
 
-<input type="checkbox" name="propertyType" value="Villa"
-<%= property.propertyType && property.propertyType.includes('Villa') ? 'checked' : '' %>>
-<label>Villa</label><br>
+</div>
 
-<input type="checkbox" name="propertyType" value="Plot"
-<%= property.propertyType && property.propertyType.includes('Plot') ? 'checked' : '' %>>
-<label>Plot</label><br>
 
-<input type="checkbox" name="propertyType" value="Office"
-<%= property.propertyType && property.propertyType.includes('Office') ? 'checked' : '' %>>
-<label>Office</label><br>
 
-<input type="checkbox" name="propertyType" value="Showroom"
-<%= property.propertyType && property.propertyType.includes('Showroom') ? 'checked' : '' %>>
-<label>Showroom</label><br>
+<div class="form-group">
 
-<input type="checkbox" name="propertyType" value="Retail"
-<%= property.propertyType && property.propertyType.includes('Retail') ? 'checked' : '' %>>
-<label>Retail</label><br>
+<label>
+Builder Name
+</label>
 
-<input type="checkbox" name="propertyType" value="Shop"
-<%= property.propertyType && property.propertyType.includes('Shop') ? 'checked' : '' %>>
-<label>Shop</label><br><br>
+<input
+type="text"
+name="builderName"
+value="<%= property.builderName || '' %>"
+class="form-control"
+>
 
-<label>Project Status</label>
-<select name="projectStatus">
-    <option value="">Select</option>
-    <option <%= property.projectStatus === 'New Launch' ? 'selected' : '' %>>New Launch</option>
-    <option <%= property.projectStatus === 'Under Construction' ? 'selected' : '' %>>Under Construction</option>
-    <option <%= property.projectStatus === 'Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
-    <option <%= property.projectStatus === 'Resale' ? 'selected' : '' %>>Resale</option>
-</select><br><br>
+</div>
 
-<label>Transaction Type</label>
 
-<select name="transactionType">
+
+<div class="form-group full-width">
+
+<label>
+Project Type
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Residential"
+<%= property.projectType &&
+property.projectType.includes('Residential')
+? 'checked'
+: '' %>
+>
+
+Residential
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Commercial"
+<%= property.projectType &&
+property.projectType.includes('Commercial')
+? 'checked'
+: '' %>
+>
+
+Commercial
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Mixed Use"
+<%= property.projectType &&
+property.projectType.includes('Mixed Use')
+? 'checked'
+: '' %>
+>
+
+Mixed Use
+
+</label>
+
+
+</div>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Property Type
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Apartment"
+<%= property.propertyType &&
+property.propertyType.includes('Apartment')
+? 'checked'
+: '' %>
+>
+
+Apartment
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Villa"
+<%= property.propertyType &&
+property.propertyType.includes('Villa')
+? 'checked'
+: '' %>
+>
+
+Villa
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Plot"
+<%= property.propertyType &&
+property.propertyType.includes('Plot')
+? 'checked'
+: '' %>
+>
+
+Plot
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Office"
+<%= property.propertyType &&
+property.propertyType.includes('Office')
+? 'checked'
+: '' %>
+>
+
+Office
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Showroom"
+<%= property.propertyType &&
+property.propertyType.includes('Showroom')
+? 'checked'
+: '' %>
+>
+
+Showroom
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Retail"
+<%= property.propertyType &&
+property.propertyType.includes('Retail')
+? 'checked'
+: '' %>
+>
+
+Retail
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="propertyType"
+value="Shop"
+<%= property.propertyType &&
+property.propertyType.includes('Shop')
+? 'checked'
+: '' %>
+>
+
+Shop
+
+</label>
+
+
+</div>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Project Status
+</label>
+
+<select
+name="projectStatus"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option
+<%= property.projectStatus === 'New Launch'
+? 'selected'
+: '' %>
+>
+New Launch
+</option>
+
+<option
+<%= property.projectStatus === 'Under Construction'
+? 'selected'
+: '' %>
+>
+Under Construction
+</option>
+
+<option
+<%= property.projectStatus === 'Ready Possession'
+? 'selected'
+: '' %>
+>
+Ready Possession
+</option>
+
+<option
+<%= property.projectStatus === 'Resale'
+? 'selected'
+: '' %>
+>
+Resale
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Transaction Type
+</label>
+
+<select
+name="transactionType"
+class="form-control"
+>
 
 <option
 value="SALE"
 <%= property.transactionType === 'SALE'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Sale
 </option>
 
@@ -92,7 +906,8 @@ Sale
 value="RENT"
 <%= property.transactionType === 'RENT'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Rent
 </option>
 
@@ -100,313 +915,1386 @@ Rent
 value="LEASE"
 <%= property.transactionType === 'LEASE'
 ? 'selected'
-: '' %>>
+: '' %>
+>
 Lease
 </option>
 
 </select>
 
-<br><br>
+</div>
 
-<label>RERA Approved</label>
-<select name="reraApproved">
-    <option value="">Select</option>
-    <option <%= property.reraApproved === 'Yes' ? 'selected' : '' %>>Yes</option>
-    <option <%= property.reraApproved === 'No' ? 'selected' : '' %>>No</option>
-</select><br><br>
 
-<hr>
 
-<h2>Location Details</h2>
+<div class="form-group">
+
+<label>
+RERA Approved
+</label>
+
+<select
+name="reraApproved"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option
+<%= property.reraApproved === 'Yes'
+? 'selected'
+: '' %>
+>
+Yes
+</option>
+
+<option
+<%= property.reraApproved === 'No'
+? 'selected'
+: '' %>
+>
+No
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- ================================
+     LOCATION DETAILS
+================================ -->
+
+<div class="form-section">
+
+<h2 class="section-title">
+Location Details
+</h2>
+
 
 <% if(property.coverPhoto){ %>
 
-<label>Current Cover Photo</label>
+
+<div class="cover-photo-box">
+
+<img
+src="/uploads/properties/<%= property.coverPhoto %>"
+class="cover-photo"
+alt="Current Cover Photo"
+>
+
+
+<div class="cover-photo-info">
+
+<p>
+Current Cover Photo
+</p>
+
+<label>
+Replace Cover Photo
+</label>
+
+<input
+type="file"
+name="coverPhoto"
+accept="image/*"
+class="form-control file-input"
+>
+
+</div>
+
+</div>
+
 
 <br>
 
-<img
-    src="/uploads/properties/<%= property.coverPhoto %>"
-    width="150">
 
-<br><br>
+<% } else { %>
+
+
+<div class="form-group full-width">
+
+<label>
+Add Cover Photo
+</label>
+
+<input
+type="file"
+name="coverPhoto"
+accept="image/*"
+class="form-control file-input"
+>
+
+</div>
+
+
+<br>
+
 
 <% } %>
 
-<label>Replace Cover Photo</label>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+City
+</label>
 
 <input
-    type="file"
-    name="coverPhoto"
-    accept="image/*">
+type="text"
+name="city"
+value="<%= property.city || '' %>"
+class="form-control"
+>
+
+</div>
 
 
-<label>City</label>
-<input type="text" name="city" value="<%= property.city || '' %>"><br><br>
 
-<label>Direction</label>
-<select name="direction">
-    <option value="">Select</option>
-    <option <%= property.direction === 'East' ? 'selected' : '' %>>East</option>
-    <option <%= property.direction === 'West' ? 'selected' : '' %>>West</option>
-    <option <%= property.direction === 'North' ? 'selected' : '' %>>North</option>
-    <option <%= property.direction === 'South' ? 'selected' : '' %>>South</option>
-    <option <%= property.direction === 'Central' ? 'selected' : '' %>>Central</option>
-</select><br><br>
+<div class="form-group">
 
-<label>Property Location</label>
-<select name="propertyLocation" required>
-    <option value="">Select Location</option>
+<label>
+Direction
+</label>
 
-    <% locations.forEach(function(location){ %>
-        <option value="<%= location.officeName %>"
-            <%= property.propertyLocation === location.officeName ? 'selected' : '' %>>
-            <%= location.officeName %>
-        </option>
-    <% }) %>
+<select
+name="direction"
+class="form-control"
+>
 
-</select><br><br>
+<option value="">
+Select
+</option>
 
-<label>Location Landmark</label>
-<input type="text" name="locationLandmark" value="<%= property.locationLandmark || '' %>"><br><br>
+<option
+<%= property.direction === 'East'
+? 'selected'
+: '' %>
+>
+East
+</option>
 
-<label>Google Pin</label>
-<input type="text" name="googlePin" value="<%= property.googlePin || '' %>"><br><br>
+<option
+<%= property.direction === 'West'
+? 'selected'
+: '' %>
+>
+West
+</option>
 
-<label>Longitude</label>
-<input type="text" name="lng" value="<%= property.location && property.location.coordinates ? property.location.coordinates[0] : '' %>"><br><br>
+<option
+<%= property.direction === 'North'
+? 'selected'
+: '' %>
+>
+North
+</option>
 
-<label>Latitude</label>
-<input type="text" name="lat" value="<%= property.location && property.location.coordinates ? property.location.coordinates[1] : '' %>"><br><br>
+<option
+<%= property.direction === 'South'
+? 'selected'
+: '' %>
+>
+South
+</option>
 
-<hr>
+<option
+<%= property.direction === 'Central'
+? 'selected'
+: '' %>
+>
+Central
+</option>
 
-<h2>Tower Details</h2>
+</select>
 
-<label>Number of Towers</label>
-<input type="number" name="numberOfTowers" value="<%= property.numberOfTowers || '' %>"><br><br>
+</div>
 
-<label>Tower Name</label>
-<input type="text" name="towerName" value="<%= property.towers && property.towers.length ? property.towers[0].towerName : '' %>"><br><br>
 
-<label>Number of Floors</label>
-<input type="number" name="numberOfFloors" value="<%= property.towers && property.towers.length ? property.towers[0].numberOfFloors : '' %>"><br><br>
 
-<label>Tower Status</label>
-<select name="towerStatus">
-    <option value="">Select</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Under Construction' ? 'selected' : '' %>>Under Construction</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].towerStatus === 'Sold Out' ? 'selected' : '' %>>Sold Out</option>
-</select><br><br>
+<div class="form-group full-width">
 
-<label>Inventory Status</label>
-<select name="inventoryStatus">
-    <option value="">Select</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Available' ? 'selected' : '' %>>Available</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Limited Availability' ? 'selected' : '' %>>Limited Availability</option>
-    <option <%= property.towers && property.towers.length && property.towers[0].inventoryStatus === 'Sold Out' ? 'selected' : '' %>>Sold Out</option>
-</select><br><br>
+<label>
+Property Location
+</label>
 
-<label>Possession Month</label>
-<input type="text" name="possessionMonth" value="<%= property.towers && property.towers.length ? property.towers[0].possessionMonth : '' %>"><br><br>
+<select
+name="propertyLocation"
+class="form-control"
+required
+>
 
-<label>Possession Year</label>
-<input type="number" name="possessionYear" value="<%= property.towers && property.towers.length ? property.towers[0].possessionYear : '' %>"><br><br>
+<option value="">
+Select Location
+</option>
 
-<hr>
 
-<h2>Configurations</h2>
+<% locations.forEach(function(location){ %>
 
-<button type="button" onclick="showTab('apartmentTab')">
+
+<option
+value="<%= location.officeName %>"
+<%= property.propertyLocation === location.officeName
+? 'selected'
+: '' %>
+>
+
+<%= location.officeName %>
+
+</option>
+
+
+<% }) %>
+
+
+</select>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Location Landmark
+</label>
+
+<input
+type="text"
+name="locationLandmark"
+value="<%= property.locationLandmark || '' %>"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- ================================
+     ADVANCED LOCATION
+================================ -->
+
+<details class="details-section">
+
+<summary>
+Advanced Location Details
+</summary>
+
+<div class="details-content">
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Google Pin
+</label>
+
+<input
+type="text"
+name="googlePin"
+value="<%= property.googlePin || '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Longitude
+</label>
+
+<input
+type="text"
+name="lng"
+value="<%= property.location && property.location.coordinates ? property.location.coordinates[0] : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Latitude
+</label>
+
+<input
+type="text"
+name="lat"
+value="<%= property.location && property.location.coordinates ? property.location.coordinates[1] : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+</div>
+
+</details>
+
+
+
+<!-- ================================
+     TOWER DETAILS
+================================ -->
+
+<details
+class="details-section"
+open
+>
+
+<summary>
+Tower Details
+</summary>
+
+<div class="details-content">
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Number of Towers
+</label>
+
+<input
+type="number"
+name="numberOfTowers"
+value="<%= property.numberOfTowers || '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Tower Name
+</label>
+
+<input
+type="text"
+name="towerName"
+value="<%= property.towers && property.towers.length ? property.towers[0].towerName : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Number of Floors
+</label>
+
+<input
+type="number"
+name="numberOfFloors"
+value="<%= property.towers && property.towers.length ? property.towers[0].numberOfFloors : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Tower Status
+</label>
+
+<select
+name="towerStatus"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].towerStatus === 'Under Construction'
+? 'selected'
+: '' %>
+>
+Under Construction
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].towerStatus === 'Ready Possession'
+? 'selected'
+: '' %>
+>
+Ready Possession
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].towerStatus === 'Sold Out'
+? 'selected'
+: '' %>
+>
+Sold Out
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Inventory Status
+</label>
+
+<select
+name="inventoryStatus"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].inventoryStatus === 'Available'
+? 'selected'
+: '' %>
+>
+Available
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].inventoryStatus === 'Limited Availability'
+? 'selected'
+: '' %>
+>
+Limited Availability
+</option>
+
+<option
+<%= property.towers &&
+property.towers.length &&
+property.towers[0].inventoryStatus === 'Sold Out'
+? 'selected'
+: '' %>
+>
+Sold Out
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Possession Month
+</label>
+
+<input
+type="text"
+name="possessionMonth"
+value="<%= property.towers && property.towers.length ? property.towers[0].possessionMonth : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Possession Year
+</label>
+
+<input
+type="number"
+name="possessionYear"
+value="<%= property.towers && property.towers.length ? property.towers[0].possessionYear : '' %>"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+</div>
+
+</details>
+
+
+
+<!-- ================================
+     CONFIGURATIONS
+================================ -->
+
+<details
+class="details-section"
+open
+>
+
+<summary>
+Configurations
+</summary>
+
+
+<div class="details-content">
+
+
+<div class="tab-buttons">
+
+
+<button
+type="button"
+id="apartmentTabButton"
+class="tab-btn active"
+onclick="showTab('apartmentTab')"
+>
 Apartment (BHK)
 </button>
 
-<button type="button" onclick="showTab('otherTab')">
+
+<button
+type="button"
+id="otherTabButton"
+class="tab-btn"
+onclick="showTab('otherTab')"
+>
 Villa / Plot / Office / Showroom / Retail / Shop
 </button>
 
-<hr>
+
+</div>
+
+
+
+<!-- APARTMENT TAB -->
 
 <div id="apartmentTab">
 
-<h3>Apartment Configurations</h3>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<h3>
+Apartment Configurations
+</h3>
+
+
+<div class="table-wrapper">
+
+
+<table class="configuration-table">
+
+
+<thead>
+
 <tr>
+
 <th>Flat Type</th>
 <th>Carpet Area</th>
 <th>Quoted Price</th>
 <th>Closing Price</th>
 <th>Available Units</th>
+
 </tr>
 
-<% const apartmentData = [
+</thead>
+
+
+<tbody>
+
+
+<%
+
+const apartmentData = [
+
 ['Studio','studio'],
-['1 RK','1RK'],
-['1 BHK','1BHK'],
-['1.5 BHK','1_5BHK'],
-['2 BHK','2BHK'],
-['2.5 BHK','2_5BHK'],
-['3 BHK','3BHK'],
-['3.5 BHK','3_5BHK'],
-['4 BHK','4BHK'],
-['4.5 BHK','4_5BHK'],
-['5 BHK','5BHK'],
-['5+ BHK','5PlusBHK']
-]; %>
 
-<% apartmentData.forEach(function(item){ 
-const label = item[0];
-const field = item[1];
-const config = property.configurations && property.configurations.find(c => c.flatType === label) || {};
+['1 RK','1RK'],
+
+['1 BHK','1BHK'],
+
+['1.5 BHK','1_5BHK'],
+
+['2 BHK','2BHK'],
+
+['2.5 BHK','2_5BHK'],
+
+['3 BHK','3BHK'],
+
+['3.5 BHK','3_5BHK'],
+
+['4 BHK','4BHK'],
+
+['4.5 BHK','4_5BHK'],
+
+['5 BHK','5BHK'],
+
+['5+ BHK','5PlusBHK']
+
+];
+
 %>
+
+
+<%
+
+apartmentData.forEach(function(item){
+
+const label =
+item[0];
+
+const field =
+item[1];
+
+const config =
+property.configurations &&
+property.configurations.find(
+c => c.flatType === label
+) || {};
+
+%>
+
+
 <tr>
-<td><%= label %></td>
-<td><input type="number" name="carpetArea_<%= field %>" value="<%= config.carpetArea || '' %>"></td>
-<td><input type="number" name="quotedPrice_<%= field %>" value="<%= config.quotedPrice || '' %>"></td>
-<td><input type="number" name="closingPrice_<%= field %>" value="<%= config.closingPrice || '' %>"></td>
-<td><input type="number" name="availableUnits_<%= field %>" value="<%= config.availableUnits || '' %>"></td>
+
+
+<td>
+<%= label %>
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="carpetArea_<%= field %>"
+value="<%= config.carpetArea || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="quotedPrice_<%= field %>"
+value="<%= config.quotedPrice || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="closingPrice_<%= field %>"
+value="<%= config.closingPrice || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="availableUnits_<%= field %>"
+value="<%= config.availableUnits || '' %>"
+>
+
+</td>
+
+
 </tr>
+
+
 <% }) %>
+
+
+</tbody>
+
 
 </table>
 
+
 </div>
 
-<div id="otherTab" style="display:none;">
 
-<h3>Villa / Plot / Commercial Configurations</h3>
+</div>
 
-<table border="1" cellpadding="10" cellspacing="0">
+
+
+<!-- OTHER TAB -->
+
+<div
+id="otherTab"
+style="display:none;"
+>
+
+
+<h3>
+Villa / Plot / Commercial Configurations
+</h3>
+
+
+<div class="table-wrapper">
+
+
+<table class="configuration-table">
+
+
+<thead>
+
 <tr>
+
 <th>Type</th>
 <th>Area</th>
 <th>Quoted Price</th>
 <th>Closing Price</th>
 <th>Available Units</th>
+
 </tr>
 
-<% const otherData = [
+</thead>
+
+
+<tbody>
+
+
+<%
+
+const otherData = [
+
 ['Villa','villa'],
-['Plot','plot'],
-['Office','office'],
-['Showroom','showroom'],
-['Retail','retail'],
-['Shop','shop']
-]; %>
 
-<% otherData.forEach(function(item){ 
-const label = item[0];
-const field = item[1];
-const config = property.configurations && property.configurations.find(c => c.flatType === label) || {};
+['Plot','plot'],
+
+['Office','office'],
+
+['Showroom','showroom'],
+
+['Retail','retail'],
+
+['Shop','shop']
+
+];
+
 %>
+
+
+<%
+
+otherData.forEach(function(item){
+
+const label =
+item[0];
+
+const field =
+item[1];
+
+const config =
+property.configurations &&
+property.configurations.find(
+c => c.flatType === label
+) || {};
+
+%>
+
+
 <tr>
-<td><%= label %></td>
-<td><input type="number" name="carpetArea_<%= field %>" value="<%= config.carpetArea || '' %>"></td>
-<td><input type="number" name="quotedPrice_<%= field %>" value="<%= config.quotedPrice || '' %>"></td>
-<td><input type="number" name="closingPrice_<%= field %>" value="<%= config.closingPrice || '' %>"></td>
-<td><input type="number" name="availableUnits_<%= field %>" value="<%= config.availableUnits || '' %>"></td>
+
+
+<td>
+<%= label %>
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="carpetArea_<%= field %>"
+value="<%= config.carpetArea || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="quotedPrice_<%= field %>"
+value="<%= config.quotedPrice || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="closingPrice_<%= field %>"
+value="<%= config.closingPrice || '' %>"
+>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+name="availableUnits_<%= field %>"
+value="<%= config.availableUnits || '' %>"
+>
+
+</td>
+
+
 </tr>
+
+
 <% }) %>
+
+
+</tbody>
+
 
 </table>
 
+
 </div>
 
-<hr>
+
+</div>
+
+
+</div>
+
+</details>
+
+
 
 <%
+
 const firstConfig =
-    property.configurations &&
-    property.configurations.length
-        ? property.configurations[0]
-        : {};
+
+property.configurations &&
+
+property.configurations.length
+
+?
+
+property.configurations[0]
+
+:
+
+{};
+
 %>
 
-<h2>Sales Details</h2>
-
-<label>Parking Type</label><br>
-
-<input type="checkbox" name="parkingType" value="Open"
-<%= firstConfig.parkingType && firstConfig.parkingType.includes('Open') ? 'checked' : '' %>>
-<label>Open</label><br>
-
-<input type="checkbox" name="parkingType" value="Covered"
-<%= firstConfig.parkingType && firstConfig.parkingType.includes('Covered') ? 'checked' : '' %>>
-<label>Covered</label><br>
-
-<input type="checkbox" name="parkingType" value="Basement"
-<%= firstConfig.parkingType && firstConfig.parkingType.includes('Basement') ? 'checked' : '' %>>
-<label>Basement</label><br>
-
-<input type="checkbox" name="parkingType" value="Podium"
-<%= firstConfig.parkingType && firstConfig.parkingType.includes('Podium') ? 'checked' : '' %>>
-<label>Podium</label><br>
-
-<input type="checkbox" name="parkingType" value="Stilt"
-<%= firstConfig.parkingType && firstConfig.parkingType.includes('Stilt') ? 'checked' : '' %>>
-<label>Stilt</label><br><br>
 
 
-<label>Furnished Status</label>
-<select name="furnishedStatus">
-    <option value="">Select</option>
-    <option <%= firstConfig.furnishedStatus === 'Unfurnished' ? 'selected' : '' %>>
-        Unfurnished
-    </option>
-    <option <%= firstConfig.furnishedStatus === 'Semi-Furnished' ? 'selected' : '' %>>
-        Semi-Furnished
-    </option>
-    <option <%= firstConfig.furnishedStatus === 'Fully Furnished' ? 'selected' : '' %>>
-        Fully Furnished
-    </option>
-</select><br><br>
+<!-- ================================
+     SALES DETAILS
+================================ -->
+
+<div class="form-section">
 
 
-<label>Possession Status</label><br>
+<h2 class="section-title">
+Sales Details
+</h2>
 
-<input type="checkbox" name="possessionStatus" value="Immediate"
-<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Immediate') ? 'checked' : '' %>>
-<label>Immediate</label><br>
 
-<input type="checkbox" name="possessionStatus" value="Ready Possession"
-<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Ready Possession') ? 'checked' : '' %>>
-<label>Ready Possession</label><br>
+<div class="form-grid">
 
-<input type="checkbox" name="possessionStatus" value="Under Construction"
-<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Under Construction') ? 'checked' : '' %>>
-<label>Under Construction</label><br>
 
-<input type="checkbox" name="possessionStatus" value="Possession Soon"
-<%= firstConfig.possessionStatus && firstConfig.possessionStatus.includes('Possession Soon') ? 'checked' : '' %>>
-<label>Possession Soon</label><br><br>
+<div class="form-group full-width">
 
-<hr>
 
-<h2>Highlights</h2>
+<label>
+Parking Type
+</label>
 
-<label>Amenities</label><br>
-<textarea name="amenities" rows="4" cols="50"><%= property.amenities ? property.amenities.join(', ') : '' %></textarea><br><br>
 
-<label>USP</label><br>
-<textarea name="usp" rows="4" cols="50"><%= property.usp || '' %></textarea><br><br>
+<div class="checkbox-grid">
 
-<label>Notes</label><br>
-<textarea name="notes" rows="4" cols="50"><%= property.notes || '' %></textarea><br><br>
 
-<button type="submit">Update Property</button>
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="parkingType"
+value="Open"
+<%= firstConfig.parkingType &&
+firstConfig.parkingType.includes('Open')
+? 'checked'
+: '' %>
+>
+
+Open
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="parkingType"
+value="Covered"
+<%= firstConfig.parkingType &&
+firstConfig.parkingType.includes('Covered')
+? 'checked'
+: '' %>
+>
+
+Covered
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="parkingType"
+value="Basement"
+<%= firstConfig.parkingType &&
+firstConfig.parkingType.includes('Basement')
+? 'checked'
+: '' %>
+>
+
+Basement
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="parkingType"
+value="Podium"
+<%= firstConfig.parkingType &&
+firstConfig.parkingType.includes('Podium')
+? 'checked'
+: '' %>
+>
+
+Podium
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="parkingType"
+value="Stilt"
+<%= firstConfig.parkingType &&
+firstConfig.parkingType.includes('Stilt')
+? 'checked'
+: '' %>
+>
+
+Stilt
+
+</label>
+
+
+</div>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Furnished Status
+</label>
+
+
+<select
+name="furnishedStatus"
+class="form-control"
+>
+
+
+<option value="">
+Select
+</option>
+
+
+<option
+<%= firstConfig.furnishedStatus === 'Unfurnished'
+? 'selected'
+: '' %>
+>
+Unfurnished
+</option>
+
+
+<option
+<%= firstConfig.furnishedStatus === 'Semi-Furnished'
+? 'selected'
+: '' %>
+>
+Semi-Furnished
+</option>
+
+
+<option
+<%= firstConfig.furnishedStatus === 'Fully Furnished'
+? 'selected'
+: '' %>
+>
+Fully Furnished
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+
+<label>
+Possession Status
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="possessionStatus"
+value="Immediate"
+<%= firstConfig.possessionStatus &&
+firstConfig.possessionStatus.includes('Immediate')
+? 'checked'
+: '' %>
+>
+
+Immediate
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="possessionStatus"
+value="Ready Possession"
+<%= firstConfig.possessionStatus &&
+firstConfig.possessionStatus.includes('Ready Possession')
+? 'checked'
+: '' %>
+>
+
+Ready Possession
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="possessionStatus"
+value="Under Construction"
+<%= firstConfig.possessionStatus &&
+firstConfig.possessionStatus.includes('Under Construction')
+? 'checked'
+: '' %>
+>
+
+Under Construction
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="possessionStatus"
+value="Possession Soon"
+<%= firstConfig.possessionStatus &&
+firstConfig.possessionStatus.includes('Possession Soon')
+? 'checked'
+: '' %>
+>
+
+Possession Soon
+
+</label>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     HIGHLIGHTS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Highlights
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Amenities
+</label>
+
+<textarea
+name="amenities"
+class="form-control"
+><%= property.amenities ? property.amenities.join(', ') : '' %></textarea>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+USP
+</label>
+
+<textarea
+name="usp"
+class="form-control"
+><%= property.usp || '' %></textarea>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Notes
+</label>
+
+<textarea
+name="notes"
+class="form-control"
+><%= property.notes || '' %></textarea>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="form-actions">
+
+
+<a
+href="javascript:history.back()"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="save-btn"
+>
+Update Property
+</button>
+
+
+</div>
+
 
 </form>
 
+
+</div>
+
+
+
 <script>
-function showTab(tabId) {
-    document.getElementById('apartmentTab').style.display = 'none';
-    document.getElementById('otherTab').style.display = 'none';
-    document.getElementById(tabId).style.display = 'block';
+
+
+function showTab(
+tabId
+){
+
+
+document
+.getElementById(
+'apartmentTab'
+)
+.style
+.display =
+'none';
+
+
+document
+.getElementById(
+'otherTab'
+)
+.style
+.display =
+'none';
+
+
+document
+.getElementById(
+'apartmentTabButton'
+)
+.classList
+.remove(
+'active'
+);
+
+
+document
+.getElementById(
+'otherTabButton'
+)
+.classList
+.remove(
+'active'
+);
+
+
+document
+.getElementById(
+tabId
+)
+.style
+.display =
+'block';
+
+
+if(
+tabId ===
+'apartmentTab'
+){
+
+document
+.getElementById(
+'apartmentTabButton'
+)
+.classList
+.add(
+'active'
+);
+
+}else{
+
+document
+.getElementById(
+'otherTabButton'
+)
+.classList
+.add(
+'active'
+);
+
 }
+
+
+}
+
+
 </script>
 
-</body>
-</html>
 
+</body>
+
+</html>

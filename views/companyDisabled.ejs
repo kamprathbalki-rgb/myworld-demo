@@ -2,22 +2,136 @@
 <html>
 
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Company Disabled</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:600px;
+    margin:80px auto;
+}
+
+.message-card{
+    padding:30px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+    text-align:center;
+    border-top:4px solid #dc3545;
+}
+
+.icon{
+    font-size:40px;
+    margin-bottom:15px;
+}
+
+h1{
+    margin:0 0 12px;
+    color:#dc3545;
+    font-size:22px;
+}
+
+p{
+    margin:0;
+    color:#666;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.login-btn{
+    display:inline-block;
+    margin-top:22px;
+    padding:12px 20px;
+    background:#1f4e79;
+    color:white;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        margin:40px auto;
+    }
+
+    .message-card{
+        padding:24px 16px;
+    }
+
+    h1{
+        font-size:19px;
+    }
+
+    .login-btn{
+        display:block;
+        width:100%;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<h2>
+<div class="container">
+
+<div class="message-card">
+
+<div class="icon">
+⚠️
+</div>
+
+<h1>
+Company Account Disabled
+</h1>
+
+<p>
 Company account is disabled. Contact platform Admin.
-</h2>
+</p>
 
 <p>
 Click below to return to login.
 </p>
 
-<a href="/login">
+<a
+href="/login"
+class="login-btn"
+>
 Go To Login
 </a>
+
+</div>
+
+</div>
 
 </body>
 

@@ -1,33 +1,600 @@
-<h2>Bulk Upload Result</h2>
+<!DOCTYPE html>
+<html>
 
-<p>Imported: <%= importedCount %></p>
+<head>
 
-<p>Duplicates: <%= duplicateCount %></p>
+<meta charset="UTF-8">
 
-<p>Invalid Locations: <%= invalidLocationCount %></p>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<h3>Duplicate Locations</h3>
-<ul>
+<title>Bulk Upload Result</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:900px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.dashboard-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.summary-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.summary-card{
+    padding:20px 12px;
+
+    background:white;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.summary-card h3{
+    margin:0;
+
+    color:#777;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+}
+
+.summary-card .count{
+    margin-top:8px;
+
+    color:#1f4e79;
+
+    font-size:30px;
+
+    font-weight:bold;
+}
+
+.imported{
+    border-top:4px solid #28a745;
+}
+
+.duplicates{
+    border-top:4px solid #fd7e14;
+}
+
+.invalid{
+    border-top:4px solid #dc3545;
+}
+
+
+/* ================================
+   RESULT SECTION
+================================ */
+
+.result-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.result-section h2{
+    margin:0 0 15px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:17px;
+}
+
+.result-list{
+    margin:0;
+
+    padding-left:22px;
+}
+
+.result-list li{
+    padding:7px 0;
+
+    color:#555;
+
+    font-size:13px;
+
+    border-bottom:
+    1px solid #f2f2f2;
+
+    word-break:break-word;
+}
+
+.result-list li:last-child{
+    border-bottom:none;
+}
+
+.empty-message{
+    margin:0;
+
+    color:#888;
+
+    font-size:13px;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+}
+
+.action-btn{
+    display:inline-block;
+
+    padding:11px 16px;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.upload-btn{
+    background:#28a745;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .dashboard-btn{
+        margin-top:12px;
+
+        width:100%;
+
+        text-align:center;
+    }
+
+    .summary-grid{
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:7px;
+
+        margin-bottom:12px;
+    }
+
+    .summary-card{
+        padding:14px 5px;
+    }
+
+    .summary-card h3{
+        font-size:8px;
+    }
+
+    .summary-card .count{
+        font-size:23px;
+    }
+
+    .result-section{
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .result-section h2{
+        font-size:15px;
+    }
+
+    .result-list li{
+        font-size:12px;
+    }
+
+    .actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:7px;
+    }
+
+    .action-btn{
+        padding:11px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Bulk Upload Result
+</h1>
+
+<p>
+Property import summary
+</p>
+
+</div>
+
+
+<a
+href="/dashboard"
+class="dashboard-btn"
+>
+Dashboard
+</a>
+
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+<div class="summary-grid">
+
+
+<div class="
+summary-card
+imported
+">
+
+<h3>
+Imported
+</h3>
+
+<div class="count">
+
+<%= importedCount %>
+
+</div>
+
+</div>
+
+
+
+<div class="
+summary-card
+duplicates
+">
+
+<h3>
+Duplicates
+</h3>
+
+<div class="count">
+
+<%= duplicateCount %>
+
+</div>
+
+</div>
+
+
+
+<div class="
+summary-card
+invalid
+">
+
+<h3>
+Invalid Locations
+</h3>
+
+<div class="count">
+
+<%= invalidLocationCount %>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     DUPLICATE LOCATIONS
+================================ -->
+
+<div class="result-section">
+
+
+<h2>
+Duplicate Locations
+</h2>
+
+
+<% if(
+duplicateLocations &&
+duplicateLocations.length
+){ %>
+
+
+<ul class="result-list">
+
+
 <% duplicateLocations.forEach(location => { %>
-<li><%= location %></li>
+
+
+<li>
+
+<%= location %>
+
+</li>
+
+
 <% }) %>
+
+
 </ul>
 
-<h3>Missing Locations</h3>
-<ul>
+
+<% } else { %>
+
+
+<p class="empty-message">
+
+No duplicate locations found.
+
+</p>
+
+
+<% } %>
+
+
+</div>
+
+
+
+<!-- ================================
+     MISSING LOCATIONS
+================================ -->
+
+<div class="result-section">
+
+
+<h2>
+Missing Locations
+</h2>
+
+
+<% if(
+missingLocationRequests &&
+missingLocationRequests.length
+){ %>
+
+
+<ul class="result-list">
+
+
 <% missingLocationRequests.forEach(location => { %>
-<li><%= location %></li>
+
+
+<li>
+
+<%= location %>
+
+</li>
+
+
 <% }) %>
+
+
 </ul>
 
-<br><br>
 
-<a href="/property/bulk-upload">
-    Upload Another File
+<% } else { %>
+
+
+<p class="empty-message">
+
+No missing locations found.
+
+</p>
+
+
+<% } %>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="actions">
+
+
+<a
+href="/property/bulk-upload"
+class="
+action-btn
+upload-btn
+"
+>
+Upload Another File
 </a>
 
-&nbsp;&nbsp;&nbsp;
 
-<a href="/dashboard">
-    Dashboard
+<a
+href="/dashboard"
+class="
+action-btn
+home-btn
+"
+>
+Dashboard
 </a>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

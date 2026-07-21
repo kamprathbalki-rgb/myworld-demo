@@ -1,54 +1,606 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Buyer Upload Result</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Buyer Upload Result</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
+}
+
+.container{
+    max-width:900px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.dashboard-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.summary-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.summary-card{
+    padding:20px 12px;
+
+    background:white;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.summary-card h3{
+    margin:0;
+
+    color:#777;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+}
+
+.summary-card .count{
+    margin-top:8px;
+
+    color:#1f4e79;
+
+    font-size:30px;
+
+    font-weight:bold;
+}
+
+.imported{
+    border-top:
+    4px solid #28a745;
+}
+
+.duplicates{
+    border-top:
+    4px solid #fd7e14;
+}
+
+.invalid{
+    border-top:
+    4px solid #dc3545;
+}
+
+
+/* ================================
+   RESULT SECTIONS
+================================ */
+
+.result-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.result-section h2{
+    margin:0 0 15px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:17px;
+}
+
+.result-list{
+    margin:0;
+
+    padding-left:22px;
+}
+
+.result-list li{
+    padding:7px 0;
+
+    border-bottom:
+    1px solid #f2f2f2;
+
+    color:#555;
+
+    font-size:13px;
+
+    word-break:break-word;
+}
+
+.result-list li:last-child{
+    border-bottom:none;
+}
+
+.empty-message{
+    margin:0;
+
+    color:#888;
+
+    font-size:13px;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+}
+
+.action-btn{
+    display:inline-block;
+
+    padding:11px 16px;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.upload-btn{
+    background:#28a745;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .dashboard-btn{
+        display:block;
+
+        width:100%;
+
+        margin-top:12px;
+
+        text-align:center;
+    }
+
+    .summary-grid{
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:7px;
+
+        margin-bottom:12px;
+    }
+
+    .summary-card{
+        padding:14px 5px;
+    }
+
+    .summary-card h3{
+        font-size:8px;
+    }
+
+    .summary-card .count{
+        font-size:23px;
+    }
+
+    .result-section{
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .result-section h2{
+        font-size:15px;
+    }
+
+    .result-list li{
+        font-size:12px;
+    }
+
+    .actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:7px;
+    }
+
+    .action-btn{
+        padding:11px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-<h2>Buyer Upload Result</h2>
+
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Buyer Upload Result
+</h1>
 
 <p>
-Imported:
-<%= importedCount %>
+Buyer bulk import summary
 </p>
 
-<p>
-Duplicates:
-<%= duplicateCount %>
-</p>
+</div>
 
-<p>
-Invalid Rows:
-<%= invalidCount %>
-</p>
 
-<h3>Duplicate Mobiles</h3>
-
-<ul>
-<% duplicateMobiles.forEach(mobile => { %>
-<li><%= mobile %></li>
-<% }) %>
-</ul>
-
-<h3>Invalid Rows</h3>
-
-<ul>
-<% invalidRows.forEach(row => { %>
-<li><%= row %></li>
-<% }) %>
-</ul>
-
-<br>
-
-<a href="/buyer/bulk-upload">
-Upload Another File
-</a>
-
-&nbsp;&nbsp;
-
-<a href="/dashboard">
+<a
+href="/dashboard"
+class="dashboard-btn"
+>
 Dashboard
 </a>
 
+
+</div>
+
+
+
+<!-- ================================
+     SUMMARY
+================================ -->
+
+<div class="summary-grid">
+
+
+<div class="
+summary-card
+imported
+">
+
+<h3>
+Imported
+</h3>
+
+<div class="count">
+
+<%= importedCount %>
+
+</div>
+
+</div>
+
+
+
+<div class="
+summary-card
+duplicates
+">
+
+<h3>
+Duplicates
+</h3>
+
+<div class="count">
+
+<%= duplicateCount %>
+
+</div>
+
+</div>
+
+
+
+<div class="
+summary-card
+invalid
+">
+
+<h3>
+Invalid Rows
+</h3>
+
+<div class="count">
+
+<%= invalidCount %>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     DUPLICATE MOBILES
+================================ -->
+
+<div class="result-section">
+
+
+<h2>
+Duplicate Mobiles
+</h2>
+
+
+<% if(
+duplicateMobiles &&
+duplicateMobiles.length
+){ %>
+
+
+<ul class="result-list">
+
+
+<% duplicateMobiles.forEach(mobile => { %>
+
+
+<li>
+
+<%= mobile %>
+
+</li>
+
+
+<% }) %>
+
+
+</ul>
+
+
+<% } else { %>
+
+
+<p class="empty-message">
+
+No duplicate mobile numbers found.
+
+</p>
+
+
+<% } %>
+
+
+</div>
+
+
+
+<!-- ================================
+     INVALID ROWS
+================================ -->
+
+<div class="result-section">
+
+
+<h2>
+Invalid Rows
+</h2>
+
+
+<% if(
+invalidRows &&
+invalidRows.length
+){ %>
+
+
+<ul class="result-list">
+
+
+<% invalidRows.forEach(row => { %>
+
+
+<li>
+
+<%= row %>
+
+</li>
+
+
+<% }) %>
+
+
+</ul>
+
+
+<% } else { %>
+
+
+<p class="empty-message">
+
+No invalid rows found.
+
+</p>
+
+
+<% } %>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="actions">
+
+
+<a
+href="/buyer/bulk-upload"
+class="
+action-btn
+upload-btn
+"
+>
+Upload Another File
+</a>
+
+
+<a
+href="/dashboard"
+class="
+action-btn
+home-btn
+"
+>
+Dashboard
+</a>
+
+
+</div>
+
+
+</div>
+
+
 </body>
+
 </html>

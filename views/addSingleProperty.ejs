@@ -1,206 +1,844 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Add Single Property</title>
 
 <style>
 
-body{
-    font-family:Arial,sans-serif;
-    margin:15px;
-    max-width:700px;
-}
-
-.section{
-    background:#f8f8f8;
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:8px;
-}
-
-label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:5px;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    margin-bottom:12px;
+*{
     box-sizing:border-box;
-    font-size:16px;
 }
 
-textarea{
-    min-height:80px;
+body{
+    margin:0;
+    padding:20px;
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7fa;
+
+    color:#333;
 }
 
-button{
-    width:100%;
-    padding:15px;
+.container{
+    max-width:1000px;
+
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+
+    color:#1f4e79;
+
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.error-message{
+    margin-bottom:18px;
+
+    padding:12px 15px;
+
+    background:#ffebee;
+
+    color:#c62828;
+
+    border:1px solid #ffcdd2;
+
+    border-left:4px solid #dc3545;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
     font-size:18px;
 }
 
-h2{
-    margin-top:0;
+.section-note{
+    margin:-5px 0 18px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   FORM GRID
+================================ */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:16px 20px;
+}
+
+.form-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.form-group.full-width{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    color:#555;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+
+    min-height:42px;
+
+    padding:9px 10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    background:white;
+
+    color:#333;
+
+    font-family:Arial,sans-serif;
+
+    font-size:13px;
+}
+
+.form-control:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+
+    box-shadow:
+    0 0 0 2px rgba(31,78,121,.08);
+}
+
+textarea.form-control{
+    min-height:100px;
+
+    resize:vertical;
+}
+
+
+/* ================================
+   FILE UPLOAD
+================================ */
+
+.file-input{
+    padding:8px;
+
+    background:#f8fafc;
+}
+
+
+/* ================================
+   ADVANCED LOCATION
+================================ */
+
+.advanced-section{
+    margin-bottom:18px;
+
+    padding:0;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+
+    overflow:hidden;
+}
+
+.advanced-section summary{
+    padding:17px 20px;
+
+    color:#1f4e79;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    list-style-position:inside;
+}
+
+.advanced-section summary:hover{
+    background:#f8fafc;
+}
+
+.advanced-content{
+    padding:5px 20px 20px;
+
+    border-top:1px solid #eee;
+}
+
+
+/* ================================
+   FORM ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:5px;
+}
+
+.cancel-btn{
+    display:inline-block;
+
+    min-width:110px;
+
+    padding:12px 18px;
+
+    background:#6c757d;
+
+    color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn{
+    min-width:180px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn:hover{
+    background:#218838;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+
+    .header-info p{
+        font-size:11px;
+    }
+
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+
+    .form-section{
+        margin-bottom:12px;
+
+        padding:14px;
+    }
+
+
+    .section-title{
+        margin-bottom:14px;
+
+        font-size:16px;
+    }
+
+
+    .form-grid{
+        grid-template-columns:1fr;
+
+        gap:13px;
+    }
+
+
+    .form-group.full-width{
+        grid-column:auto;
+    }
+
+
+    .form-control{
+        min-height:44px;
+
+        font-size:14px;
+    }
+
+
+    .advanced-section{
+        margin-bottom:12px;
+    }
+
+
+    .advanced-section summary{
+        padding:15px;
+
+        font-size:14px;
+    }
+
+
+    .advanced-content{
+        padding:5px 14px 14px;
+    }
+
+
+    .form-actions{
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:8px;
+    }
+
+
+    .cancel-btn,
+    .save-btn{
+        width:100%;
+
+        min-width:0;
+
+        text-align:center;
+    }
+
 }
 
 </style>
 
-
-<title>Add Single Property</title>
-
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
-<a href="/dashboard">Home</a>
 
-<h1>Add Single Property</h1>
+<div class="container">
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<div class="page-header">
+
+
+<div class="header-info">
+
+<h1>
+Add Single Property
+</h1>
+
+<p>
+Add an individual property to your inventory
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     FORM
+================================ -->
 
 <form
-    method="POST"
-    action="/property/save"
-    enctype="multipart/form-data">
+method="POST"
+action="/property/save"
+enctype="multipart/form-data"
+>
+
 
 <% if(error){ %>
 
-<div style="
-background:#ffe5e5;
-color:red;
-padding:10px;
-margin-bottom:15px;
-border:1px solid red;
-border-radius:5px;
-">
+<div class="error-message">
+
 <%= error %>
+
 </div>
 
 <% } %>
 
-<input type="hidden"
-       name="propertyMode"
-       value="SINGLE">
 
-<div style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
+<input
+type="hidden"
+name="propertyMode"
+value="SINGLE"
+>
 
-<h2 style="margin-top:0;">
+
+
+<!-- ================================
+     OWNER DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
 Owner Details
 </h2>
 
-<label>Owner Name</label>
-<input type="text" name="ownerName" required>
 
-<label>Owner Mobile</label>
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Owner Name
+</label>
 
 <input
-    type="tel"
-    name="ownerMobile"
-    pattern="[0-9]{10}"
-    maxlength="10"
-    minlength="10"
-    placeholder="10 digit mobile number"
-    required>
+type="text"
+name="ownerName"
+class="form-control"
+required
+>
 
 </div>
 
 
-<div style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
+<div class="form-group">
 
-<h2 style="margin-top:0;">
+<label>
+Owner Mobile
+</label>
+
+<input
+type="tel"
+name="ownerMobile"
+class="form-control"
+pattern="[0-9]{10}"
+maxlength="10"
+minlength="10"
+placeholder="10 digit mobile number"
+required
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PRICING
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
 Pricing
 </h2>
 
-<label>Carpet Area (Sq Ft)</label>
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Carpet Area (Sq Ft)
+</label>
 
 <input
-    type="number"
-    step="1"
-    name="singleCarpetArea"
-    required
-    placeholder="e.g. 850">
+type="number"
+step="1"
+name="singleCarpetArea"
+class="form-control"
+required
+placeholder="e.g. 850"
+>
 
-<label>Builder / Owner Asking Price (Lakhs)</label>
-<input
-    type="number"
-    step="0.01"
-    name="askingPrice"
-    required>
-
-<label>Expected Closing Price (Lakhs)</label>
-<input
-    type="number"
-    step="0.01"
-    name="expectedClosingPrice">
 </div>
 
 
-<label>Monthly Rent</label>
+<div class="form-group">
+
+<label>
+Builder / Owner Asking Price (Lakhs)
+</label>
+
 <input
-    type="number"
-    name="monthlyRent"
-    placeholder="e.g. 25000">
+type="number"
+step="0.01"
+name="askingPrice"
+class="form-control"
+required
+>
 
-<label>Security Deposit</label>
+</div>
+
+
+<div class="form-group">
+
+<label>
+Expected Closing Price (Lakhs)
+</label>
+
 <input
-    type="number"
-    name="securityDeposit"
-    placeholder="e.g. 75000">
+type="number"
+step="0.01"
+name="expectedClosingPrice"
+class="form-control"
+>
 
-<label>Maintenance Charges</label>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     RENTAL / LEASE DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Rental / Lease Details
+</h2>
+
+
+<p class="section-note">
+Complete these fields when the property is available for rent or lease.
+</p>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Monthly Rent
+</label>
+
 <input
-    type="number"
-    name="maintenanceCharges"
-    placeholder="e.g. 3000">
+type="number"
+name="monthlyRent"
+class="form-control"
+placeholder="e.g. 25000"
+>
 
-<label>Lease Duration (Months)</label>
+</div>
+
+
+<div class="form-group">
+
+<label>
+Security Deposit
+</label>
+
 <input
-    type="number"
-    name="leaseDurationMonths"
-    placeholder="e.g. 11">
+type="number"
+name="securityDeposit"
+class="form-control"
+placeholder="e.g. 75000"
+>
 
-<div style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
+</div>
 
-<h2 style="margin-top:0;">
+
+<div class="form-group">
+
+<label>
+Maintenance Charges
+</label>
+
+<input
+type="number"
+name="maintenanceCharges"
+class="form-control"
+placeholder="e.g. 3000"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Lease Duration (Months)
+</label>
+
+<input
+type="number"
+name="leaseDurationMonths"
+class="form-control"
+placeholder="e.g. 11"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROPERTY DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
 Property Details
 </h2>
 
-<label>Property Status</label>
 
-<select name="propertyStatus">
-    <option value="Available" selected>
-        Available
-    </option>
-    <option value="Blocked">
-        Blocked
-    </option>
-    <option value="Sold">
-        Sold
-    </option>
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Property Status
+</label>
+
+<select
+name="propertyStatus"
+class="form-control"
+>
+
+<option
+value="Available"
+selected
+>
+Available
+</option>
+
+<option value="Blocked">
+Blocked
+</option>
+
+<option value="Sold">
+Sold
+</option>
+
 </select>
 
-<div class="mb-3">
+</div>
+
+
+
+<div class="form-group">
 
 <label>
 Transaction Type
@@ -208,7 +846,8 @@ Transaction Type
 
 <select
 name="transactionType"
-class="form-control">
+class="form-control"
+>
 
 <option value="SALE">
 Sale
@@ -226,295 +865,793 @@ Lease
 
 </div>
 
-<label>Floor Number</label>
-<input
-    type="number"
-    name="floorNumber"
-    min="0">
 
-<label>Total Floors</label>
-<input
-    type="number"
-    name="totalFloors"
-    min="1">
 
-<label>Facing</label>
+<div class="form-group">
 
-<select name="facing">
-
-    <option value="">
-        Select Facing
-    </option>
-
-    <option>East</option>
-    <option>West</option>
-    <option>North</option>
-    <option>South</option>
-
-    <option>North-East</option>
-    <option>North-West</option>
-    <option>South-East</option>
-    <option>South-West</option>
-
-</select>
-
-<label>Lift Available</label>
-
-<select name="liftAvailable">
-
-    <option value="">
-        Select
-    </option>
-
-    <option value="Yes">
-        Yes
-    </option>
-
-    <option value="No">
-        No
-    </option>
-
-</select>
-
-<label>Property Age (Years)</label>
+<label>
+Floor Number
+</label>
 
 <input
-    type="number"
-    name="propertyAge"
-    min="0"
-    placeholder="e.g. 5">
+type="number"
+name="floorNumber"
+class="form-control"
+min="0"
+>
 
-<label>Property Status</label>
+</div>
 
-<select name="propertyStatus">
 
-    <option value="Available">
-        Available
-    </option>
 
-    <option value="Token Received">
-        Token Received
-    </option>
+<div class="form-group">
 
-    <option value="Agreement Done">
-        Agreement Done
-    </option>
+<label>
+Total Floors
+</label>
 
-    <option value="Sold">
-        Sold
-    </option>
+<input
+type="number"
+name="totalFloors"
+class="form-control"
+min="1"
+>
 
-</select>
+</div>
 
-<br><br>
 
-<label>Furnished Status</label>
 
-<select name="furnishedStatus">
-<option>Unfurnished</option>
-<option>Semi-Furnished</option>
-<option>Fully Furnished</option>
-</select>
+<div class="form-group">
 
-<br><br>
+<label>
+Facing
+</label>
 
-<label>Possession Status</label>
+<select
+name="facing"
+class="form-control"
+>
 
-<select name="possessionStatus">
-    <option value="">Select</option>
-    <option>Immediate</option>
-    <option>Ready Possession</option>
-    <option>Under Construction</option>
-    <option>Possession Soon</option>
-</select>
+<option value="">
+Select Facing
+</option>
 
-<label>Parking Type</label>
+<option>
+East
+</option>
 
-<select name="parkingType">
-    <option value="">Select</option>
-    <option>Open</option>
-    <option>Covered</option>
-    <option>Basement</option>
-    <option>Podium</option>
-    <option>Stilt</option>
+<option>
+West
+</option>
+
+<option>
+North
+</option>
+
+<option>
+South
+</option>
+
+<option>
+North-East
+</option>
+
+<option>
+North-West
+</option>
+
+<option>
+South-East
+</option>
+
+<option>
+South-West
+</option>
+
 </select>
 
 </div>
 
-<div style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
 
-<h2 style="margin-top:0;">
+
+<div class="form-group">
+
+<label>
+Lift Available
+</label>
+
+<select
+name="liftAvailable"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option value="Yes">
+Yes
+</option>
+
+<option value="No">
+No
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Property Age (Years)
+</label>
+
+<input
+type="number"
+name="propertyAge"
+class="form-control"
+min="0"
+placeholder="e.g. 5"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Property Status
+</label>
+
+<select
+name="propertyStatus"
+class="form-control"
+>
+
+<option value="Available">
+Available
+</option>
+
+<option value="Token Received">
+Token Received
+</option>
+
+<option value="Agreement Done">
+Agreement Done
+</option>
+
+<option value="Sold">
+Sold
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Furnished Status
+</label>
+
+<select
+name="furnishedStatus"
+class="form-control"
+>
+
+<option>
+Unfurnished
+</option>
+
+<option>
+Semi-Furnished
+</option>
+
+<option>
+Fully Furnished
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Possession Status
+</label>
+
+<select
+name="possessionStatus"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+Immediate
+</option>
+
+<option>
+Ready Possession
+</option>
+
+<option>
+Under Construction
+</option>
+
+<option>
+Possession Soon
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Parking Type
+</label>
+
+<select
+name="parkingType"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+Open
+</option>
+
+<option>
+Covered
+</option>
+
+<option>
+Basement
+</option>
+
+<option>
+Podium
+</option>
+
+<option>
+Stilt
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROPERTY BASICS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
 Property Basics
 </h2>
 
-<label>Property Name</label>
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Property Name
+</label>
+
 <input
-    type="text"
-    name="projectName"
-    required>
+type="text"
+name="projectName"
+class="form-control"
+required
+>
 
-<label>Builder / Society / Source</label>
+</div>
 
-<input type="text" name="builderName">
 
-<label>Location</label>
 
-<select name="propertyLocation" required>
+<div class="form-group">
+
+<label>
+Builder / Society / Source
+</label>
+
+<input
+type="text"
+name="builderName"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Location
+</label>
+
+<select
+name="propertyLocation"
+class="form-control"
+required
+>
+
 
 <option value="">
 Select Location
 </option>
 
+
 <% locations.forEach(function(location){ %>
 
+
 <option value="<%= location.officeName %>">
-    <%= location.officeName %>
-    (
-    <%= location.district %>
-    )
+
+<%= location.officeName %>
+
+(
+
+<%= location.district %>
+
+)
+
 </option>
+
 
 <% }) %>
 
+
 </select>
 
-<label>Project Status</label>
+</div>
 
-<select name="projectStatus">
-    <option value="">Select</option>
-    <option>New Launch</option>
-    <option>Under Construction</option>
-    <option>Ready Possession</option>
-    <option>Resale</option>
+
+
+<div class="form-group">
+
+<label>
+Project Status
+</label>
+
+<select
+name="projectStatus"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+New Launch
+</option>
+
+<option>
+Under Construction
+</option>
+
+<option>
+Ready Possession
+</option>
+
+<option>
+Resale
+</option>
+
 </select>
 
-<label>Property Type</label>
+</div>
 
-<select name="propertyType" required>
-    <option>Apartment</option>
-    <option>Villa</option>
-    <option>Plot</option>
-    <option>Office</option>
-    <option>Showroom</option>
-    <option>Retail</option>
-    <option>Shop</option>
+
+
+<div class="form-group">
+
+<label>
+Property Type
+</label>
+
+<select
+name="propertyType"
+class="form-control"
+required
+>
+
+<option>
+Apartment
+</option>
+
+<option>
+Villa
+</option>
+
+<option>
+Plot
+</option>
+
+<option>
+Office
+</option>
+
+<option>
+Showroom
+</option>
+
+<option>
+Retail
+</option>
+
+<option>
+Shop
+</option>
+
 </select>
 
-<label>RERA Approved</label>
+</div>
 
-<select name="reraApproved">
-    <option value="">Select</option>
-    <option>Yes</option>
-    <option>No</option>
+
+
+<div class="form-group">
+
+<label>
+RERA Approved
+</label>
+
+<select
+name="reraApproved"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>
+Yes
+</option>
+
+<option>
+No
+</option>
+
 </select>
 
-<label>Number of Buildings / Towers</label>
+</div>
 
-<input type="number" name="numberOfTowers">
 
-<label>Flat Type</label>
 
-<select name="singleFlatType" required>
-    <option>Studio</option>
-    <option>1 RK</option>
-    <option>1 BHK</option>
-    <option>1.5 BHK</option>
-    <option>2 BHK</option>
-    <option>2.5 BHK</option>
-    <option>3 BHK</option>
-    <option>3.5 BHK</option>
-    <option>4 BHK</option>
-    <option>4.5 BHK</option>
-    <option>5 BHK</option>
-    <option>5+ BHK</option>
-    <option>Villa</option>
-    <option>Plot</option>
-    <option>Office</option>
-    <option>Showroom</option>
-    <option>Retail</option>
-    <option>Shop</option>
-</select>
+<div class="form-group">
 
-<label>Cover Photo</label>
+<label>
+Number of Buildings / Towers
+</label>
 
 <input
-    type="file"
-    name="coverPhoto"
-    accept="image/*">
+type="number"
+name="numberOfTowers"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Flat Type
+</label>
+
+<select
+name="singleFlatType"
+class="form-control"
+required
+>
+
+<option>
+Studio
+</option>
+
+<option>
+1 RK
+</option>
+
+<option>
+1 BHK
+</option>
+
+<option>
+1.5 BHK
+</option>
+
+<option>
+2 BHK
+</option>
+
+<option>
+2.5 BHK
+</option>
+
+<option>
+3 BHK
+</option>
+
+<option>
+3.5 BHK
+</option>
+
+<option>
+4 BHK
+</option>
+
+<option>
+4.5 BHK
+</option>
+
+<option>
+5 BHK
+</option>
+
+<option>
+5+ BHK
+</option>
+
+<option>
+Villa
+</option>
+
+<option>
+Plot
+</option>
+
+<option>
+Office
+</option>
+
+<option>
+Showroom
+</option>
+
+<option>
+Retail
+</option>
+
+<option>
+Shop
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Cover Photo
+</label>
+
+<input
+type="file"
+name="coverPhoto"
+class="form-control file-input"
+accept="image/*"
+>
+
+</div>
+
+
+</div>
 
 
 </div>
 
 
 
-<br><br>
+<!-- ================================
+     ADVANCED LOCATION DETAILS
+================================ -->
 
-<details style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
+<details class="advanced-section">
 
-<summary style="
-font-weight:bold;
-cursor:pointer;
-">
+
+<summary>
 Advanced Location Details
 </summary>
 
-<br>
 
-<label>Google Pin</label>
-<input type="text" name="googlePin">
+<div class="advanced-content">
 
-<label>Longitude</label>
-<input type="text" name="lng">
 
-<label>Latitude</label>
-<input type="text" name="lat">
+<div class="form-grid">
 
-</details>
 
-<br><br>
+<div class="form-group full-width">
 
-<div style="
-background:#f8f8f8;
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-border:1px solid #ddd;
-">
+<label>
+Google Pin
+</label>
 
-<h2 style="margin-top:0;">
-Marketing Notes
-</h2>
-
-<label>Amenities</label>
-<textarea name="amenities"></textarea>
-
-<label>USP</label>
-<textarea name="usp"></textarea>
-
-<label>Notes</label>
-<textarea name="notes"></textarea>
+<input
+type="text"
+name="googlePin"
+class="form-control"
+>
 
 </div>
 
-<br><br>
 
-<button type="submit">
+
+<div class="form-group">
+
+<label>
+Longitude
+</label>
+
+<input
+type="text"
+name="lng"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Latitude
+</label>
+
+<input
+type="text"
+name="lat"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</details>
+
+
+
+<!-- ================================
+     MARKETING NOTES
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Marketing Notes
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Amenities
+</label>
+
+<textarea
+name="amenities"
+class="form-control"
+></textarea>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+USP
+</label>
+
+<textarea
+name="usp"
+class="form-control"
+></textarea>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Notes
+</label>
+
+<textarea
+name="notes"
+class="form-control"
+></textarea>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="form-actions">
+
+
+<a
+href="javascript:history.back()"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="save-btn"
+>
 Save Single Property
 </button>
 
+
+</div>
+
+
 </form>
 
+
+</div>
+
+
 </body>
+
 </html>

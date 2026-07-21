@@ -1,102 +1,741 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Add Executive</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+
+    margin-bottom:20px;
+    padding:18px 20px;
+
+    background:white;
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+    color:#1f4e79;
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+    color:#777;
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+    text-decoration:none;
+
+    font-size:12px;
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+.logout-btn{
+    background:#d9534f;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.error-message{
+    margin-bottom:18px;
+
+    padding:12px 15px;
+
+    background:#ffebee;
+    color:#c62828;
+
+    border:1px solid #ffcdd2;
+    border-left:4px solid #dc3545;
+
+    border-radius:8px;
+
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+.section-note{
+    margin:-5px 0 18px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   FORM GRID
+================================ */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:16px 20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group.full-width{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    color:#555;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+
+    min-height:42px;
+
+    padding:9px 10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    background:white;
+
+    color:#333;
+
+    font-family:Arial,sans-serif;
+
+    font-size:13px;
+}
+
+.form-control:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+
+    box-shadow:
+    0 0 0 2px rgba(31,78,121,.08);
+}
+
+
+/* ================================
+   LOCATION SELECT
+================================ */
+
+.location-select{
+    min-height:260px;
+
+    padding:6px;
+}
+
+.location-select option{
+    padding:8px 7px;
+
+    border-bottom:
+    1px solid #f0f0f0;
+}
+
+.location-help{
+    margin-top:8px;
+
+    padding:10px 12px;
+
+    background:#f8fafc;
+
+    border-left:4px solid #1f4e79;
+
+    color:#666;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:5px;
+}
+
+.cancel-btn{
+    display:inline-block;
+
+    min-width:110px;
+
+    padding:12px 18px;
+
+    background:#6c757d;
+
+    color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn{
+    min-width:180px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn:hover{
+    background:#218838;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        repeat(3,1fr);
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+    .header-btn{
+        padding:9px 5px;
+
+        text-align:center;
+
+        font-size:10px;
+    }
+
+    .form-section{
+        margin-bottom:12px;
+
+        padding:14px;
+    }
+
+    .section-title{
+        margin-bottom:14px;
+
+        font-size:16px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+
+        gap:13px;
+    }
+
+    .form-group.full-width{
+        grid-column:auto;
+    }
+
+    .form-control{
+        min-height:44px;
+
+        font-size:14px;
+    }
+
+    .location-select{
+        min-height:230px;
+    }
+
+    .form-actions{
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:8px;
+    }
+
+    .cancel-btn,
+    .save-btn{
+        width:100%;
+
+        min-width:0;
+
+        text-align:center;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
 
-<a href="/dashboard">Home</a> |
+<div class="container">
 
-<a href="/logout">Logout</a>
 
-<hr>
+<!-- ================================
+     HEADER
+================================ -->
 
-<h1>Add Executive</h1>
+<div class="page-header">
 
-<form method="POST" action="/executive/save">
+
+<div class="header-info">
+
+<h1>
+Add Executive
+</h1>
+
+<p>
+Create an executive and assign operating locations
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+<a
+href="/logout"
+class="header-btn logout-btn"
+>
+Logout
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     FORM
+================================ -->
+
+<form
+method="POST"
+action="/executive/save"
+>
+
 
 <% if(error){ %>
-<div style="
-background:#ffe5e5;
-color:red;
-padding:10px;
-margin-bottom:10px;
-border:1px solid red;">
-    <%= error %>
+
+<div class="error-message">
+
+<%= error %>
+
 </div>
+
 <% } %>
 
-<label>Name</label>
-<input type="text"
-       name="name"
-       value="<%= executive?.name || '' %>"
-       required>
-<br><br>
 
-<label>Mobile</label>
-<input type="text"
-       name="mobile"
-       value="<%= executive?.mobile || '' %>">
-<br><br>
 
-<input type="date"
-       name="dateOfJoining"
-       value="<%= executive?.dateOfJoining || '' %>">
+<!-- ================================
+     EXECUTIVE DETAILS
+================================ -->
 
-<br><br>
+<div class="form-section">
 
-<input type="date"
-       name="dateOfLeaving"
-       value="<%= executive?.dateOfLeaving || '' %>">
 
-<br><br>
+<h2 class="section-title">
+Executive Details
+</h2>
 
-<label>Email</label>
-<input type="email"
-       name="email"
-       value="<%= executive?.email || '' %>">
 
-<br><br>
+<div class="form-grid">
 
-<label>Password</label>
-<input type="text"
-       name="password"
-       value="<%= executive?.password || '' %>">
-<br><br>
 
-<label>Assign Multiple Locations</label>
+<div class="form-group">
 
-<br><br>
+<label>
+Name
+</label>
 
-<select name="assignedLocations" multiple size="10" required>
+<input
+type="text"
+name="name"
+class="form-control"
+value="<%= executive?.name || '' %>"
+required
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Mobile
+</label>
+
+<input
+type="text"
+name="mobile"
+class="form-control"
+value="<%= executive?.mobile || '' %>"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Date of Joining
+</label>
+
+<input
+type="date"
+name="dateOfJoining"
+class="form-control"
+value="<%= executive?.dateOfJoining || '' %>"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Date of Leaving
+</label>
+
+<input
+type="date"
+name="dateOfLeaving"
+class="form-control"
+value="<%= executive?.dateOfLeaving || '' %>"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Email
+</label>
+
+<input
+type="email"
+name="email"
+class="form-control"
+value="<%= executive?.email || '' %>"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Password
+</label>
+
+<input
+type="text"
+name="password"
+class="form-control"
+value="<%= executive?.password || '' %>"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ASSIGNED LOCATIONS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Assign Multiple Locations
+</h2>
+
+
+<p class="section-note">
+
+Select all locations that this executive will handle.
+
+</p>
+
+
+<div class="form-group">
+
+
+<label>
+Assigned Locations
+</label>
+
+
+<select
+name="assignedLocations"
+multiple
+size="10"
+required
+class="form-control location-select"
+>
+
 
 <% locations.forEach(function(location){ %>
 
+
 <option
-    value="<%= location.officeName %>"
-    <%= (executive?.assignedLocations || [])
-        .includes(location.officeName)
-        ? 'selected'
-        : '' %>>
-    <%= location.officeName %>
-    (
-    <%= location.divisionName %>,
-    <%= location.district %>
-    )
+value="<%= location.officeName %>"
+<%= (executive?.assignedLocations || [])
+.includes(location.officeName)
+? 'selected'
+: '' %>
+>
+
+
+<%= location.officeName %>
+
+(
+
+<%= location.divisionName %>,
+
+<%= location.district %>
+
+)
+
+
 </option>
+
 
 <% }) %>
 
+
 </select>
 
-<br><br>
 
-<button type="submit">Save Executive</button>
+<div class="location-help">
+
+On desktop, hold Ctrl / Command while selecting to choose multiple locations.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="form-actions">
+
+
+<a
+href="javascript:history.back()"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="save-btn"
+>
+Save Executive
+</button>
+
+
+</div>
+
 
 </form>
 
+
+</div>
+
+
 </body>
+
 </html>

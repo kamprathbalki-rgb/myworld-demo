@@ -48,30 +48,31 @@ endDate.setMonth(
 
 const tenant = new Tenant({
 
-    name:req.body.name,
+    name: req.body.name,
 
-    email:req.body.email,
+    email: req.body.email,
 
-    adminName:
-    req.body.adminName,
+    adminName: req.body.adminName,
 
-    adminEmail:
-    req.body.adminEmail,
+    adminEmail: req.body.adminEmail,
 
-    stateName:req.body.stateName,
+    stateName: req.body.stateName,
 
-    primaryDistrict:req.body.primaryDistrict,
+    primaryDistrict: req.body.primaryDistrict,
 
-    subscriptionMonths:
-        Number(req.body.subscriptionMonths),
+    companyType: req.body.companyType,
 
-    subscriptionStartDate:
-        startDate,
+    credits: Number(req.body.credits),
 
-    subscriptionEndDate:
-        endDate,
+    usedCredits: 0,
 
-    isActive:true
+    subscriptionMonths: Number(req.body.subscriptionMonths),
+
+    subscriptionStartDate: startDate,
+
+    subscriptionEndDate: endDate,
+
+    isActive: true
 
 })
 

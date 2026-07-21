@@ -2,48 +2,76 @@ const mongoose = require('mongoose')
 
 const tenantSchema = new mongoose.Schema({
 
-name:String,
+    name:String,
 
-email:String,
+    email:String,
 
-adminName:String,
+    adminName:String,
 
-adminEmail:String,
+    adminEmail:String,
 
-stateName:{
-    type:String,
-    required:true
-},
+    stateName:{
+        type:String,
+        required:true
+    },
 
-primaryDistrict:{
-    type:String,
-    required:true
-},
+    primaryDistrict:{
+        type:String,
+        required:true
+    },
 
-subscriptionMonths:{
-    type:Number,
-    default:12
-},
+    subscriptionMonths:{
+        type:Number,
+        default:12
+    },
 
-subscriptionStartDate:{
-    type:Date,
-    default:Date.now
-},
+    subscriptionStartDate:{
+        type:Date,
+        default:Date.now
+    },
 
-subscriptionEndDate:{
-    type:Date
-},
+    subscriptionEndDate:{
+        type:Date
+    },
 
-isActive:{
-    type:Boolean,
-    default:true
-},
+    isActive:{
+        type:Boolean,
+        default:true
+    },
 
-createdAt:{
-type:Date,
-default:Date.now
-}
+    companyType:{
+        type:String,
+        enum:[
+            'Builder',
+            'Real Estate Agency',
+            'Channel Partner',
+            'Broker',
+            'Developer',
+            'Property Consultant',
+            'Individual'
+        ],
+        default:'Real Estate Agency'
+    },
+
+    credits:{
+        type:Number,
+        default:0
+    },
+
+    usedCredits:{
+        type:Number,
+        default:0
+    },
+
+    createdAt:{
+        type:Date,
+        default:Date.now
+    }
 
 })
 
-module.exports = mongoose.model('Tenant',tenantSchema)
+tenantSchema.virtual('availableCredits').get(function () {
+    return (this.credits || 0) - (this.usedCredits || 0);
+})
+
+module.exports = mongoose.model('Tenant', tenantSchema)

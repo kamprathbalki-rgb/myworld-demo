@@ -2,74 +2,303 @@
 <html>
 
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <title>Company History</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    padding:18px 20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.page-header h1{
+    margin:0;
+    color:#1f4e79;
+    font-size:24px;
+}
+
+.page-header p{
+    margin:5px 0 0;
+    color:#777;
+    font-size:12px;
+}
+
+.back-btn{
+    display:inline-block;
+    padding:10px 14px;
+    background:#6c757d;
+    color:white;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.table-card{
+    padding:20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    border:1px solid #eee;
+    border-radius:8px;
+}
+
+table{
+    width:100%;
+    min-width:750px;
+    border-collapse:collapse;
+}
+
+th{
+    padding:11px 10px;
+    background:#1f4e79;
+    color:white;
+    text-align:left;
+    font-size:10px;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+
+td{
+    padding:11px 10px;
+    border-bottom:1px solid #eee;
+    color:#555;
+    font-size:12px;
+}
+
+tr:last-child td{
+    border-bottom:none;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+        padding:14px;
+        margin-bottom:12px;
+    }
+
+    .page-header h1{
+        font-size:19px;
+    }
+
+    .back-btn{
+        display:block;
+        width:100%;
+        margin-top:12px;
+        text-align:center;
+    }
+
+    .table-card{
+        padding:10px;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    th{
+        padding:9px 7px;
+        font-size:9px;
+    }
+
+    td{
+        padding:9px 7px;
+        font-size:11px;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<h2>
-<%= tenant.name %>
-</h2>
+<div class="container">
 
-<a href="/saas/dashboard">
-Back
+
+<div class="page-header">
+
+<div>
+
+<h1>
+<%= tenant.name %>
+</h1>
+
+<p>
+Company activity and subscription history
+</p>
+
+</div>
+
+
+<a
+href="/saas/dashboard"
+class="back-btn"
+>
+← Back
 </a>
 
-<hr>
+</div>
 
-<table border="1" cellpadding="8">
+
+
+<div class="table-card">
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
 
 <tr>
-<th>Action</th>
-<th>Months</th>
-<th>Old Expiry</th>
-<th>New Expiry</th>
-<th>Performed By</th>
-<th>Date</th>
+
+<th>
+Action
+</th>
+
+<th>
+Months
+</th>
+
+<th>
+Old Expiry
+</th>
+
+<th>
+New Expiry
+</th>
+
+<th>
+Performed By
+</th>
+
+<th>
+Date
+</th>
+
 </tr>
+
+</thead>
+
+
+<tbody>
+
 
 <% history.forEach(function(h){ %>
 
+
 <tr>
+
 
 <td>
 <%= h.action %>
 </td>
 
+
 <td>
 <%= h.months || '' %>
 </td>
 
+
 <td>
+
 <%= h.oldExpiryDate
 ? h.oldExpiryDate.toLocaleDateString()
 : ''
 %>
+
 </td>
 
+
 <td>
+
 <%= h.newExpiryDate
 ? h.newExpiryDate.toLocaleDateString()
 : ''
 %>
+
 </td>
+
 
 <td>
 <%= h.performedBy || '' %>
 </td>
 
+
 <td>
+
 <%= h.createdAt
 ? h.createdAt.toLocaleDateString()
 : ''
 %>
+
 </td>
+
 
 </tr>
 
+
 <% }) %>
 
+
+</tbody>
+
 </table>
+
+</div>
+
+</div>
+
+
+</div>
 
 </body>
 

@@ -1,9 +1,184 @@
-<h2>Company Registered</h2>
+<!DOCTYPE html>
+<html>
 
-<p>Tenant ID:</p>
+<head>
 
-<h3><%= tenant._id %></h3>
+<meta charset="UTF-8">
 
-<p>Use this Tenant ID when registering users.</p>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<a href="/register">Register User</a>
+<title>Company Registered</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:650px;
+    margin:60px auto;
+}
+
+.success-card{
+    padding:30px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+    text-align:center;
+}
+
+.success-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+h1{
+    margin:0 0 8px;
+    color:#28a745;
+    font-size:25px;
+}
+
+.subtitle{
+    margin:0 0 25px;
+    color:#777;
+    font-size:13px;
+}
+
+.tenant-box{
+    margin:20px 0;
+    padding:18px;
+    background:#f8fafc;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.tenant-label{
+    margin:0 0 8px;
+    color:#777;
+    font-size:11px;
+    font-weight:bold;
+    text-transform:uppercase;
+}
+
+.tenant-id{
+    margin:0;
+    color:#1f4e79;
+    font-size:20px;
+    word-break:break-all;
+}
+
+.info{
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.action-btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:12px 20px;
+    background:#1f4e79;
+    color:white;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        margin:30px auto;
+    }
+
+    .success-card{
+        padding:22px 15px;
+    }
+
+    h1{
+        font-size:21px;
+    }
+
+    .tenant-id{
+        font-size:16px;
+    }
+
+    .action-btn{
+        display:block;
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+<div class="success-card">
+
+<div class="success-icon">
+✓
+</div>
+
+<h1>
+Company Registered
+</h1>
+
+<p class="subtitle">
+Company registration completed successfully
+</p>
+
+
+<div class="tenant-box">
+
+<p class="tenant-label">
+Tenant ID
+</p>
+
+<h3 class="tenant-id">
+<%= tenant._id %>
+</h3>
+
+</div>
+
+
+<p class="info">
+Use this Tenant ID when registering users.
+</p>
+
+
+<a
+href="/register"
+class="action-btn"
+>
+Register User
+</a>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,57 +1,754 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Add Project</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Add Property</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    color:#333;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+
+    margin-bottom:20px;
+    padding:18px 20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.header-info h1{
+    margin:0;
+    color:#1f4e79;
+    font-size:25px;
+}
+
+.header-info p{
+    margin:6px 0 0;
+    color:#777;
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+}
+
+.header-btn{
+    display:inline-block;
+
+    padding:10px 14px;
+
+    border-radius:7px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.back-btn{
+    background:#6c757d;
+}
+
+.home-btn{
+    background:#1f4e79;
+}
+
+
+/* ================================
+   SECTIONS
+================================ */
+
+.form-section{
+    margin-bottom:18px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-title{
+    margin:0 0 18px;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid #eee;
+
+    color:#1f4e79;
+
+    font-size:18px;
+}
+
+.section-note{
+    margin:-5px 0 18px;
+
+    color:#777;
+
+    font-size:12px;
+}
+
+
+/* ================================
+   PROPERTY MODE
+================================ */
+
+.mode-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:10px;
+}
+
+.mode-option{
+    position:relative;
+
+    display:block;
+
+    cursor:pointer;
+}
+
+.mode-option input{
+    position:absolute;
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+.mode-card{
+    display:block;
+
+    padding:16px;
+
+    border:2px solid #ddd;
+
+    border-radius:9px;
+
+    text-align:center;
+
+    color:#555;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    transition:.2s;
+}
+
+.mode-option input:checked + .mode-card{
+    border-color:#1f4e79;
+
+    background:#eef5fb;
+
+    color:#1f4e79;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:16px 20px;
+}
+
+.form-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.form-group.full-width{
+    grid-column:1 / -1;
+}
+
+.form-group > label{
+    color:#555;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+
+    min-height:42px;
+
+    padding:9px 10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    background:white;
+
+    color:#333;
+
+    font-family:Arial,sans-serif;
+
+    font-size:13px;
+}
+
+.form-control:focus{
+    outline:none;
+
+    border-color:#1f4e79;
+}
+
+textarea.form-control{
+    min-height:100px;
+
+    resize:vertical;
+}
+
+
+/* ================================
+   CHECKBOXES
+================================ */
+
+.checkbox-grid{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+}
+
+.checkbox-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:9px 12px;
+
+    background:#f8fafc;
+
+    border:1px solid #ddd;
+
+    border-radius:7px;
+
+    color:#555;
+
+    font-size:12px;
+}
+
+
+/* ================================
+   CONFIGURATION TABS
+================================ */
+
+.tab-buttons{
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:8px;
+
+    margin-bottom:18px;
+}
+
+.tab-btn{
+    min-height:44px;
+
+    padding:10px;
+
+    border:1px solid #1f4e79;
+
+    border-radius:7px;
+
+    background:white;
+
+    color:#1f4e79;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.tab-btn.active{
+    background:#1f4e79;
+
+    color:white;
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-wrapper{
+    width:100%;
+
+    overflow-x:auto;
+
+    border:1px solid #eee;
+
+    border-radius:9px;
+}
+
+.configuration-table{
+    width:100%;
+
+    min-width:750px;
+
+    border-collapse:collapse;
+}
+
+.configuration-table th{
+    padding:11px 9px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+}
+
+.configuration-table td{
+    padding:8px;
+
+    border-bottom:1px solid #eee;
+
+    font-size:12px;
+}
+
+.configuration-table input{
+    width:100%;
+
+    min-width:100px;
+
+    padding:8px;
+
+    border:1px solid #ccc;
+
+    border-radius:5px;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+}
+
+.cancel-btn{
+    display:inline-block;
+
+    min-width:110px;
+
+    padding:12px 18px;
+
+    background:#6c757d;
+
+    color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:7px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.save-btn{
+    min-width:180px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#28a745;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .page-header{
+        display:block;
+
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .header-info h1{
+        font-size:20px;
+    }
+
+    .header-info p{
+        font-size:11px;
+    }
+
+    .header-actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:6px;
+
+        margin-top:12px;
+    }
+
+    .header-btn{
+        text-align:center;
+
+        font-size:10px;
+    }
+
+    .form-section{
+        padding:14px;
+
+        margin-bottom:12px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+
+        gap:13px;
+    }
+
+    .form-group.full-width{
+        grid-column:auto;
+    }
+
+    .mode-grid{
+        grid-template-columns:1fr;
+    }
+
+    .checkbox-grid{
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .tab-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .configuration-table{
+        min-width:650px;
+    }
+
+    .form-actions{
+        display:grid;
+
+        grid-template-columns:
+        1fr 1fr;
+
+        gap:8px;
+    }
+
+    .cancel-btn,
+    .save-btn{
+        width:100%;
+
+        min-width:0;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<a href="javascript:history.back()">Back</a> |
 
-<a href="/dashboard">Home</a> |
+<div class="container">
 
-<h1>Add Project</h1>
 
-<form method="POST" action="/property/save">
+<!-- ================================
+     HEADER
+================================ -->
 
-<h3>Property Type</h3>
+<div class="page-header">
 
-<label>
-<input type="radio"
-       name="propertyMode"
-       value="PROJECT"
-       checked
-       onclick="showPropertyMode('PROJECT')">
+
+<div class="header-info">
+
+<h1>
+Add Property
+</h1>
+
+<p>
+Add a builder project or individual property
+</p>
+
+</div>
+
+
+<div class="header-actions">
+
+
+<a
+href="javascript:history.back()"
+class="header-btn back-btn"
+>
+← Back
+</a>
+
+
+<a
+href="/dashboard"
+class="header-btn home-btn"
+>
+Home
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<form
+method="POST"
+action="/property/save"
+>
+
+
+
+<!-- ================================
+     PROPERTY MODE
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Property Type
+</h2>
+
+
+<div class="mode-grid">
+
+
+<label class="mode-option">
+
+
+<input
+type="radio"
+name="propertyMode"
+value="PROJECT"
+checked
+onclick="showPropertyMode('PROJECT')"
+>
+
+
+<span class="mode-card">
+
 Builder Project
+
+</span>
+
+
 </label>
+
+
+
+<label class="mode-option">
+
+
+<input
+type="radio"
+name="propertyMode"
+value="SINGLE"
+onclick="showPropertyMode('SINGLE')"
+>
+
+
+<span class="mode-card">
+
+Single Property
+
+</span>
+
+
+</label>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     SINGLE PROPERTY
+================================ -->
+
+<div
+id="singleSection"
+style="display:none;"
+>
+
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Owner Details
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
 
 <label>
-<input type="radio"
-       name="propertyMode"
-       value="SINGLE"
-       onclick="showPropertyMode('SINGLE')">
-Single Property
+Owner Name
 </label>
 
-<hr>
+<input
+type="text"
+name="ownerName"
+class="form-control"
+>
 
-<hr>
+</div>
 
-<label>Owner Name</label>
-<input type="text" name="ownerName">
 
-<br><br>
+<div class="form-group">
 
-<label>Owner Mobile</label>
-<input type="text" name="ownerMobile">
+<label>
+Owner Mobile
+</label>
 
-<br><br>
+<input
+type="text"
+name="ownerMobile"
+class="form-control"
+>
 
-<h3>Single Property</h3>
+</div>
 
-<label>Property Category</label>
 
-<select name="singlePropertyType">
+</div>
+
+
+</div>
+
+
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Single Property
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Property Category
+</label>
+
+<select
+name="singlePropertyType"
+class="form-control"
+>
 
 <option>Apartment</option>
 <option>Villa</option>
@@ -63,489 +760,1367 @@ Single Property
 
 </select>
 
-<br><br>
+</div>
 
-<label>Property Name</label>
-<input type="text" name="singlePropertyName">
 
-<br><br>
 
-<label>Price</label>
-<input type="number" name="singlePropertyPrice">
+<div class="form-group">
 
-<br><br>
+<label>
+Property Name
+</label>
 
-<label>Area</label>
-<input type="number" name="singlePropertyArea">
+<input
+type="text"
+name="singlePropertyName"
+class="form-control"
+>
 
-<br><br>
+</div>
 
-<label>Flat Type</label>
 
-<select name="singleFlatType">
-    <option>Studio</option>
-    <option>1 RK</option>
-    <option>1 BHK</option>
-    <option>1.5 BHK</option>
-    <option>2 BHK</option>
-    <option>2.5 BHK</option>
-    <option>3 BHK</option>
-    <option>3.5 BHK</option>
-    <option>4 BHK</option>
-    <option>4.5 BHK</option>
-    <option>5 BHK</option>
-    <option>5+ BHK</option>
-    <option>Villa</option>
-    <option>Plot</option>
-    <option>Office</option>
-    <option>Showroom</option>
-    <option>Retail</option>
-    <option>Shop</option>
+
+<div class="form-group">
+
+<label>
+Price
+</label>
+
+<input
+type="number"
+name="singlePropertyPrice"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Area
+</label>
+
+<input
+type="number"
+name="singlePropertyArea"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Flat Type
+</label>
+
+<select
+name="singleFlatType"
+class="form-control"
+>
+
+<option>Studio</option>
+<option>1 RK</option>
+<option>1 BHK</option>
+<option>1.5 BHK</option>
+<option>2 BHK</option>
+<option>2.5 BHK</option>
+<option>3 BHK</option>
+<option>3.5 BHK</option>
+<option>4 BHK</option>
+<option>4.5 BHK</option>
+<option>5 BHK</option>
+<option>5+ BHK</option>
+<option>Villa</option>
+<option>Plot</option>
+<option>Office</option>
+<option>Showroom</option>
+<option>Retail</option>
+<option>Shop</option>
+
 </select>
 
-<br><br>
-
-<label>Carpet Area</label>
-<input type="number" name="singleCarpetArea">
-
-<br><br>
-
-<label>Quoted Price</label>
-<input type="number" name="singleQuotedPrice">
-
-<br><br>
-
-<label>Closing Price</label>
-<input type="number" name="singleClosingPrice">
-</div>
 </div>
 
-<h2>Basic Project Information</h2>
 
-<label>Project Name</label>
-<input type="text" name="projectName"><br><br>
 
-<label>Builder Name</label>
-<input type="text" name="builderName"><br><br>
+<div class="form-group">
 
-<label>Project Type</label><br>
+<label>
+Carpet Area
+</label>
 
-<input type="checkbox" name="projectType" value="Residential">
-<label>Residential</label><br>
+<input
+type="number"
+name="singleCarpetArea"
+class="form-control"
+>
 
-<input type="checkbox" name="projectType" value="Commercial">
-<label>Commercial</label><br>
+</div>
 
-<input type="checkbox" name="projectType" value="Mixed Use">
-<label>Mixed Use</label><br><br>
 
-<label>Property Type</label><br>
 
+<div class="form-group">
+
+<label>
+Quoted Price
+</label>
+
+<input
+type="number"
+name="singleQuotedPrice"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Closing Price
+</label>
+
+<input
+type="number"
+name="singleClosingPrice"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     PROJECT SECTION
+================================ -->
+
+<div id="projectSection">
+
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Basic Project Information
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Project Name
+</label>
+
+<input
+type="text"
+name="projectName"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Builder Name
+</label>
+
+<input
+type="text"
+name="builderName"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Project Type
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Residential"
+>
+
+Residential
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Commercial"
+>
+
+Commercial
+
+</label>
+
+
+<label class="checkbox-item">
+
+<input
+type="checkbox"
+name="projectType"
+value="Mixed Use"
+>
+
+Mixed Use
+
+</label>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Property Type
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Apartment">
-<label>Apartment</label><br>
+Apartment
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Villa">
-<label>Villa</label><br>
+Villa
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Plot">
-<label>Plot</label><br>
+Plot
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Office">
-<label>Office</label><br>
+Office
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Showroom">
-<label>Showroom</label><br>
+Showroom
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Retail">
-<label>Retail</label><br>
+Retail
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="propertyType" value="Shop">
-<label>Shop</label><br><br>
+Shop
+</label>
 
-<label>Project Status</label>
-<select name="projectStatus">
-    <option value="">Select</option>
-    <option>New Launch</option>
-    <option>Under Construction</option>
-    <option>Ready Possession</option>
-    <option>Resale</option>
-</select><br><br>
 
-<label>RERA Approved</label>
-<select name="reraApproved">
-    <option value="">Select</option>
-    <option>Yes</option>
-    <option>No</option>
-</select><br><br>
+</div>
 
-<hr>
 
-<h2>Location Details</h2>
+</div>
 
-<label>City</label>
-<input type="text" name="city"><br><br>
 
-<label>Direction</label>
-<select name="direction">
-    <option value="">Select</option>
-    <option>East</option>
-    <option>West</option>
-    <option>North</option>
-    <option>South</option>
-    <option>Central</option>
-</select><br><br>
 
-<label>Property Location</label>
+<div class="form-group">
 
-<select name="propertyLocation" required>
-    <option value="">Select Location</option>
+<label>
+Project Status
+</label>
 
-    <% locations.forEach(function(location){ %>
-        <option value="<%= location.officeName %>">
-            <%= location.officeName %>
-        </option>
-    <% }) %>
+<select
+name="projectStatus"
+class="form-control"
+>
 
-</select><br><br>
+<option value="">
+Select
+</option>
 
-<label>Location Landmark</label>
-<input type="text" name="locationLandmark"><br><br>
+<option>
+New Launch
+</option>
 
-<label>Google Pin</label>
-<input type="text" name="googlePin"><br><br>
+<option>
+Under Construction
+</option>
 
-<label>Longitude</label>
-<input type="text" name="lng"><br><br>
+<option>
+Ready Possession
+</option>
 
-<label>Latitude</label>
-<input type="text" name="lat"><br><br>
+<option>
+Resale
+</option>
 
-<hr>
+</select>
 
-<h2>Tower Details</h2>
+</div>
 
-<label>Number of Towers</label>
-<input type="number" name="numberOfTowers"><br><br>
 
-<label>Tower Name</label>
-<input type="text" name="towerName"><br><br>
 
-<label>Number of Floors</label>
-<input type="number" name="numberOfFloors"><br><br>
+<div class="form-group">
 
-<label>Tower Status</label>
-<select name="towerStatus">
-    <option value="">Select</option>
-    <option>Under Construction</option>
-    <option>Ready Possession</option>
-    <option>Sold Out</option>
-</select><br><br>
+<label>
+RERA Approved
+</label>
 
-<label>Inventory Status</label>
-<select name="inventoryStatus">
-    <option value="">Select</option>
-    <option>Available</option>
-    <option>Limited Availability</option>
-    <option>Sold Out</option>
-</select><br><br>
+<select
+name="reraApproved"
+class="form-control"
+>
 
-<label>Possession Month</label>
-<input type="text" name="possessionMonth"><br><br>
+<option value="">
+Select
+</option>
 
-<label>Possession Year</label>
-<input type="number" name="possessionYear"><br><br>
+<option>
+Yes
+</option>
 
-<hr>
+<option>
+No
+</option>
 
-<div id="configurationSection">
+</select>
 
-<h2>Configurations</h2>
+</div>
 
-<button type="button" onclick="showTab('apartmentTab')">
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     LOCATION
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Location Details
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+City
+</label>
+
+<input
+type="text"
+name="city"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Direction
+</label>
+
+<select
+name="direction"
+class="form-control"
+>
+
+<option value="">
+Select
+</option>
+
+<option>East</option>
+<option>West</option>
+<option>North</option>
+<option>South</option>
+<option>Central</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Property Location
+</label>
+
+<select
+name="propertyLocation"
+class="form-control"
+required
+>
+
+<option value="">
+Select Location
+</option>
+
+
+<% locations.forEach(function(location){ %>
+
+
+<option value="<%= location.officeName %>">
+
+<%= location.officeName %>
+
+</option>
+
+
+<% }) %>
+
+
+</select>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Location Landmark
+</label>
+
+<input
+type="text"
+name="locationLandmark"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+<label>
+Google Pin
+</label>
+
+<input
+type="text"
+name="googlePin"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Longitude
+</label>
+
+<input
+type="text"
+name="lng"
+class="form-control"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Latitude
+</label>
+
+<input
+type="text"
+name="lat"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     TOWER DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Tower Details
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Number of Towers
+</label>
+
+<input
+type="number"
+name="numberOfTowers"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Tower Name
+</label>
+
+<input
+type="text"
+name="towerName"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Number of Floors
+</label>
+
+<input
+type="number"
+name="numberOfFloors"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Tower Status
+</label>
+
+<select
+name="towerStatus"
+class="form-control"
+>
+
+<option value="">Select</option>
+<option>Under Construction</option>
+<option>Ready Possession</option>
+<option>Sold Out</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Inventory Status
+</label>
+
+<select
+name="inventoryStatus"
+class="form-control"
+>
+
+<option value="">Select</option>
+<option>Available</option>
+<option>Limited Availability</option>
+<option>Sold Out</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Possession Month
+</label>
+
+<input
+type="text"
+name="possessionMonth"
+class="form-control"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Possession Year
+</label>
+
+<input
+type="number"
+name="possessionYear"
+class="form-control"
+>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     CONFIGURATIONS
+================================ -->
+
+<div
+id="configurationSection"
+class="form-section"
+>
+
+
+<h2 class="section-title">
+Configurations
+</h2>
+
+
+<div class="tab-buttons">
+
+
+<button
+type="button"
+id="apartmentTabButton"
+class="tab-btn active"
+onclick="showTab('apartmentTab')"
+>
 Apartment (BHK)
 </button>
 
-<button type="button" onclick="showTab('otherTab')">
+
+<button
+type="button"
+id="otherTabButton"
+class="tab-btn"
+onclick="showTab('otherTab')"
+>
 Villa / Plot / Office / Showroom / Retail / Shop
 </button>
 
-<hr>
 
-<!-- TAB 1 -->
+</div>
+
+
 
 <div id="apartmentTab">
 
-<h3>Apartment Configurations</h3>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<h3>
+Apartment Configurations
+</h3>
 
-<tr>
-    <th>Flat Type</th>
-    <th>Carpet Area</th>
-    <th>Quoted Price</th>
-    <th>Closing Price</th>
-    <th>Available Units</th>
-</tr>
 
-<tr>
-    <td>Studio</td>
-    <td><input type="number" name="carpetArea_studio"></td>
-    <td><input type="number" name="quotedPrice_studio"></td>
-    <td><input type="number" name="closingPrice_studio"></td>
-    <td><input type="number" name="availableUnits_studio"></td>
-</tr>
+<div class="table-wrapper">
 
+
+<table class="configuration-table">
+
+
+<thead>
 
 <tr>
-    <td>1 RK</td>
-    <td><input type="number" name="carpetArea_1RK"></td>
-    <td><input type="number" name="quotedPrice_1RK"></td>
-    <td><input type="number" name="closingPrice_1RK"></td>
-    <td><input type="number" name="availableUnits_1RK"></td>
+
+<th>Flat Type</th>
+
+<th>Carpet Area</th>
+
+<th>Quoted Price</th>
+
+<th>Closing Price</th>
+
+<th>Available Units</th>
+
 </tr>
 
+</thead>
 
-<tr>
-    <td>1 BHK</td>
-    <td><input type="number" name="carpetArea_1BHK"></td>
-    <td><input type="number" name="quotedPrice_1BHK"></td>
-    <td><input type="number" name="closingPrice_1BHK"></td>
-    <td><input type="number" name="availableUnits_1BHK"></td>
-</tr>
+
+<tbody>
 
 
 <tr>
-    <td>1.5 BHK</td>
-    <td><input type="number" name="carpetArea_1_5BHK"></td>
-    <td><input type="number" name="quotedPrice_1_5BHK"></td>
-    <td><input type="number" name="closingPrice_1_5BHK"></td>
-    <td><input type="number" name="availableUnits_1_5BHK"></td>
+<td>Studio</td>
+<td><input type="number" name="carpetArea_studio"></td>
+<td><input type="number" name="quotedPrice_studio"></td>
+<td><input type="number" name="closingPrice_studio"></td>
+<td><input type="number" name="availableUnits_studio"></td>
 </tr>
 
-<tr>
-    <td>2 BHK</td>
-    <td><input type="number" name="carpetArea_2BHK"></td>
-    <td><input type="number" name="quotedPrice_2BHK"></td>
-    <td><input type="number" name="closingPrice_2BHK"></td>
-    <td><input type="number" name="availableUnits_2BHK"></td>
-</tr>
 
 <tr>
-    <td>2.5 BHK</td>
-    <td><input type="number" name="carpetArea_2_5BHK"></td>
-    <td><input type="number" name="quotedPrice_2_5BHK"></td>
-    <td><input type="number" name="closingPrice_2_5BHK"></td>
-    <td><input type="number" name="availableUnits_2_5BHK"></td>
+<td>1 RK</td>
+<td><input type="number" name="carpetArea_1RK"></td>
+<td><input type="number" name="quotedPrice_1RK"></td>
+<td><input type="number" name="closingPrice_1RK"></td>
+<td><input type="number" name="availableUnits_1RK"></td>
 </tr>
 
-<tr>
-    <td>3 BHK</td>
-    <td><input type="number" name="carpetArea_3BHK"></td>
-    <td><input type="number" name="quotedPrice_3BHK"></td>
-    <td><input type="number" name="closingPrice_3BHK"></td>
-    <td><input type="number" name="availableUnits_3BHK"></td>
-</tr>
 
 <tr>
-    <td>3.5 BHK</td>
-    <td><input type="number" name="carpetArea_3_5BHK"></td>
-    <td><input type="number" name="quotedPrice_3_5BHK"></td>
-    <td><input type="number" name="closingPrice_3_5BHK"></td>
-    <td><input type="number" name="availableUnits_3_5BHK"></td>
+<td>1 BHK</td>
+<td><input type="number" name="carpetArea_1BHK"></td>
+<td><input type="number" name="quotedPrice_1BHK"></td>
+<td><input type="number" name="closingPrice_1BHK"></td>
+<td><input type="number" name="availableUnits_1BHK"></td>
 </tr>
 
-<tr>
-    <td>4 BHK</td>
-    <td><input type="number" name="carpetArea_4BHK"></td>
-    <td><input type="number" name="quotedPrice_4BHK"></td>
-    <td><input type="number" name="closingPrice_4BHK"></td>
-    <td><input type="number" name="availableUnits_4BHK"></td>
-</tr>
 
 <tr>
-    <td>4.5 BHK</td>
-    <td><input type="number" name="carpetArea_4_5BHK"></td>
-    <td><input type="number" name="quotedPrice_4_5BHK"></td>
-    <td><input type="number" name="closingPrice_4_5BHK"></td>
-    <td><input type="number" name="availableUnits_4_5BHK"></td>
+<td>1.5 BHK</td>
+<td><input type="number" name="carpetArea_1_5BHK"></td>
+<td><input type="number" name="quotedPrice_1_5BHK"></td>
+<td><input type="number" name="closingPrice_1_5BHK"></td>
+<td><input type="number" name="availableUnits_1_5BHK"></td>
 </tr>
 
-<tr>
-    <td>5 BHK</td>
-    <td><input type="number" name="carpetArea_5BHK"></td>
-    <td><input type="number" name="quotedPrice_5BHK"></td>
-    <td><input type="number" name="closingPrice_5BHK"></td>
-    <td><input type="number" name="availableUnits_5BHK"></td>
-</tr>
 
 <tr>
-    <td>5+ BHK</td>
-    <td><input type="number" name="carpetArea_5PlusBHK"></td>
-    <td><input type="number" name="quotedPrice_5PlusBHK"></td>
-    <td><input type="number" name="closingPrice_5PlusBHK"></td>
-    <td><input type="number" name="availableUnits_5PlusBHK"></td>
+<td>2 BHK</td>
+<td><input type="number" name="carpetArea_2BHK"></td>
+<td><input type="number" name="quotedPrice_2BHK"></td>
+<td><input type="number" name="closingPrice_2BHK"></td>
+<td><input type="number" name="availableUnits_2BHK"></td>
 </tr>
+
+
+<tr>
+<td>2.5 BHK</td>
+<td><input type="number" name="carpetArea_2_5BHK"></td>
+<td><input type="number" name="quotedPrice_2_5BHK"></td>
+<td><input type="number" name="closingPrice_2_5BHK"></td>
+<td><input type="number" name="availableUnits_2_5BHK"></td>
+</tr>
+
+
+<tr>
+<td>3 BHK</td>
+<td><input type="number" name="carpetArea_3BHK"></td>
+<td><input type="number" name="quotedPrice_3BHK"></td>
+<td><input type="number" name="closingPrice_3BHK"></td>
+<td><input type="number" name="availableUnits_3BHK"></td>
+</tr>
+
+
+<tr>
+<td>3.5 BHK</td>
+<td><input type="number" name="carpetArea_3_5BHK"></td>
+<td><input type="number" name="quotedPrice_3_5BHK"></td>
+<td><input type="number" name="closingPrice_3_5BHK"></td>
+<td><input type="number" name="availableUnits_3_5BHK"></td>
+</tr>
+
+
+<tr>
+<td>4 BHK</td>
+<td><input type="number" name="carpetArea_4BHK"></td>
+<td><input type="number" name="quotedPrice_4BHK"></td>
+<td><input type="number" name="closingPrice_4BHK"></td>
+<td><input type="number" name="availableUnits_4BHK"></td>
+</tr>
+
+
+<tr>
+<td>4.5 BHK</td>
+<td><input type="number" name="carpetArea_4_5BHK"></td>
+<td><input type="number" name="quotedPrice_4_5BHK"></td>
+<td><input type="number" name="closingPrice_4_5BHK"></td>
+<td><input type="number" name="availableUnits_4_5BHK"></td>
+</tr>
+
+
+<tr>
+<td>5 BHK</td>
+<td><input type="number" name="carpetArea_5BHK"></td>
+<td><input type="number" name="quotedPrice_5BHK"></td>
+<td><input type="number" name="closingPrice_5BHK"></td>
+<td><input type="number" name="availableUnits_5BHK"></td>
+</tr>
+
+
+<tr>
+<td>5+ BHK</td>
+<td><input type="number" name="carpetArea_5PlusBHK"></td>
+<td><input type="number" name="quotedPrice_5PlusBHK"></td>
+<td><input type="number" name="closingPrice_5PlusBHK"></td>
+<td><input type="number" name="availableUnits_5PlusBHK"></td>
+</tr>
+
+
+</tbody>
+
 
 </table>
 
+
 </div>
 
-<!-- TAB 2 -->
 
-<div id="otherTab" style="display:none;">
+</div>
 
-<h3>Villa / Plot / Commercial Configurations</h3>
 
-<table border="1" cellpadding="10" cellspacing="0">
 
-<tr>
-    <th>Type</th>
-    <th>Area</th>
-    <th>Quoted Price</th>
-    <th>Closing Price</th>
-    <th>Available Units</th>
-</tr>
+<div
+id="otherTab"
+style="display:none;"
+>
 
-<tr>
-    <td>Villa</td>
-    <td><input type="number" name="carpetArea_villa"></td>
-    <td><input type="number" name="quotedPrice_villa"></td>
-    <td><input type="number" name="closingPrice_villa"></td>
-    <td><input type="number" name="availableUnits_villa"></td>
-</tr>
 
-<tr>
-    <td>Plot</td>
-    <td><input type="number" name="carpetArea_plot"></td>
-    <td><input type="number" name="quotedPrice_plot"></td>
-    <td><input type="number" name="closingPrice_plot"></td>
-    <td><input type="number" name="availableUnits_plot"></td>
-</tr>
+<h3>
+Villa / Plot / Commercial Configurations
+</h3>
+
+
+<div class="table-wrapper">
+
+
+<table class="configuration-table">
+
+
+<thead>
 
 <tr>
-    <td>Office</td>
-    <td><input type="number" name="carpetArea_office"></td>
-    <td><input type="number" name="quotedPrice_office"></td>
-    <td><input type="number" name="closingPrice_office"></td>
-    <td><input type="number" name="availableUnits_office"></td>
+
+<th>Type</th>
+
+<th>Area</th>
+
+<th>Quoted Price</th>
+
+<th>Closing Price</th>
+
+<th>Available Units</th>
+
 </tr>
 
-<tr>
-    <td>Showroom</td>
-    <td><input type="number" name="carpetArea_showroom"></td>
-    <td><input type="number" name="quotedPrice_showroom"></td>
-    <td><input type="number" name="closingPrice_showroom"></td>
-    <td><input type="number" name="availableUnits_showroom"></td>
-</tr>
+</thead>
+
+
+<tbody>
+
 
 <tr>
-    <td>Retail</td>
-    <td><input type="number" name="carpetArea_retail"></td>
-    <td><input type="number" name="quotedPrice_retail"></td>
-    <td><input type="number" name="closingPrice_retail"></td>
-    <td><input type="number" name="availableUnits_retail"></td>
+<td>Villa</td>
+<td><input type="number" name="carpetArea_villa"></td>
+<td><input type="number" name="quotedPrice_villa"></td>
+<td><input type="number" name="closingPrice_villa"></td>
+<td><input type="number" name="availableUnits_villa"></td>
 </tr>
 
+
 <tr>
-    <td>Shop</td>
-    <td><input type="number" name="carpetArea_shop"></td>
-    <td><input type="number" name="quotedPrice_shop"></td>
-    <td><input type="number" name="closingPrice_shop"></td>
-    <td><input type="number" name="availableUnits_shop"></td>
+<td>Plot</td>
+<td><input type="number" name="carpetArea_plot"></td>
+<td><input type="number" name="quotedPrice_plot"></td>
+<td><input type="number" name="closingPrice_plot"></td>
+<td><input type="number" name="availableUnits_plot"></td>
 </tr>
+
+
+<tr>
+<td>Office</td>
+<td><input type="number" name="carpetArea_office"></td>
+<td><input type="number" name="quotedPrice_office"></td>
+<td><input type="number" name="closingPrice_office"></td>
+<td><input type="number" name="availableUnits_office"></td>
+</tr>
+
+
+<tr>
+<td>Showroom</td>
+<td><input type="number" name="carpetArea_showroom"></td>
+<td><input type="number" name="quotedPrice_showroom"></td>
+<td><input type="number" name="closingPrice_showroom"></td>
+<td><input type="number" name="availableUnits_showroom"></td>
+</tr>
+
+
+<tr>
+<td>Retail</td>
+<td><input type="number" name="carpetArea_retail"></td>
+<td><input type="number" name="quotedPrice_retail"></td>
+<td><input type="number" name="closingPrice_retail"></td>
+<td><input type="number" name="availableUnits_retail"></td>
+</tr>
+
+
+<tr>
+<td>Shop</td>
+<td><input type="number" name="carpetArea_shop"></td>
+<td><input type="number" name="quotedPrice_shop"></td>
+<td><input type="number" name="closingPrice_shop"></td>
+<td><input type="number" name="availableUnits_shop"></td>
+</tr>
+
+
+</tbody>
+
 
 </table>
 
-</div>
 
 </div>
 
+
 </div>
 
-<hr>
 
-<h2>Sales Details</h2>
+</div>
 
-<label>Parking Type</label><br>
 
+
+<!-- ================================
+     SALES DETAILS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Sales Details
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+
+<label>
+Parking Type
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
 <input type="checkbox" name="parkingType" value="Open">
-<label>Open</label><br>
+Open
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="parkingType" value="Covered">
-<label>Covered</label><br>
+Covered
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="parkingType" value="Basement">
-<label>Basement</label><br>
+Basement
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="parkingType" value="Podium">
-<label>Podium</label><br>
+Podium
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="parkingType" value="Stilt">
-<label>Stilt</label><br><br>
+Stilt
+</label>
 
-<label>Furnished Status</label>
-<select name="furnishedStatus">
-    <option value="">Select</option>
-    <option>Unfurnished</option>
-    <option>Semi-Furnished</option>
-    <option>Fully Furnished</option>
-</select><br><br>
 
-<label>Possession Status</label><br>
+</div>
 
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+
+<label>
+Furnished Status
+</label>
+
+
+<select
+name="furnishedStatus"
+class="form-control"
+>
+
+<option value="">Select</option>
+<option>Unfurnished</option>
+<option>Semi-Furnished</option>
+<option>Fully Furnished</option>
+
+</select>
+
+
+</div>
+
+
+
+<div class="form-group full-width">
+
+
+<label>
+Possession Status
+</label>
+
+
+<div class="checkbox-grid">
+
+
+<label class="checkbox-item">
 <input type="checkbox" name="possessionStatus" value="Immediate">
-<label>Immediate</label><br>
+Immediate
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="possessionStatus" value="Ready Possession">
-<label>Ready Possession</label><br>
+Ready Possession
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="possessionStatus" value="Under Construction">
-<label>Under Construction</label><br>
+Under Construction
+</label>
 
+
+<label class="checkbox-item">
 <input type="checkbox" name="possessionStatus" value="Possession Soon">
-<label>Possession Soon</label><br><br>
+Possession Soon
+</label>
 
-<hr>
 
-<h2>Highlights</h2>
+</div>
 
-<label>Amenities</label><br>
-<textarea name="amenities" rows="4" cols="50"></textarea><br><br>
 
-<label>USP</label><br>
-<textarea name="usp" rows="4" cols="50"></textarea><br><br>
+</div>
 
-<label>Notes</label><br>
-<textarea name="notes" rows="4" cols="50"></textarea><br><br>
 
-<button type="submit">Save Project</button>
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     HIGHLIGHTS
+================================ -->
+
+<div class="form-section">
+
+
+<h2 class="section-title">
+Highlights
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group full-width">
+
+<label>
+Amenities
+</label>
+
+<textarea
+name="amenities"
+class="form-control"
+></textarea>
+
+</div>
+
+
+<div class="form-group full-width">
+
+<label>
+USP
+</label>
+
+<textarea
+name="usp"
+class="form-control"
+></textarea>
+
+</div>
+
+
+<div class="form-group full-width">
+
+<label>
+Notes
+</label>
+
+<textarea
+name="notes"
+class="form-control"
+></textarea>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
+
+<div class="form-actions">
+
+
+<a
+href="javascript:history.back()"
+class="cancel-btn"
+>
+Cancel
+</a>
+
+
+<button
+type="submit"
+class="save-btn"
+>
+Save Property
+</button>
+
+
+</div>
+
 
 </form>
 
-<script>
-function showTab(tabId) {
-    document.getElementById('apartmentTab').style.display = 'none';
-    document.getElementById('otherTab').style.display = 'none';
-    document.getElementById(tabId).style.display = 'block';
-}
-</script>
+
+</div>
+
+
 
 <script>
+
+function showTab(tabId){
+
+    document
+    .getElementById(
+        'apartmentTab'
+    )
+    .style
+    .display =
+    'none'
+
+
+    document
+    .getElementById(
+        'otherTab'
+    )
+    .style
+    .display =
+    'none'
+
+
+    document
+    .getElementById(
+        'apartmentTabButton'
+    )
+    .classList
+    .remove(
+        'active'
+    )
+
+
+    document
+    .getElementById(
+        'otherTabButton'
+    )
+    .classList
+    .remove(
+        'active'
+    )
+
+
+    document
+    .getElementById(
+        tabId
+    )
+    .style
+    .display =
+    'block'
+
+
+    if(
+        tabId ===
+        'apartmentTab'
+    ){
+
+        document
+        .getElementById(
+            'apartmentTabButton'
+        )
+        .classList
+        .add(
+            'active'
+        )
+
+    }else{
+
+        document
+        .getElementById(
+            'otherTabButton'
+        )
+        .classList
+        .add(
+            'active'
+        )
+
+    }
+
+}
+
 
 function showPropertyMode(id){
 
-    if(id === 'PROJECT'){
-        document.getElementById('singleSection').style.display = 'none'
-        document.getElementById('configurationSection').style.display = 'block'
+    const singleSection =
+    document.getElementById(
+        'singleSection'
+    )
+
+    const projectSection =
+    document.getElementById(
+        'projectSection'
+    )
+
+
+    if(
+        id === 'PROJECT'
+    ){
+
+        singleSection
+        .style
+        .display =
+        'none'
+
+        projectSection
+        .style
+        .display =
+        'block'
+
     }
 
-    if(id === 'SINGLE'){
-        document.getElementById('singleSection').style.display = 'block'
-        document.getElementById('configurationSection').style.display = 'none'
+
+    if(
+        id === 'SINGLE'
+    ){
+
+        singleSection
+        .style
+        .display =
+        'block'
+
+        projectSection
+        .style
+        .display =
+        'none'
+
     }
 
 }
 
 </script>
+
+
 </body>
+
 </html>
