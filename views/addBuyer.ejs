@@ -1754,32 +1754,43 @@ matches.forEach(location => {
         <small>${location.divisionName}, ${location.district}</small>
     `;
 
-div.addEventListener("click", function(){
+div.onclick = function () {
 
-    console.log("CLICK", location.officeName);
-    console.log("Before:", selectedLocations.map(x => x.officeName));
-
-    if(selectedLocations.length >= 3){
-        alert("Maximum 3 locations allowed");
+    // Ignore if already selected
+    if (selectedLocations.find(l => l.officeName === location.officeName)) {
         return;
     }
 
-    if(selectedLocations.some(l => l.officeName === location.officeName)){
-        alert("Location already selected");
+    if (selectedLocations.length === 3) {
+        alert("Maximum 3 locations allowed");
         return;
     }
 
     selectedLocations.push(location);
 
-    console.log("After:", selectedLocations.map(x => x.officeName));
-
     renderSelectedLocations();
 
-});
+    // Update hidden fields
+    document.getElementById("preferredLocation1").value =
+        selectedLocations[0]?.officeName || "";
 
-        console.log(selectedLocations);
+    document.getElementById("preferredLocation2").value =
+        selectedLocations[1]?.officeName || "";
 
-    });
+    document.getElementById("preferredLocation3").value =
+        selectedLocations[2]?.officeName || "";
+
+    // Auto-fill geo from first preference
+    if (selectedLocations.length === 1) {
+        document.getElementById("buyerLat").value = location.lat;
+        document.getElementById("buyerLng").value = location.lng;
+    }
+
+    // Better UX
+    searchBox.value = "";
+    resultsBox.innerHTML = "";
+    resultsBox.style.display = "none";
+};
 
     resultsBox.appendChild(div);
 
