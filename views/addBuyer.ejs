@@ -1678,6 +1678,37 @@ const selectedBox = document.getElementById("selectedLocations");
 
 let selectedLocations = [];
 
+function renderSelectedLocations(){
+
+    selectedBox.innerHTML = "";
+
+    if(selectedLocations.length === 0){
+
+        selectedBox.innerHTML =
+            '<div class="empty-selection">No locations selected</div>';
+
+        return;
+    }
+
+    selectedLocations.forEach((location,index)=>{
+
+        const card = document.createElement("div");
+
+        card.className = "selected-location";
+
+        card.innerHTML = `
+            <div>
+                <strong>${index + 1}. ${location.officeName}</strong><br>
+                <small>${location.divisionName}, ${location.district}</small>
+            </div>
+        `;
+
+        selectedBox.appendChild(card);
+
+    });
+
+}
+
 searchBox.addEventListener("input", function(){
 
     const keyword = this.value.trim().toLowerCase();
@@ -1742,6 +1773,8 @@ matches.forEach(location => {
         }
 
         selectedLocations.push(location);
+
+renderSelectedLocations();
 
         console.log(selectedLocations);
 
