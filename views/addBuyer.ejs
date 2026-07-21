@@ -1754,27 +1754,28 @@ matches.forEach(location => {
         <small>${location.divisionName}, ${location.district}</small>
     `;
 
-    div.addEventListener("click", function(){
+div.addEventListener("click", function(){
 
-        if(selectedLocations.length >= 3){
+    console.log("CLICK", location.officeName);
+    console.log("Before:", selectedLocations.map(x => x.officeName));
 
-            alert("Maximum 3 locations allowed");
+    if(selectedLocations.length >= 3){
+        alert("Maximum 3 locations allowed");
+        return;
+    }
 
-            return;
+    if(selectedLocations.some(l => l.officeName === location.officeName)){
+        alert("Location already selected");
+        return;
+    }
 
-        }
+    selectedLocations.push(location);
 
-        if(selectedLocations.some(l => l.officeName === location.officeName)){
+    console.log("After:", selectedLocations.map(x => x.officeName));
 
-            alert("Location already selected");
+    renderSelectedLocations();
 
-            return;
-
-        }
-
-        selectedLocations.push(location);
-
-renderSelectedLocations();
+});
 
         console.log(selectedLocations);
 
