@@ -100,9 +100,27 @@ leaseDurationMonths: {
 
     askingPricePerSqFt: Number,
 
-    parkingType: String,
+    parkingType: {
+    type: [String],
+    enum: [
+        'Open',
+        'Covered',
+        'Basement',
+        'Podium',
+        'Stilt'
+    ],
+    default: []
+},
 
-    furnishedStatus: String,
+furnishedStatus: {
+    type: [String],
+    enum: [
+        'Unfurnished',
+        'Semi-Furnished',
+        'Fully Furnished'
+    ],
+    default: []
+},
 
     possessionStatus: String,
 
