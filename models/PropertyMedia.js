@@ -1,23 +1,31 @@
 const mongoose = require("mongoose");
 
-const mediaItemSchema = new mongoose.Schema({
-    placeholder: {
-        type: String,
-        trim: true
-    },
+const mediaItemSchema = new mongoose.Schema(
+{
     filename: {
         type: String,
         trim: true
     },
+
     originalName: {
         type: String,
         trim: true
     },
+
+    relativePath: {
+        type: String,
+        trim: true
+    },
+
     uploadedAt: {
         type: Date,
         default: Date.now
     }
-}, { _id: false });
+},
+{
+    _id: false
+}
+);
 
 const propertyMediaSchema = new mongoose.Schema({
 
@@ -28,13 +36,39 @@ const propertyMediaSchema = new mongoose.Schema({
         unique: true
     },
 
+    projectName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     coverPhoto: mediaItemSchema,
 
-    configurationPhotos: {
-        type: Map,
-        of: [mediaItemSchema],
-        default: {}
-    },
+    /*
+        Structure
+
+        configurationPhotos = {
+            "1 BHK": {
+                "Living Room": [],
+                "Bedroom": [],
+                "Kitchen": [],
+                "Bathroom": [],
+                "Balcony": []
+            },
+
+            "Studio": {
+                "Living / Sleeping Area": [],
+                "Kitchenette": [],
+                "Bathroom": []
+            }
+        }
+    */
+
+configurationPhotos: {
+    type: Map,
+    of: [mediaItemSchema],
+    default: {}
+},
 
     amenityPhotos: {
         type: [mediaItemSchema],
@@ -46,12 +80,15 @@ const propertyMediaSchema = new mongoose.Schema({
         default: []
     },
 
-propertyVideo: mediaItemSchema,
+    propertyVideo: mediaItemSchema,
 
-builderDocuments: [mediaItemSchema]
+    builderDocuments: {
+        type: [mediaItemSchema],
+        default: []
+    }
 
-
-}, {
+},
+{
     timestamps: true
 });
 

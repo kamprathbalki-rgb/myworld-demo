@@ -4,52 +4,91 @@ const fs = require("fs");
 
 const ROOT = path.join(__dirname, "../public/uploads/properties");
 
-const folders = {
-    cover: path.join(ROOT, "cover"),
-    configurations: path.join(ROOT, "configurations"),
-    amenities: path.join(ROOT, "amenities"),
-    usp: path.join(ROOT, "usp"),
-    videos: path.join(ROOT, "videos"),
-    documents: path.join(ROOT, "documents")
-};
-
-Object.values(folders).forEach(folder => {
-    if (!fs.existsSync(folder)) {
-        fs.mkdirSync(folder, { recursive: true });
-    }
-});
+function safeName(name = "") {
+    return name
+        .trim()
+        .replace(/[<>:"/\\|?*]/g, "")
+        .replace(/\s+/g, "-");
+}
 
 const storage = multer.diskStorage({
 
     destination(req, file, cb) {
 
+        const property = req.property;
+
+        if (!property) {
+            return cb(new Error("Property not loaded before upload."));
+        }
+
+const projectFolder =
+    safeName(property.projectName) + "-" + property._id;
+
+        let destination = path.join(ROOT, projectFolder);
+
         switch (file.fieldname) {
 
             case "coverPhoto":
-                return cb(null, folders.cover);
+                destination = path.join(destination, "cover");
+                break;
 
-            case "propertyVideo":
-                return cb(null, folders.videos);
+case "amenityPhotos":
+case "amenityPhoto":
+    destination = path.join(destination, "amenities");
+    break;
 
-            case "builderDocuments":
-                return cb(null, folders.documents);
+case "uspPhotos":
+case "uspPhoto":
+    destination = path.join(destination, "usp");
+    break;
+
+case "builderDocuments":
+case "builderDocument":
+    destination = path.join(destination, "documents");
+    break;
 
             default:
 
                 if (file.fieldname.startsWith("configuration_")) {
-                    return cb(null, folders.configurations);
+
+                    let config =
+                        file.fieldname.replace("configuration_", "");
+
+                    // Future support:
+                    // configuration_1-BHK_Living-Room
+                    // configuration_2-BHK_Kitchen
+
+                    if (config.includes("_")) {
+
+                        const parts = config.split("_");
+
+                        destination = path.join(
+                            destination,
+                            safeName(parts[0]),
+                            safeName(parts[1])
+                        );
+
+                    } else {
+
+                        destination = path.join(
+                            destination,
+                            safeName(config)
+                        );
+
+                    }
+
+                } else {
+
+                    return cb(new Error("Unknown upload field."));
+
                 }
 
-                if (file.fieldname === "amenityPhotos") {
-                    return cb(null, folders.amenities);
-                }
-
-                if (file.fieldname === "uspPhotos") {
-                    return cb(null, folders.usp);
-                }
-
-                return cb(new Error("Unknown upload field."));
         }
+
+        fs.mkdirSync(destination, { recursive: true });
+
+        cb(null, destination);
+
     },
 
     filename(req, file, cb) {
@@ -63,38 +102,14 @@ const storage = multer.diskStorage({
             Math.random().toString(36).substring(2, 8) +
             ext
         );
+
     }
+
 });
 
-const fileFilter = (req, file, cb) => {
-
-    if (file.fieldname === "propertyVideo") {
-
-        const allowed = [
-            "video/mp4",
-            "video/quicktime",
-            "video/x-msvideo"
-        ];
-
-        return cb(null, allowed.includes(file.mimetype));
-    }
-
-    if (file.fieldname === "builderDocuments") {
-
-        return cb(null, file.mimetype === "application/pdf");
-    }
-
-    return cb(null, file.mimetype.startsWith("image/"));
-};
-
 module.exports = multer({
-
     storage,
-
-    fileFilter,
-
     limits: {
-        fileSize: 100 * 1024 * 1024 // default 5 MB
+        fileSize: 100 * 1024 * 1024
     }
-
 });

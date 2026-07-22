@@ -76,6 +76,26 @@ input[type=file]{
 
 <body>
 
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+
+    <div>
+
+        <a href="/properties"
+           style="text-decoration:none;background:#28a745;color:#fff;padding:10px 18px;border-radius:6px;font-weight:bold;">
+            🏠 Home
+        </a>
+
+        <button
+            type="button"
+            onclick="history.back()"
+            style="margin-left:10px;background:#6c757d;color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-weight:bold;">
+            ← Back
+        </button>
+
+    </div>
+
+</div>
+
 <form method="POST"
       enctype="multipart/form-data"
       action="/property-media/<%= property._id %>/upload">
@@ -104,7 +124,48 @@ input[type=file]{
             src="/uploads/properties/cover/<%= media.coverPhoto.filename %>"
             style="max-width:250px;border:1px solid #ddd;border-radius:8px;">
 
-    </a>
+</a>
+
+<div style="margin-top:10px;">
+
+<form
+    action="/property-media/<%= property._id %>/cover/delete"
+    method="POST"
+    style="display:inline;">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete the cover photo?')"
+        style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/cover/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input
+        type="file"
+        id="coverPhotoReplace"
+        name="coverPhoto"
+        accept="image/*"
+        style="display:none"
+        onchange="this.form.submit()">
+
+    <button
+        type="button"
+        onclick="document.getElementById('coverPhotoReplace').click()"
+        style="background:#ffc107;color:#000;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;margin-left:8px;">
+        ✏ Replace
+    </button>
+
+</form>
+
+</div>
 
 </div>
 
@@ -158,15 +219,64 @@ media.configurationPhotos.get(configuration) || [];
 
 <% uploadedPhotos.forEach(function(file){ %>
 
-<div style="display:inline-block;margin:5px;">
+<div style="display:inline-block;margin:8px;text-align:center;">
 
     <a href="/uploads/properties/configurations/<%= file.filename %>" target="_blank">
 
         <img
             src="/uploads/properties/configurations/<%= file.filename %>"
-            style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;">
+            style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;display:block;">
 
     </a>
+
+<form
+    action="/property-media/<%= property._id %>/configuration/delete"
+    method="POST"
+    style="margin-top:6px;">
+
+    <input
+        type="hidden"
+        name="configuration"
+        value="<%= configuration %>">
+
+    <input
+        type="hidden"
+        name="filename"
+        value="<%= file.filename %>">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete this configuration photo?')"
+        style="background:#dc3545;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/configuration/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input type="hidden" name="configuration" value="<%= configuration %>">
+    <input type="hidden" name="oldFilename" value="<%= file.filename %>">
+
+    <input
+        type="file"
+        name="configuration_<%= configuration %>"
+        style="display:none"
+        onchange="this.form.submit()"
+        id="replace_<%= file.filename %>">
+
+    <button
+        type="button"
+        onclick="document.getElementById('replace_<%= file.filename %>').click()"
+        style="margin-top:6px;background:#ffc107;color:#000;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        ✏ Replace
+    </button>
+
+</form>
 
 </div>
 
@@ -206,13 +316,64 @@ multiple>
 
 <% media.amenityPhotos.forEach(function(photo){ %>
 
-<a href="/uploads/properties/amenities/<%= photo.filename %>" target="_blank">
+<div style="display:inline-block;margin:8px;text-align:center;">
 
-<img
-src="/uploads/properties/amenities/<%= photo.filename %>"
-style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;margin:5px;">
+    <a href="/uploads/properties/amenities/<%= photo.filename %>" target="_blank">
 
-</a>
+        <img
+            src="/uploads/properties/amenities/<%= photo.filename %>"
+            style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;display:block;">
+
+    </a>
+
+<form
+    action="/property-media/<%= property._id %>/amenity/delete"
+    method="POST"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="filename"
+        value="<%= photo.filename %>">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete this amenity photo?')"
+        style="margin-top:6px;background:#dc3545;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/amenity/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="oldFilename"
+        value="<%= photo.filename %>">
+
+    <input
+        type="file"
+        id="amenityReplace_<%= photo.filename %>"
+        name="amenityPhoto"
+        accept="image/*"
+        style="display:none"
+        onchange="this.form.submit()">
+
+    <button
+        type="button"
+        onclick="document.getElementById('amenityReplace_<%= photo.filename %>').click()"
+        style="margin-top:6px;background:#ffc107;color:#000;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        ✏ Replace
+    </button>
+
+</form>
+
+</div>
 
 <% }) %>
 
@@ -252,13 +413,64 @@ multiple>
 
 <% media.uspPhotos.forEach(function(photo){ %>
 
-<a href="/uploads/properties/usp/<%= photo.filename %>" target="_blank">
+<div style="display:inline-block;margin:8px;text-align:center;">
 
-<img
-src="/uploads/properties/usp/<%= photo.filename %>"
-style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;margin:5px;">
+    <a href="/uploads/properties/usp/<%= photo.filename %>" target="_blank">
 
-</a>
+        <img
+            src="/uploads/properties/usp/<%= photo.filename %>"
+            style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;display:block;">
+
+    </a>
+
+<form
+    action="/property-media/<%= property._id %>/usp/delete"
+    method="POST"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="filename"
+        value="<%= photo.filename %>">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete this USP photo?')"
+        style="margin-top:6px;background:#dc3545;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/usp/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="oldFilename"
+        value="<%= photo.filename %>">
+
+    <input
+        type="file"
+        id="uspReplace_<%= photo.filename %>"
+        name="uspPhoto"
+        accept="image/*"
+        style="display:none"
+        onchange="this.form.submit()">
+
+    <button
+        type="button"
+        onclick="document.getElementById('uspReplace_<%= photo.filename %>').click()"
+        style="margin-top:6px;background:#ffc107;color:#000;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
+        ✏ Replace
+    </button>
+
+</form>
+
+</div>
 
 <% }) %>
 
@@ -311,10 +523,47 @@ multiple>
     <a
         href="/uploads/properties/videos/<%= media.propertyVideo.filename %>"
         target="_blank">
-
-        Open Video
-
+        ▶ Open Video
     </a>
+
+    <br><br>
+
+<form
+    action="/property-media/<%= property._id %>/video/delete"
+    method="POST"
+    style="display:inline;">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete this property video?')"
+        style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/video/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input
+        type="file"
+        id="videoReplace"
+        name="propertyVideo"
+        accept="video/*"
+        style="display:none"
+        onchange="this.form.submit()">
+
+    <button
+        type="button"
+        onclick="document.getElementById('videoReplace').click()"
+        style="background:#ffc107;color:#000;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;margin-left:8px;">
+        ✏ Replace
+    </button>
+
+</form>
 
 </div>
 
@@ -341,19 +590,68 @@ name="propertyVideo">
 
 <% media.builderDocuments.forEach(function(doc){ %>
 
-<p>
+<div style="margin-bottom:12px;padding:10px;border:1px solid #ddd;border-radius:6px;">
 
-📄
+    📄
 
-<a
-href="/uploads/properties/documents/<%= doc.filename %>"
-target="_blank">
+    <a
+        href="/uploads/properties/documents/<%= doc.filename %>"
+        target="_blank">
 
-<%= doc.originalName %>
+        <%= doc.originalName %>
 
-</a>
+    </a>
 
-</p>
+    <br><br>
+
+<form
+    action="/property-media/<%= property._id %>/document/delete"
+    method="POST"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="filename"
+        value="<%= doc.filename %>">
+
+    <button
+        type="submit"
+        onclick="return confirm('Delete this document?')"
+        style="background:#dc3545;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;">
+        🗑 Delete
+    </button>
+
+</form>
+
+<form
+    action="/property-media/<%= property._id %>/document/replace"
+    method="POST"
+    enctype="multipart/form-data"
+    style="display:inline;">
+
+    <input
+        type="hidden"
+        name="oldFilename"
+        value="<%= doc.filename %>">
+
+    <input
+        type="file"
+        id="documentReplace_<%= doc.filename %>"
+        name="builderDocument"
+        accept=".pdf"
+        style="display:none"
+        onchange="this.form.submit()">
+
+    <button
+        type="button"
+        onclick="document.getElementById('documentReplace_<%= doc.filename %>').click()"
+        style="background:#ffc107;color:#000;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;margin-left:8px;">
+        ✏ Replace
+    </button>
+
+</form>
+
+</div>
 
 <% }) %>
 
