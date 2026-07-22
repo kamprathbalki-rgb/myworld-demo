@@ -186,23 +186,29 @@ module.exports = function calculateProductiveHours(attendance) {
             - lunchSeconds
         );
 
-    return {
+return {
 
-        loginTime,
+    loginTime,
 
-        logoutTime,
+    logoutTime,
 
-        teaSeconds,
+    teaSeconds,
 
-        lunchSeconds,
+    lunchSeconds,
 
-        productiveSeconds,
+    productiveSeconds,
 
-        productiveHHMMSS:
-            formatTime(productiveSeconds),
+    productiveHHMMSS:
+        formatTime(productiveSeconds),
 
-        systemLogout
+    totalTeaBreakMinutes:
+        Math.floor(teaSeconds / 60),
 
-    };
+    totalLunchBreakMinutes:
+        Math.floor(lunchSeconds / 60),
+
+    systemLogout
+
+};
 
 };

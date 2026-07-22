@@ -175,22 +175,55 @@ obj.productiveHours = obj.productiveHours
 
     // Tea Minutes
 obj.teaMinutes =
-    Math.floor(obj.totalTeaBreak / 60000) + 'm'
+    Math.floor((obj.totalTeaBreak || 0) / 60000) + 'm'
 
     // Lunch Minutes
 obj.lunchMinutes =
-    Math.floor(obj.totalLunchBreak / 60000) + 'm'
+    Math.floor((obj.totalLunchBreak || 0) / 60000) + 'm'
 
     // Attendance Status
-    if (!obj.logoutTime) {
+const lastLogin =
+    obj.loginLocations?.length
+        ? obj.loginLocations[obj.loginLocations.length - 1].time
+        : ''
+
+const lastLogout =
+    obj.logoutLocations?.length
+        ? obj.logoutLocations[obj.logoutLocations.length - 1].time
+        : ''
+
+if (!lastLogin) {
+
+    obj.status = 'Not Logged In'
+
+}
+else if (!lastLogout) {
+
+    obj.status = 'Working'
+
+}
+else {
+
+    const login = new Date(`1970-01-01 ${lastLogin}`)
+    const logout = new Date(`1970-01-01 ${lastLogout}`)
+
+    if (login > logout) {
+
         obj.status = 'Working'
+
     }
     else if (obj.autoLogout) {
+
         obj.status = 'Auto Logout'
+
     }
     else {
+
         obj.status = 'Completed'
+
     }
+
+}
 
     return obj
 
