@@ -8,6 +8,7 @@ const ContactAccessLog = require('../models/ContactAccessLog')
 
 const Property = require('../models/Property')
 const calculateScore = require('../services/matchService')
+const groupLeadAging = require('../services/leadAgingService');
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 
@@ -803,131 +804,7 @@ let buyers = await Buyer.find({
     createdAt: -1
 })
 
-const todayStart = new Date()
-todayStart.setHours(0, 0, 0, 0)
-
-const tomorrowStart = new Date(todayStart)
-tomorrowStart.setDate(
-    tomorrowStart.getDate() + 1
-)
-
-const leadGroups = {
-    overdue: [],
-    today: [],
-    fresh: [],
-    days4to7: [],
-    days8to15: [],
-    days16plus: []
-}
-
-buyers.forEach(buyer => {
-
-    // --------------------------------
-    // 1. FOLLOW-UP PRIORITY
-    // --------------------------------
-
-    if (buyer.nextFollowUp) {
-
-        const followUpDate =
-            new Date(buyer.nextFollowUp)
-
-        // Overdue follow-up
-        if (followUpDate < todayStart) {
-
-            leadGroups.overdue.push(buyer)
-
-            return
-        }
-
-        // Today's follow-up
-        if (
-            followUpDate >= todayStart &&
-            followUpDate < tomorrowStart
-        ) {
-
-            leadGroups.today.push(buyer)
-
-            return
-        }
-
-    }
-
-
-    // --------------------------------
-    // 2. LEAD AGING
-    // --------------------------------
-
-    const createdDate =
-        new Date(buyer.createdAt)
-
-    const ageInDays =
-        Math.floor(
-            (
-                todayStart -
-                new Date(
-                    createdDate.getFullYear(),
-                    createdDate.getMonth(),
-                    createdDate.getDate()
-                )
-            ) /
-            (1000 * 60 * 60 * 24)
-        )
-
-
-    if (ageInDays <= 3) {
-
-        leadGroups.fresh.push(buyer)
-
-    }
-    else if (ageInDays <= 7) {
-
-        leadGroups.days4to7.push(buyer)
-
-    }
-    else if (ageInDays <= 15) {
-
-        leadGroups.days8to15.push(buyer)
-
-    }
-    else {
-
-        leadGroups.days16plus.push(buyer)
-
-    }
-
-})
-
-// Overdue: oldest missed follow-up first
-leadGroups.overdue.sort(
-    (a, b) =>
-        new Date(a.nextFollowUp) -
-        new Date(b.nextFollowUp)
-)
-
-// Today's follow-ups: earliest scheduled first
-leadGroups.today.sort(
-    (a, b) =>
-        new Date(a.nextFollowUp) -
-        new Date(b.nextFollowUp)
-)
-
-// Aging groups: newest lead first
-;[
-    leadGroups.fresh,
-    leadGroups.days4to7,
-    leadGroups.days8to15,
-    leadGroups.days16plus
-]
-.forEach(group => {
-
-    group.sort(
-        (a, b) =>
-            new Date(b.createdAt) -
-            new Date(a.createdAt)
-    )
-
-})
-
+const leadGroups = groupLeadAging(buyers);
 
 const closedValue = await Buyer.aggregate([
 {

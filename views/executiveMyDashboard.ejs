@@ -756,34 +756,51 @@ color:#555;
 
 const groups = [
 
+    // Follow-Up Required
     {
         title: '🔴 Overdue Follow-ups',
-        leads: leadGroups.overdue
+        leads: leadGroups.followUpRequired.overdue
     },
 
     {
         title: '🔵 Today\'s Follow-ups',
-        leads: leadGroups.today
+        leads: leadGroups.followUpRequired.today
     },
 
     {
-        title: '🟢 Fresh Leads (0–3 Days)',
-        leads: leadGroups.fresh
+        title: '🟡 Follow-ups (1–3 Days)',
+        leads: leadGroups.followUpRequired.oneToThree
     },
 
     {
-        title: '🟡 Leads (4–7 Days)',
-        leads: leadGroups.days4to7
+        title: '🟢 Follow-ups (4–7 Days)',
+        leads: leadGroups.followUpRequired.fourToSeven
     },
 
     {
-        title: '🟠 Aging Leads (8–15 Days)',
-        leads: leadGroups.days8to15
+        title: '🔷 Follow-ups (8+ Days)',
+        leads: leadGroups.followUpRequired.eightPlus
+    },
+
+    // No Follow-Up Assigned
+    {
+        title: '🆕 New Leads (0–3 Days)',
+        leads: leadGroups.noFollowUpAssigned.new
     },
 
     {
-        title: '🔴 Old Leads (16+ Days)',
-        leads: leadGroups.days16plus
+        title: '🟨 Leads (4–7 Days)',
+        leads: leadGroups.noFollowUpAssigned.fourToSeven
+    },
+
+    {
+        title: '🟧 Leads (8–15 Days)',
+        leads: leadGroups.noFollowUpAssigned.eightToFifteen
+    },
+
+    {
+        title: '🟥 Leads (15+ Days)',
+        leads: leadGroups.noFollowUpAssigned.moreThanFifteen
     }
 
 ]
@@ -799,8 +816,8 @@ const groups = [
 <details
 class="lead-group-details"
 <%= (
-    group.leads === leadGroups.overdue ||
-    group.leads === leadGroups.today
+    group.leads === leadGroups.followUpRequired.overdue ||
+    group.leads === leadGroups.followUpRequired.today
 ) ? 'open' : '' %>
 >
 

@@ -1213,11 +1213,9 @@ Properties with token
 
 <div class="section-card">
 
-
 <h2 class="section-title">
 Business Overview
 </h2>
-
 
 <div class="summary">
 
@@ -1237,6 +1235,7 @@ Properties
 </h2>
 
 </div>
+
 
 </a>
 
@@ -1325,11 +1324,107 @@ Lost
 
 </div>
 
+</div>
+
+<div class="section-card">
+
+<h2 class="section-title">
+Lead Aging
+</h2>
+
+<%
+const sections = [
+
+    // Follow-Up Required
+    ["🔴 Overdue",
+        leadGroups.followUpRequired.overdue],
+
+    ["🟠 Today",
+        leadGroups.followUpRequired.today],
+
+    ["🟡 1 - 3 Days",
+        leadGroups.followUpRequired.oneToThree],
+
+    ["🟢 4 - 7 Days",
+        leadGroups.followUpRequired.fourToSeven],
+
+    ["🔵 8+ Days",
+        leadGroups.followUpRequired.eightPlus],
+
+    // No Follow-Up Assigned
+    ["🆕 New (0 - 3 Days)",
+        leadGroups.noFollowUpAssigned.new],
+
+    ["🟨 4 - 7 Days",
+        leadGroups.noFollowUpAssigned.fourToSeven],
+
+    ["🟧 8 - 15 Days",
+        leadGroups.noFollowUpAssigned.eightToFifteen],
+
+    ["🟥 15+ Days",
+        leadGroups.noFollowUpAssigned.moreThanFifteen]
+
+];
+%>
+
+<% sections.forEach(([title, buyers]) => { %>
+
+<details style="margin-bottom:15px;" <%= buyers.length ? "open" : "" %>>
+
+<summary style="
+padding:12px;
+background:#f5f7fa;
+font-weight:bold;
+cursor:pointer;
+border-radius:8px;
+">
+<%= title %> (<%= buyers.length %>)
+</summary>
+
+<% buyers.forEach(function(buyer){ %>
+
+<div style="
+padding:12px;
+margin:8px 0;
+border:1px solid #ddd;
+border-radius:8px;
+background:#fff;
+">
+
+<b><%= buyer.name %></b><br>
+
+<%= buyer.mobile || "" %><br>
+
+Status :
+<%= buyer.status %><br>
+
+Follow Up :
+<%= buyer.nextFollowUp
+? buyer.nextFollowUp.toLocaleDateString("en-IN")
+: "-" %>
+
+<br><br>
+
+<a href="/buyer/edit/<%= buyer._id %>">
+Edit
+</a>
+
+</div>
+
+<% }) %>
+
+</details>
+
+<% }) %>
 
 </div>
 
 
+
 </div>
+
+
+
 
 
 <!-- ================================

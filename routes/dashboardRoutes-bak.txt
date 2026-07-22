@@ -9,8 +9,6 @@ const Executive = require('../models/Executive')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 const Tenant = require('../models/Tenant')
-const groupLeadAging = require('../services/leadAgingService');
-
 
 router.get('/main', isLoggedIn, isAdmin, async (req,res)=>{
 
@@ -134,56 +132,6 @@ today.setHours(0,0,0,0)
 const tomorrow = new Date(today)
 tomorrow.setDate(today.getDate() + 1)
 
-const agingToday = new Date();
-agingToday.setHours(0,0,0,0);
-
-const agingBuyers = await Buyer.find({
-    tenantId: req.session.tenantId,
-    status: {
-        $nin: ['Deal Closed', 'Lost']
-    }
-}).sort({
-    nextFollowUp: 1
-});
-
-
-const leadGroups = groupLeadAging(agingBuyers);
-
-agingBuyers.forEach(buyer => {
-
-    if (!buyer.nextFollowUp) {
-        leadGroups.noFollowUp.push(buyer);
-        return;
-    }
-
-    const followUp = new Date(buyer.nextFollowUp);
-    followUp.setHours(0,0,0,0);
-
-    const diffDays = Math.floor(
-        (followUp - agingToday) /
-        (1000 * 60 * 60 * 24)
-    );
-
-    if (diffDays < 0)
-        leadGroups.overdue.push(buyer);
-
-    else if (diffDays === 0)
-        leadGroups.today.push(buyer);
-
-    else if (diffDays <= 3)
-        leadGroups.oneToThree.push(buyer);
-
-    else if (diffDays <= 7)
-        leadGroups.fourToSeven.push(buyer);
-
-    else if (diffDays <= 15)
-        leadGroups.eightToFifteen.push(buyer);
-
-    else
-        leadGroups.moreThanFifteen.push(buyer);
-
-});
-
 const visitCount = await BuyerProjectVisit.countDocuments({
     tenantId:req.session.tenantId,
     scheduledVisitDate:{
@@ -245,8 +193,7 @@ closedValue:
 closedValue[0]?.total || 0,
 tokenProperties,
 lostValue:
-lostValue[0]?.total || 0,
-leadGroups
+lostValue[0]?.total || 0
 
 })
 
@@ -986,7 +933,7 @@ scoreMap[d._id].deals = d.deals
 
 const result = Object.keys(scoreMap).map(location=>{
 
-const data = scoreMap[location]
+const data = scoreMap[city]
 
 const score = data.buyers + data.visits + (data.deals*3)
 
@@ -1080,7 +1027,7 @@ map[d._id].deals = d.deals
 
 const result = Object.keys(map).map(location=>{
 
-const data = map[location]
+const data = map[city]
 
 const opportunityScore =
 (data.demand * 2) +
