@@ -101,6 +101,26 @@ siteVisitInLocations: [{
     time: String
 }],
 
+productiveHours: {
+    type: String,
+    default: '00:00:00'
+},
+
+totalTeaBreak: {
+    type: Number,
+    default: 0
+},
+
+totalLunchBreak: {
+    type: Number,
+    default: 0
+},
+
+autoLogout: {
+    type: Boolean,
+    default: false
+},
+
 activityLog: [
 {
     action: String,

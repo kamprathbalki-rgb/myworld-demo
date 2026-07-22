@@ -10,7 +10,7 @@ const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 const Tenant = require('../models/Tenant')
 const groupLeadAging = require('../services/leadAgingService');
-
+const calculateProductiveHours = require('../services/productiveHoursService');
 
 router.get('/main', isLoggedIn, isAdmin, async (req,res)=>{
 
@@ -1230,6 +1230,7 @@ try{
             String(executive._id)
         )
 
+const productive = calculateProductiveHours(attendance);
 
         let status =
         'Not Checked In'
@@ -1483,7 +1484,9 @@ try{
 
             lastActivity,
 
-            lastActivityTime
+            lastActivityTime,
+
+            productiveHours: productive.productiveHHMMSS
 
         }
 

@@ -668,12 +668,65 @@ gap:10px;
 <div>
 
 <h2 style="margin:0;">
-Welcome, <%= executiveName %>
+    Welcome, <%= executiveName %>
 </h2>
 
-<p style="color:#666;margin:5px 0 0 0;">
-Manage Leads, Follow Ups & Site Visits
+<div style="
+    margin-top:8px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+">
+
+    <div style="
+        background:#eef7ee;
+        border:1px solid #b7dfb7;
+        border-radius:10px;
+        padding:8px 14px;
+    ">
+
+        <div style="
+            font-size:11px;
+            color:#666;
+            text-transform:uppercase;
+        ">
+            Hours At Work
+        </div>
+
+        <div
+            id="productiveTimer"
+            style="
+                font-size:26px;
+                font-weight:bold;
+                color:#0b7a0b;
+            "
+        >
+            <%= productive.productiveHHMMSS %>
+        </div>
+
+    </div>
+
+</div>
+
+<% if(productive.systemLogout){ %>
+
+<div style="
+    color:#c62828;
+    margin-top:6px;
+    font-size:12px;
+">
+
+System logged out at 20:30 hrs
+
+</div>
+
+<% } %>
+
+<p style="color:#666;margin:10px 0 0 0;">
+    Manage Leads, Follow Ups & Site Visits
 </p>
+
 
 <div style="
 margin-top:10px;
@@ -1831,6 +1884,15 @@ onclick="document.getElementById('logoutForm').requestSubmit();return false;">
 
 <script>
 
+let productiveSeconds = <%= productive.productiveSeconds %>;
+
+const pauseProductive =
+    <%= teaActive || lunchActive ? 'true' : 'false' %>;
+
+</script>
+
+<script>
+
 document
 .getElementById('breaksBtn')
 .addEventListener('click', function(){
@@ -1840,6 +1902,33 @@ document
     .style.display = 'block'
 
 })
+
+function formatProductive(seconds){
+
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    return (
+        String(h).padStart(2,'0') + ':' +
+        String(m).padStart(2,'0') + ':' +
+        String(s).padStart(2,'0')
+    );
+
+}
+
+setInterval(function(){
+
+    if(!pauseProductive){
+
+        productiveSeconds++;
+
+        document.getElementById('productiveTimer').innerText =
+            formatProductive(productiveSeconds);
+
+    }
+
+},1000);
 
 function closeBreaksModal(){
 

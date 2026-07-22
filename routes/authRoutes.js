@@ -154,40 +154,47 @@ let records = await ExecutiveAttendance.find({
 })
 .sort({ date: -1 })
 
-records = records.map(r=>{
+records = records.map(r => {
 
-const obj = r.toObject()
+    const obj = r.toObject()
 
-obj.loginTime = ''
+    obj.loginTime = ''
+    obj.logoutTime = ''
 
-obj.logoutTime = ''
+    if (obj.loginLocations && obj.loginLocations.length) {
+        obj.loginTime = obj.loginLocations[0].time || ''
+    }
 
-if(
-obj.loginLocations &&
-obj.loginLocations.length
-){
+    if (obj.logoutLocations && obj.logoutLocations.length) {
+        obj.logoutTime =
+            obj.logoutLocations[obj.logoutLocations.length - 1].time || ''
+    }
 
-obj.loginTime =
-obj.loginLocations[0].time || ''
+    // Productive Hours
+obj.productiveHours = obj.productiveHours
 
-}
+    // Tea Minutes
+obj.teaMinutes =
+    Math.floor(obj.totalTeaBreak / 60000) + 'm'
 
-if(
-obj.logoutLocations &&
-obj.logoutLocations.length
-){
+    // Lunch Minutes
+obj.lunchMinutes =
+    Math.floor(obj.totalLunchBreak / 60000) + 'm'
 
-obj.logoutTime =
-obj.logoutLocations[
-obj.logoutLocations.length - 1
-].time || ''
+    // Attendance Status
+    if (!obj.logoutTime) {
+        obj.status = 'Working'
+    }
+    else if (obj.autoLogout) {
+        obj.status = 'Auto Logout'
+    }
+    else {
+        obj.status = 'Completed'
+    }
 
-}
-
-return obj
+    return obj
 
 })
-
 res.render(
 'adminAttendance',
 {

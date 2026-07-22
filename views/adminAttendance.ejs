@@ -472,25 +472,15 @@ Attendance Records
 
 <tr>
 
-<th>
-Executive
-</th>
-
-<th>
-Date
-</th>
-
-<th>
-Login
-</th>
-
-<th>
-Logout
-</th>
-
-<th>
-Log
-</th>
+<th>Executive</th>
+<th>Date</th>
+<th>Login</th>
+<th>Logout</th>
+<th>Productive</th>
+<th>Tea</th>
+<th>Lunch</th>
+<th>Status</th>
+<th>Log</th>
 
 </tr>
 
@@ -508,50 +498,43 @@ Log
 
 <tr>
 
-
-<td
-data-label="Executive"
-class="executive-name"
->
-<%= r.executiveName %>
+<td data-label="Executive" class="executive-name">
+    <%= r.executiveName %>
 </td>
 
-
-<td
-data-label="Date"
-class="date-value"
->
-<%= r.date %>
+<td data-label="Date" class="date-value">
+    <%= r.date %>
 </td>
 
-
-<td
-data-label="Login"
-class="time-value"
->
-<%= r.loginTime || '' %>
+<td data-label="Login" class="time-value">
+    <%= r.loginTime || '' %>
 </td>
 
-
-<td
-data-label="Logout"
-class="time-value"
->
-<%= r.logoutTime || '' %>
+<td data-label="Logout" class="time-value">
+    <%= r.logoutTime || '' %>
 </td>
 
-
-<td data-label="Activity">
-
-<a
-href="/attendance/log/<%= r._id %>"
-class="log-btn"
->
-View Log
-</a>
-
+<td data-label="Productive">
+    <%= r.productiveHours %>
 </td>
 
+<td data-label="Tea">
+    <%= r.teaMinutes %>
+</td>
+
+<td data-label="Lunch">
+    <%= r.lunchMinutes %>
+</td>
+
+<td data-label="Status">
+    <%= r.status %>
+</td>
+
+<td data-label="Log">
+    <a href="/attendance/log/<%= r._id %>" class="log-btn">
+        View Log
+    </a>
+</td>
 
 </tr>
 
@@ -565,7 +548,7 @@ View Log
 <tr>
 
 <td
-colspan="5"
+colspan="9"
 class="empty-state"
 >
 No attendance records found.

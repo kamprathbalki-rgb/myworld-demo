@@ -9,6 +9,8 @@ const ContactAccessLog = require('../models/ContactAccessLog')
 const Property = require('../models/Property')
 const calculateScore = require('../services/matchService')
 const groupLeadAging = require('../services/leadAgingService');
+const calculateProductiveHours = require('../services/productiveHoursService');
+
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 
@@ -637,9 +639,14 @@ console.log(
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
-        executiveId: executive._id,
-        date: today
-    })
+
+    tenantId: executive.tenantId,
+
+    executiveId: executive._id,
+
+    date: today
+
+})
 
 if (record && !record.activityLog) {
     record.activityLog = []
@@ -743,10 +750,18 @@ router.get('/reports', async (req, res) => {
 
     const today = getISTDate()
 
-    const attendance = await ExecutiveAttendance.findOne({
-        executiveId: req.session.executiveId,
-        date: today
-    })
+const attendance =
+await ExecutiveAttendance.findOne({
+
+    tenantId:
+    req.session.tenantId,
+
+    executiveId:
+    req.session.executiveId,
+
+    date: today
+
+})
 
     res.render('executiveReports', {
         attendance
@@ -854,8 +869,13 @@ const negotiation = await Buyer.countDocuments({
 const today = getISTDate()
 
 const attendance = await ExecutiveAttendance.findOne({
+
+    tenantId: req.session.tenantId,
+
     executiveId: req.session.executiveId,
+
     date: today
+
 })
 
 
@@ -1063,8 +1083,12 @@ if(state.date !== today){
 const motivation =
 motivations[state.index]
 
+const productive =
+    calculateProductiveHours(attendance);
+
 res.render('executiveMyDashboard', {
     motivation,
+    productive,
     buyers,
     leadGroups,
     executiveName: req.session.executiveName,
@@ -1239,9 +1263,14 @@ router.post('/attendance/punch', async (req, res) => {
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
-        executiveId: req.session.executiveId,
-        date: today
-    })
+
+    tenantId: req.session.tenantId,
+
+    executiveId: req.session.executiveId,
+
+    date: today
+
+})
 
 if (!record) {
 
@@ -1439,9 +1468,14 @@ router.get('/logout', async (req, res) => {
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
-        executiveId: req.session.executiveId,
-        date: today
-    })
+
+    tenantId: req.session.tenantId,
+
+    executiveId: req.session.executiveId,
+
+    date: today
+
+})
 
 const office =
 await OfficeLocation.findOne({
@@ -1532,6 +1566,18 @@ record.logoutTimes.push(currentTime)
             type: 'LOGOUT',
             time: currentTime
         })
+
+const productive = calculateProductiveHours(record)
+
+record.productiveHours = productive.productiveHHMMSS
+
+record.totalTeaBreak =
+    productive.totalTeaBreakMinutes * 60000
+
+record.totalLunchBreak =
+    productive.totalLunchBreakMinutes * 60000
+
+record.autoLogout = false
 
 console.log('GPS LOGOUT:', {
     latitude: req.query.latitude,
