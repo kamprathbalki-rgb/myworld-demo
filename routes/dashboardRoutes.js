@@ -149,41 +149,6 @@ const agingBuyers = await Buyer.find({
 
 const leadGroups = groupLeadAging(agingBuyers);
 
-agingBuyers.forEach(buyer => {
-
-    if (!buyer.nextFollowUp) {
-        leadGroups.noFollowUp.push(buyer);
-        return;
-    }
-
-    const followUp = new Date(buyer.nextFollowUp);
-    followUp.setHours(0,0,0,0);
-
-    const diffDays = Math.floor(
-        (followUp - agingToday) /
-        (1000 * 60 * 60 * 24)
-    );
-
-    if (diffDays < 0)
-        leadGroups.overdue.push(buyer);
-
-    else if (diffDays === 0)
-        leadGroups.today.push(buyer);
-
-    else if (diffDays <= 3)
-        leadGroups.oneToThree.push(buyer);
-
-    else if (diffDays <= 7)
-        leadGroups.fourToSeven.push(buyer);
-
-    else if (diffDays <= 15)
-        leadGroups.eightToFifteen.push(buyer);
-
-    else
-        leadGroups.moreThanFifteen.push(buyer);
-
-});
-
 const visitCount = await BuyerProjectVisit.countDocuments({
     tenantId:req.session.tenantId,
     scheduledVisitDate:{
