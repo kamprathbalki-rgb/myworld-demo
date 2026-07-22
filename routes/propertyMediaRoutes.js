@@ -85,7 +85,8 @@ let media = await PropertyMedia.findOne({
 if (!media) {
 
     media = new PropertyMedia({
-        property: req.params.propertyId
+        property: req.params.propertyId,
+        projectName: req.property.projectName
     });
 
 }
