@@ -53,6 +53,11 @@ const {
     notifyExecutive
 } = require('../services/notificationService');
 
+const {
+    downloadCSV,
+    downloadExcel
+} = require("../services/bulkDownloadService");
+
 router.post(
     '/bulk-upload',
     isLoggedIn,
@@ -1514,5 +1519,47 @@ res.render('map')
 router.get('/buyer-map/:buyerId',(req,res)=>{
 res.render('buyerMap',{ buyerId:req.params.buyerId })
 })
+
+router.get(
+    "/export/csv",
+    isLoggedIn,
+    isAdmin,
+    async (req, res) => {
+
+        const properties =
+        await Property.find({
+            tenantId: req.session.tenantId
+        })
+        .lean();
+
+        downloadCSV(
+            res,
+            properties,
+            `properties-${new Date().toISOString().slice(0,10)}`
+        );
+
+    }
+);
+
+router.get(
+    "/export/excel",
+    isLoggedIn,
+    isAdmin,
+    async (req, res) => {
+
+        const properties =
+        await Property.find({
+            tenantId: req.session.tenantId
+        })
+        .lean();
+
+        downloadExcel(
+            res,
+            properties,
+            `properties-${new Date().toISOString().slice(0,10)}`
+        );
+
+    }
+);
 
 module.exports = router

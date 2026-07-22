@@ -30,6 +30,8 @@ const uploadExcel = multer({
     storage: multer.memoryStorage()
 })
 
+
+
 const WhatsappGroup =
 require('../models/WhatsappGroup');
 
@@ -37,6 +39,11 @@ const clientManager =
 require(
 '../services/tenantWhatsapp/clientManager'
 )
+
+const {
+    downloadCSV,
+    downloadExcel
+} = require("../services/bulkDownloadService");
 
 router.post('/add', async (req,res)=>{
 
@@ -1684,5 +1691,45 @@ res.render(
 );
 
 });
+
+router.get(
+    "/export/csv",
+    isLoggedIn,
+    isAdmin,
+    async (req, res) => {
+
+        const buyers =
+        await Buyer.find({
+            tenantId: req.session.tenantId
+        }).lean();
+
+        downloadCSV(
+            res,
+            buyers,
+            `buyers-${new Date().toISOString().slice(0,10)}`
+        );
+
+    }
+);
+
+router.get(
+    "/export/excel",
+    isLoggedIn,
+    isAdmin,
+    async (req, res) => {
+
+        const buyers =
+        await Buyer.find({
+            tenantId: req.session.tenantId
+        }).lean();
+
+        downloadExcel(
+            res,
+            buyers,
+            `buyers-${new Date().toISOString().slice(0,10)}`
+        );
+
+    }
+);
 
 module.exports = router
