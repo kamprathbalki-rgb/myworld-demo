@@ -20,6 +20,82 @@
 <label>Builder Name</label>
 <input type="text" name="builderName" value="<%= property.builderName || '' %>"><br><br>
 
+<h3>Builder Contacts</h3>
+
+<div id="builderContacts">
+
+<% if(property.builderContacts && property.builderContacts.length){ %>
+
+    <% property.builderContacts.forEach(function(contact,index){ %>
+
+        <div class="builder-contact-card">
+
+            <hr>
+
+            <label>Role</label>
+
+            <select name="contactRole[]">
+
+                <% builderContactRoles.forEach(function(role){ %>
+
+                    <option value="<%= role %>"
+                        <%= contact.role===role ? 'selected' : '' %>>
+                        <%= role %>
+                    </option>
+
+                <% }) %>
+
+            </select>
+
+            <br><br>
+
+            <label>Designation</label>
+            <input type="text" name="contactDesignation[]" value="<%= contact.designation || '' %>">
+
+            <br><br>
+
+            <label>Name</label>
+            <input type="text" name="contactName[]" value="<%= contact.name || '' %>">
+
+            <br><br>
+
+            <label>Mobile</label>
+            <input type="text" name="contactMobile[]" value="<%= contact.mobile || '' %>">
+
+            <br><br>
+
+            <label>Alternate Mobile</label>
+            <input type="text" name="contactAlternateMobile[]" value="<%= contact.alternateMobile || '' %>">
+
+            <br><br>
+
+            <label>Email</label>
+            <input type="email" name="contactEmail[]" value="<%= contact.email || '' %>">
+
+            <br><br>
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="primaryContact"
+                    value="<%= index %>"
+                    <%= contact.isPrimary ? 'checked' : '' %>>
+
+                Primary Contact
+
+            </label>
+
+            <br><br>
+
+        </div>
+
+    <% }) %>
+
+<% } %>
+
+</div>
+
 <label>Project Type</label><br>
 
 <input type="checkbox" name="projectType" value="Residential"

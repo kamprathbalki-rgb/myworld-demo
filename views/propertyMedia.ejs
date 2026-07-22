@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Property Media</title>
+
+    <style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    margin:30px;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    margin-bottom:25px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    border:1px solid #e5e5e5;
+}
+
+h2{
+    margin-top:0;
+    color:#333;
+    border-left:4px solid #007bff;
+    padding-left:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:20px;
+    background:#fff;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+        td{
+            padding:8px;
+            border-bottom:1px solid #eee;
+        }
+
+input[type=file]{
+    width:100%;
+    padding:8px;
+    border:1px solid #ddd;
+    border-radius:5px;
+    background:#fff;
+}
+
+.btn{
+    margin-top:20px;
+    background:#007bff;
+    color:#fff;
+    border:none;
+    padding:12px 25px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.btn:hover{
+    background:#0056b3;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<form method="POST"
+      enctype="multipart/form-data"
+      action="/property-media/<%= property._id %>/upload">
+
+<div class="card">
+
+<h1 style="margin-top:0;">
+    <%= property.projectName %>
+</h1>
+
+<p style="color:#666;margin-top:-10px;">
+    Manage Photos, Videos & Documents
+</p>
+
+<hr style="margin:20px 0;">
+
+<h2>Cover Photo</h2>
+
+<% if (media.coverPhoto && media.coverPhoto.filename) { %>
+
+<div style="margin-bottom:15px;">
+
+    <a href="/uploads/properties/cover/<%= media.coverPhoto.filename %>" target="_blank">
+
+        <img
+            src="/uploads/properties/cover/<%= media.coverPhoto.filename %>"
+            style="max-width:250px;border:1px solid #ddd;border-radius:8px;">
+
+    </a>
+
+</div>
+
+<% } %>
+
+<input
+    type="file"
+    name="coverPhoto"
+    accept="image/*">
+
+<p style="color:#666;font-size:13px;margin-top:8px;">
+    Upload one cover image. Uploading a new image will replace the existing cover photo.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Configuration Photos</h2>
+
+<p style="color:#666;font-size:13px;margin-top:-10px;">
+    Upload photos for each available configuration. You can select multiple images.
+</p>
+
+<%
+const configurationKeys = Object.keys(mediaLimits.configurationPhotos);
+%>
+
+<% configurationKeys.forEach(function(configuration){ %>
+
+<h3><%= configuration %></h3>
+
+<table>
+
+<%
+const placeholders = mediaLimits.configurationPhotos[configuration];
+%>
+
+<% placeholders.forEach(function(photo){ %>
+
+<tr>
+
+<td width="40%"><%= photo %></td>
+
+<td>
+
+<%
+const uploadedPhotos =
+media.configurationPhotos.get(configuration) || [];
+%>
+
+<% uploadedPhotos.forEach(function(file){ %>
+
+<div style="display:inline-block;margin:5px;">
+
+    <a href="/uploads/properties/configurations/<%= file.filename %>" target="_blank">
+
+        <img
+            src="/uploads/properties/configurations/<%= file.filename %>"
+            style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;">
+
+    </a>
+
+</div>
+
+<% }) %>
+
+<input
+type="file"
+accept="image/*"
+name="configuration_<%= configuration %>"
+multiple>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+<br>
+
+<% }) %>
+
+</div>
+
+<div class="card">
+
+<h2>Amenity Photos (<%= mediaLimits.amenityPhotos.maxFiles %>)</h2>
+
+<p style="color:#666;font-size:13px;margin-top:-10px;">
+    Upload multiple photos for amenities.
+</p>
+
+<% if (media.amenityPhotos && media.amenityPhotos.length) { %>
+
+<div style="margin-bottom:15px;">
+
+<% media.amenityPhotos.forEach(function(photo){ %>
+
+<a href="/uploads/properties/amenities/<%= photo.filename %>" target="_blank">
+
+<img
+src="/uploads/properties/amenities/<%= photo.filename %>"
+style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;margin:5px;">
+
+</a>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+<% for(let i=1;i<=mediaLimits.amenityPhotos.maxFiles;i++){ %>
+
+<p>
+
+Amenity Photo <%= i %>
+
+<input
+type="file"
+accept="image/*"
+name="amenityPhotos"
+multiple>
+
+</p>
+
+<% } %>
+
+</div>
+
+<div class="card">
+
+<h2>USP Photos (<%= mediaLimits.uspPhotos.maxFiles %>)</h2>
+
+<p style="color:#666;font-size:13px;margin-top:-10px;">
+    Upload multiple USP photos.
+</p>
+
+<% if (media.uspPhotos && media.uspPhotos.length) { %>
+
+<div style="margin-bottom:15px;">
+
+<% media.uspPhotos.forEach(function(photo){ %>
+
+<a href="/uploads/properties/usp/<%= photo.filename %>" target="_blank">
+
+<img
+src="/uploads/properties/usp/<%= photo.filename %>"
+style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;margin:5px;">
+
+</a>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+<% for(let i=1;i<=mediaLimits.uspPhotos.maxFiles;i++){ %>
+
+<p>
+
+USP Photo <%= i %>
+
+<input
+type="file"
+accept="image/*"
+name="uspPhotos"
+multiple>
+
+</p>
+
+<% } %>
+
+</div>
+
+<div class="card">
+
+<h2>Property Video</h2>
+
+<p style="color:#666;font-size:13px;margin-top:-10px;">
+    Upload one property walkthrough or promotional video.
+</p>
+
+<% if (media.propertyVideo && media.propertyVideo.filename) { %>
+
+<div style="margin-bottom:15px;">
+
+    <video
+        controls
+        width="350"
+        style="max-width:100%;border-radius:8px;">
+
+        <source
+            src="/uploads/properties/videos/<%= media.propertyVideo.filename %>">
+
+    </video>
+
+    <br><br>
+
+    <a
+        href="/uploads/properties/videos/<%= media.propertyVideo.filename %>"
+        target="_blank">
+
+        Open Video
+
+    </a>
+
+</div>
+
+<% } %>
+
+<input
+type="file"
+accept="video/*"
+name="propertyVideo">
+
+</div>
+
+<div class="card">
+
+<h2>Builder Documents</h2>
+
+<p style="color:#666;font-size:13px;margin-top:-10px;">
+    Upload PDF documents like brochure, floor plans, approvals, price list, etc.
+</p>
+
+<% if (media.builderDocuments && media.builderDocuments.length) { %>
+
+<div style="margin-bottom:15px;">
+
+<% media.builderDocuments.forEach(function(doc){ %>
+
+<p>
+
+📄
+
+<a
+href="/uploads/properties/documents/<%= doc.filename %>"
+target="_blank">
+
+<%= doc.originalName %>
+
+</a>
+
+</p>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+<% for(let i=1;i<=mediaLimits.builderDocuments.maxFiles;i++){ %>
+
+<p>
+
+PDF <%= i %>
+
+<input
+type="file"
+accept=".pdf"
+name="builderDocuments"
+multiple>
+
+</p>
+
+<% } %>
+
+</div>
+
+<div style="text-align:center;margin-top:30px;">
+
+    <button class="btn" type="submit">
+        💾 Save Property Media
+    </button>
+
+</div>
+
+</form>
+
+</body>
+</html>

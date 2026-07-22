@@ -1251,10 +1251,11 @@ router.get(
 
     }
 
-    res.render('editBuilderProperty', {
-        property,
-        locations
-    })
+res.render('editBuilderProperty', {
+    property,
+    locations,
+    builderContactRoles
+})
 
 })
 
