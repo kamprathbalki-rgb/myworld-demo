@@ -42,8 +42,13 @@ require(
 
 const {
     downloadCSV,
-    downloadExcel
+    downloadExcel,
+    createCSVBuffer,
+    createExcelBuffer
 } = require("../services/bulkDownloadService");
+
+const archiver = require("archiver");
+
 
 router.post('/add', async (req,res)=>{
 
@@ -1728,6 +1733,55 @@ router.get(
             buyers,
             `buyers-${new Date().toISOString().slice(0,10)}`
         );
+
+    }
+);
+
+router.get(
+    "/export/all",
+    isLoggedIn,
+    isAdmin,
+    async (req, res) => {
+
+        const buyers = await Buyer.find({
+            tenantId: req.session.tenantId
+        }).lean();
+
+        const properties = await Property.find({
+            tenantId: req.session.tenantId
+        }).lean();
+
+        const archive = archiver("zip", {
+            zlib: { level: 9 }
+        });
+
+        res.attachment(
+            `MyWorld-Backup-${new Date().toISOString().slice(0,10)}.zip`
+        );
+
+        archive.pipe(res);
+
+        archive.append(
+            createCSVBuffer(properties),
+            { name: "properties.csv" }
+        );
+
+        archive.append(
+            createExcelBuffer(properties),
+            { name: "properties.xlsx" }
+        );
+
+        archive.append(
+            createCSVBuffer(buyers),
+            { name: "buyers.csv" }
+        );
+
+        archive.append(
+            createExcelBuffer(buyers),
+            { name: "buyers.xlsx" }
+        );
+
+        archive.finalize();
 
     }
 );
