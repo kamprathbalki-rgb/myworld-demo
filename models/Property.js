@@ -25,6 +25,33 @@ enum:[
 default:'SALE'
 },
 
+builderContacts: [{
+    role: {
+        type: String,
+        enum: [
+            'Sales Head',
+            'Sales Manager',
+            'Sales Executive',
+            'Relationship Manager',
+            'CRM Executive',
+            'Site Engineer',
+            'Channel Partner Manager',
+            'Marketing Manager',
+            'Project Manager',
+            'Other'
+        ]
+    },
+    designation: String,
+    name: String,
+    mobile: String,
+    alternateMobile: String,
+    email: String,
+    isPrimary: {
+        type: Boolean,
+        default: false
+    }
+}],
+
     propertyStatus: {
         type: String,
         default: 'Available'

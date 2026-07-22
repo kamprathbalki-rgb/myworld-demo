@@ -96,13 +96,130 @@ app.use('/admin',officeLocationRoutes)
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 
-app.get('/dashboard', (req, res) => {
-    return res.redirect('/dashboard/main');
+app.get('/dashboard', async (req, res) => {
+
+const today = new Date()
+today.setHours(0,0,0,0)
+
+const tomorrow = new Date(today)
+tomorrow.setDate(today.getDate() + 1)
+
+    const properties = await Property.countDocuments({
+        tenantId: req.session.tenantId
+    })
+
+    const buyers = await Buyer.countDocuments({
+        tenantId: req.session.tenantId
+    })
+
+const visits = await BuyerProjectVisit.countDocuments({
+        tenantId: req.session.tenantId,
+        scheduledVisitDate: {
+        $gte: today,
+        $lt: tomorrow
+    }
+})
+
+const executives = await Executive.countDocuments({
+    tenantId: req.session.tenantId,
+    isActive: true
+})
+
+const followUps = await Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    nextFollowUp: {
+        $gte: today,
+        $lt: tomorrow
+    }
+})
+
+const contacted = await Buyer.countDocuments({
+    status: 'Contacted'
 });
+
+const negotiation = await Buyer.countDocuments({
+    status: 'Negotiation'
+});
+
+const pipelineCount = 0;
+const pipelineValue = 0;
+const closedCount = 0;
+const closedValue = 0;
+const lostCount = 0;
+const lostValue = 0;
+
+const availableProperties =
+    await Property.countDocuments({
+        tenantId: req.session.tenantId,
+        propertyStatus: { $ne: 'Sold' }
+    })
+
+const soldProperties =
+    await Property.countDocuments({
+        tenantId: req.session.tenantId,
+        propertyStatus: 'Sold'
+    })
+
+const tokenProperties =
+    await Property.countDocuments({
+        tenantId: req.session.tenantId,
+        propertyStatus: 'Token Received'
+    })
+
+const Tenant = require('./models/Tenant')
+
+const tenant = await Tenant.findById(
+    req.session.tenantId
+)
+
+let daysRemaining = 0
+
+if (
+    tenant &&
+    tenant.subscriptionEndDate
+) {
+    daysRemaining = Math.max(
+        0,
+        Math.ceil(
+            (
+                new Date(tenant.subscriptionEndDate) -
+                new Date()
+            ) / (1000 * 60 * 60 * 24)
+        )
+    )
+}
+
+
+res.render('dashboard', {
+    tenant,
+    daysRemaining,
+    properties,
+    buyers,
+    visits,
+    executives,
+    followUps,
+    contacted,
+    negotiation,
+
+    pipelineCount,
+    pipelineValue,
+
+    closedCount,
+    closedValue,
+
+lostCount,
+lostValue,
+
+availableProperties,
+soldProperties,
+tokenProperties
+})
+
+})
 
 app.all('/api/leads', async (req, res) => {
   try {
-    let lead = {};
+    let lead = {}
 
     // Housing (JSON body)
     if (req.body && req.body.name) {
@@ -112,7 +229,7 @@ app.all('/api/leads', async (req, res) => {
         email: req.body.email,
         projectName: req.body.project_name,
         source: 'Housing'
-      };
+      }
     }
 
     // MagicBricks (query params)
@@ -123,21 +240,24 @@ app.all('/api/leads', async (req, res) => {
         email: req.query.email,
         projectName: req.query.project,
         source: 'MagicBricks'
-      };
+      }
     }
 
     console.log("Incoming Lead:", lead);
-    console.log("Lead route file loaded");
 
-    res.send("Success: Lead punched in the CRM");
+console.log("Lead route file loaded");
+
+    res.send("Success: Lead punched in the CRM")
 
   } catch (err) {
-    console.error(err);
-    res.send("Failure: Lead error");
+    console.error(err)
+    res.send("Failure: Lead error")
   }
-});
+})
 
-app.get('/session-test', (req, res) => {
+app.get(
+'/session-test',
+(req,res) => {
 
     res.json({
         user: req.session.user,

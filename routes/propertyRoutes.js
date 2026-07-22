@@ -16,7 +16,7 @@ const calculateScore = require('../services/matchService')
 const generateRecommendations = require('../services/recommendationService')
 const getSimilarProperties = require('../services/similarPropertyService')
 const Shortlist = require('../models/Shortlist')
-
+const builderContactRoles = require('../data/builderContactRoles');
 const multer = require('multer')
 const path = require('path')
 const XLSX = require('xlsx')
@@ -543,16 +543,18 @@ router.get('/add', isLoggedIn, isAdmin, (req, res) => {
 
 })
 
+
 router.get('/add-builder', isLoggedIn, isAdmin, async (req, res) => {
 
     const locations = await LocationMaster.find({})
-    .sort({ officeName: 1 })
+        .sort({ officeName: 1 });
 
     res.render('addBuilderProperty', {
-        locations
-    })
+        locations,
+        builderContactRoles
+    });
 
-})
+});
 
 
 router.get('/add-single', isLoggedIn, isAdmin, async (req, res) => {
@@ -1157,7 +1159,18 @@ propertyAge: req.body.propertyAge,
         : [],
 
     usp: req.body.usp,
-    notes: req.body.notes
+
+    notes: req.body.notes,
+
+builderContacts: (req.body.contactName || []).map((name, index) => ({
+    role: req.body.contactRole[index],
+    designation: req.body.contactDesignation[index],
+    name: name,
+    mobile: req.body.contactMobile[index],
+    alternateMobile: req.body.contactAlternateMobile[index],
+    email: req.body.contactEmail[index],
+    isPrimary: String(req.body.primaryContact) === String(index)
+}))
 
 })
 
@@ -1431,7 +1444,19 @@ coverPhoto: req.file
         : [],
 
     usp: req.body.usp,
-    notes: req.body.notes
+
+    notes: req.body.notes,
+
+builderContacts: (req.body.contactName || []).map((name, index) => ({
+    role: req.body.contactRole[index],
+    designation: req.body.contactDesignation[index],
+    name: name,
+    mobile: req.body.contactMobile[index],
+    alternateMobile: req.body.contactAlternateMobile[index],
+    email: req.body.contactEmail[index],
+    isPrimary: String(req.body.primaryContact) === String(index)
+}))
+
 }
 )
 
