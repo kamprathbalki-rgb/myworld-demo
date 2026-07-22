@@ -191,7 +191,7 @@ input[type=file]{
 </p>
 
 <%
-const configurationKeys = Object.keys(mediaLimits.configurationPhotos);
+const configurationKeys = property.configurations.map(c => c.flatType);
 %>
 
 <% configurationKeys.forEach(function(configuration){ %>
