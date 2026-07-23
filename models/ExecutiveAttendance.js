@@ -123,8 +123,11 @@ autoLogout: {
 
 activityLog: [
 {
-    action: String,
-    time: String
+    type: String,
+    time: String,
+    latitude: Number,
+    longitude: Number,
+    accuracy: Number
 }
 ]
 

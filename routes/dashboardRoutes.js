@@ -1288,180 +1288,91 @@ const productive = calculateProductiveHours(attendance);
             when an action exists.
             */
 
-            if(
-                attendance.activityLog &&
-                attendance.activityLog.length
-            ){
-
-                const latestActivity =
-                attendance.activityLog[
-                    attendance.activityLog.length - 1
-                ]
-
-
-                if(latestActivity.time){
-
-                    lastActivityTime =
-                    latestActivity.time
-
-                }
-
-
-                if(latestActivity.action){
-
-                    lastActivity =
-                    latestActivity.action
-
-
-                    switch(
-                        latestActivity.action
-                    ){
-
-
-                        case 'login':
-
-                            status =
-                            'At Office'
-
-                            statusClass =
-                            'at-office'
-
-                            icon =
-                            '🟢'
-
-                            break
-
-
-                        case 'teaOut':
-
-                            status =
-                            'Tea Break'
-
-                            statusClass =
-                            'on-break'
-
-                            icon =
-                            '🟡'
-
-                            break
-
-
-                        case 'teaIn':
-
-                            status =
-                            'At Office'
-
-                            statusClass =
-                            'at-office'
-
-                            icon =
-                            '🟢'
-
-                            break
-
-
-                        case 'lunchOut':
-
-                            status =
-                            'Lunch Break'
-
-                            statusClass =
-                            'on-break'
-
-                            icon =
-                            '🟠'
-
-                            break
-
-
-                        case 'lunchIn':
-
-                            status =
-                            'At Office'
-
-                            statusClass =
-                            'at-office'
-
-                            icon =
-                            '🟢'
-
-                            break
-
-
-                        case 'meetingOut':
-
-                            status =
-                            'Meeting / With Client'
-
-                            statusClass =
-                            'meeting'
-
-                            icon =
-                            '🟣'
-
-                            break
-
-
-                        case 'meetingIn':
-
-                            status =
-                            'At Office'
-
-                            statusClass =
-                            'at-office'
-
-                            icon =
-                            '🟢'
-
-                            break
-
-
-                        case 'siteVisitOut':
-
-                            status =
-                            'At Site'
-
-                            statusClass =
-                            'at-site'
-
-                            icon =
-                            '🔵'
-
-                            break
-
-
-                        case 'siteVisitIn':
-
-                            status =
-                            'At Office'
-
-                            statusClass =
-                            'at-office'
-
-                            icon =
-                            '🟢'
-
-                            break
-
-
-                        case 'logout':
-
-                            status =
-                            'Logged Out'
-
-                            statusClass =
-                            'logged-out'
-
-                            icon =
-                            '⚪'
-
-                            break
-
-                    }
-
-                }
-
-            }
+            if (
+    attendance.activityLog &&
+    attendance.activityLog.length
+) {
+
+    const latestActivity =
+        attendance.activityLog[
+            attendance.activityLog.length - 1
+        ];
+
+    if (latestActivity.time) {
+        lastActivityTime = latestActivity.time;
+    }
+
+    const activity =
+        (latestActivity.type || latestActivity.action || '').toLowerCase();
+
+    if (activity) {
+
+        lastActivity = activity;
+
+        switch (activity) {
+
+            case 'login':
+                status = 'At Office';
+                statusClass = 'at-office';
+                icon = '🟢';
+                break;
+
+            case 'teaout':
+                status = 'Tea Break';
+                statusClass = 'on-break';
+                icon = '🟡';
+                break;
+
+            case 'teain':
+                status = 'At Office';
+                statusClass = 'at-office';
+                icon = '🟢';
+                break;
+
+            case 'lunchout':
+                status = 'Lunch Break';
+                statusClass = 'on-break';
+                icon = '🟠';
+                break;
+
+            case 'lunchin':
+                status = 'At Office';
+                statusClass = 'at-office';
+                icon = '🟢';
+                break;
+
+            case 'meetingout':
+                status = 'Meeting / With Client';
+                statusClass = 'meeting';
+                icon = '🟣';
+                break;
+
+            case 'meetingin':
+                status = 'At Office';
+                statusClass = 'at-office';
+                icon = '🟢';
+                break;
+
+            case 'sitevisitout':
+                status = 'At Site';
+                statusClass = 'at-site';
+                icon = '🔵';
+                break;
+
+            case 'sitevisitin':
+                status = 'At Office';
+                statusClass = 'at-office';
+                icon = '🟢';
+                break;
+
+            case 'logout':
+                status = 'Logged Out';
+                statusClass = 'logged-out';
+                icon = '⚪';
+                break;
+        }
+    }
+}
 
         }
 
@@ -1516,8 +1427,5 @@ const productive = calculateProductiveHours(attendance);
 }
 
 })
-
-
-module.exports = router
 
 module.exports = router

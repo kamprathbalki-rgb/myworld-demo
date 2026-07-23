@@ -1272,6 +1272,17 @@ router.post('/attendance/punch', async (req, res) => {
 
 })
 
+console.log("TODAY:", today);
+console.log("EXECUTIVE:", req.session.executiveId);
+console.log("RECORD FOUND:", !!record);
+
+if (record) {
+    console.log("BEFORE SAVE");
+    console.log("LoginTimes:", record.loginTimes);
+    console.log("LogoutTimes:", record.logoutTimes);
+}
+
+
 if (!record) {
 
     record = new ExecutiveAttendance({
@@ -1479,6 +1490,16 @@ console.log("***** EXECUTIVE LOGOUT ROUTE HIT *****");
 
 })
 
+console.log("TODAY:", today);
+console.log("EXECUTIVE:", req.session.executiveId);
+console.log("RECORD FOUND:", !!record);
+
+if (record) {
+    console.log("BEFORE SAVE");
+    console.log("LoginTimes:", record.loginTimes);
+    console.log("LogoutTimes:", record.logoutTimes);
+}
+
 const office =
 await OfficeLocation.findOne({
 
@@ -1589,6 +1610,9 @@ console.log('GPS LOGOUT:', {
 
         await record.save()
     }
+
+console.log("AFTER SAVE");
+console.log("LogoutTimes:", record.logoutTimes);
 
     delete req.session.executiveId
     delete req.session.executiveName
