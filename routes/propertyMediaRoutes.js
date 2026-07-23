@@ -102,7 +102,7 @@ req.files.forEach(file => {
         filename: file.filename,
         originalName: file.originalname,
         relativePath:
-            `${req.property.projectName}-${req.property._id}/` +
+            `${req.property.projectName.replace(/\s+/g, "-")}-${req.property._id}/` +
             `${configuration.replace(/\s+/g, "-")}/` +
             `${room.replace(/\s+/g, "-")}/` +
             file.filename
@@ -364,7 +364,7 @@ if (file) {
         filename: file.filename,
         originalName: file.originalname,
         relativePath:
-            `${req.property.projectName}-${req.property._id}/` +
+            `${req.property.projectName.replace(/\s+/g, "-")}-${req.property._id}/` +
             `${configuration.replace(/\s+/g, "-")}/` +
             `${room.replace(/\s+/g, "-")}/` +
             file.filename
