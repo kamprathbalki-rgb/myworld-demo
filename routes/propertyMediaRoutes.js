@@ -42,33 +42,7 @@ router.post("/:propertyId/upload", async (req, res, next) => {
             return res.status(404).send("Property not found");
         }
 
-        upload.fields([
-            { name: "coverPhoto", maxCount: 1 },
-            { name: "propertyVideo", maxCount: 1 },
-            { name: "builderDocuments", maxCount: 5 },
-            { name: "amenityPhotos", maxCount: 7 },
-            { name: "uspPhotos", maxCount: 3 },
-
-            { name: "configuration_Studio", maxCount: 5 },
-            { name: "configuration_1 RK", maxCount: 5 },
-            { name: "configuration_1 BHK", maxCount: 6 },
-            { name: "configuration_1.5 BHK", maxCount: 7 },
-            { name: "configuration_2 BHK", maxCount: 8 },
-            { name: "configuration_2.5 BHK", maxCount: 9 },
-            { name: "configuration_3 BHK", maxCount: 10 },
-            { name: "configuration_3.5 BHK", maxCount: 11 },
-            { name: "configuration_4 BHK", maxCount: 12 },
-            { name: "configuration_4.5 BHK", maxCount: 13 },
-            { name: "configuration_5 BHK", maxCount: 14 },
-            { name: "configuration_5+ BHK", maxCount: 14 },
-            { name: "configuration_Villa", maxCount: 15 },
-            { name: "configuration_Plot", maxCount: 4 },
-            { name: "configuration_Office", maxCount: 8 },
-            { name: "configuration_Showroom", maxCount: 8 },
-            { name: "configuration_Retail", maxCount: 8 },
-            { name: "configuration_Shop", maxCount: 5 }
-
-        ])(req, res, async function(err) {
+upload.any()(req, res, async function (err) {
 
             if (err) {
                 return next(err);
@@ -91,88 +65,98 @@ if (!media) {
 
 }
 
-if (req.files.coverPhoto) {
+const coverPhoto = req.files.find(
+    file => file.fieldname === "coverPhoto"
+);
+
+if (coverPhoto) {
 
     media.coverPhoto = {
-        filename: req.files.coverPhoto[0].filename,
-        originalName: req.files.coverPhoto[0].originalname
+        filename: coverPhoto.filename,
+        originalName: coverPhoto.originalname
     };
 
 }
 
-console.log("========== FILES RECEIVED ==========");
+req.files.forEach(file => {
+    console.log(file.fieldname);
+    console.log("  ", file.originalname);
+});
 
-Object.keys(req.files).forEach(field => {
-    console.log(field);
+req.files.forEach(file => {
 
-    req.files[field].forEach(file => {
-        console.log("  ", file.originalname);
+    if (!file.fieldname.startsWith("configuration_")) return;
+
+    const parts = file.fieldname.replace("configuration_", "").split("_");
+
+    const configuration = parts[0];
+    const room = parts.slice(1).join("_");
+
+    let rooms = media.configurationPhotos.get(configuration);
+
+    if (!rooms) {
+        rooms = new Map();
+    }
+
+    rooms.set(room, {
+        filename: file.filename,
+        originalName: file.originalname,
+        relativePath:
+            `${req.property.projectName}-${req.property._id}/` +
+            `${configuration.replace(/\s+/g, "-")}/` +
+            `${room.replace(/\s+/g, "-")}/` +
+            file.filename
     });
+
+    media.configurationPhotos.set(configuration, rooms);
 });
 
-console.log("====================================");
+const amenityPhotos = req.files.filter(
+    file => file.fieldname === "amenityPhotos"
+);
 
-Object.keys(req.files).forEach(field => {
+if (amenityPhotos.length) {
 
-    if (!field.startsWith("configuration_")) return;
-
-const parts = field.replace("configuration_", "").split("_");
-
-const configuration = parts[0];
-const room = parts.slice(1).join("_");
-
-let rooms = media.configurationPhotos.get(configuration);
-
-if (!rooms) {
-    rooms = new Map();
-}
-
-const file = req.files[field][0];
-
-rooms.set(room, {
-    filename: file.filename,
-    originalName: file.originalname,
-    relativePath:
-        `${req.property.projectName}-${req.property._id}/` +
-        `${configuration.replace(/\s+/g, "-")}/` +
-        `${room.replace(/\s+/g, "-")}/` +
-        file.filename
-});
-
-media.configurationPhotos.set(configuration, rooms);
-
-});
-
-if (req.files.amenityPhotos) {
-
-    media.amenityPhotos = req.files.amenityPhotos.map(file => ({
+    media.amenityPhotos = amenityPhotos.map(file => ({
         filename: file.filename,
         originalName: file.originalname
     }));
 
 }
 
-if (req.files.uspPhotos) {
+const uspPhotos = req.files.filter(
+    file => file.fieldname === "uspPhotos"
+);
 
-    media.uspPhotos = req.files.uspPhotos.map(file => ({
+if (uspPhotos.length) {
+
+    media.uspPhotos = uspPhotos.map(file => ({
         filename: file.filename,
         originalName: file.originalname
     }));
 
 }
 
-if (req.files.propertyVideo) {
+const propertyVideo = req.files.find(
+    file => file.fieldname === "propertyVideo"
+);
+
+if (propertyVideo) {
 
     media.propertyVideo = {
-        filename: req.files.propertyVideo[0].filename,
-        originalName: req.files.propertyVideo[0].originalname
+        filename: propertyVideo.filename,
+        originalName: propertyVideo.originalname
     };
 
 }
 
-if (req.files.builderDocuments) {
+const builderDocuments = req.files.filter(
+    file => file.fieldname === "builderDocuments"
+);
 
-    media.builderDocuments = req.files.builderDocuments.map(file => ({
+if (builderDocuments.length) {
+
+    media.builderDocuments = builderDocuments.map(file => ({
         filename: file.filename,
         originalName: file.originalname
     }));
@@ -333,12 +317,7 @@ router.post(
 
         req.property = await Property.findById(req.params.propertyId);
 
-        upload.fields([
-    {
-        name: `configuration_${req.body.configuration}_${req.body.room}`,
-        maxCount: 1
-    }
-])(req, res, async function (err) {
+upload.any()(req, res, async function (err) {
 
             if (err) return next(err);
 
@@ -366,7 +345,10 @@ if (!existing) {
     return res.redirect("/property-media/" + req.params.propertyId);
 }
 
-if (req.files.length) {
+const fieldName = `configuration_${configuration}_${room}`;
+const file = req.files.find(f => f.fieldname === fieldName);
+
+if (file) {
 
     const oldPath = path.join(
         __dirname,
@@ -377,8 +359,6 @@ if (req.files.length) {
     if (fs.existsSync(oldPath)) {
         fs.unlinkSync(oldPath);
     }
-
-    const file = req.files[0];
 
     rooms.set(room, {
         filename: file.filename,
