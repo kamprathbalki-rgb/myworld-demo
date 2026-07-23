@@ -1305,6 +1305,9 @@ const productive = calculateProductiveHours(attendance);
     const activity =
         (latestActivity.type || latestActivity.action || '').toLowerCase();
 
+console.log("Latest activity:", latestActivity);
+console.log("Activity value:", activity);
+
     if (activity) {
 
         lastActivity = activity;
