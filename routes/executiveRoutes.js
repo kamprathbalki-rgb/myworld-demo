@@ -728,6 +728,13 @@ office?.longitude
 
 })
 
+console.log('MODEL PATH:', require.resolve('../models/ExecutiveAttendance'));
+
+console.log(
+    'ACTIVITY PATH TYPE:',
+    ExecutiveAttendance.schema.path('activityLog').instance
+);
+
 record.activityLog.push({
     type: 'LOGIN',
     time: now,

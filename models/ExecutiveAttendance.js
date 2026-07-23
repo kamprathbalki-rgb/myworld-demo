@@ -122,14 +122,24 @@ autoLogout: {
 },
 
 activityLog: [
-{
-    type: String,
-    time: String,
-    latitude: Number,
-    longitude: Number,
-    accuracy: Number
-}
-]
+    {
+        type: {
+            type: String
+        },
+        time: {
+            type: String
+        },
+        latitude: {
+            type: Number
+        },
+        longitude: {
+            type: Number
+        },
+        accuracy: {
+            type: Number
+        }
+    }
+],
 
 })
 
