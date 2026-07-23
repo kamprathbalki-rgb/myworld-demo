@@ -1465,6 +1465,8 @@ res.render('executiveLost',{
 
 router.get('/logout', async (req, res) => {
 
+console.log("***** EXECUTIVE LOGOUT ROUTE HIT *****");
+
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
