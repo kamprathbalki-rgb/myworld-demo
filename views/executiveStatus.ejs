@@ -452,6 +452,11 @@ class="back-btn"
 <% executives.forEach(function(executive){ %>
 
 
+<pre>
+Status: <%= executive.status %>
+Running: <%= !['Tea Break','Lunch Break','Logged Out','Not Checked In'].includes(executive.status) %>
+</pre>
+
 <div class="
 executive-card
 <%= executive.statusClass %>
@@ -536,7 +541,6 @@ No executives found.
 </div>
 
 <script>
-
 function startTimer(el){
 
     let parts = el.textContent.trim().split(':').map(Number);
@@ -545,7 +549,9 @@ function startTimer(el){
     let m = parts[1] || 0;
     let s = parts[2] || 0;
 
-    setInterval(function(){
+    setInterval(() => {
+
+        if(el.dataset.running !== "true") return;
 
         s++;
 
@@ -565,23 +571,11 @@ function startTimer(el){
             String(s).padStart(2,'0');
 
     },1000);
-
 }
 
-document.querySelectorAll('.productive-timer').forEach(function(el){
+document.querySelectorAll(".productive-timer").forEach(startTimer);
 
-    if(el.dataset.running === "true"){
-        startTimer(el);
-    }
-
-});
-
-setInterval(function(){
-
-    window.location.reload();
-
-},15000);
-
+setInterval(() => location.reload(),15000);
 </script>
 
 </body>
