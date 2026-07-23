@@ -557,12 +557,6 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-console.log('GPS LOGIN:', {
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    accuracy: req.body.accuracy
-})
-
 const executive = await Executive.findOne({
     email: req.body.email,
     isActive: true
@@ -596,11 +590,6 @@ await OfficeLocation.findOne({
 
 })
 
-console.log(
-'OFFICE LOCATION:',
-office
-)
-
 let distanceFromOffice = null
 
 if (
@@ -627,13 +616,6 @@ if (
     )
 
 }
-
-console.log(
-    'DISTANCE FROM OFFICE:',
-    distanceFromOffice,
-    'meters'
-)
-
 
     // --- AUTO CAPTURE LOGIN TIME ---
     const today = getISTDate()
@@ -711,29 +693,6 @@ record.loginLocations.push({
     }
 
 }
-
-console.log({
-
-loginLatitude:
-req.body.latitude,
-
-loginLongitude:
-req.body.longitude,
-
-officeLatitude:
-office?.latitude,
-
-officeLongitude:
-office?.longitude
-
-})
-
-console.log('MODEL PATH:', require.resolve('../models/ExecutiveAttendance'));
-
-console.log(
-    'ACTIVITY PATH TYPE:',
-    ExecutiveAttendance.schema.path('activityLog').instance
-);
 
 record.activityLog.push({
     type: 'LOGIN',
@@ -1279,16 +1238,6 @@ router.post('/attendance/punch', async (req, res) => {
 
 })
 
-console.log("TODAY:", today);
-console.log("EXECUTIVE:", req.session.executiveId);
-console.log("RECORD FOUND:", !!record);
-
-if (record) {
-    console.log("BEFORE SAVE");
-    console.log("LoginTimes:", record.loginTimes);
-    console.log("LogoutTimes:", record.logoutTimes);
-}
-
 
 if (!record) {
 
@@ -1483,8 +1432,6 @@ res.render('executiveLost',{
 
 router.get('/logout', async (req, res) => {
 
-console.log("***** EXECUTIVE LOGOUT ROUTE HIT *****");
-
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
@@ -1496,16 +1443,6 @@ console.log("***** EXECUTIVE LOGOUT ROUTE HIT *****");
     date: today
 
 })
-
-console.log("TODAY:", today);
-console.log("EXECUTIVE:", req.session.executiveId);
-console.log("RECORD FOUND:", !!record);
-
-if (record) {
-    console.log("BEFORE SAVE");
-    console.log("LoginTimes:", record.loginTimes);
-    console.log("LogoutTimes:", record.logoutTimes);
-}
 
 const office =
 await OfficeLocation.findOne({
@@ -1543,12 +1480,6 @@ if (
     )
 
 }
-
-console.log(
-    'LOGOUT DISTANCE FROM OFFICE:',
-    distanceFromOffice,
-    'meters'
-)
 
     if (record) {
 
@@ -1609,17 +1540,8 @@ record.totalLunchBreak =
 
 record.autoLogout = false
 
-console.log('GPS LOGOUT:', {
-    latitude: req.query.latitude,
-    longitude: req.query.longitude,
-    accuracy: req.query.accuracy
-})
-
         await record.save()
     }
-
-console.log("AFTER SAVE");
-console.log("LogoutTimes:", record.logoutTimes);
 
     delete req.session.executiveId
     delete req.session.executiveName
