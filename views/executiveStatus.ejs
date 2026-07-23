@@ -494,19 +494,20 @@ Time:
 
 <div class="last-activity">
     Hours At Work:
-<strong id="productive-<%= executive.id %>">
-    <%= executive.productiveHours %>
-</strong>
+    <strong
+        id="productive-<%= executive.id %>"
+        class="productive-timer"
+        data-running="<%= !['Tea Break','Lunch Break','Logged Out','Not Checked In'].includes(executive.status) %>"
+        <%= executive.productiveHours %>
+    </strong>
 
-<br>
+    <br>
 
-Status:
+    Status:
 
-<strong>
-    <%= executive.status %>
-</strong>
-
-
+    <strong>
+        <%= executive.status %>
+    </strong>
 </div>
 
 
@@ -536,11 +537,50 @@ No executives found.
 
 <script>
 
+function startTimer(el){
+
+    let parts = el.textContent.trim().split(':').map(Number);
+
+    let h = parts[0] || 0;
+    let m = parts[1] || 0;
+    let s = parts[2] || 0;
+
+    setInterval(function(){
+
+        s++;
+
+        if(s >= 60){
+            s = 0;
+            m++;
+        }
+
+        if(m >= 60){
+            m = 0;
+            h++;
+        }
+
+        el.textContent =
+            String(h).padStart(2,'0') + ':' +
+            String(m).padStart(2,'0') + ':' +
+            String(s).padStart(2,'0');
+
+    },1000);
+
+}
+
+document.querySelectorAll('.productive-timer').forEach(function(el){
+
+    if(el.dataset.running === "true"){
+        startTimer(el);
+    }
+
+});
+
 setInterval(function(){
 
-    window.location.reload()
+    window.location.reload();
 
-}, 15000)
+},15000);
 
 </script>
 
