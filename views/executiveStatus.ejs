@@ -502,17 +502,14 @@ Time:
     <strong
         id="productive-<%= executive.id %>"
         class="productive-timer"
-        data-running="<%= !['Tea Break','Lunch Break','Logged Out','Not Checked In'].includes(executive.status) %>"
+        data-running="<%= !['Tea Break','Lunch Break','Logged Out','Not Checked In'].includes(executive.status) %>">
         <%= executive.productiveHours %>
     </strong>
 
     <br>
 
     Status:
-
-    <strong>
-        <%= executive.status %>
-    </strong>
+    <strong><%= executive.status %></strong>
 </div>
 
 
