@@ -62,11 +62,11 @@ case "builderDocument":
 
                         const parts = config.split("_");
 
-                        destination = path.join(
-                            destination,
-                            safeName(parts[0]),
-                            safeName(parts[1])
-                        );
+destination = path.join(
+    destination,
+    safeName(parts[0]),
+    safeName(parts.slice(1).join("_"))
+);
 
                     } else {
 

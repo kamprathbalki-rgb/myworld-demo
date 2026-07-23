@@ -116,15 +116,30 @@ Object.keys(req.files).forEach(field => {
 
     if (!field.startsWith("configuration_")) return;
 
-    const configuration = field.replace("configuration_", "");
+const parts = field.replace("configuration_", "").split("_");
 
-    media.configurationPhotos.set(
-        configuration,
-        req.files[field].map(file => ({
-            filename: file.filename,
-            originalName: file.originalname
-        }))
-    );
+const configuration = parts[0];
+const room = parts.slice(1).join("_");
+
+let rooms = media.configurationPhotos.get(configuration);
+
+if (!rooms) {
+    rooms = new Map();
+}
+
+const file = req.files[field][0];
+
+rooms.set(room, {
+    filename: file.filename,
+    originalName: file.originalname,
+    relativePath:
+        `${req.property.projectName}-${req.property._id}/` +
+        `${configuration.replace(/\s+/g, "-")}/` +
+        `${room.replace(/\s+/g, "-")}/` +
+        file.filename
+});
+
+media.configurationPhotos.set(configuration, rooms);
 
 });
 
@@ -270,41 +285,45 @@ router.post(
 
 router.post("/:propertyId/configuration/delete", async (req, res) => {
 
-    const { configuration, filename } = req.body;
+const { configuration, room, filename } = req.body;
 
-    const media = await PropertyMedia.findOne({
-        property: req.params.propertyId
-    });
+const media = await PropertyMedia.findOne({
+    property: req.params.propertyId
+});
 
-    if (!media) {
-        return res.redirect("/property-media/" + req.params.propertyId);
-    }
+if (!media) {
+    return res.redirect("/property-media/" + req.params.propertyId);
+}
 
-    const photos = media.configurationPhotos.get(configuration) || [];
+const rooms = media.configurationPhotos.get(configuration);
 
-    const photo = photos.find(p => p.filename === filename);
+if (!rooms) {
+    return res.redirect("/property-media/" + req.params.propertyId);
+}
 
-    if (photo) {
+const photo = rooms.get(room);
 
-        const filePath = path.join(
-            __dirname,
-            "../uploads/properties/configurations",
-            filename
-        );
+if (!photo) {
+    return res.redirect("/property-media/" + req.params.propertyId);
+}
 
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
+const filePath = path.join(
+    __dirname,
+    "../public/uploads/properties",
+    photo.relativePath
+);
 
-        media.configurationPhotos.set(
-            configuration,
-            photos.filter(p => p.filename !== filename)
-        );
+if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+}
 
-        await media.save();
-    }
+rooms.delete(room);
 
-    res.redirect("/property-media/" + req.params.propertyId);
+media.configurationPhotos.set(configuration, rooms);
+
+await media.save();
+
+res.redirect("/property-media/" + req.params.propertyId);
 
 });
 
@@ -314,7 +333,12 @@ router.post(
 
         req.property = await Property.findById(req.params.propertyId);
 
-        upload.any()(req, res, async function (err) {
+        upload.fields([
+    {
+        name: `configuration_${req.body.configuration}_${req.body.room}`,
+        maxCount: 1
+    }
+])(req, res, async function (err) {
 
             if (err) return next(err);
 
@@ -326,36 +350,50 @@ router.post(
                 return res.redirect("/property-media/" + req.params.propertyId);
             }
 
-            const configuration = req.body.configuration;
-            const oldFilename = req.body.oldFilename;
+const configuration = req.body.configuration;
+const room = req.body.room;
+const oldFilename = req.body.oldFilename;
 
-            const photos = media.configurationPhotos.get(configuration) || [];
+const rooms = media.configurationPhotos.get(configuration);
 
-            const index = photos.findIndex(
-                p => p.filename === oldFilename
-            );
+if (!rooms) {
+    return res.redirect("/property-media/" + req.params.propertyId);
+}
 
-            if (index >= 0 && req.files.length) {
+const existing = rooms.get(room);
 
-                const oldPath = path.join(
-                    __dirname,
-                    "../uploads/properties/configurations",
-                    oldFilename
-                );
+if (!existing) {
+    return res.redirect("/property-media/" + req.params.propertyId);
+}
 
-                if (fs.existsSync(oldPath)) {
-                    fs.unlinkSync(oldPath);
-                }
+if (req.files.length) {
 
-                photos[index] = {
-                    filename: req.files[0].filename,
-                    originalName: req.files[0].originalname
-                };
+    const oldPath = path.join(
+        __dirname,
+        "../public/uploads/properties",
+        existing.relativePath
+    );
 
-                media.configurationPhotos.set(configuration, photos);
+    if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+    }
 
-                await media.save();
-            }
+    const file = req.files[0];
+
+    rooms.set(room, {
+        filename: file.filename,
+        originalName: file.originalname,
+        relativePath:
+            `${req.property.projectName}-${req.property._id}/` +
+            `${configuration.replace(/\s+/g, "-")}/` +
+            `${room.replace(/\s+/g, "-")}/` +
+            file.filename
+    });
+
+    media.configurationPhotos.set(configuration, rooms);
+
+    await media.save();
+}
 
             res.redirect("/property-media/" + req.params.propertyId);
 

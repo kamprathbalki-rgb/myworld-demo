@@ -214,17 +214,20 @@ const placeholders = mediaLimits.configurationPhotos[configuration];
 
 <%
 const uploadedPhotos =
-media.configurationPhotos.get(configuration) || [];
+(media.configurationPhotos.get(configuration) || new Map());
+
+const uploadedPhoto =
+uploadedPhotos.get(photo);
 %>
 
-<% uploadedPhotos.forEach(function(file){ %>
+<% if(uploadedPhoto){ %>
 
 <div style="display:inline-block;margin:8px;text-align:center;">
 
-    <a href="/uploads/properties/configurations/<%= file.filename %>" target="_blank">
+<a href="/uploads/properties/<%= uploadedPhoto.relativePath %>" target="_blank">
 
-        <img
-            src="/uploads/properties/configurations/<%= file.filename %>"
+<img
+src="/uploads/properties/<%= uploadedPhoto.relativePath %>"
             style="width:120px;height:90px;object-fit:cover;border:1px solid #ddd;border-radius:6px;display:block;">
 
     </a>
@@ -234,15 +237,20 @@ media.configurationPhotos.get(configuration) || [];
     method="POST"
     style="margin-top:6px;">
 
-    <input
-        type="hidden"
-        name="configuration"
-        value="<%= configuration %>">
+<input
+    type="hidden"
+    name="configuration"
+    value="<%= configuration %>">
 
-    <input
-        type="hidden"
-        name="filename"
-        value="<%= file.filename %>">
+<input
+    type="hidden"
+    name="room"
+    value="<%= photo %>">
+
+<input
+    type="hidden"
+    name="filename"
+    value="<%= uploadedPhoto.filename %>">
 
     <button
         type="submit"
@@ -259,19 +267,20 @@ media.configurationPhotos.get(configuration) || [];
     enctype="multipart/form-data"
     style="display:inline;">
 
-    <input type="hidden" name="configuration" value="<%= configuration %>">
-    <input type="hidden" name="oldFilename" value="<%= file.filename %>">
+<input type="hidden" name="configuration" value="<%= configuration %>">
+<input type="hidden" name="room" value="<%= photo %>">
+<input type="hidden" name="oldFilename" value="<%= uploadedPhoto.filename %>">
 
     <input
         type="file"
-        name="configuration_<%= configuration %>"
+        name="configuration_<%= configuration %>_<%= photo %>"
         style="display:none"
         onchange="this.form.submit()"
-        id="replace_<%= file.filename %>">
+        id="replace_<%= uploadedPhoto.filename %>">
 
     <button
         type="button"
-        onclick="document.getElementById('replace_<%= file.filename %>').click()"
+        onclick="document.getElementById('replace_<%= uploadedPhoto.filename %>').click()"
         style="margin-top:6px;background:#ffc107;color:#000;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">
         ✏ Replace
     </button>
@@ -280,13 +289,12 @@ media.configurationPhotos.get(configuration) || [];
 
 </div>
 
-<% }) %>
+<% } %>
 
 <input
 type="file"
 accept="image/*"
-name="configuration_<%= configuration %>"
-multiple>
+name="configuration_<%= configuration %>_<%= photo %>">
 
 </td>
 

@@ -66,7 +66,10 @@ const propertyMediaSchema = new mongoose.Schema({
 
 configurationPhotos: {
     type: Map,
-    of: [mediaItemSchema],
+    of: {
+        type: Map,
+        of: mediaItemSchema
+    },
     default: {}
 },
 
