@@ -15,6 +15,9 @@ const storage = multer.diskStorage({
 
     destination(req, file, cb) {
 
+console.log("Destination called");
+console.log("Field:", file.fieldname);
+
         const property = req.property;
 
         if (!property) {
@@ -84,6 +87,8 @@ destination = path.join(
                 }
 
         }
+
+console.log("Creating:", destination);
 
         fs.mkdirSync(destination, { recursive: true });
 
