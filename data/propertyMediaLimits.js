@@ -224,13 +224,27 @@ module.exports = {
         ]
     },
 
-    amenityPhotos: {
-        maxFiles: 7
-    },
+amenityPhotos: {
+    maxFiles: 7,
+    placeholders: [
+        "Club House",
+        "Swimming Pool",
+        "Gym",
+        "Children Play Area",
+        "Garden",
+        "Parking",
+        "Security"
+    ]
+},
 
-    uspPhotos: {
-        maxFiles: 3
-    },
+uspPhotos: {
+    maxFiles: 3,
+    placeholders: [
+        "USP 1",
+        "USP 2",
+        "USP 3"
+    ]
+},
 
     propertyVideo: {
         maxFiles: 1,

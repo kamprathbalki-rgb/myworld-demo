@@ -2,56 +2,187 @@
 <html>
 <head>
     <title>Property Media</title>
+
     <style>
+
         body{
             font-family:Arial,sans-serif;
-            margin:40px;
-            max-width:900px;
+            max-width:1000px;
+            margin:40px auto;
+            padding:20px;
+            background:#f5f5f5;
+        }
+
+        h1{
+            margin-bottom:30px;
         }
 
         .card{
+            background:#fff;
             border:1px solid #ddd;
             border-radius:8px;
             padding:20px;
-            margin-bottom:20px;
+            margin-bottom:25px;
         }
 
         h2{
             margin-top:0;
         }
 
+        h3{
+            margin-top:25px;
+        }
+
+        img{
+            max-width:220px;
+            border:1px solid #ddd;
+            border-radius:6px;
+            margin-bottom:10px;
+            display:block;
+        }
+
         input[type=file]{
             width:100%;
-            margin:10px 0;
+            margin:10px 0 20px;
         }
 
         button{
-            padding:10px 20px;
+            padding:12px 24px;
             background:#007bff;
-            color:white;
+            color:#fff;
             border:none;
-            border-radius:5px;
+            border-radius:6px;
             cursor:pointer;
+            font-size:16px;
         }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        .placeholder{
+            color:#777;
+            margin-bottom:10px;
+            font-style:italic;
+        }
+
+        hr{
+            margin:25px 0;
+            border:none;
+            border-top:1px solid #ddd;
+        }
+
     </style>
+
 </head>
 
 <body>
 
 <h1><%= property.projectName %></h1>
 
-<form method="POST"
-      action="/property-media/<%= property._id %>/upload"
-      enctype="multipart/form-data">
+<%
+const configurationKeys = property.configurations.map(c => c.flatType);
+
+let totalRequired = 1;
+let totalUploaded = media.coverPhoto ? 1 : 0;
+
+const configurationSummary = [];
+
+configurationKeys.forEach(configuration => {
+
+    const placeholders =
+        mediaLimits.configurationPhotos[configuration] || [];
+
+    const roomPhotos =
+        media.configurationPhotos &&
+        media.configurationPhotos[configuration]
+            ? media.configurationPhotos[configuration]
+            : {};
+
+    let uploaded = 0;
+
+    placeholders.forEach(room => {
+
+        totalRequired++;
+
+        if (roomPhotos[room] && roomPhotos[room].relativePath) {
+            uploaded++;
+            totalUploaded++;
+        }
+
+    });
+
+    configurationSummary.push({
+        configuration,
+        uploaded,
+        total: placeholders.length
+    });
+
+});
+%>
+
+<div class="card">
+
+<h2>Media Summary</h2>
+
+<p>
+<strong>Cover Photo:</strong>
+<%= media.coverPhoto ? "✅ Uploaded" : "❌ Missing" %>
+</p>
+
+<% configurationSummary.forEach(item => { %>
+
+<p>
+<strong><%= item.configuration %>:</strong>
+<%= item.uploaded %> / <%= item.total %>
+</p>
+
+<% }) %>
+
+<hr>
+
+<p>
+
+<strong>Overall Completion:</strong>
+
+<%= totalUploaded %> /
+<%= totalRequired %>
+
+(<%= Math.round(totalUploaded * 100 / totalRequired) %>%)
+
+</p>
+
+</div>
+
+
+<form
+    method="POST"
+    action="/property-media/<%= property._id %>/upload"
+    enctype="multipart/form-data">
 
 <div class="card">
 
 <h2>Cover Photo</h2>
 
+<% if (media.coverPhoto && media.coverPhoto.relativePath) { %>
+
+<p><strong>Status:</strong> ✅ Uploaded</p>
+<p><strong>File:</strong> <%= media.coverPhoto.originalName %></p>
+
+<a href="/uploads/properties/<%= media.coverPhoto.relativePath %>" target="_blank">
+    View Uploaded File
+</a>
+
+<% } else { %>
+
+<p><strong>Status:</strong> ❌ Not Uploaded</p>
+
+<% } %>
+
 <input
-    type="file"
-    name="coverPhoto"
-    accept="image/*">
+type="file"
+name="coverPhoto"
+accept="image/*">
 
 </div>
 
@@ -60,37 +191,228 @@
 <h2>Configuration Photos</h2>
 
 <%
-const configurationKeys = property.configurations.map(c => c.flatType);
+
 configurationKeys.forEach(function(configuration){
+
 %>
 
 <h3><%= configuration %></h3>
 
 <%
-const placeholders = mediaLimits.configurationPhotos[configuration];
 
-placeholders.forEach(function(photo){
+const placeholders = mediaLimits.configurationPhotos[configuration] || [];
+
+const roomPhotos =
+media.configurationPhotos &&
+media.configurationPhotos[configuration]
+? media.configurationPhotos[configuration]
+: {};
+
+placeholders.forEach(function(room){
+
+const existing = roomPhotos[room];
+
 %>
 
-<label><%= photo %></label>
+<div style="margin-bottom:20px;">
+
+<strong><%= room %></strong>
+
+<br><br>
+
+<% if(existing && existing.relativePath){ %>
+
+<p><strong>Status:</strong> ✅ Uploaded</p>
+<p><strong>File:</strong> <%= existing.originalName %></p>
+
+<a href="/uploads/properties/<%= existing.relativePath %>" target="_blank">
+    View Uploaded File
+</a>
+
+<% } else { %>
+
+<p><strong>Status:</strong> ❌ Not Uploaded</p>
+
+<% } %>
 
 <input
-    type="file"
-    name="configuration_<%= configuration %>_<%= photo %>"
-    accept="image/*">
+type="file"
+name="configuration_<%= configuration %>_<%= room %>"
+accept="image/*">
+
+</div>
+
+<hr>
 
 <%
+
 });
+
 });
+
 %>
 
 </div>
 
+<div class="card">
+
+<h2>Amenities</h2>
+
+<% mediaLimits.amenityPhotos.placeholders.forEach(function(item,index){ 
+
+const existing =
+    media.amenityPhotos &&
+    media.amenityPhotos[index];
+
+%>
+
+<p>
+<strong><%= item %></strong>
+</p>
+
+<% if(existing && existing.relativePath){ %>
+
+<p><strong>Status:</strong> ✅ Uploaded</p>
+
+<p>File: <%= existing.originalName %></p>
+
+<a href="/uploads/properties/<%= existing.relativePath %>" target="_blank">
+View Uploaded File
+</a>
+
+<% } else { %>
+
+<p>❌ Not Uploaded</p>
+
+<% } %>
+
+<input
+type="file"
+name="amenity_<%= index %>"
+accept="image/*">
+
+<hr>
+
+<% }) %>
+
+</div>
+
+<div class="card">
+
+<h2>USP Photos</h2>
+
+<% mediaLimits.uspPhotos.placeholders.forEach(function(item,index){
+
+const existing =
+    media.uspPhotos &&
+    media.uspPhotos[index];
+
+%>
+
+<p>
+<strong><%= item %></strong>
+</p>
+
+<% if(existing && existing.relativePath){ %>
+
+<p>✅ Uploaded</p>
+<p>File: <%= existing.originalName %></p>
+
+<a href="/uploads/properties/<%= existing.relativePath %>" target="_blank">
+View Uploaded File
+</a>
+
+<% } else { %>
+
+<p>❌ Not Uploaded</p>
+
+<% } %>
+
+<input
+type="file"
+name="usp_<%= index %>"
+accept="image/*">
+
+<hr>
+
+<% }) %>
+
+</div>
+
+<div class="card">
+
+<h2>Property Video</h2>
+
+<% if(media.propertyVideo && media.propertyVideo.relativePath){ %>
+
+<p>✅ Uploaded</p>
+
+<p>
+File:
+<%= media.propertyVideo.originalName %>
+</p>
+
+<a href="/uploads/properties/<%= media.propertyVideo.relativePath %>" target="_blank">
+View Video
+</a>
+
+<% } else { %>
+
+<p>❌ Not Uploaded</p>
+
+<% } %>
+
+<input
+type="file"
+name="propertyVideo"
+accept="video/*">
+
+</div>
+
+
+<div class="card">
+
+<h2>Builder Documents</h2>
+
+<% if(media.builderDocuments && media.builderDocuments.length){ %>
+
+<% media.builderDocuments.forEach(function(doc){ %>
+
+<p>
+
+✅ <%= doc.originalName %>
+
+<a href="/uploads/properties/<%= doc.relativePath %>" target="_blank">
+View
+</a>
+
+</p>
+
+<% }) %>
+
+<% } else { %>
+
+<p>❌ No documents uploaded</p>
+
+<% } %>
+
+<input
+type="file"
+name="builderDocuments"
+multiple>
+
+</div>
+
+
+
 <button type="submit">
-    Save Property Media
+
+Save Property Media
+
 </button>
 
 </form>
 
 </body>
+
 </html>

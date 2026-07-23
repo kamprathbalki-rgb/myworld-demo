@@ -11,6 +11,8 @@ const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 const Tenant = require('../models/Tenant')
 const groupLeadAging = require('../services/leadAgingService');
 const calculateProductiveHours = require('../services/productiveHoursService');
+const PropertyMedia = require('../models/PropertyMedia')
+const mediaLimits = require('../data/propertyMediaLimits')
 
 router.get('/main', isLoggedIn, isAdmin, async (req,res)=>{
 
@@ -1430,5 +1432,6 @@ console.log("Activity value:", activity);
 }
 
 })
+
 
 module.exports = router

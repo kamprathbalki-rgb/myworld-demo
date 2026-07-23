@@ -24,6 +24,13 @@ media = new PropertyMedia({
 });
     }
 
+console.log(mediaLimits.amenityPhotos);
+console.log(typeof mediaLimits.amenityPhotos);
+
+console.log("Property:", property);
+console.log("Media:", media);
+console.log("Media Limits:", mediaLimits);
+
     res.render("propertyMedia", {
         property,
         media,
@@ -71,10 +78,13 @@ const coverPhoto = req.files.find(
 
 if (coverPhoto) {
 
-    media.coverPhoto = {
-        filename: coverPhoto.filename,
-        originalName: coverPhoto.originalname
-    };
+media.coverPhoto = {
+    filename: coverPhoto.filename,
+    originalName: coverPhoto.originalname,
+    relativePath:
+        `${req.property.projectName.replace(/\s+/g, "-")}-${req.property._id}/cover/` +
+        coverPhoto.filename
+};
 
 }
 
@@ -164,6 +174,9 @@ if (builderDocuments.length) {
 }
 
 await media.save();
+
+console.log("Saved cover photo:");
+console.log(media.coverPhoto);
 
 res.redirect("/property-media/" + req.params.propertyId);
 

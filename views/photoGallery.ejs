@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Gallery</title>
+
+    <style>
+        body{
+            margin:0;
+            padding:25px;
+            font-family:Arial,sans-serif;
+            background:#f5f7fa;
+        }
+
+        h1{
+            margin:0 0 25px;
+            color:#1f4e79;
+        }
+
+        .top-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:25px;
+        }
+
+        .back-btn{
+            text-decoration:none;
+            background:#1f4e79;
+            color:#fff;
+            padding:10px 18px;
+            border-radius:6px;
+            font-weight:bold;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:#fff;
+            box-shadow:0 2px 10px rgba(0,0,0,.08);
+        }
+
+        th{
+            background:#1f4e79;
+            color:#fff;
+            padding:12px;
+            font-size:14px;
+        }
+
+        td{
+            padding:12px;
+            border-bottom:1px solid #eee;
+            text-align:center;
+        }
+
+        tr:hover{
+            background:#f9fbff;
+        }
+
+        .progress{
+            width:140px;
+            height:12px;
+            background:#ddd;
+            border-radius:20px;
+            overflow:hidden;
+            margin:auto;
+        }
+
+        .progress-bar{
+            height:100%;
+            background:#28a745;
+        }
+
+        .btn{
+            display:inline-block;
+            padding:8px 15px;
+            border-radius:5px;
+            text-decoration:none;
+            background:#1f4e79;
+            color:#fff;
+            font-size:13px;
+            font-weight:bold;
+        }
+
+        .btn:hover{
+            background:#163b5d;
+        }
+
+.action-panel{
+
+    margin-top:30px;
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:8px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.action-panel button{
+
+    margin-right:10px;
+
+    padding:10px 20px;
+
+    border:none;
+
+    border-radius:5px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.action-panel select{
+
+    width:350px;
+
+    max-width:100%;
+
+    padding:8px;
+
+}
+
+.action-panel label{
+
+    display:block;
+
+    margin:8px 0;
+
+}
+
+.action-panel button{
+
+    margin:5px;
+
+}
+
+        @media(max-width:900px){
+
+            body{
+                padding:10px;
+            }
+
+            table{
+                display:block;
+                overflow-x:auto;
+                white-space:nowrap;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="top-bar">
+
+    <h1>📷 Property Photo Gallery</h1>
+
+    <a
+        href="/dashboard/main"
+        class="back-btn">
+        ← Dashboard
+    </a>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+    <th>
+    <input type="checkbox" id="selectAll">
+</th>
+<th>Project</th>
+    <th>Cover</th>
+    <th>Configurations</th>
+    <th>Amenities</th>
+    <th>USP</th>
+    <th>Video</th>
+    <th>Documents</th>
+    <th>Total</th>
+    <th>Completion</th>
+    <th>Manage</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% gallery.forEach(function(item){ %>
+
+<tr>
+
+<td>
+    <input
+        type="checkbox"
+        class="property-checkbox"
+        value="<%= item.project._id %>"
+        data-name="<%= item.project.projectName %>">
+</td>
+
+<td>
+
+<b><%= item.project.projectName %></b>
+
+</td>
+
+<td>
+
+<%= item.cover %> / 1
+
+</td>
+
+<td>
+
+<%= item.configurationUploaded %> /
+<%= item.configurationRequired %>
+
+</td>
+
+<td>
+
+<%= item.amenity %> / 7
+
+</td>
+
+<td>
+
+<%= item.usp %> / 3
+
+</td>
+
+<td>
+
+<%= item.video %> / 1
+
+</td>
+
+<td>
+
+<%= item.documents %>
+
+</td>
+
+<td>
+
+<b>
+
+<%= item.totalUploaded %> /
+<%= item.totalRequired %>
+
+</b>
+
+</td>
+
+<td>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+style="width:<%= item.completion %>%">
+</div>
+
+</div>
+
+<div style="margin-top:5px;">
+
+<%= item.completion %>%
+
+</div>
+
+</td>
+
+<td>
+
+    <a
+        class="btn"
+        href="/property-media/<%= item.project._id %>">
+        📷 Open
+    </a>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
+</table>
+
+<div class="action-panel">
+
+    <h3>Selected Projects</h3>
+
+    <div id="selectedProjects">
+        No project selected
+    </div>
+
+    <br>
+
+    <label>
+        Buyer
+    </label>
+
+<select id="buyer">
+
+    <option value="">Select Buyer</option>
+
+    <% buyers.forEach(function(buyer){ %>
+
+        <option
+            value="<%= buyer._id %>"
+            data-phone="<%= buyer.phone || '' %>"
+            data-email="<%= buyer.email || '' %>"
+        >
+            <%= buyer.name %> | 📱 <%= buyer.phone || "-" %> | ✉ <%= buyer.email || "-" %>
+        </option>
+
+    <% }) %>
+
+</select>
+
+    <hr>
+
+    <label><input type="checkbox" checked id="cover"> Cover Photo</label><br>
+
+    <label><input type="checkbox" checked id="config"> Configuration Photos</label><br>
+
+    <label><input type="checkbox" checked id="amenity"> Amenities</label><br>
+
+    <label><input type="checkbox" checked id="usp"> USP Photos</label><br>
+
+    <label><input type="checkbox" checked id="video"> Videos</label><br>
+
+    <label><input type="checkbox" id="documents"> Builder Documents</label>
+
+    <br><br>
+
+    <button type="button" id="whatsappBtn">
+        💬 Send WhatsApp
+    </button>
+
+    <button type="button" id="emailBtn">
+        📧 Send Email
+    </button>
+
+</div>
+
+<script>
+
+const selectAll=document.getElementById("selectAll");
+
+const checkboxes=document.querySelectorAll(".property-checkbox");
+
+const selected=document.getElementById("selectedProjects");
+
+function refreshSelection(){
+
+    let names=[];
+
+    let checkedCount=0;
+
+    checkboxes.forEach(cb=>{
+
+        if(cb.checked){
+
+            checkedCount++;
+
+            names.push(cb.dataset.name);
+
+        }
+
+    });
+
+    selected.innerHTML = checkedCount
+        ? "<b>Selected Projects (" + checkedCount + ")</b><br><br>" + names.join("<br>")
+        : "No project selected";
+
+    selectAll.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
+
+}
+
+selectAll.addEventListener("change",()=>{
+
+    checkboxes.forEach(cb=>{
+
+        cb.checked=selectAll.checked;
+
+    });
+
+    refreshSelection();
+
+});
+
+checkboxes.forEach(cb=>{
+
+    cb.addEventListener("change",refreshSelection);
+
+});
+
+</script>
+
+<script>
+
+document.getElementById('whatsappBtn').addEventListener('click', async () => {
+
+    const buyerId = document.getElementById('buyer').value;
+
+    const propertyIds = Array.from(
+        document.querySelectorAll('.property-checkbox:checked')
+    ).map(cb => cb.value);
+
+    const include = {
+        cover: document.getElementById('cover').checked,
+        configurations: document.getElementById('config').checked,
+        amenities: document.getElementById('amenity').checked,
+        usp: document.getElementById('usp').checked,
+        video: document.getElementById('video').checked,
+        documents: document.getElementById('documents').checked
+    };
+
+    const response = await fetch('/photo-gallery/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            buyerId,
+            propertyIds,
+            include,
+            channel: 'whatsapp'
+        })
+    });
+
+    const result = await response.json();
+
+    console.log(result);
+    alert(result.message);
+
+});
+
+</script>
+
+<script>
+
+document.getElementById('emailBtn').addEventListener('click', async () => {
+
+    const buyerId = document.getElementById('buyer').value;
+
+    const propertyIds = Array.from(
+        document.querySelectorAll('.property-checkbox:checked')
+    ).map(cb => cb.value);
+
+    const include = {
+        cover: document.getElementById('cover').checked,
+        configurations: document.getElementById('config').checked,
+        amenities: document.getElementById('amenity').checked,
+        usp: document.getElementById('usp').checked,
+        video: document.getElementById('video').checked,
+        documents: document.getElementById('documents').checked
+    };
+
+    const response = await fetch('/photo-gallery/send-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            buyerId,
+            propertyIds,
+            include
+        })
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+});
+
+</script>
+
+</body>
+
+</html>
