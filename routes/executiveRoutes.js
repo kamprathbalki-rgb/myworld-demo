@@ -1372,7 +1372,7 @@ if (
     }
 
     record.activityLog.push({
-        action: type,
+        type: type,
         time: time
     })
 
