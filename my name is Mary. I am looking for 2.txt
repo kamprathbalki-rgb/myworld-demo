@@ -1,0 +1,84 @@
+my name is Mary. I am looking for 2 BHK. Location Alandi Devachi S.O with a budget of 90 and carpet area of 650
+
+myworld> db.properties.find({
+...     tenantId: ObjectId("6a4dd420f864976be508d248")
+... }).pretty()
+[
+  {
+    _id: ObjectId('6a615e8a7e0f54adbd905523'),
+    tenantId: ObjectId('6a4dd420f864976be508d248'),
+    projectName: 'Ram Nagar',
+    builderName: 'Nisarg',
+    transactionType: 'SALE',
+    builderContacts: [
+      {
+        role: 'Sales Head',
+        designation: 'Head Of Sales',
+        name: 'Kambrath',
+        mobile: '1221231231',
+        alternateMobile: '1331231230',
+        email: 'ram@gmail.com',
+        isPrimary: true,
+        _id: ObjectId('6a615e8a7e0f54adbd905524')
+      }
+    ],
+    propertyStatus: 'Available',
+    coverPhoto: '',
+    monthlyRent: 0,
+    securityDeposit: 0,
+    maintenanceCharges: 0,
+    leaseDurationMonths: 0,
+    askingPricePerSqFt: 0,
+    parkingType: [ 'Covered' ],
+    furnishedStatus: [ 'Unfurnished' ],
+    possessionStatus: 'Under Construction',
+    propertyMode: 'PROJECT',
+    projectType: [ 'Residential' ],
+    propertyType: [ 'Apartment' ],
+    projectStatus: 'Under Construction',
+    reraApproved: 'Yes',
+    city: 'Pune',
+    direction: 'East',
+    propertyLocation: 'Alandi Devachi S.O',
+    divisionName: 'Pune Moffusil Division',
+    pincode: '412105',
+    district: 'Pune',
+    stateName: 'Maharashtra',
+    locationLandmark: 'NDA Road',
+    googlePin: '',
+    location: { type: 'Point', coordinates: [ 0, 0 ] },
+    numberOfTowers: 1,
+    towers: [
+      {
+        towerName: 'Alandi Towers',
+        numberOfFloors: 20,
+        towerStatus: 'Under Construction',
+        inventoryStatus: 'Available',
+        possessionMonth: 'December',
+        possessionYear: 2028,
+        _id: ObjectId('6a615e8a7e0f54adbd905525')
+      }
+    ],
+    configurations: [
+      {
+        flatType: '2 BHK',
+        carpetArea: 650,
+        quotedPrice: 100,
+        closingPrice: 90,
+        furnishedStatus: 'Unfurnished',
+        parkingType: [ 'Covered' ],
+        possessionStatus: [ 'Under Construction' ],
+        towerName: 'Alandi Towers',
+        availableUnits: 120,
+        _id: ObjectId('6a615e8a7e0f54adbd905526')
+      }
+    ],
+    amenities: [],
+    usp: '',
+    notes: '',
+    images: [],
+    createdAt: ISODate('2026-07-23T00:21:30.447Z'),
+    __v: 0
+  }
+]
+myworld>

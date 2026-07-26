@@ -554,7 +554,6 @@ router.get('/login', (req, res) => {
     res.render('executiveLogin')
 })
 
-
 router.post('/login', async (req, res) => {
 
 const executive = await Executive.findOne({

@@ -19,6 +19,9 @@ const Visit = require('../models/Visit')
 const WhatsappMessage = require('../models/WhatsappMessage')
 const TenantWhatsapp = require('../models/TenantWhatsapp')
 
+const generateTenantCode =
+require('../utils/generateTenantCode')
+
 router.get(
 '/saas/dashboard',
 async (req,res)=>{
@@ -889,5 +892,19 @@ res.send(
 )
 
 })
+
+router.get(
+    '/saas/generate-company-code',
+    async (req, res) => {
+
+        const tenantCode =
+        await generateTenantCode()
+
+        res.json({
+            tenantCode
+        })
+
+    }
+)
 
 module.exports = router

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Chatbot Dashboard</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    margin:40px;
+}
+
+.card{
+    display:inline-block;
+    margin-right:20px;
+    padding:20px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    min-width:180px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:30px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:left;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2><%= tenant.companyName %> Chatbot Dashboard</h2>
+
+<div class="card">
+<h3>Total Messages</h3>
+<h1><%= stats.totalMessages %></h1>
+</div>
+
+<div class="card">
+<h3>User Messages</h3>
+<h1><%= stats.userMessages %></h1>
+</div>
+
+<div class="card">
+<h3>Bot Messages</h3>
+<h1><%= stats.botMessages %></h1>
+</div>
+
+<h2>Recent Leads</h2>
+
+<table>
+
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Status</th>
+</tr>
+
+<% leads.forEach(lead=>{ %>
+
+<tr>
+
+<td><%= lead.name %></td>
+<td><%= lead.phone %></td>
+<td><%= lead.email %></td>
+<td><%= lead.status %></td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+
+</html>

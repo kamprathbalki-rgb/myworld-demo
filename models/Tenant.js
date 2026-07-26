@@ -10,6 +10,27 @@ const tenantSchema = new mongoose.Schema({
 
     adminEmail:String,
 
+name:String,
+
+email:String,
+
+adminName:String,
+
+adminEmail:String,
+
+tenantCode: {
+    type: String,
+    unique: true,
+    required: true,
+    uppercase: true,
+    trim: true
+},
+
+stateName:{
+    type:String,
+    required:true
+},
+
     stateName:{
         type:String,
         required:true
@@ -52,6 +73,26 @@ const tenantSchema = new mongoose.Schema({
         ],
         default:'Real Estate Agency'
     },
+
+aiEnabled: {
+    type: Boolean,
+    default: true
+},
+
+aiRole: {
+    type: String,
+    default: "You are the official AI assistant."
+},
+
+aiInstructions: {
+    type: String,
+    default: ""
+},
+
+businessDescription: {
+    type: String,
+    default: ""
+},
 
     credits:{
         type:Number,

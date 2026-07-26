@@ -283,6 +283,27 @@ button[type="submit"]:hover{
 <input type="text" name="name" required>
 <br><br>
 
+<label>Company Code</label><br>
+
+<div style="display:flex;gap:10px;">
+    <input
+        type="text"
+        id="tenantCode"
+        name="tenantCode"
+        readonly
+        required
+    >
+
+    <button
+        type="button"
+        id="generateCodeBtn"
+    >
+        Generate
+    </button>
+</div>
+
+<br><br>
+
 <label>Email</label>
 <br>
 <input type="email" name="email" required>
@@ -463,6 +484,22 @@ Select District
 </body>
 
 <script>
+
+document
+.getElementById('generateCodeBtn')
+.addEventListener('click', async function () {
+
+    const response = await fetch(
+        '/saas/generate-company-code'
+    )
+
+    const data = await response.json()
+
+    document.getElementById(
+        'tenantCode'
+    ).value = data.tenantCode
+
+})
 
 const states =
 <%- JSON.stringify(states) %>

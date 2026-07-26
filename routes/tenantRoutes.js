@@ -11,6 +11,9 @@ require('../data/states-and-districts.json')
 
 const {sendEmail} = require('../utils/emailService')
 
+const generateTenantCode =
+require('../utils/generateTenantCode')
+
 router.get('/register-company',(req,res)=>{
 
 res.render(
@@ -46,6 +49,9 @@ endDate.setMonth(
     Number(req.body.subscriptionMonths)
 )
 
+const tenantCode =
+req.body.tenantCode
+
 const tenant = new Tenant({
 
     name: req.body.name,
@@ -55,6 +61,8 @@ const tenant = new Tenant({
     adminName: req.body.adminName,
 
     adminEmail: req.body.adminEmail,
+
+    tenantCode,
 
     stateName: req.body.stateName,
 
@@ -77,6 +85,8 @@ const tenant = new Tenant({
 })
 
 await tenant.save()
+
+console.log('Generated tenant code:', tenant.tenantCode)
 
 const hashed =
 await bcrypt.hash(

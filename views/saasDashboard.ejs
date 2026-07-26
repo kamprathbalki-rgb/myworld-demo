@@ -761,6 +761,7 @@ tr:hover td{
     </a>
 
 
+
     <a
         href="/saas/subscription-history"
         class="nav-item"
@@ -1411,7 +1412,9 @@ tr:hover td{
 <tr>
 
 <th>Company</th>
-
+<th>URL Slug</th>
+<th>Tenant Code</th>
+<th>Public URL</th>
 <th>Company Email</th>
 
 <th>Admin</th>
@@ -1545,6 +1548,21 @@ else if(daysRemaining <= 30){
 
     </div>
 
+</td>
+
+
+<td>
+    <%= t.name.toLowerCase().replace(/\s+/g,'') %>
+</td>
+
+<td>
+    <%= t.tenantCode %>
+</td>
+
+<td>
+    <a href="/<%= t.name.toLowerCase().replace(/\s+/g,'') %>.<%= t.tenantCode %>" target="_blank">
+        /<%= t.name.toLowerCase().replace(/\s+/g,'') %>.<%= t.tenantCode %>
+    </a>
 </td>
 
 

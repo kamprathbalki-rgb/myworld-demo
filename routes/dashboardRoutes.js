@@ -13,6 +13,7 @@ const groupLeadAging = require('../services/leadAgingService');
 const calculateProductiveHours = require('../services/productiveHoursService');
 const PropertyMedia = require('../models/PropertyMedia')
 const mediaLimits = require('../data/propertyMediaLimits')
+const ChatLead = require("../models/ChatLead");
 
 router.get('/main', isLoggedIn, isAdmin, async (req,res)=>{
 
@@ -190,6 +191,9 @@ const tokenProperties =
         propertyStatus: 'Token Received'
     })
 
+const chatLeadCount = await ChatLead.countDocuments({
+    tenantId: req.session.tenantId
+});
 
 res.render('dashboard',{
 
@@ -213,7 +217,8 @@ closedValue[0]?.total || 0,
 tokenProperties,
 lostValue:
 lostValue[0]?.total || 0,
-leadGroups
+leadGroups,
+chatLeadCount
 
 })
 

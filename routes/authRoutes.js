@@ -23,10 +23,10 @@ require('../models/OfficeLocation')
 
 
 
-router.get('/login',(req,res)=>{
-
-    res.render('login')
-
+router.get('/login', (req, res) => {
+    res.render('login', {
+        loginAction: '/login'
+    })
 })
 
 router.post('/login', async (req,res)=>{

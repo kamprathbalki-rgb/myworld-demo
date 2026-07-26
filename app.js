@@ -22,8 +22,11 @@ const learningCorrectionRoutes = require('./routes/learningCorrectionRoutes');
 const officeLocationRoutes = require('./routes/officeLocationRoutes')
 const propertyMediaRoutes = require("./routes/propertyMediaRoutes");
 const photoGalleryRoutes = require("./routes/photoGalleryRoutes");
-
-
+const websiteRoutes = require('./routes/websiteRoutes');
+const chatbotRoutes = require("./routes/chatbotRoutes");
+const chatbotAdminRoutes = require("./routes/chatbotAdminRoutes");
+const chatSessionMonitor = require("./services/chatSessionMonitor");
+const chatLeadRoutes = require("./routes/chatLeadRoutes");
 
 connectDB()
 
@@ -63,6 +66,7 @@ cookie:{ maxAge: 30 * 60 * 1000 }
 app.set('view engine','ejs')
 app.use(express.static('public'))
 
+
 const authRoutes = require('./routes/authRoutes')
 const propertyRoutes = require('./routes/propertyRoutes')
 const buyerRoutes = require('./routes/buyerRoutes')
@@ -99,6 +103,10 @@ app.use('/learning-correction',learningCorrectionRoutes);
 app.use('/admin',officeLocationRoutes)
 app.use("/property-media", propertyMediaRoutes);
 app.use("/photo-gallery", photoGalleryRoutes);
+app.use("/", chatbotRoutes);
+app.use("/", chatbotAdminRoutes);
+app.use(chatLeadRoutes);
+app.use('/', websiteRoutes)
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 
@@ -173,3 +181,18 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, '0.0.0.0', () => {
     console.log("Server running on port " + PORT)
 })
+
+setInterval(async () => {
+
+    try {
+
+        await chatSessionMonitor.checkIdleSessions();
+
+    } catch (err) {
+
+        console.error("Chat session monitor:", err);
+
+    }
+
+}, 60000);
+

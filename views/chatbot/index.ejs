@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot</title>
+
+    <link rel="stylesheet" href="/chatbot/css/chatbot.css">
+</head>
+<body>
+
+<div class="chat-container">
+
+<div class="chat-header">
+    <h2>🤖 AI Property Assistant</h2>
+    <small>Online • Ask me about properties, pricing, amenities, and site visits.</small>
+</div>
+
+    <div id="messages"></div>
+
+    <div class="input-area">
+        <input
+            type="text"
+            id="message"
+            placeholder="Type your message..."
+            autocomplete="off"
+        >
+
+        <button id="send">Send</button>
+    </div>
+
+</div>
+
+<script>
+    const tenant = "<%= tenant %>";
+</script>
+
+<script src="/chatbot/js/chatbot.js"></script>
+
+</body>
+</html>

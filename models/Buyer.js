@@ -131,6 +131,63 @@ lostDate:{
     type:Date
 },
 
+emailVerified: {
+    type: Boolean,
+    default: false
+},
+
+mobileVerified: {
+    type: Boolean,
+    default: false
+},
+
+leadOrigin: {
+    type: String,
+    default: "Manual"
+},
+
+createdByRole: {
+    type: String,
+    enum: [
+        "Admin",
+        "Executive",
+        "PreSales",
+        "System"
+    ],
+    default: "Admin"
+},
+
+createdById: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null
+},
+
+createdByName: {
+    type: String,
+    default: ""
+},
+
+currentOwnerRole: {
+    type: String,
+    enum: [
+        "PreSales",
+        "Executive",
+        "PostSales"
+    ],
+    default: "Executive"
+},
+
+chatSessionId: {
+    type: String,
+    default: ""
+},
+
+chatLeadId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ChatLead",
+    default: null
+},
+
 createdAt: {
     type: Date,
     default: Date.now

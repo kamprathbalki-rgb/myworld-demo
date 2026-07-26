@@ -207,7 +207,7 @@ button:hover{
 
 <% } %>
 
-<form method="POST" action="/login">
+<form method="POST" action="<%= loginAction || '/login' %>">
 
 <label>Email</label>
 
