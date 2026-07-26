@@ -37,7 +37,7 @@ exports.search = async (tenantId, lead = {}) => {
             $elemMatch: {
                 flatType: lead.configuration,
                 ...(lead.budget && {
-                    closingPrice: {
+                    quotedPrice: {
                         $lte: Number(lead.budget)
                     }
                 }),
@@ -89,7 +89,7 @@ return properties.map(property => {
 
             if (
                 lead.budget &&
-                Number(config.closingPrice) > Number(lead.budget)
+                Number(config.quotedPrice) > Number(lead.budget)
             )
                 return false;
 
@@ -134,7 +134,7 @@ Location: ${p.propertyLocation}, ${p.city}
 Type: ${p.propertyType.join(", ")}
 Configuration: ${c.flatType}
 Carpet Area: ${c.carpetArea}
-Price: ${c.closingPrice}
+Price: ${c.quotedPrice}
 Status: ${p.propertyStatus}`;
 
     }).join("\n\n");

@@ -1,28 +1,3 @@
-exports.validateMobile = (mobile) => {
-
-    if (!mobile) {
-        return {
-            valid: false,
-            reason: "missing"
-        };
-    }
-
-    const cleaned = mobile.replace(/\D/g, "");
-
-    if (cleaned.length !== 10) {
-        return {
-            valid: false,
-            reason: "invalid"
-        };
-    }
-
-    return {
-        valid: true,
-        value: cleaned
-    };
-
-};
-
 exports.validateEmail = (email) => {
 
     if (!email) {
@@ -45,19 +20,6 @@ exports.validateEmail = (email) => {
         valid: true,
         value: email.trim().toLowerCase()
     };
-
-};
-
-exports.needsVerification = (lead) => {
-
-    return (
-        lead.mobile &&
-        lead.email &&
-        (
-            !lead.mobileVerified ||
-            !lead.emailVerified
-        )
-    );
 
 };
 
@@ -120,19 +82,21 @@ exports.nextQuestion = (missing, lead = {}) => {
         return "name";
     }
 
-    if (
-        asked.has("name") &&
-        !asked.has("mobile")
-    ) {
-        return "mobile";
-    }
+if (
+    asked.has("name") &&
+    !asked.has("mobile") &&
+    !lead.mobileDeclined
+) {
+    return "mobile";
+}
 
-    if (
-        asked.has("name") &&
-        !asked.has("email")
-    ) {
-        return "email";
-    }
+if (
+    asked.has("name") &&
+    !asked.has("email") &&
+    !lead.emailDeclined
+) {
+    return "email";
+}
 
     return missing[0];
 

@@ -98,6 +98,25 @@ leadOrigin: {
     default: "AIChatBot"
 },
 
+mobileValidationAttempts: {
+    type: Number,
+    default: 0
+},
+
+emailValidationAttempts: {
+    type: Number,
+    default: 0
+},
+
+awaitingMobileConfirmation: {
+    type: Boolean,
+    default: false
+},
+
+awaitingEmailConfirmation: {
+    type: Boolean,
+    default: false
+},
     status: {
         type: String,
         default: "Open"

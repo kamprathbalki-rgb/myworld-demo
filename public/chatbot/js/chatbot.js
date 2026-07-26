@@ -2,6 +2,24 @@ const messages = document.getElementById("messages");
 const input = document.getElementById("message");
 const send = document.getElementById("send");
 
+const newChat = document.getElementById("newChat");
+const endSession = document.getElementById("endSession");
+const sessionStatus = document.getElementById("sessionStatus");
+const chatTimer = document.getElementById("chatTimer");
+
+let timer = 0;
+
+setInterval(() => {
+
+    timer++;
+
+    const mins = String(Math.floor(timer / 60)).padStart(2, "0");
+    const secs = String(timer % 60).padStart(2, "0");
+
+    chatTimer.textContent = `${mins}:${secs}`;
+
+}, 1000);
+
 let sessionId = sessionStorage.getItem("chatSessionId");
 
 if (!sessionId) {
@@ -12,7 +30,7 @@ if (!sessionId) {
 function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "message " + type;
-    div.textContent = text;
+    div.innerHTML = text.replace(/\n/g, "<br>");
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
 }
@@ -26,21 +44,7 @@ const greeting =
             ? "Good Afternoon"
             : "Good Evening";
 
-const date = now.toLocaleDateString("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-});
-
-const time = now.toLocaleTimeString("en-IN", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true
-});
-
-addMessage(`${greeting}! ${date}
-${time}`, "bot");
+addMessage(`${greeting}!`, "bot");
 
 setTimeout(() => {
     addMessage(
@@ -116,3 +120,90 @@ input.addEventListener("keypress", function(e) {
     }
 });
 
+endSession.addEventListener("click", async () => {
+
+    if (!confirm("End this chat session?"))
+        return;
+
+    const response = await fetch(`/${tenant}/chat/end`, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            sessionId
+        })
+
+    });
+
+    const data = await response.json();
+
+    if (!data.success)
+        return;
+
+    input.disabled = true;
+    send.disabled = true;
+
+    endSession.disabled = true;
+    newChat.disabled = false;
+
+    sessionStatus.textContent = "🔴 Session Closed";
+
+    addMessage(
+        "Thank you for chatting with us. Have a great day!",
+        "bot"
+    );
+
+});
+
+newChat.addEventListener("click", async () => {
+
+    sessionId = crypto.randomUUID();
+
+    sessionStorage.setItem("chatSessionId", sessionId);
+
+    messages.innerHTML = "";
+
+    input.disabled = false;
+    send.disabled = false;
+
+    endSession.disabled = false;
+    newChat.disabled = true;
+
+    sessionStatus.textContent = "🟢 Session Active";
+
+    timer = 0;
+    chatTimer.textContent = "00:00";
+
+    addMessage("Hello! I'm your AI Property Assistant.", "bot");
+    addMessage("How can I help you today?", "bot");
+
+});
+
+function updateHeaderDateTime() {
+
+    const now = new Date();
+
+    document.getElementById("chatDate").textContent =
+        now.toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
+
+    document.getElementById("chatTime").textContent =
+        now.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
+
+}
+
+updateHeaderDateTime();
+
+setInterval(updateHeaderDateTime, 1000);

@@ -70,7 +70,11 @@ const fields = [
     "emailVerified",
     "mobileVerified",
     "mobileDeclined",
-    "emailDeclined"
+    "emailDeclined",
+    "mobileValidationAttempts",
+    "emailValidationAttempts",
+    "awaitingMobileConfirmation",
+    "awaitingEmailConfirmation"
 ];
 
         for (const field of fields) {

@@ -1,0 +1,22 @@
+const bcrypt = require("bcrypt");
+bcrypt.hash("Elite24@123", 10).then(console.log);
+
+$2b$10$kq6cnRBqA.2tM9Kv4y0bHu18yW8E4scaZ809IlDSeGuo2wwVKMkMy
+
+db.users.updateOne(
+    { email: "sales.elite24@gmail.com" },
+    {
+        $set: {
+            password: "$2b$10$kq6cnRBqA.2tM9Kv4y0bHu18yW8E4scaZ809IlDSeGuo2wwVKMkMy"
+        }
+    }
+)
+
+https://myworld-demo-production.up.railway.app/chatbot.EL24/chat
+
+Give changes in exactly this format:
+File name
+Find this exact code
+Replace/Delete/Add
+Expected result
+No more references to multiple places or generic instructions.

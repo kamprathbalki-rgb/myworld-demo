@@ -1,6 +1,9 @@
 const leadExtractionService = require("./leadExtractionService");
 const leadValidationService = require("./leadValidationService");
 const leadService = require("./leadService");
+const ChatSession = require("../models/ChatSession");
+const emailVerificationService = require("./emailVerificationService");
+const mobileVerificationService = require("./mobileVerificationService");
 
 exports.reply = async (
     tenantId,
@@ -14,8 +17,6 @@ let lead =
         tenantId,
         sessionId
     );
-
-const ChatSession = require("../models/ChatSession");
 
 const chatSession = await ChatSession.findOne({
     tenantId,
@@ -32,80 +33,29 @@ if (chatSession && chatSession.status === "Closed") {
         lead = {};
     }
 
-const emailVerificationService = require("./emailVerificationService");
 
 if (
-    lead.verificationRequestedAt &&
-    /^[A-Z1-9]{4}$/i.test(message.trim())
+    emailVerificationService.isVerificationCode(
+        lead,
+        message
+    )
 ) {
 
-    const verified =
-        await emailVerificationService.verify(
-            tenantId,
-            sessionId,
-            message.trim()
-        );
-
-    if (verified) {
-
-        lead.emailVerified = true;
-        lead.verificationRequestedAt = null;
-        lead.emailVerificationAttempts = 0;
-
-        await leadService.save(
-            tenantId,
-            sessionId,
-            lead
-        );
-
-return {
-    handled: false,
-    lead,
-    sendVerification: false,
-    readyForPropertySearch: true,
-    nextQuestion: null,
-    verificationJustSucceeded: true
-};
-
-    }
-
-    lead.emailVerificationAttempts =
-        (lead.emailVerificationAttempts || 0) + 1;
-
-    await leadService.save(
+const verification =
+    await emailVerificationService.handleVerification(
         tenantId,
         sessionId,
-        lead
+        lead,
+        message
     );
 
-    if (lead.emailVerificationAttempts < 2) {
+if (verification.handled) {
 
-        return {
-            handled: true,
-            waitingForVerification: true,
-            reply:
-                "The verification code is incorrect. Please try again. You have one more attempt remaining."
-        };
+    return verification;
 
-    }
+}
 
-lead.verificationRequestedAt = null;
-lead.emailVerificationAttempts = 0;
-lead.emailVerified = false;
-delete lead.email;
-
-await leadService.save(
-    tenantId,
-    sessionId,
-    lead
-);
-
-    return {
-        handled: true,
-        verificationFailed: true,
-        reply:
-            "The verification code was incorrect twice. For security, a new verification email is required. Please provide your email address again."
-    };
+lead = verification.lead;
 
 }
 
@@ -167,26 +117,21 @@ if (extracted.emailIntent === "PROVIDED") {
     lead.emailDeclined = false;
 }
 
-    // Validate mobile
-if (lead.mobile) {
+// Validate mobile
+const mobileVerification =
+    await mobileVerificationService.process(
+        tenantId,
+        sessionId,
+        lead
+    );
 
-    const result =
-        leadValidationService.validateMobile(
-            lead.mobile
-        );
+if (mobileVerification.handled) {
 
-    if (!result.valid) {
-
-        return {
-            handled: true,
-            reply: "It looks like the mobile number you entered has fewer than 10 digits. It may just be a typing mistake. Could you please confirm your 10-digit mobile number?"
-        };
-
-    }
-
-    lead.mobile = result.value;
+    return mobileVerification;
 
 }
+
+lead = mobileVerification.lead;
 
 // Validate email
 if (lead.email) {
@@ -200,7 +145,7 @@ if (lead.email) {
 
         return {
             handled: true,
-            reply: "That email address doesn't look valid. Could you enter it again?"
+            reply: "That email address doesn't look valid. Could you please enter a valid email address?"
         };
 
     }
@@ -228,8 +173,6 @@ const result = {
 
     lead,
 
-    sendVerification: false,
-
     readyForPropertySearch: false,
 
     nextQuestion: null
@@ -238,12 +181,12 @@ const result = {
 
 // Verification required
 if (
-    leadValidationService.needsVerification(
+    emailVerificationService.requiresVerification(
         lead
     )
 ) {
 
-    result.sendVerification = true;
+    result.readyForPropertySearch = false;
 
 }
 

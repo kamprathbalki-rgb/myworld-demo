@@ -1,5 +1,7 @@
 const chatbotService = require("../services/chatbotService");
 const ChatMessage = require("../models/ChatMessage");
+const ChatSession = require("../models/ChatSession");
+
 
 exports.showChat = (req, res) => {
     res.render("chatbot/index", {
@@ -36,5 +38,21 @@ exports.getMessages = async (req, res) => {
     res.json({
         messages
     });
+
+};
+
+exports.endSession = async (req, res) => {
+
+    const { sessionId } = req.body;
+
+    await ChatSession.findOneAndUpdate(
+        { sessionId },
+        {
+            status: "Closed",
+            endedAt: new Date()
+        }
+    );
+
+    res.json({ success: true });
 
 };

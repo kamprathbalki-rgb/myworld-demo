@@ -12,22 +12,37 @@
 <div class="chat-container">
 
 <div class="chat-header">
-    <h2>🤖 AI Property Assistant</h2>
-    <small>Online • Ask me about properties, pricing, amenities, and site visits.</small>
-</div>
+<h2>🤖 AI Property Assistant</h2>
+
+<small class="chat-datetime">
+
+    <span id="chatDate"></span>
+
+    <span class="separator">•</span>
+
+    <span id="chatTime"></span>
+
+    <span class="separator">•</span>
+
+    <span id="sessionStatus">🟢 Chat Active</span>
+
+    <button id="endSession">🛑 End Chat</button>
+
+    <button id="newChat" disabled>🆕 Start New Chat</button>
+
+</small></div>
 
     <div id="messages"></div>
 
-    <div class="input-area">
-        <input
-            type="text"
-            id="message"
-            placeholder="Type your message..."
-            autocomplete="off"
-        >
+<div class="input-area">
+<textarea
+    id="message"
+    rows="5"
+    placeholder="Describe your property requirement..."
+    autocomplete="off"></textarea>
 
-        <button id="send">Send</button>
-    </div>
+    <button id="send">Send</button>
+</div>
 
 </div>
 

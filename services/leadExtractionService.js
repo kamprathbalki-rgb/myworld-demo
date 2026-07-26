@@ -74,6 +74,8 @@ Examples
 
 Contact Intent
 
+Contact Intent
+
 For mobileIntent return one of:
 
 "PROVIDED"
@@ -81,22 +83,31 @@ For mobileIntent return one of:
 "DECLINED"
 "UNKNOWN"
 
-Examples
+For emailIntent return one of:
 
-"My number is 9876543210"
+"PROVIDED"
+"LATER"
+"DECLINED"
+"UNKNOWN"
 
-mobile: "9876543210"
-mobileIntent: "PROVIDED"
+Only set mobileIntent when the user's message explicitly refers to a mobile number, phone number, contact number or WhatsApp number.
 
-"I'll share later"
+Only set emailIntent when the user's message explicitly refers to an email address.
 
-mobileIntent: "LATER"
+General statements such as:
+- "No other preference"
+- "Nothing else"
+- "That's all"
+- "No"
+- "Okay"
+- "Fine"
 
-"I don't want to share my number"
+must return:
 
-mobileIntent: "DECLINED"
+mobileIntent: "UNKNOWN"
+emailIntent: "UNKNOWN"
 
-Similarly return emailIntent using the same values.
+Do not interpret generic replies as declining or postponing contact information.
 
 Property Mapping
 
@@ -119,16 +130,20 @@ If the user says "Apartment":
     "propertyType":"Apartment"
 }
 
-If the user says "2 BHK":
+"If the user says \"2 BHK\":"
 
 {
     "propertyCategory":"Residential",
     "configuration":"2 BHK"
 }
 
-Do NOT set propertyType unless the user explicitly says Apartment, Flat, Villa, Plot, Office, Shop, etc.
+If the user later says "Apartment", "Flat", "Villa", "Plot", "Office", "Shop", etc.,
+populate propertyType from that message.
 
 Do NOT infer Apartment from 1 BHK, 2 BHK, 3 BHK or 4 BHK.
+
+A later message may provide information missing from earlier messages.
+Always extract newly supplied information.
 
 If the user mentions
 
