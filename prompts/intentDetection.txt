@@ -1,0 +1,22 @@
+Classify the user's intent.
+
+Return JSON only.
+
+{
+    "intent":"",
+    "confidence":0
+}
+
+Possible intents:
+
+GENERAL
+FAQ
+KNOWLEDGE
+CHECK_AVAILABILITY
+PROPERTY_SEARCH
+PROPERTY_DETAILS
+BOOK_SITE_VISIT
+CONTACT_REQUEST
+LEAD
+GREETING
+GOODBYE

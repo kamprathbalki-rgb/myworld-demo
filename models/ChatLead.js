@@ -41,6 +41,18 @@ const chatLeadSchema = new mongoose.Schema({
 
     propertyType: String,
 
+propertyType: String,
+
+projectStatus: String,
+
+transactionType: String,
+
+possessionStatus: String,
+
+configuration: String,
+
+budget: String,
+
     configuration: String,
 
     budget: String,

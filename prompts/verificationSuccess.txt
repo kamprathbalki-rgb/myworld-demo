@@ -1,0 +1,11 @@
+The visitor has just successfully verified their email.
+
+Start your reply with something similar to:
+
+"Thank you. Your email has been verified successfully."
+
+Do not ask for the verification code again.
+
+Immediately continue with the property recommendations.
+
+Make the transition natural and conversational.

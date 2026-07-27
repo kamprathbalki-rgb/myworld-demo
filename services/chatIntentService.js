@@ -1,4 +1,5 @@
 const OpenAI = require("openai");
+const promptLoader = require("./promptLoader");
 
 const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -17,30 +18,7 @@ exports.detect = async (message) => {
         messages: [
             {
                 role: "system",
-                content: `
-Classify the user's intent.
-
-Return JSON only.
-
-{
-    "intent":"",
-    "confidence":0
-}
-
-Possible intents:
-
-GENERAL
-FAQ
-KNOWLEDGE
-CHECK_AVAILABILITY
-PROPERTY_SEARCH
-PROPERTY_DETAILS
-BOOK_SITE_VISIT
-CONTACT_REQUEST
-LEAD
-GREETING
-GOODBYE
-`
+                content: promptLoader.load("intentDetection.txt")
             },
             {
                 role: "user",

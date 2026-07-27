@@ -1,6 +1,10 @@
 const Property = require("../models/Property");
+const normalizeBudget = require("../utils/budgetNormalizer");
+
 
 exports.search = async (tenantId, lead = {}) => {
+
+const budget = normalizeBudget(lead.budget);
 
     const query = {
         tenantId,
@@ -11,9 +15,24 @@ exports.search = async (tenantId, lead = {}) => {
         query.projectType = lead.propertyCategory;
     }
 
-    if (lead.propertyType) {
-        query.propertyType = lead.propertyType;
-    }
+if (lead.propertyType) {
+    query.propertyType = {
+        $regex: `^${lead.propertyType}$`,
+        $options: "i"
+    };
+}
+
+if (lead.projectStatus) {
+    query.projectStatus = lead.projectStatus;
+}
+
+if (lead.possessionStatus) {
+    query.possessionStatus = lead.possessionStatus;
+}
+
+if (lead.transactionType) {
+    query.transactionType = lead.transactionType;
+}
 
     if (lead.location) {
         query.$or = [
@@ -32,25 +51,33 @@ exports.search = async (tenantId, lead = {}) => {
         ];
     }
 
-    if (lead.configuration) {
-        query.configurations = {
-            $elemMatch: {
-                flatType: lead.configuration,
-                ...(lead.budget && {
-                    quotedPrice: {
-                        $lte: Number(lead.budget)
-                    }
-                }),
-                ...(lead.carpetArea && {
-                    carpetArea: Number(lead.carpetArea)
-                })
-            }
-        };
-    }
+if (lead.configuration) {
+
+    query.configurations = {
+        $elemMatch: {
+            flatType: lead.configuration,
+
+            ...(budget !== null && {
+                quotedPrice: {
+                    $lte: budget + 5
+                }
+            }),
+
+            ...(lead.carpetArea && {
+                carpetArea: Number(lead.carpetArea)
+            })
+        }
+    };
+
+}
 
 console.log("\n========== PROPERTY SEARCH QUERY ==========");
 console.dir(query, { depth: null });
 console.log("===========================================");
+
+console.log("lead.propertyType =", lead.propertyType);
+console.log("lead.projectStatus =", lead.projectStatus);
+console.log("lead.transactionType =", lead.transactionType);
 
 const properties = await Property.find(query).lean();
 
@@ -87,11 +114,11 @@ return properties.map(property => {
             if (config.flatType !== lead.configuration)
                 return false;
 
-            if (
-                lead.budget &&
-                Number(config.quotedPrice) > Number(lead.budget)
-            )
-                return false;
+if (
+    budget !== null &&
+    Number(config.quotedPrice) > budget + 5
+)
+    return false;
 
             if (
                 lead.carpetArea &&
