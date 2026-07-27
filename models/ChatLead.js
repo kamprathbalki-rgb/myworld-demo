@@ -33,13 +33,11 @@ const chatLeadSchema = new mongoose.Schema({
     verificationRequestedAt: Date,
 
     // Property Requirement
-    propertyCategory: String,
+propertyCategory: String,
 
-    purpose: String,
+purpose: String,
 
-    location: String,
-
-    propertyType: String,
+location: String,
 
 propertyType: String,
 
@@ -53,11 +51,7 @@ configuration: String,
 
 budget: String,
 
-    configuration: String,
-
-    budget: String,
-
-    timeline: String,
+timeline: String,
 
     // Conversation
     guestMode: {
