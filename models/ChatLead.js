@@ -49,6 +49,8 @@ possessionStatus: String,
 
 configuration: String,
 
+carpetArea: Number,
+
 budget: String,
 
 timeline: String,

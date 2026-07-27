@@ -66,6 +66,12 @@ const fields = [
     "configuration",
     "budget",
     "timeline",
+
+    "projectStatus",
+    "transactionType",
+    "carpetArea",
+    "possessionStatus",
+
     "verificationRequestedAt",
     "emailVerified",
     "mobileVerified",

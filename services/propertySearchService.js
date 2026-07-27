@@ -63,9 +63,12 @@ if (lead.configuration) {
                 }
             }),
 
-            ...(lead.carpetArea && {
-                carpetArea: Number(lead.carpetArea)
-            })
+...(lead.carpetArea && {
+    carpetArea: {
+        $gte: Math.floor(Number(lead.carpetArea) * 0.90),
+        $lte: Math.ceil(Number(lead.carpetArea) * 1.20)
+    }
+})
         }
     };
 
@@ -120,11 +123,21 @@ if (
 )
     return false;
 
-            if (
-                lead.carpetArea &&
-                Number(config.carpetArea) !== Number(lead.carpetArea)
-            )
-                return false;
+if (lead.carpetArea) {
+
+    const minArea =
+        Math.floor(Number(lead.carpetArea) * 0.90);
+
+    const maxArea =
+        Math.ceil(Number(lead.carpetArea) * 1.20);
+
+    if (
+        Number(config.carpetArea) < minArea ||
+        Number(config.carpetArea) > maxArea
+    ) {
+        return false;
+    }
+}
 
             return true;
 
