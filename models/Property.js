@@ -126,6 +126,8 @@ furnishedStatus: {
 
 availableFrom: Date,
 
+flatNumber: String,
+
     propertyMode: {
         type: String,
         enum: ['PROJECT', 'SINGLE'],
