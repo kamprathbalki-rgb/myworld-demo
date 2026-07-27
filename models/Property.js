@@ -124,6 +124,8 @@ furnishedStatus: {
 
     possessionStatus: String,
 
+availableFrom: Date,
+
     propertyMode: {
         type: String,
         enum: ['PROJECT', 'SINGLE'],
