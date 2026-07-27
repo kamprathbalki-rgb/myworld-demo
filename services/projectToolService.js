@@ -84,7 +84,7 @@ Location: ${p.location}
 
     return {
         handled: true,
-        response: answer;
+        response: answer
 
 }
 

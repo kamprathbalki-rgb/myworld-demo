@@ -327,6 +327,38 @@ Examples
   "propertyType":"Plot"
 }
 
+Budget Extraction
+
+If the current user message contains only a numeric value, interpret it as the budget.
+
+If the current message contains only a number with optional decimal point
+(e.g. 90, 125, 370, 90.5),
+and no other extractable information,
+return it as the budget.
+
+Examples:
+
+User:
+370
+
+Return:
+
+{
+  "budget": "370"
+}
+
+User:
+125
+
+Return:
+
+{
+  "budget": "125"
+}
+
+Do not require the word "budget" to be present.
+When the message contains only a number, return it as the budget exactly as spoken.
+
 Other Rules
 
 - Extract mobile exactly as spoken.

@@ -84,7 +84,6 @@ const fields = [
 ];
 
         for (const field of fields) {
-for (const field of fields) {
     if (
         lead[field] !== undefined &&
         (
@@ -95,7 +94,6 @@ for (const field of fields) {
         existing[field] = lead[field];
     }
 }
-        }
 
         await existing.save();
         return existing;
@@ -126,6 +124,11 @@ for (const field of fields) {
         budget: lead.budget,
 
         timeline: lead.timeline,
+
+        projectStatus: lead.projectStatus,
+transactionType: lead.transactionType,
+possessionStatus: lead.possessionStatus,
+carpetArea: lead.carpetArea,
 
         guestMode: !lead.name
 
