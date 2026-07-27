@@ -75,10 +75,6 @@ builderContacts: [{
 
     singleQuotedPrice: Number,
 
-tokenAmountExpected: Number,
-
-tokenAmountReceived: Number,
-
 monthlyRent: {
     type: Number,
     default: 0
@@ -315,18 +311,6 @@ flatNumber: String,
                 ],
                 default: []
             },
-
-listingStatus: {
-    type: String,
-    enum: [
-        "Available",
-        "Hold",
-        "Not Available",
-        "Sold",
-        "Investor Only"
-    ],
-    default: "Available"
-},
 
             towerName: String,
 

@@ -693,6 +693,36 @@ class="form-control"
 </div>
 
 
+<div class="form-group">
+
+<label>
+Seller's Expected Token Amount (Lakhs)
+</label>
+
+<input
+type="number"
+step="0.01"
+name="tokenAmountExpected"
+class="form-control"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Token Received Amount (Lakhs)
+</label>
+
+<input
+type="number"
+step="0.01"
+name="tokenAmountReceived"
+class="form-control"
+>
+
+</div>
+
 </div>
 
 
@@ -809,38 +839,6 @@ Property Details
 <div class="form-group">
 
 <label>
-Property Status
-</label>
-
-<select
-name="propertyStatus"
-class="form-control"
->
-
-<option
-value="Available"
-selected
->
-Available
-</option>
-
-<option value="Blocked">
-Blocked
-</option>
-
-<option value="Sold">
-Sold
-</option>
-
-</select>
-
-</div>
-
-
-
-<div class="form-group">
-
-<label>
 Transaction Type
 </label>
 
@@ -866,6 +864,21 @@ Lease
 </div>
 
 
+
+<div class="form-group">
+
+<label>
+Flat Number
+</label>
+
+<input
+type="text"
+name="flatNumber"
+class="form-control"
+placeholder="e.g. A-1204"
+>
+
+</div>
 
 <div class="form-group">
 
@@ -1012,8 +1025,12 @@ name="propertyStatus"
 class="form-control"
 >
 
-<option value="Available">
+<option value="Available" selected>
 Available
+</option>
+
+<option value="Blocked">
+Blocked
 </option>
 
 <option value="Token Received">
@@ -1098,9 +1115,23 @@ Possession Soon
 
 </div>
 
+<div class="form-group">
+
+<label>
+Available From
+</label>
+
+<input
+type="date"
+name="availableFrom"
+class="form-control"
+>
+
+</div>
 
 
-<div class="form-group full-width">
+
+<div class="form-group">
 
 <label>
 Parking Type
@@ -1136,6 +1167,22 @@ Stilt
 </option>
 
 </select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Parking Count
+</label>
+
+<input
+type="number"
+name="parkingCount"
+class="form-control"
+min="0"
+value="0"
+>
 
 </div>
 

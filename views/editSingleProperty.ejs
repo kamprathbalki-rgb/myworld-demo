@@ -126,6 +126,91 @@ Lease
 
 <br><br>
 
+<label>Flat Number</label>
+<input
+    type="text"
+    name="flatNumber"
+    value="<%= property.flatNumber || '' %>">
+
+<br><br>
+
+<label>Floor Number</label>
+<input
+    type="number"
+    name="floorNumber"
+    value="<%= property.floorNumber || '' %>">
+
+<br><br>
+
+<label>Total Floors</label>
+<input
+    type="number"
+    name="totalFloors"
+    value="<%= property.totalFloors || '' %>">
+
+<br><br>
+
+<label>Facing</label>
+
+<select name="facing">
+    <option value="">Select Facing</option>
+    <option value="East" <%= property.facing === 'East' ? 'selected' : '' %>>East</option>
+    <option value="West" <%= property.facing === 'West' ? 'selected' : '' %>>West</option>
+    <option value="North" <%= property.facing === 'North' ? 'selected' : '' %>>North</option>
+    <option value="South" <%= property.facing === 'South' ? 'selected' : '' %>>South</option>
+</select>
+
+<br><br>
+
+
+<label>Lift Available</label>
+
+<select name="liftAvailable">
+    <option value="">Select</option>
+    <option value="Yes" <%= property.liftAvailable === 'Yes' ? 'selected' : '' %>>Yes</option>
+    <option value="No" <%= property.liftAvailable === 'No' ? 'selected' : '' %>>No</option>
+</select>
+
+<br><br>
+
+<label>Property Age (Years)</label>
+<input
+    type="number"
+    name="propertyAge"
+    min="0"
+    value="<%= property.propertyAge || '' %>">
+
+<br><br>
+
+<label>Property Status</label>
+
+<select name="propertyStatus">
+    <option value="Available" <%= property.propertyStatus === 'Available' ? 'selected' : '' %>>Available</option>
+    <option value="Blocked" <%= property.propertyStatus === 'Blocked' ? 'selected' : '' %>>Blocked</option>
+    <option value="Token Received" <%= property.propertyStatus === 'Token Received' ? 'selected' : '' %>>Token Received</option>
+    <option value="Agreement Done" <%= property.propertyStatus === 'Agreement Done' ? 'selected' : '' %>>Agreement Done</option>
+    <option value="Sold" <%= property.propertyStatus === 'Sold' ? 'selected' : '' %>>Sold</option>
+</select>
+
+<br><br>
+
+<label>Parking Count</label>
+<input
+    type="number"
+    name="parkingCount"
+    min="0"
+    value="<%= property.parkingCount || 0 %>">
+
+<br><br>
+
+<label>Available From</label>
+<input
+    type="date"
+    name="availableFrom"
+    value="<%= property.availableFrom ? new Date(property.availableFrom).toISOString().split('T')[0] : '' %>">
+
+<br><br>
+
 <label>Property Type</label>
 
 <select name="propertyType">
@@ -192,26 +277,123 @@ Lease
 
 <br><br>
 
-<label>Quoted Price</label>
-<input type="number"
-       name="singleQuotedPrice"
-       value="<%= property.singleQuotedPrice || '' %>">
+<label>Asking Price</label>
+<input
+    type="number"
+    name="askingPrice"
+    value="<%= property.singleQuotedPrice || '' %>">
 
 <br><br>
 
-<label>Closing Price</label>
-<input type="number"
-       name="singleClosingPrice"
-       value="<%= property.singleClosingPrice || '' %>">
+<label>Expected Closing Price</label>
+<input
+    type="number"
+    name="expectedClosingPrice"
+    value="<%= property.singleClosingPrice || '' %>">
 
 <br><br>
 
+<label>Seller's Expected Token Amount</label>
+<input
+    type="number"
+    name="tokenAmountExpected"
+    value="<%= property.tokenAmountExpected || '' %>">
+
+<br><br>
+
+<label>Token Received Amount</label>
+<input
+    type="number"
+    name="tokenAmountReceived"
+    value="<%= property.tokenAmountReceived || '' %>">
+
+<br><br>
+
+<label>Asking Price Per Sq Ft</label>
+<input
+    type="number"
+    value="<%= property.askingPricePerSqFt || '' %>"
+    readonly>
+
+<br><br>
 
 <label>Monthly Rent</label>
 <input
 type="number"
 name="monthlyRent"
 value="<%= property.monthlyRent || '' %>">
+
+<br><br>
+
+<label>Furnished Status</label>
+
+<select name="furnishedStatus">
+    <option value="">Select</option>
+    <option value="Unfurnished"
+        <%= property.furnishedStatus == 'Unfurnished' ? 'selected' : '' %>>
+        Unfurnished
+    </option>
+    <option value="Semi-Furnished"
+        <%= property.furnishedStatus == 'Semi-Furnished' ? 'selected' : '' %>>
+        Semi-Furnished
+    </option>
+    <option value="Fully Furnished"
+        <%= property.furnishedStatus == 'Fully Furnished' ? 'selected' : '' %>>
+        Fully Furnished
+    </option>
+</select>
+
+<br><br>
+
+<label>Parking Type</label>
+
+<select name="parkingType">
+    <option value="">Select</option>
+    <option value="Open"
+        <%= property.parkingType == 'Open' ? 'selected' : '' %>>
+        Open
+    </option>
+    <option value="Covered"
+        <%= property.parkingType == 'Covered' ? 'selected' : '' %>>
+        Covered
+    </option>
+    <option value="Basement"
+        <%= property.parkingType == 'Basement' ? 'selected' : '' %>>
+        Basement
+    </option>
+    <option value="Podium"
+        <%= property.parkingType == 'Podium' ? 'selected' : '' %>>
+        Podium
+    </option>
+    <option value="Stilt"
+        <%= property.parkingType == 'Stilt' ? 'selected' : '' %>>
+        Stilt
+    </option>
+</select>
+
+<br><br>
+
+<label>Possession Status</label>
+
+<select name="possessionStatus">
+    <option value="">Select</option>
+    <option value="Immediate"
+        <%= property.possessionStatus == 'Immediate' ? 'selected' : '' %>>
+        Immediate
+    </option>
+    <option value="Ready Possession"
+        <%= property.possessionStatus == 'Ready Possession' ? 'selected' : '' %>>
+        Ready Possession
+    </option>
+    <option value="Under Construction"
+        <%= property.possessionStatus == 'Under Construction' ? 'selected' : '' %>>
+        Under Construction
+    </option>
+    <option value="Possession Soon"
+        <%= property.possessionStatus == 'Possession Soon' ? 'selected' : '' %>>
+        Possession Soon
+    </option>
+</select>
 
 <br><br>
 
@@ -281,41 +463,6 @@ value="<%= location.officeName %>"
        value="<%= property.location && property.location.coordinates ? property.location.coordinates[1] : '' %>">
 
 <br><br>
-<br><br>
-
-
-<label>Parking Type</label>
-
-<select name="parkingType">
-    <option value="">Select</option>
-    <option <%= property.parkingType==='Open' ? 'selected' : '' %>>Open</option>
-    <option <%= property.parkingType==='Covered' ? 'selected' : '' %>>Covered</option>
-    <option <%= property.parkingType==='Basement' ? 'selected' : '' %>>Basement</option>
-    <option <%= property.parkingType==='Podium' ? 'selected' : '' %>>Podium</option>
-    <option <%= property.parkingType==='Stilt' ? 'selected' : '' %>>Stilt</option>
-</select>
-
-<br><br>
-
-<label>Furnished Status</label>
-
-<select name="furnishedStatus">
-<option <%= property.furnishedStatus==='Unfurnished' ? 'selected' : '' %>>Unfurnished</option>
-<option <%= property.furnishedStatus==='Semi-Furnished' ? 'selected' : '' %>>Semi-Furnished</option>
-<option <%= property.furnishedStatus==='Fully Furnished' ? 'selected' : '' %>>Fully Furnished</option>
-</select>
-
-<br><br>
-
-<label>Possession Status</label>
-
-<select name="possessionStatus">
-    <option value="">Select</option>
-    <option <%= property.possessionStatus==='Immediate' ? 'selected' : '' %>>Immediate</option>
-    <option <%= property.possessionStatus==='Ready Possession' ? 'selected' : '' %>>Ready Possession</option>
-    <option <%= property.possessionStatus==='Under Construction' ? 'selected' : '' %>>Under Construction</option>
-    <option <%= property.possessionStatus==='Possession Soon' ? 'selected' : '' %>>Possession Soon</option>
-</select>
 
 <br><br>
 

@@ -1079,12 +1079,21 @@ propertyAge: req.body.propertyAge,
     singleFlatType: req.body.singleFlatType,
     singleCarpetArea: req.body.singleCarpetArea,
 
-    singleQuotedPrice: req.body.askingPrice,
-    singleClosingPrice: req.body.expectedClosingPrice,
+singleQuotedPrice: req.body.askingPrice,
+singleClosingPrice: req.body.expectedClosingPrice,
+tokenAmountExpected: Number(req.body.tokenAmountExpected || 0),
+tokenAmountReceived: Number(req.body.tokenAmountReceived || 0),
 
-    parkingType: req.body.parkingType,
-    furnishedStatus: req.body.furnishedStatus,
-    possessionStatus: req.body.possessionStatus,
+parkingType: req.body.parkingType,
+parkingCount: Number(req.body.parkingCount || 0),
+furnishedStatus: req.body.furnishedStatus,
+
+listingStatus: req.body.listingStatus,
+
+possessionStatus: req.body.possessionStatus,
+availableFrom: req.body.availableFrom || null,
+
+flatNumber: req.body.flatNumber,
 
     askingPricePerSqFt: askingPricePerSqFt,
 
@@ -1378,8 +1387,10 @@ req.body.transactionType,
 
 singleFlatType: req.body.singleFlatType,
 singleCarpetArea: req.body.singleCarpetArea,
-singleQuotedPrice: req.body.singleQuotedPrice,
-singleClosingPrice: req.body.singleClosingPrice,
+singleQuotedPrice: req.body.askingPrice,
+singleClosingPrice: req.body.expectedClosingPrice,
+tokenAmountExpected: Number(req.body.tokenAmountExpected || 0),
+tokenAmountReceived: Number(req.body.tokenAmountReceived || 0),
 
 monthlyRent:
 Number(req.body.monthlyRent || 0),
@@ -1395,8 +1406,15 @@ Number(req.body.leaseDurationMonths || 0),
 
 
 parkingType: req.body.parkingType,
+parkingCount: Number(req.body.parkingCount || 0),
 furnishedStatus: req.body.furnishedStatus,
+
+listingStatus: req.body.listingStatus,
+
 possessionStatus: req.body.possessionStatus,
+availableFrom: req.body.availableFrom || null,
+
+flatNumber: req.body.flatNumber,
 
     projectType: projectType,
     propertyType: propertyType,
