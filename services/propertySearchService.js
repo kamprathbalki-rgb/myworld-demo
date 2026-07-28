@@ -26,9 +26,13 @@ if (lead.projectStatus) {
 
     if (Array.isArray(lead.projectStatus)) {
 
-        query.projectStatus = {
-            $in: lead.projectStatus
-        };
+        if (lead.projectStatus.length > 0) {
+
+            query.projectStatus = {
+                $in: lead.projectStatus
+            };
+
+        }
 
     } else {
 
@@ -55,48 +59,58 @@ if (lead.location) {
 
     query.$or = [];
 
-    locations.forEach(location => {
+locations.forEach(location => {
 
-        query.$or.push(
-            {
-                city: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                propertyLocation: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                divisionName: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                district: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                stateName: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                pincode: {
-                    $regex: location,
-                    $options: "i"
-                }
+    const normalizedLocation = location
+        .replace(/\b(B\.?\s*O\.?|S\.?\s*O\.?|H\.?\s*O\.?)\b/gi, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const escapedLocation = normalizedLocation.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+    );
+
+    query.$or.push(
+        {
+            city: {
+                $regex: escapedLocation,
+                $options: "i"
             }
-        );
+        },
+        {
+            propertyLocation: {
+                $regex: escapedLocation,
+                $options: "i"
+            }
+        },
+        {
+            divisionName: {
+                $regex: escapedLocation,
+                $options: "i"
+            }
+        },
+        {
+            district: {
+                $regex: escapedLocation,
+                $options: "i"
+            }
+        },
+        {
+            stateName: {
+                $regex: escapedLocation,
+                $options: "i"
+            }
+        },
+        {
+            pincode: {
+                $regex: escapedLocation,
+                $options: "i"
+            }
+        }
+    );
 
-    });
+});
 
 }
 
@@ -132,7 +146,15 @@ console.log("lead.propertyType =", lead.propertyType);
 console.log("lead.projectStatus =", lead.projectStatus);
 console.log("lead.transactionType =", lead.transactionType);
 
-const properties = await Property.find(query).lean();
+console.log("\n========== QUERY BEFORE FIND ==========");
+console.dir(query, { depth: null });
+
+const properties = await Property.collection.find(query).toArray();
+
+console.log("Native Driver Count:", properties.length);
+
+console.log("\n========== QUERY AFTER FIND ==========");
+console.dir(query, { depth: null });
 
 console.log("\n========== MATCHING PROPERTIES ==========");
 console.log("Count:", properties.length);

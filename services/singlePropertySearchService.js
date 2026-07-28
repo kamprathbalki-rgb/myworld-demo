@@ -31,9 +31,13 @@ if (lead.projectStatus) {
 
     if (Array.isArray(lead.projectStatus)) {
 
-        query.projectStatus = {
-            $in: lead.projectStatus
-        };
+        if (lead.projectStatus.length > 0) {
+
+            query.projectStatus = {
+                $in: lead.projectStatus
+            };
+
+        }
 
     } else {
 

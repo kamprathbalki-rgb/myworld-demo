@@ -6,6 +6,7 @@ const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     secure: Number(process.env.SMTP_PORT) === 465,
+    requireTLS: Number(process.env.SMTP_PORT) === 587,
 
     auth: {
         user: process.env.SMTP_USER,
@@ -140,7 +141,17 @@ exports.sendCode = async (email, code) => {
 
         subject: "Verify Your Email Address",
 
-        html: `...`
+        html: `
+    <h2>Email Verification</h2>
+
+    <p>Your verification code is:</p>
+
+    <h1 style="letter-spacing:5px">${code}</h1>
+
+    <p>Please enter this code within 3 minutes.</p>
+
+    <p>If you did not provided this email in property Chat session please ignore the verification email.</p>
+`
 
     });
 
