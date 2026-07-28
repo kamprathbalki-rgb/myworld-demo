@@ -120,6 +120,16 @@ setTimeout(async () => {
 
 exports.sendCode = async (email, code) => {
 
+    console.log("SMTP Config:", {
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        user: process.env.SMTP_USER,
+        from: process.env.SMTP_FROM
+    });
+
+    await transporter.verify();
+    console.log("SMTP connection verified.");
+
     await transporter.sendMail({
 
         from: process.env.SMTP_FROM,
@@ -128,17 +138,7 @@ exports.sendCode = async (email, code) => {
 
         subject: "Verify Your Email Address",
 
-        html: `
-            <h2>Email Verification</h2>
-
-            <p>Your verification code is:</p>
-
-            <h1 style="letter-spacing:5px">${code}</h1>
-
-            <p>To be protected and for security, please enter the code within 3 minutes.</p>
-
-            <p>If you did not request this verification, you can safely ignore the email.</p>
-        `
+        html: `...`
 
     });
 
