@@ -338,15 +338,14 @@ Examples
 
 {
   "propertyCategory":"Residential",
-  "propertyType":"Flat"
+  "propertyType":"Apartment"
 }
 
-"I need a 2BHK"
+"I need a 2 BHK"
 
 {
   "propertyCategory":"Residential",
-  "propertyType":"Flat",
-  "configuration":"2BHK"
+  "configuration":"2 BHK"
 }
 
 "I need a villa"
