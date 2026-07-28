@@ -58,8 +58,6 @@ Examples
 
 Contact Intent
 
-Contact Intent
-
 For mobileIntent return one of:
 
 "PROVIDED"
@@ -152,10 +150,24 @@ Return
 If the user says
 
 rent
+rental
+renting
+on rent
+for rent
 
 Return
 
 "transactionType":"RENT"
+
+If the user says
+
+lease
+leased
+leasing
+
+Return
+
+"transactionType":"LEASE"
 
 If the user says only "Residential":
 
@@ -173,6 +185,37 @@ If the user says "Apartment":
     "propertyCategory":"Residential",
     "propertyType":"Apartment"
 }
+
+If the user mentions more than one project status, preserve all explicitly mentioned values.
+
+Example:
+
+User:
+Ready Possession or Resale
+
+Return:
+
+{
+    "projectStatus": [
+        "Ready Possession",
+        "Resale"
+    ]
+}
+
+User:
+New Launch or Under Construction
+
+Return:
+
+{
+    "projectStatus": [
+        "New Launch",
+        "Under Construction"
+    ]
+}
+
+If only one project status is mentioned, continue returning a single string exactly as before.
+
 
 Canonical Values
 

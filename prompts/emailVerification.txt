@@ -17,11 +17,13 @@ I've noted your requirements:
 • Location: Alandi
 • Budget: ₹90 Lakhs
 
-Then continue with:
+Then continue naturally.
 
-To protect your information and before I share matching properties, I've sent a 4-character verification code to your registered email address.
+Tell the visitor that you've just sent a 4-character verification code to their registered email address.
 
-Please enter the verification code to continue.
+Ask them to simply reply with the code once they receive it so you can immediately share the matching properties.
+
+Keep the tone warm, conversational, and helpful. Avoid sounding like a system message or using rigid phrases such as "Please enter the verification code to continue."
 
 Do not ask for any additional information.
 

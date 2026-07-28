@@ -41,7 +41,9 @@ location: String,
 
 propertyType: String,
 
-projectStatus: String,
+projectStatus: {
+    type: [String]
+},
 
 transactionType: String,
 

@@ -23,19 +23,7 @@ if (lead.propertyType) {
 }
 
 if (lead.projectStatus) {
-
-    if (Array.isArray(lead.projectStatus)) {
-
-        query.projectStatus = {
-            $in: lead.projectStatus
-        };
-
-    } else {
-
-        query.projectStatus = lead.projectStatus;
-
-    }
-
+    query.projectStatus = lead.projectStatus;
 }
 
 if (lead.possessionStatus) {
@@ -46,59 +34,22 @@ if (lead.transactionType) {
     query.transactionType = lead.transactionType;
 }
 
-if (lead.location) {
-
-    const locations = lead.location
-        .split(",")
-        .map(s => s.trim())
-        .filter(Boolean);
-
-    query.$or = [];
-
-    locations.forEach(location => {
-
-        query.$or.push(
+    if (lead.location) {
+        query.$or = [
             {
                 city: {
-                    $regex: location,
+                    $regex: lead.location,
                     $options: "i"
                 }
             },
             {
                 propertyLocation: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                divisionName: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                district: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                stateName: {
-                    $regex: location,
-                    $options: "i"
-                }
-            },
-            {
-                pincode: {
-                    $regex: location,
+                    $regex: lead.location,
                     $options: "i"
                 }
             }
-        );
-
-    });
-
-}
+        ];
+    }
 
 if (lead.configuration) {
 
@@ -106,12 +57,11 @@ if (lead.configuration) {
         $elemMatch: {
             flatType: lead.configuration,
 
-...(budget !== null && {
-    quotedPrice: {
-        $gte: Math.floor(budget * 0.85),
-        $lte: Math.ceil(budget * 1.15)
-    }
-}),
+            ...(budget !== null && {
+                quotedPrice: {
+                    $lte: budget + 5
+                }
+            }),
 
 ...(lead.carpetArea && {
     carpetArea: {
@@ -167,19 +117,11 @@ return properties.map(property => {
             if (config.flatType !== lead.configuration)
                 return false;
 
-if (budget !== null) {
-
-    const minBudget = Math.floor(budget * 0.85);
-    const maxBudget = Math.ceil(budget * 1.15);
-
-    if (
-        Number(config.quotedPrice) < minBudget ||
-        Number(config.quotedPrice) > maxBudget
-    ) {
-        return false;
-    }
-
-}
+if (
+    budget !== null &&
+    Number(config.quotedPrice) > budget + 5
+)
+    return false;
 
 if (lead.carpetArea) {
 

@@ -11,65 +11,69 @@ function normalizeBudget(input) {
     let text = String(input)
         .toLowerCase()
         .replace(/,/g, "")
-        .replace(/₹|rs\.?|inr/g, "")
+        .replace(/₹|rs\.?|inr/gi, "")
         .trim();
 
-    const number = parseFloat(text);
-
-    if (isNaN(number)) {
-
-        const match = text.match(/(\d+(\.\d+)?)/);
-
-        if (!match) {
-            return null;
-        }
-
-        const value = parseFloat(match[1]);
-
-        if (text.includes("crore") || text.includes("crores") || text.includes("cr")) {
-            return value * 100;
-        }
-
-        if (text.includes("lakh") || text.includes("lakhs") || text.includes("lac") || text.includes("lacs") || text.includes("l")) {
-            return value;
-        }
-
-        if (text.includes("thousand") || text.includes("k")) {
-            return value / 100;
-        }
-
-        if (text.includes("million")) {
-            return value * 10;
-        }
-
-        if (text.includes("billion")) {
-            return value * 10000;
-        }
-
-        return value;
+    if (!text) {
+        return null;
     }
 
-    if (text.includes("crore") || text.includes("crores") || text.includes("cr")) {
-        return number * 100;
+    // ------------------------------------------------------------
+    // Indian format:
+    // 3 crore 70 lakh
+    // 2 crore 5 lakh
+    // ------------------------------------------------------------
+    let crore = 0;
+    let lakh = 0;
+
+    const croreMatch = text.match(/(\d+(?:\.\d+)?)\s*(crore|crores|cr)\b/i);
+    if (croreMatch) {
+        crore = parseFloat(croreMatch[1]);
     }
 
-    if (text.includes("lakh") || text.includes("lakhs") || text.includes("lac") || text.includes("lacs")) {
-        return number;
+    const lakhMatch = text.match(/(\d+(?:\.\d+)?)\s*(lakh|lakhs|lac|lacs)\b/i);
+    if (lakhMatch) {
+        lakh = parseFloat(lakhMatch[1]);
     }
 
-    if (text.includes("thousand") || text.includes("k")) {
-        return number / 100;
+    if (crore > 0 || lakh > 0) {
+        return (crore * 100) + lakh;
     }
 
-    if (text.includes("million")) {
-        return number * 10;
+    // ------------------------------------------------------------
+    // Million
+    // ------------------------------------------------------------
+    const millionMatch = text.match(/(\d+(?:\.\d+)?)\s*million\b/i);
+    if (millionMatch) {
+        return parseFloat(millionMatch[1]) * 10;
     }
 
-    if (text.includes("billion")) {
-        return number * 10000;
+    // ------------------------------------------------------------
+    // Billion
+    // ------------------------------------------------------------
+    const billionMatch = text.match(/(\d+(?:\.\d+)?)\s*billion\b/i);
+    if (billionMatch) {
+        return parseFloat(billionMatch[1]) * 10000;
     }
 
-    return number;
+    // ------------------------------------------------------------
+    // Thousand / K
+    // ------------------------------------------------------------
+    const thousandMatch = text.match(/(\d+(?:\.\d+)?)\s*(thousand|k)\b/i);
+    if (thousandMatch) {
+        return parseFloat(thousandMatch[1]) / 100;
+    }
+
+    // ------------------------------------------------------------
+    // Plain numeric
+    // ------------------------------------------------------------
+    const numberMatch = text.match(/(\d+(?:\.\d+)?)/);
+
+    if (!numberMatch) {
+        return null;
+    }
+
+    return parseFloat(numberMatch[1]);
 
 }
 

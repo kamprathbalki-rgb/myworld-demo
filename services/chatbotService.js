@@ -11,7 +11,8 @@ const ChatSession = require("../models/ChatSession");
 const emailVerificationService = require("./emailVerificationService");
 const client = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 const propertySearchService = require("./propertySearchService");
-
+const singlePropertySearchService = require("./singlePropertySearchService");
+const rentalSearchService = require("./rentalSearchService");
 
 exports.reply = async (tenantUrl, incomingSessionId, message) => {
 
@@ -309,23 +310,127 @@ if (conversation.readyForPropertySearch) {
 
 console.log(">>>> ENTERED PROPERTY SEARCH BLOCK <<<<");
 
-const properties =
-    await propertySearchService.search(
-        tenant._id,
-        conversation.lead
+const isRentalSearch =
+    ["RENT", "LEASE"].includes(
+        (conversation.lead.transactionType || "").toUpperCase()
     );
 
-console.log(">>>> propertySearchService.search() CALLED <<<<");
+let builderProperties = [];
+let singleProperties = [];
+let rentalProperties = [];
 
-messages.push({
-    role: "system",
-    content: promptLoader.load(
-    "propertySearchResponse.txt",
-    {
-        results: propertySearchService.formatResults(properties)
-    }
-)
+if (isRentalSearch) {
+
+    rentalProperties =
+        await rentalSearchService.search(
+            tenant._id,
+            conversation.lead
+        );
+
+} else {
+
+    builderProperties =
+        await propertySearchService.search(
+            tenant._id,
+            conversation.lead
+        );
+
+    singleProperties =
+        await singlePropertySearchService.search(
+            tenant._id,
+            conversation.lead
+        );
+
+}
+
+const properties = isRentalSearch
+    ? rentalProperties.map(p => ({
+          ...p,
+          resultType: "RENTAL"
+      }))
+    : [
+          ...builderProperties.map(p => ({
+              ...p,
+              resultType: "PROJECT"
+          })),
+          ...singleProperties.map(p => ({
+              ...p,
+              resultType: "SINGLE"
+          }))
+      ];
+
+properties.sort((a, b) => {
+
+    const priceA =
+        Number(a.singleQuotedPrice) ||
+        Number(a.configurations?.[0]?.quotedPrice) ||
+        0;
+
+    const priceB =
+        Number(b.singleQuotedPrice) ||
+        Number(b.configurations?.[0]?.quotedPrice) ||
+        0;
+
+    return priceA - priceB;
+
 });
+
+if (isRentalSearch) {
+
+    console.log("Rental:", rentalProperties.length);
+
+} else {
+
+    console.log("Builder:", builderProperties.length);
+    console.log("Single:", singleProperties.length);
+
+}
+
+console.log("Total:", properties.length);
+
+if (isRentalSearch) {
+
+    const rentalResults =
+        rentalSearchService.formatResults(rentalProperties);
+
+    messages.push({
+        role: "system",
+        content: promptLoader.load(
+            "rentalSearchResponse.txt",
+            {
+                results: rentalResults
+            }
+        )
+    });
+
+} else {
+
+    const builderResults =
+        propertySearchService.formatResults(builderProperties);
+
+    const singleResults =
+        singlePropertySearchService.formatResults(singleProperties);
+
+    messages.push({
+        role: "system",
+        content: promptLoader.load(
+            "propertySearchResponse.txt",
+            {
+                results:
+`BUILDER PROJECTS
+
+${builderResults}
+
+----------------------------------------
+
+SINGLE PROPERTIES
+
+${singleResults}`
+            }
+        )
+    });
+
+}
 
 const final =
     await client.chat.completions.create({
