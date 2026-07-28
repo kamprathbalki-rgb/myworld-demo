@@ -214,6 +214,7 @@ if (
 }
 
 if (
+    conversation.readyForPropertySearch &&
     emailVerificationService.canSendVerification(
         conversation.lead
     )
