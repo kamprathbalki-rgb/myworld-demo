@@ -3,7 +3,6 @@ const EmailVerification = require("../models/EmailVerification");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     secure: Number(process.env.SMTP_PORT) === 465,
@@ -11,8 +10,11 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
-    }
+    },
 
+    connectionTimeout: 60000,
+    greetingTimeout: 30000,
+    socketTimeout: 60000
 });
 
 exports.generateCode = () => {
