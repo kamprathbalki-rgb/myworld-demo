@@ -1290,6 +1290,13 @@ const columns = [
         🏠 View Matches
     </a>
 
+<a id="drawerMarketplaceBtn"
+   class="action-link"
+   href="/"
+   style="display:block;text-align:center;margin-bottom:12px;">
+    🌐 Marketplace Matches
+</a>
+
     <a id="drawerEditBtn"
        class="action-link edit-link"
        href="/"
@@ -1369,6 +1376,9 @@ matchesLink.href =
 
 matchesLink.innerHTML =
     "🏠 View " + card.dataset.matches + " Matching Properties";
+
+document.getElementById("drawerMarketplaceBtn").href =
+    "/marketplace/buyer/" + card.dataset.id;
 
         drawer.classList.add("open");
 

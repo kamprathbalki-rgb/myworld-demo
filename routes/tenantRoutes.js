@@ -58,6 +58,8 @@ const tenant = new Tenant({
 
     email: req.body.email,
 
+    mobile: req.body.mobile,
+
     adminName: req.body.adminName,
 
     adminEmail: req.body.adminEmail,

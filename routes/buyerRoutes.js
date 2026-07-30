@@ -1166,7 +1166,15 @@ for (const buyer of buyers) {
 
     for (const property of properties) {
 
+console.log(
+    "Matching:",
+    buyer.name,
+    property.projectName || property.propertyName || property._id
+);
+
         const score = await calculateScore(property, buyer);
+
+console.log("Score:", score);
 
 if (
     property.transactionType === buyer.transactionType &&

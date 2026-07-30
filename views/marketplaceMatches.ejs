@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Marketplace Matches</title>
+
+    <style>
+
+        body{
+            font-family:Arial,sans-serif;
+            margin:30px;
+            background:#f5f7fa;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:#fff;
+        }
+
+        th,td{
+            padding:12px;
+            border:1px solid #ddd;
+            text-align:left;
+        }
+
+        th{
+            background:#1f4e79;
+            color:#fff;
+        }
+
+        tr:nth-child(even){
+            background:#fafafa;
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-bottom:20px;
+            padding:10px 15px;
+            background:#1f4e79;
+            color:#fff;
+            text-decoration:none;
+            border-radius:6px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<a href="javascript:history.back()" class="back-btn">
+    ← Back
+</a>
+
+<h2>Other Companies With Matching Inventory</h2>
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>Company</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>Builder Properties</th>
+            <th>Resale Properties</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    <% if(matches.length){ %>
+
+        <% matches.forEach(function(company){ %>
+
+            <tr>
+
+                <td><%= company.companyName %></td>
+
+                <td><%= company.mobile %></td>
+
+                <td><%= company.email %></td>
+
+                <td><%= company.builderCount %></td>
+
+                <td><%= company.resaleCount %></td>
+
+            </tr>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <tr>
+
+            <td colspan="5" style="text-align:center;">
+                No matching companies found.
+            </td>
+
+        </tr>
+
+    <% } %>
+
+    </tbody>
+
+</table>
+
+</body>
+</html>

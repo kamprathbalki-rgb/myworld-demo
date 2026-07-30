@@ -27,6 +27,7 @@ const chatbotRoutes = require("./routes/chatbotRoutes");
 const chatbotAdminRoutes = require("./routes/chatbotAdminRoutes");
 const chatSessionMonitor = require("./services/chatSessionMonitor");
 const chatLeadRoutes = require("./routes/chatLeadRoutes");
+const marketplaceRoutes = require("./routes/marketplaceRoutes");
 
 connectDB()
 
@@ -107,6 +108,7 @@ app.use("/", chatbotRoutes);
 app.use("/", chatbotAdminRoutes);
 app.use(chatLeadRoutes);
 app.use('/', websiteRoutes)
+app.use("/marketplace", marketplaceRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

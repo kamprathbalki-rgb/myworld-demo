@@ -10,6 +10,16 @@ const tenantSchema = new mongoose.Schema({
 
     adminEmail:String,
 
+companyName: {
+    type: String,
+    default: ""
+},
+
+mobile: {
+    type: String,
+    default: ""
+},
+
 name:String,
 
 email:String,

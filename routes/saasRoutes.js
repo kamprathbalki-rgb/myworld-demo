@@ -277,6 +277,8 @@ await Tenant.findByIdAndUpdate(
 
         email: req.body.email,
 
+        mobile: req.body.mobile,
+
         stateName: req.body.stateName,
 
         primaryDistrict: req.body.primaryDistrict,

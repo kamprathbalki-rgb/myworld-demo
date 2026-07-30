@@ -385,6 +385,16 @@ action="/saas/company/<%= tenant._id %>"
             >
         </div>
 
+<div class="field">
+    <label>Company Mobile</label>
+    <input
+        type="text"
+        name="mobile"
+        value="<%= tenant.mobile || '' %>"
+        required
+    >
+</div>
+
         <div class="field">
             <label>State</label>
             <input
