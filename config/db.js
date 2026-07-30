@@ -14,6 +14,7 @@ await mongoose.connect(dbUri, {
     autoIndex: true
 });
 
+
 console.log(
     `MongoDB Connected (${process.env.USE_LOCAL_DB === 'true' ? 'Local' : 'Railway'})`
 );
