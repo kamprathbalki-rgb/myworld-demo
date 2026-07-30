@@ -1355,31 +1355,6 @@ document.querySelectorAll(".buyer-card").forEach(card=>{
 document.getElementById("drawerName").textContent =
     card.dataset.name;
 
-document.getElementById("drawerNameValue").textContent =
-    card.dataset.name;
-
-const phoneLink =
-    document.getElementById("drawerPhone");
-
-phoneLink.innerHTML = "📞 " + card.dataset.phone;
-
-phoneLink.href = "tel:" + card.dataset.phone;
-
-document.getElementById("drawerAging").textContent =
-    "";
-
-        document.getElementById("drawerBudget").textContent =
-            card.dataset.budget;
-
-        document.getElementById("drawerFlat").textContent =
-            card.dataset.flat;
-
-        document.getElementById("drawerLocation").textContent =
-            card.dataset.location;
-
-        document.getElementById("drawerExecutive").textContent =
-            card.dataset.executive;
-
 const matchesLink =
     document.getElementById("drawerMatchesBtn");
 
