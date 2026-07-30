@@ -344,61 +344,75 @@ body{
 ================================ */
 
 .table-wrapper{
-    width:100%;
-
     overflow-x:auto;
+}
 
-    border:1px solid #eee;
+.kanban-board{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    overflow-x:auto;
+    padding-bottom:10px;
+}
 
+.kanban-column{
+    min-width:320px;
+    width:320px;
+    background:#eef2f7;
+    border-radius:12px;
+    padding:12px;
+}
+
+.kanban-header{
+    font-size:15px;
+    font-weight:bold;
+    color:#1f4e79;
+    margin-bottom:12px;
+    position:sticky;
+    top:0;
+    background:#eef2f7;
+    padding-bottom:8px;
+}
+
+.buyer-card{
+    background:#fff;
     border-radius:10px;
+    padding:14px;
+    margin-bottom:12px;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    transition:.2s;
 }
 
-.buyer-table{
-    width:100%;
-
-    min-width:2200px;
-
-    border-collapse:collapse;
+.buyer-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
 }
 
-.buyer-table th{
-    padding:11px 9px;
-
-    background:#1f4e79;
-
-    color:white;
-
-    text-align:left;
-
-    font-size:10px;
-
-    text-transform:uppercase;
-
-    letter-spacing:.3px;
-
-    white-space:nowrap;
+.buyer-card-name{
+    font-size:16px;
+    font-weight:bold;
+    color:#1f4e79;
+    margin-bottom:8px;
 }
 
-.buyer-table td{
-    padding:10px 9px;
-
-    border-bottom:1px solid #eee;
-
-    color:#444;
-
-    font-size:11px;
-
-    vertical-align:top;
+.buyer-card-phone,
+.buyer-card-budget,
+.buyer-card-flat,
+.buyer-card-location,
+.buyer-card-exec,
+.buyer-card-matches{
+    font-size:12px;
+    color:#555;
+    margin-bottom:6px;
 }
 
-.buyer-table tbody tr:hover{
-    background:#f8fafc;
+.buyer-card-matches{
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid #eee;
+    font-weight:bold;
 }
-
-.buyer-table tbody tr:last-child td{
-    border-bottom:none;
-}
-
 
 /* ================================
    BUYER NAME
@@ -701,95 +715,19 @@ body{
         border:none;
     }
 
-    .buyer-table{
-        min-width:0;
-    }
 
-    .buyer-table thead{
-        display:none;
-    }
+.kanban-board{
+    display:block;
+}
 
-    .buyer-table,
-    .buyer-table tbody,
-    .buyer-table tr,
-    .buyer-table td{
-        display:block;
-
-        width:100%;
-    }
-
-    .buyer-table tr{
-        margin-bottom:14px;
-
-        padding:14px;
-
-        background:white;
-
-        border:1px solid #e5e5e5;
-
-        border-left:
-        4px solid #1f4e79;
-
-        border-radius:10px;
-
-        box-shadow:
-        0 2px 7px rgba(0,0,0,.07);
-    }
-
-    .buyer-table td{
-        display:flex;
-
-        justify-content:space-between;
-        align-items:flex-start;
-
-        gap:15px;
-
-        padding:8px 0;
-
-        border-bottom:
-        1px solid #f0f0f0;
-
-        text-align:right;
-
-        font-size:11px;
-
-        line-height:1.5;
-    }
-
-    .buyer-table td:last-child{
-        border-bottom:none;
-    }
-
-    .buyer-table td::before{
-        content:
-        attr(data-label);
-
-        flex:0 0 37%;
-
-        color:#777;
-
-        font-size:9px;
-
-        font-weight:bold;
-
-        text-transform:uppercase;
-
-        text-align:left;
-    }
-
-    .buyer-table .buyer-name{
-        font-size:15px;
-
-        color:#1f4e79;
-    }
-
-    .buyer-table td form{
-        flex:1;
-
-        text-align:right;
-    }
+.kanban-column{
+    width:100%;
+    min-width:0;
+    margin-bottom:18px;
+}
 
     .table-select,
+
     .table-input{
         width:100%;
 
@@ -808,16 +746,6 @@ body{
         font-size:10px;
     }
 
-    .mobile-actions{
-        display:flex;
-
-        justify-content:flex-end;
-
-        flex-wrap:wrap;
-
-        gap:5px;
-    }
-
 }
 
 /* ================================
@@ -832,6 +760,66 @@ body{
     }
 
 }
+
+.buyer-drawer{
+    position:fixed;
+    top:0;
+    right:-460px;
+    width:460px;
+    height:100%;
+    background:#fff;
+    box-shadow:-5px 0 18px rgba(0,0,0,.18);
+    transition:.25s;
+    z-index:9999;
+    overflow:auto;
+}
+
+.buyer-drawer.open{
+    right:0;
+}
+
+.drawer-header{
+    padding:18px;
+    background:#1f4e79;
+    color:#fff;
+}
+
+.drawer-header h2{
+    margin:0;
+}
+
+#drawerClose{
+    float:right;
+    cursor:pointer;
+    font-size:28px;
+}
+
+.drawer-content{
+    padding:20px;
+}
+
+.drawer-content p{
+    margin:18px 0 5px;
+    color:#777;
+    font-size:12px;
+}
+
+.drawer-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:25px;
+}
+
+@media(max-width:700px){
+
+    .buyer-drawer{
+        width:100%;
+        right:-100%;
+    }
+
+}
+
 
 </style>
 
@@ -1176,487 +1164,86 @@ Buyer Records
 
 <div class="table-wrapper">
 
-<table class="buyer-table">
+<div class="kanban-board">
 
-<thead>
-
-<tr>
-
-<th>Name</th>
-
-<th>Phone</th>
-
-<th>Lead Origin</th>
-
-<th>Transaction</th>
-
-<th>Budget</th>
-
-<th>Required Possession</th>
-
-<th>Required Flat Type</th>
-
-<th>Preferred Locations</th>
-
-<th>Primary Location</th>
-
-<th>Assignment Type</th>
-
-<th>Status</th>
-
-<th>Visit Status</th>
-
-<th>Last Activity</th>
-
-<th>Follow Up</th>
-
-<th>Notes</th>
-
-<th>Matches</th>
-
-<th>Actions</th>
-
-<th>Assigned Executive</th>
-
-<th>Reassign</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<% if(buyers && buyers.length){ %>
-
-<% buyers.forEach(function(b){ %>
-
-<tr>
-
-<td
-data-label="Name"
-class="buyer-name"
->
-<%= b.name %>
-</td>
-
-<td
-data-label="Phone"
-class="phone-value"
->
-<%= b.phone %>
-</td>
-
-<td data-label="Lead Origin">
-    <%= b.leadOrigin || "Manual" %>
-</td>
-
-<td data-label="Transaction">
-
-<%= b.transactionType || 'SALE' %>
-
-</td>
-
-<td data-label="Budget">
-
-<%= b.minBudget %>
--
-<%= b.maxBudget %>
-
-</td>
-
-<td data-label="Required Possession">
-
-<%= b.requiredPossession &&
-b.requiredPossession.length > 0
-? b.requiredPossession.join(', ')
-: ''
+<%
+const columns = [
+    "New Lead",
+    "Contacted",
+    "Site Visit",
+    "Negotiation",
+    "Deal Closed",
+    "Lost"
+];
 %>
 
-</td>
+<% columns.forEach(function(column){ %>
 
+<div class="kanban-column">
 
-<td data-label="Required Flat Type">
+    <div class="kanban-header">
+        <%= column %>
+        (<%= buyers.filter(x=>x.status===column).length %>)
+    </div>
 
-<%= b.requiredFlatType || '' %>
+    <% buyers
+        .filter(x=>x.status===column)
+        .forEach(function(b){ %>
 
-</td>
-
-
-<td data-label="Preferred Locations">
-
-<%= b.preferredLocations &&
-b.preferredLocations.length > 0
-? b.preferredLocations.join(', ')
-: ''
-%>
-
-</td>
-
-
-<td data-label="Primary Location">
-
-<%= b.primaryLocation || '' %>
-
-</td>
-
-
-<td data-label="Assignment Type">
-
-<%= b.assignmentType || 'AUTO' %>
-
-</td>
-
-
-
-<!-- STATUS -->
-
-<td data-label="Status">
-
-
-<form
-method="POST"
-action="/buyer/status/<%= b._id %>"
-class="inline-form"
+<div
+    class="buyer-card"
+    data-id="<%= b._id %>"
+    data-name="<%= b.name %>"
+    data-phone="<%= b.phone %>"
+    data-budget="₹<%= b.minBudget %> - ₹<%= b.maxBudget %>"
+    data-flat="<%= b.requiredFlatType || '' %>"
+    data-location="<%= b.primaryLocation || '' %>"
+    data-status="<%= b.status || '' %>"
+    data-executive="<%= b.assignedExecutiveName || 'Not Assigned' %>"
+    data-matches="<%= b.matchCount %>"
+    data-possession="<%= (b.requiredPossession || []).join(', ') %>"
+    data-preferred="<%= (b.preferredLocations || []).join(', ') %>"
+    data-visit="<%= b.latestVisitStatus || 'No Visit' %>"
+    data-activity="<%= b.lastActivity ? new Date(b.lastActivity).toLocaleString('en-IN') : '-' %>"
 >
 
+        <div class="buyer-card-name">
+            <%= b.name %>
+        </div>
 
-<select
-name="status"
-class="table-select"
-onchange="this.form.submit()"
->
+        <div class="buyer-card-phone">
+            📞 <%= b.phone %>
+        </div>
 
+        <div class="buyer-card-budget">
+            ₹<%= b.minBudget %> - ₹<%= b.maxBudget %>
+        </div>
 
-<option
-value="New Lead"
-<%= b.status=="New Lead"
-? "selected"
-: ""
-%>
->
-New Lead
-</option>
+        <div class="buyer-card-flat">
+            <%= b.requiredFlatType || "-" %>
+        </div>
 
+        <div class="buyer-card-location">
+            📍 <%= b.primaryLocation || "-" %>
+        </div>
 
-<option
-value="Contacted"
-<%= b.status=="Contacted"
-? "selected"
-: ""
-%>
->
-Contacted
-</option>
+        <div class="buyer-card-exec">
+            👤 <%= b.assignedExecutiveName || "Not Assigned" %>
+        </div>
 
+        <div class="buyer-card-matches">
+            🏠 <%= b.matchCount %> Matches
+        </div>
 
-<option
-value="Site Visit"
-<%= b.status=="Site Visit"
-? "selected"
-: ""
-%>
->
-Site Visit
-</option>
+    </div>
 
-
-<option
-value="Negotiation"
-<%= b.status=="Negotiation"
-? "selected"
-: ""
-%>
->
-Negotiation
-</option>
-
-
-<option
-value="Deal Closed"
-<%= b.status=="Deal Closed"
-? "selected"
-: ""
-%>
->
-Deal Closed
-</option>
-
-
-<option
-value="Lost"
-<%= b.status=="Lost"
-? "selected"
-: ""
-%>
->
-Lost
-</option>
-
-
-</select>
-
-
-</form>
-
-
-</td>
-
-
-
-<!-- VISIT STATUS -->
-
-<td data-label="Visit Status">
-
-<%= b.latestVisitStatus || 'No Visit' %>
-
-</td>
-
-
-
-<!-- LAST ACTIVITY -->
-
-<td data-label="Last Activity">
-
-<%= b.lastActivity
-? new Date(
-    b.lastActivity
-).toLocaleString('en-IN')
-: '-'
-%>
-
-</td>
-
-
-
-<!-- FOLLOW UP -->
-
-<td data-label="Follow Up">
-
-
-<form
-method="POST"
-action="/buyer/followup/<%= b._id %>"
-class="inline-form"
->
-
-
-<input
-type="datetime-local"
-name="nextFollowUp"
-class="
-table-input
-followup-input
-"
-value="<%= b.nextFollowUp
-? new Date(
-    new Date(b.nextFollowUp).getTime()
-    - new Date(b.nextFollowUp).getTimezoneOffset() * 60000
-).toISOString().slice(0,16)
-: ''
-%>"
->
-
-
-</td>
-
-
-
-<!-- NOTES -->
-
-<td data-label="Notes">
-
-
-<input
-type="text"
-name="followUpNotes"
-class="
-table-input
-notes-input
-"
-value="<%= b.followUpNotes || '' %>"
->
-
-
-<button
-type="submit"
-class="save-btn"
->
-Save
-</button>
-
-
-</form>
-
-
-</td>
-
-
-
-<!-- MATCHES -->
-
-<td data-label="Matches">
-
-
-<a
-href="/buyer/matches/<%= b._id %>"
-class="action-link"
->
-View Matches
-</a>
-
-
-</td>
-
-
-
-<!-- ACTIONS -->
-
-<td data-label="Actions">
-
-
-<div class="mobile-actions">
-
-
-<a
-href="/buyer/edit/<%= b._id %>"
-class="
-action-link
-edit-link
-"
->
-Edit
-</a>
-
-
-<form
-method="GET"
-action="/buyer/delete/<%= b._id %>"
-onsubmit="return confirm('Are you sure you want to delete this buyer?')"
-class="inline-form"
->
-
-
-<button
-type="submit"
-class="delete-btn"
->
-Delete
-</button>
-
-
-</form>
-
+    <% }) %>
 
 </div>
-
-
-</td>
-
-
-
-<!-- ASSIGNED EXECUTIVE -->
-
-<td
-data-label="Assigned Executive"
-class="assigned-executive"
->
-
-<%= b.assignedExecutiveName ||
-'Not Assigned'
-%>
-
-</td>
-
-
-
-<!-- REASSIGN -->
-
-<td data-label="Reassign">
-
-
-<form
-method="POST"
-action="/buyer/reassign/<%= b._id %>"
-class="inline-form"
->
-
-
-<select
-name="executiveId"
-class="
-table-select
-reassign-select
-"
-required
->
-
-
-<option value="">
-Select Executive
-</option>
-
-
-<% executives.forEach(function(exec){ %>
-
-
-<option value="<%= exec._id %>">
-
-<%= exec.name %>
-
-</option>
-
 
 <% }) %>
 
-
-</select>
-
-
-<button
-type="submit"
-class="reassign-btn"
->
-Reassign
-</button>
-
-
-</form>
-
-
-</td>
-
-
-</tr>
-
-
-<% }) %>
-
-
-<% } else { %>
-
-
-<tr>
-
-
-<td
-colspan="18"
-class="empty-state"
->
-No buyers found.
-</td>
-
-
-</tr>
-
-
-<% } %>
-
-
-</tbody>
-
-
-</table>
-
+</div>
 
 </div>
 
@@ -1666,6 +1253,184 @@ No buyers found.
 
 </div>
 
+<div id="buyerDrawer" class="buyer-drawer">
+
+    <div class="drawer-header">
+
+        <span id="drawerClose">&times;</span>
+
+        <h2 id="drawerName"></h2>
+
+    </div>
+
+<div class="drawer-content">
+
+    <h3 style="margin:0 0 18px;color:#1f4e79;">
+        Buyer Snapshot
+    </h3>
+
+<table style="
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+">
+
+    <tr>
+        <td style="width:38%;padding:10px;border-bottom:1px solid #eee;"><strong>Name</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerNameValue"></td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Phone</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;">
+            <a
+                id="drawerPhone"
+                href="#"
+                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Budget</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerBudget"></td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Flat Type</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerFlat"></td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Primary Location</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerLocation"></td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Executive</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerExecutive"></td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Matches</strong></td>
+        <td style="padding:10px;border-bottom:1px solid #eee;">
+            <a
+                id="drawerMatchesBtn"
+                href="#"
+                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:10px;"><strong>Aging</strong></td>
+        <td style="padding:10px;" id="drawerAging"></td>
+    </tr>
+
+</table>    
+
+
+</div>
+
+
+    </div>
+
+</div>
+
+<script>
+
+const drawer = document.getElementById("buyerDrawer");
+
+const closeBtn = document.getElementById("drawerClose");
+
+document.querySelectorAll(".buyer-card").forEach(card=>{
+
+    card.addEventListener("click",()=>{
+
+document.getElementById("drawerName").textContent =
+    card.dataset.name;
+
+document.getElementById("drawerNameValue").textContent =
+    card.dataset.name;
+
+const phoneLink =
+    document.getElementById("drawerPhone");
+
+phoneLink.innerHTML = "📞 " + card.dataset.phone;
+
+phoneLink.href = "tel:" + card.dataset.phone;
+
+document.getElementById("drawerAging").textContent =
+    "";
+
+        document.getElementById("drawerBudget").textContent =
+            card.dataset.budget;
+
+        document.getElementById("drawerFlat").textContent =
+            card.dataset.flat;
+
+        document.getElementById("drawerLocation").textContent =
+            card.dataset.location;
+
+        document.getElementById("drawerStatus").textContent =
+            card.dataset.status;
+
+        document.getElementById("drawerExecutive").textContent =
+            card.dataset.executive;
+
+        document.getElementById("drawerMatches").textContent =
+            card.dataset.matches;
+
+        document.getElementById("drawerPossession").textContent =
+            card.dataset.possession;
+
+        document.getElementById("drawerPreferred").textContent =
+            card.dataset.preferred;
+
+        document.getElementById("drawerVisit").textContent =
+            card.dataset.visit;
+
+        document.getElementById("drawerActivity").textContent =
+            card.dataset.activity;
+
+        document.getElementById("drawerEditBtn").href =
+            "/buyer/edit/" + card.dataset.id;
+
+        document.getElementById("drawerDeleteForm").action =
+            "/buyer/delete/" + card.dataset.id;
+
+const matchesLink =
+    document.getElementById("drawerMatchesBtn");
+
+matchesLink.href =
+    "/buyer/matches/" + card.dataset.id;
+
+matchesLink.innerHTML =
+    "🏠 " + card.dataset.matches + " Matches";
+
+        drawer.classList.add("open");
+
+    });
+
+});
+
+closeBtn.addEventListener("click",()=>{
+
+    drawer.classList.remove("open");
+
+});
+
+window.addEventListener("click",(e)=>{
+
+    if(e.target===drawer){
+
+        drawer.classList.remove("open");
+
+    }
+
+});
+
+</script>
 
 </body>
 
