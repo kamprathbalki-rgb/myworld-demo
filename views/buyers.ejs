@@ -414,6 +414,12 @@ body{
     font-weight:bold;
 }
 
+.buyer-card-aging{
+    font-size:12px;
+    color:#555;
+    margin-top:6px;
+}
+
 /* ================================
    BUYER NAME
 ================================ */
@@ -1207,33 +1213,45 @@ const columns = [
     data-activity="<%= b.lastActivity ? new Date(b.lastActivity).toLocaleString('en-IN') : '-' %>"
 >
 
-        <div class="buyer-card-name">
-            <%= b.name %>
-        </div>
+<div class="buyer-card-name">
+    <strong>Name:</strong>
+    <%= b.name %>
+</div>
 
-        <div class="buyer-card-phone">
-            📞 <%= b.phone %>
-        </div>
+<div class="buyer-card-phone">
+    <strong>Phone:</strong>
+    📞 <%= b.phone %>
+</div>
 
-        <div class="buyer-card-budget">
-            ₹<%= b.minBudget %> - ₹<%= b.maxBudget %>
-        </div>
+<div class="buyer-card-budget">
+    <strong>Budget:</strong>
+    ₹<%= b.minBudget %> - ₹<%= b.maxBudget %>
+</div>
 
-        <div class="buyer-card-flat">
-            <%= b.requiredFlatType || "-" %>
-        </div>
+<div class="buyer-card-flat">
+    <strong>Flat Type:</strong>
+    <%= b.requiredFlatType || "-" %>
+</div>
 
-        <div class="buyer-card-location">
-            📍 <%= b.primaryLocation || "-" %>
-        </div>
+<div class="buyer-card-location">
+    <strong>Primary Location:</strong>
+    <%= b.primaryLocation || "-" %>
+</div>
 
-        <div class="buyer-card-exec">
-            👤 <%= b.assignedExecutiveName || "Not Assigned" %>
-        </div>
+<div class="buyer-card-exec">
+    <strong>Executive:</strong>
+    <%= b.assignedExecutiveName || "Not Assigned" %>
+</div>
 
-        <div class="buyer-card-matches">
-            🏠 <%= b.matchCount %> Matches
-        </div>
+<div class="buyer-card-matches">
+    <strong>Matches:</strong>
+    🏠 <%= b.matchCount %> Matches
+</div>
+
+<div class="buyer-card-aging">
+    <strong>Aging:</strong>
+    <%= Math.floor((Date.now() - new Date(b.createdAt).getTime()) / 86400000) %> Days
+</div>
 
     </div>
 
@@ -1265,73 +1283,60 @@ const columns = [
 
 <div class="drawer-content">
 
-    <h3 style="margin:0 0 18px;color:#1f4e79;">
-        Buyer Snapshot
-    </h3>
+    <a id="drawerMatchesBtn"
+       class="action-link"
+       href="/"
+       style="display:block;text-align:center;margin-bottom:12px;">
+        🏠 View Matches
+    </a>
 
-<table style="
-    width:100%;
-    border-collapse:collapse;
-    font-size:14px;
-">
+    <a id="drawerEditBtn"
+       class="action-link edit-link"
+       href="/"
+       style="display:block;text-align:center;margin-bottom:20px;">
+        ✏️ Edit Buyer
+    </a>
 
-    <tr>
-        <td style="width:38%;padding:10px;border-bottom:1px solid #eee;"><strong>Name</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerNameValue"></td>
-    </tr>
+    <h3>Reassign Executive</h3>
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Phone</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;">
-            <a
-                id="drawerPhone"
-                href="#"
-                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
-            </a>
-        </td>
-    </tr>
+    <form id="drawerReassignForm" method="POST">
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Budget</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerBudget"></td>
-    </tr>
+        <select
+            name="executiveId"
+            class="table-select reassign-select">
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Flat Type</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerFlat"></td>
-    </tr>
+            <% executives.forEach(function(exec){ %>
+                <option value="<%= exec._id %>">
+                    <%= exec.name %>
+                </option>
+            <% }) %>
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Primary Location</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerLocation"></td>
-    </tr>
+        </select>
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Executive</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerExecutive"></td>
-    </tr>
+        <button
+            type="submit"
+            class="reassign-btn">
+            Assign Executive
+        </button>
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Matches</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;">
-            <a
-                id="drawerMatchesBtn"
-                href="#"
-                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
-            </a>
-        </td>
-    </tr>
+    </form>
 
-    <tr>
-        <td style="padding:10px;"><strong>Aging</strong></td>
-        <td style="padding:10px;" id="drawerAging"></td>
-    </tr>
+    <hr style="margin:20px 0;">
 
-</table>    
+    <form id="drawerDeleteForm"
+          method="POST"
+          onsubmit="return confirm('Delete this buyer?');">
 
+        <button
+            type="submit"
+            class="delete-btn"
+            style="width:100%;">
+            Delete Buyer
+        </button>
+
+    </form>
 
 </div>
-
 
     </div>
 
@@ -1372,41 +1377,23 @@ document.getElementById("drawerAging").textContent =
         document.getElementById("drawerLocation").textContent =
             card.dataset.location;
 
-        document.getElementById("drawerStatus").textContent =
-            card.dataset.status;
-
         document.getElementById("drawerExecutive").textContent =
             card.dataset.executive;
 
-        document.getElementById("drawerMatches").textContent =
-            card.dataset.matches;
-
-        document.getElementById("drawerPossession").textContent =
-            card.dataset.possession;
-
-        document.getElementById("drawerPreferred").textContent =
-            card.dataset.preferred;
-
-        document.getElementById("drawerVisit").textContent =
-            card.dataset.visit;
-
-        document.getElementById("drawerActivity").textContent =
-            card.dataset.activity;
-
-        document.getElementById("drawerEditBtn").href =
-            "/buyer/edit/" + card.dataset.id;
-
-        document.getElementById("drawerDeleteForm").action =
-            "/buyer/delete/" + card.dataset.id;
-
 const matchesLink =
     document.getElementById("drawerMatchesBtn");
+
+document.getElementById("drawerEditBtn").href =
+    "/buyer/edit/" + card.dataset.id;
+
+document.getElementById("drawerReassignForm").action =
+    "/buyer/reassign/" + card.dataset.id;
 
 matchesLink.href =
     "/buyer/matches/" + card.dataset.id;
 
 matchesLink.innerHTML =
-    "🏠 " + card.dataset.matches + " Matches";
+    "🏠 View " + card.dataset.matches + " Matching Properties";
 
         drawer.classList.add("open");
 
