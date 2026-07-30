@@ -52,6 +52,20 @@ builderContacts: [{
     }
 }],
 
+normalizedLocation: {
+    type: String,
+    index: true
+},
+
+searchFlatTypes: [{
+    type: String
+}],
+
+searchTransactionType: {
+    type: String,
+    index: true
+},
+
     propertyStatus: {
         type: String,
         default: 'Available'
@@ -351,6 +365,18 @@ listingStatus: {
 
 propertySchema.index({
     location: '2dsphere'
+})
+
+propertySchema.index({
+    tenantId: 1,
+    searchTransactionType: 1,
+    normalizedLocation: 1,
+    propertyMode: 1
+})
+
+propertySchema.index({
+    tenantId: 1,
+    searchFlatTypes: 1
 })
 
 module.exports = mongoose.model(

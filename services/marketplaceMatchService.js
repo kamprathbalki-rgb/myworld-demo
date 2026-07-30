@@ -39,37 +39,17 @@ console.log("Searching tenants:", tenants.map(t => t._id.toString()));
 const builderCount = await Property.countDocuments({
     tenantId: tenant._id,
     propertyMode: "PROJECT",
-    transactionType,
-    propertyLocation: new RegExp(
-    "^" +
-    buyer.primaryLocation
-        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/gi, "")
-        .replace(/\s+/g, "\\s*")
-        .trim() +
-    "(\\s*(B\\.?O\\.?|S\\.?O\\.?|H\\.?O\\.?|G\\.?P\\.?O\\.?)?)?$",
-    "i"
-),
-    configurations: {
-        $elemMatch: {
-            flatType
-        }
-    }
+    searchTransactionType: transactionType,
+    normalizedLocation: buyerLocation,
+    searchFlatTypes: flatType
 });
 
 const resaleCount = await Property.countDocuments({
     tenantId: tenant._id,
     propertyMode: "SINGLE",
-    transactionType,
-    singleFlatType: flatType,
-    propertyLocation: new RegExp(
-    "^" +
-    buyer.primaryLocation
-        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/gi, "")
-        .replace(/\s+/g, "\\s*")
-        .trim() +
-    "(\\s*(B\\.?O\\.?|S\\.?O\\.?|H\\.?O\\.?|G\\.?P\\.?O\\.?)?)?$",
-    "i"
-),
+    searchTransactionType: transactionType,
+    normalizedLocation: buyerLocation,
+    searchFlatTypes: flatType
 });
 
 console.log({

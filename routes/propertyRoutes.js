@@ -289,6 +289,26 @@ row['Lease Duration'] || 0
 
     })
 
+
+const normalize = value =>
+    String(value || "")
+        .toUpperCase()
+        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+        .replace(/[^A-Z0-9 ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+property.normalizedLocation =
+    normalize(property.propertyLocation);
+
+property.searchTransactionType =
+    property.transactionType;
+
+property.searchFlatTypes =
+    property.propertyMode === "PROJECT"
+        ? (property.configurations || []).map(c => c.flatType)
+        : [property.singleFlatType];
+
     await property.save()
 
 importedCount++
@@ -381,6 +401,26 @@ const property = new Property({
 ...req.body,
 tenantId:req.session.tenantId
 })
+
+const normalize = value =>
+    String(value || "")
+        .toUpperCase()
+        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+        .replace(/[^A-Z0-9 ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+property.normalizedLocation =
+    normalize(property.propertyLocation);
+
+property.searchTransactionType =
+    property.transactionType;
+
+property.searchFlatTypes =
+    property.propertyMode === "PROJECT"
+        ? property.configurations.map(c => c.flatType)
+        : [property.singleFlatType];
+
 
 await property.save()
 
@@ -1183,6 +1223,25 @@ builderContacts: (req.body.contactName || []).map((name, index) => ({
 
 })
 
+const normalize = value =>
+    String(value || "")
+        .toUpperCase()
+        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+        .replace(/[^A-Z0-9 ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+property.normalizedLocation =
+    normalize(property.propertyLocation);
+
+property.searchTransactionType =
+    property.transactionType;
+
+property.searchFlatTypes =
+    property.propertyMode === "PROJECT"
+        ? (property.configurations || []).map(c => c.flatType)
+        : [property.singleFlatType];
+
 await property.save()
 
 const executives = await Executive.find({
@@ -1457,6 +1516,21 @@ coverPhoto: req.file
     ],
 
     configurations: configurations,
+
+normalizedLocation: String(req.body.propertyLocation || "")
+    .toUpperCase()
+    .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+    .replace(/[^A-Z0-9 ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim(),
+
+searchTransactionType: req.body.transactionType,
+
+searchFlatTypes:
+    req.body.propertyMode === "PROJECT"
+        ? configurations.map(c => c.flatType)
+        : [req.body.singleFlatType],
+
 
     amenities: req.body.amenities
         ? req.body.amenities.split(',')

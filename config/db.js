@@ -10,7 +10,8 @@ const connectDB = async () => {
 
 await mongoose.connect(dbUri, {
     dbName: 'myworld',
-    authSource: 'admin'
+    authSource: 'admin',
+    autoIndex: true
 });
 
 console.log(
