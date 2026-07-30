@@ -13,6 +13,12 @@ await mongoose.connect(dbUri, {
     authSource: 'admin'
 });
 
+const Buyer = require('../models/Buyer');
+
+await Buyer.syncIndexes();
+
+console.log("Buyer indexes synchronized");
+
 console.log(
     `MongoDB Connected (${process.env.USE_LOCAL_DB === 'true' ? 'Local' : 'Railway'})`
 );

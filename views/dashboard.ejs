@@ -1293,6 +1293,22 @@ Buyers
 
 </a>
 
+<a href="/buyer/unqualified">
+
+    <div class="card buyer-card">
+
+        <h3>
+            Unqualified Leads
+        </h3>
+
+        <h2>
+            <%= unqualifiedLeadCount %>
+        </h2>
+
+    </div>
+
+</a>
+
 
 <!-- CONTACTED -->
 
@@ -1351,7 +1367,6 @@ Lead Aging
 <%
 const sections = [
 
-    // Follow-Up Required
     ["🔴 Overdue",
         leadGroups.followUpRequired.overdue],
 
@@ -1367,7 +1382,6 @@ const sections = [
     ["🔵 8+ Days",
         leadGroups.followUpRequired.eightPlus],
 
-    // No Follow-Up Assigned
     ["🆕 New (0 - 3 Days)",
         leadGroups.noFollowUpAssigned.new],
 
@@ -1385,21 +1399,29 @@ const sections = [
 
 <% sections.forEach(([title, buyers]) => { %>
 
-<details style="margin-bottom:15px;" <%= buyers.length ? "open" : "" %>>
+<details
+style="margin-bottom:15px;"
+<%= buyers.length ? "open" : "" %>
+>
 
-<summary style="
+<summary
+style="
 padding:12px;
 background:#f5f7fa;
 font-weight:bold;
 cursor:pointer;
 border-radius:8px;
-">
+"
+>
+
 <%= title %> (<%= buyers.length %>)
+
 </summary>
 
 <% buyers.forEach(function(buyer){ %>
 
-<div style="
+<div
+style="
 padding:12px;
 margin:8px 0;
 border:1px solid #ddd;
@@ -1409,7 +1431,7 @@ background:#fff;
 
 <b><%= buyer.name %></b><br>
 
-<%= buyer.mobile || "" %><br>
+<%= buyer.phone || "" %><br>
 
 Status :
 <%= buyer.status %><br>
@@ -1435,12 +1457,99 @@ Edit
 
 </div>
 
+<div class="section-card">
 
+<h2 class="section-title">
+Unqualified Lead Aging
+</h2>
+
+<%
+const unqualifiedSections = [
+
+    [
+        "🆕 New (0 - 3 Days)",
+        unqualifiedLeadGroups.new
+    ],
+
+    [
+        "🟨 4 - 7 Days",
+        unqualifiedLeadGroups.fourToSeven
+    ],
+
+    [
+        "🟧 8 - 15 Days",
+        unqualifiedLeadGroups.eightToFifteen
+    ],
+
+    [
+        "🟥 15+ Days",
+        unqualifiedLeadGroups.moreThanFifteen
+    ]
+
+];
+%>
+
+<% unqualifiedSections.forEach(([title, buyers]) => { %>
+
+<details
+style="margin-bottom:15px;"
+<%= buyers.length ? "open" : "" %>
+>
+
+<summary
+style="
+padding:12px;
+background:#f5f7fa;
+font-weight:bold;
+cursor:pointer;
+border-radius:8px;
+"
+>
+
+<%= title %> (<%= buyers.length %>)
+
+</summary>
+
+<% buyers.forEach(function(buyer){ %>
+
+<div
+style="
+padding:12px;
+margin:8px 0;
+border:1px solid #ddd;
+border-radius:8px;
+background:#fff;
+">
+
+<b><%= buyer.name %></b><br>
+
+<%= buyer.phone || "" %><br>
+
+Status :
+<%= buyer.status %><br>
+
+Imported :
+<%= buyer.createdAt
+? buyer.createdAt.toLocaleDateString("en-IN")
+: "-" %>
+
+<br><br>
+
+<a href="/buyer/edit/<%= buyer._id %>">
+Edit
+</a>
 
 </div>
 
+<% }) %>
 
+</details>
 
+<% }) %>
+
+</div>
+
+</div>
 
 
 <!-- ================================
@@ -1705,7 +1814,9 @@ id="bulkMenu"
 👥 Buyer Bulk-Upload
 </a>
 
-
+<a href="/buyer/bulk-upload-unqualified">
+    📥 Import Unqualified Leads
+</a>
 </div>
 
 

@@ -176,11 +176,20 @@ Exact officeName match
 Highest priority
 */
 
-if (
-buyer.preferredLocations &&
-buyer.preferredLocations.includes(property.propertyLocation)
-) {
-score += 20
+const normalizeLocation = (location = "") =>
+    location
+        .replace(/\s+(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)$/i, "")
+        .trim()
+        .toLowerCase();
+
+const propertyLocation = normalizeLocation(property.propertyLocation);
+
+const buyerLocations = (
+    buyer.preferredLocations || []
+).map(normalizeLocation);
+
+if (buyerLocations.includes(propertyLocation)) {
+    score += 20;
 }
 
 /*

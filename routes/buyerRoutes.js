@@ -30,8 +30,6 @@ const uploadExcel = multer({
     storage: multer.memoryStorage()
 })
 
-
-
 const WhatsappGroup =
 require('../models/WhatsappGroup');
 
@@ -48,7 +46,6 @@ const {
 } = require("../services/bulkDownloadService");
 
 const archiver = require("archiver");
-
 
 router.post('/add', async (req,res)=>{
 
@@ -85,7 +82,6 @@ topMatches: results.slice(0,5)
 
 })
 
-
 router.get(
 '/edit/:id',
 isLoggedIn,
@@ -110,7 +106,6 @@ async (req, res) => {
 
 })
 
-
 router.get(
 '/delete/:id',
 isLoggedIn,
@@ -125,7 +120,6 @@ await Buyer.findOneAndDelete({
 res.redirect('/buyer/page')
 
 })
-
 
 router.get(
 '/timeline/:buyerId',
@@ -153,8 +147,6 @@ shortlists
 
 })
 
-
-
 router.get(
 '/list',
 isLoggedIn,
@@ -178,7 +170,6 @@ buyerId:req.params.buyerId
 res.render('shortlist',{ list })
 
 })
-
 
 router.get(
     '/bulk-upload',
@@ -1088,6 +1079,10 @@ router.get(
 isLoggedIn,
 async (req,res)=>{
 
+console.log("===== BUYER GET PAGE ROUTE HIT =====");
+
+const routeStart = Date.now();
+
 const search = req.query.search || ''
 
 const status = req.query.status || ''
@@ -1095,9 +1090,10 @@ const status = req.query.status || ''
 const transactionType =
 req.query.transactionType || ''
 
-
 let filter = {
-    tenantId: req.session.tenantId
+    tenantId: req.session.tenantId,
+    leadSource: { $ne: "Excel" },
+    currentOwnerRole: { $ne: "PreSales" }
 }
 
 if(search){
@@ -1125,58 +1121,180 @@ if(transactionType){
 }
 
 const buyers = await Buyer.find(filter)
+.sort({ createdAt: -1 })
+.lean();
+
+const explain = await Buyer.find(filter)
+.sort({ createdAt: -1 })
+.explain("executionStats");
+
+console.log(
+    JSON.stringify(
+        explain.executionStats,
+        null,
+        2
+    )
+);
+
+console.log("1. Buyer Count:", buyers.length);
+
+console.log(
+    "Buyer Query:",
+    Date.now() - routeStart,
+    "ms"
+);
+
+const buyerIds = buyers.map(b => b._id);
+
+const properties = await Property.find({
+    tenantId: req.session.tenantId
+}).lean();
+
+
+const normalize = value =>
+    String(value || "")
+        .toUpperCase()
+        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+        .replace(/[^A-Z0-9 ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+
+for (const buyer of buyers) {
+
+    let matchCount = 0;
+
+    for (const property of properties) {
+
+        const score = await calculateScore(property, buyer);
+
+if (
+    property.transactionType === buyer.transactionType &&
+    (
+        (property.propertyMode === "PROJECT" &&
+            property.configurations.some(c =>
+                c.flatType === buyer.requiredFlatType
+            )) ||
+        (property.propertyMode !== "PROJECT" &&
+            property.singleFlatType === buyer.requiredFlatType)
+    ) &&
+    buyer.preferredLocations
+        .map(normalize)
+        .includes(
+            normalize(
+                property.propertyLocation || ""
+            )
+        )
+) {
+    matchCount++;
+}
+
+    }
+
+    buyer.matchCount = matchCount;
+}
+
+const visits = await BuyerProjectVisit.find({
+    buyerId: { $in: buyerIds }
+})
+.sort({
+    updatedAt: -1
+})
+.lean();
+
+console.log(
+    "Visits Query:",
+    Date.now() - routeStart,
+    "ms"
+);
+
+const latestVisitMap = new Map();
+
+for (const visit of visits) {
+
+    const key = visit.buyerId.toString();
+
+    if (!latestVisitMap.has(key)) {
+        latestVisitMap.set(key, visit);
+    }
+
+}
 
 for (const buyer of buyers) {
 
     const latestVisit =
-    await BuyerProjectVisit
-        .findOne({
-            buyerId: buyer._id
-        })
-        .sort({ updatedAt: -1 })
+        latestVisitMap.get(buyer._id.toString());
 
     buyer.latestVisitStatus =
-        latestVisit ? latestVisit.visitType : 'No Visit'
+        latestVisit
+            ? latestVisit.visitType
+            : 'No Visit';
 
     buyer.lastActivity =
-        latestVisit ? latestVisit.updatedAt : null
+        latestVisit
+            ? latestVisit.updatedAt
+            : null;
 
 }
 
-const executives = await Executive.find({
+const [
+    executives,
+    newLeads,
+    contacted,
+    siteVisits,
+    negotiations,
+    closedDeals,
+    lostDeals
+] = await Promise.all([
+
+Executive.find({
     tenantId: req.session.tenantId,
     isActive: true
-})
+}).lean(),
 
-const newLeads = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'New Lead'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'New Lead'
+    }),
 
-const contacted = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'Contacted'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'Contacted'
+    }),
 
-const siteVisits = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'Site Visit'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'Site Visit'
+    }),
 
-const negotiations = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'Negotiation'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'Negotiation'
+    }),
 
-const closedDeals = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'Deal Closed'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'Deal Closed'
+    }),
 
-const lostDeals = await Buyer.countDocuments({
-    tenantId: req.session.tenantId,
-    status: 'Lost'
-})
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        status: 'Lost'
+    })
+
+]);
+
+console.log(
+    "Dashboard Counts:",
+    Date.now() - routeStart,
+    "ms"
+);
+
+console.log(
+    "Before Render:",
+    Date.now() - routeStart,
+    "ms"
+);
 
 res.render('buyers', {
     buyers,
@@ -1192,8 +1310,188 @@ res.render('buyers', {
     lostDeals
 })
 
+console.log(
+    "Total Route:",
+    Date.now() - routeStart,
+    "ms"
+);
+
 })
 
+
+router.get(
+'/unqualified',
+isLoggedIn,
+async (req,res)=>{
+
+const search = req.query.search || ''
+
+const status = req.query.status || ''
+
+const transactionType =
+req.query.transactionType || ''
+
+let filter = {
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel"
+}
+
+if(search){
+
+    filter.$or = [
+
+        { name: { $regex: search, $options:'i' } },
+
+        { phone: { $regex: search, $options:'i' } },
+
+        { primaryLocation: { $regex: search, $options:'i' } }
+
+    ]
+}
+
+if(status){
+    filter.status = status
+}
+
+if(transactionType){
+
+    filter.transactionType =
+    transactionType
+
+}
+
+const explain = await Buyer.find(filter)
+.sort({ createdAt: -1 })
+.explain("executionStats");
+
+console.log(
+    JSON.stringify(
+        explain.executionStats,
+        null,
+        2
+    )
+);
+
+const buyers = await Buyer.find(filter)
+.sort({ createdAt: -1 })
+.lean();
+
+console.log("2. Buyer Count:", buyers.length);
+
+const buyerIds = buyers.map(b => b._id);
+
+const visits = await BuyerProjectVisit.find({
+    buyerId: { $in: buyerIds }
+})
+.sort({
+    updatedAt: -1
+})
+.lean();
+
+const latestVisitMap = new Map();
+
+for (const visit of visits) {
+
+    const key = visit.buyerId.toString();
+
+    if (!latestVisitMap.has(key)) {
+        latestVisitMap.set(key, visit);
+    }
+
+}
+
+for (const buyer of buyers) {
+
+    const latestVisit =
+        latestVisitMap.get(buyer._id.toString());
+
+    buyer.latestVisitStatus =
+        latestVisit
+            ? latestVisit.visitType
+            : 'No Visit';
+
+    buyer.lastActivity =
+        latestVisit
+            ? latestVisit.updatedAt
+            : null;
+
+}
+
+const [
+    executives,
+    newLeads,
+    contacted,
+    siteVisits,
+    negotiations,
+    closedDeals,
+    lostDeals
+] = await Promise.all([
+
+Executive.find({
+    tenantId: req.session.tenantId,
+    isActive: true
+}).lean(),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "New Lead"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Contacted"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Site Visit"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Negotiation"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Deal Closed"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Lost"
+    })
+
+]);
+
+res.render('unqualifiedBuyers', {
+    buyers,
+    transactionType,
+    executives,
+    search,
+    status,
+    newLeads,
+    contacted,
+    siteVisits,
+    negotiations,
+    closedDeals,
+    lostDeals
+})
+
+})
 
 router.post(
 '/project-visit/:buyerId/:propertyId',
@@ -1340,40 +1638,76 @@ buyer.transactionType || 'SALE'
 
 })
 
+
+const normalize = value =>
+    String(value || "")
+        .toUpperCase()
+        .replace(/\b(B\.?O\.?|S\.?O\.?|H\.?O\.?|G\.?P\.?O\.?)\b/g, "")
+        .replace(/[^A-Z0-9 ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
 let results = []
 
 for (const property of properties) {
 
-const score = await calculateScore(property, buyer)
+let matchedConfig = null;
 
-/*
-Find exact matched configuration
-based on buyer required flat type
-*/
-
-let matchedConfig = null
-
-if (property.propertyMode === 'PROJECT') {
+if (property.propertyMode === "PROJECT") {
 
     matchedConfig = property.configurations.find(c =>
         c.flatType === buyer.requiredFlatType
-    )
+    );
 
     if (!matchedConfig) {
-        continue
+        continue;
+    }
+
+} else {
+
+    if (property.singleFlatType !== buyer.requiredFlatType) {
+        continue;
     }
 
 }
 
-results.push({
-property,
-matchedConfig,
-score
-})
+const buyerLocations = (buyer.preferredLocations || [])
+    .map(normalize);
+
+const propertyLocation = normalize(
+    property.propertyLocation || ""
+);
+
+console.log("================================");
+console.log("Buyer:", buyer.name);
+console.log("Buyer Transaction:", buyer.transactionType);
+console.log("Property Transaction:", property.transactionType);
+console.log("Buyer Flat Type:", buyer.requiredFlatType);
+console.log(
+    "Property Flat Types:",
+    (property.configurations || []).map(c => c.flatType)
+);
+console.log("Buyer Locations:", buyerLocations);
+console.log("Property Location:", propertyLocation);
+
+if (
+    buyerLocations.length &&
+    !buyerLocations.includes(propertyLocation)
+) {
+    continue;
+}
+
+    const score = await calculateScore(property, buyer);
+
+    results.push({
+        property,
+        matchedConfig,
+        score
+    });
 
 }
 
-results.sort((a, b) => b.score - a.score)
+results.sort((a, b) => b.score - a.score);
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 
@@ -1383,7 +1717,7 @@ const visits = await BuyerProjectVisit.find({
 
 res.render('matches', {
 buyer,
-matches: results.slice(0, 5),
+matches: results.slice(0, 10),
 visits
 })
 
@@ -1785,5 +2119,376 @@ router.get(
 
     }
 );
+
+router.get(
+    '/bulk-upload-unqualified',
+    isLoggedIn,
+    isAdmin,
+    (req,res)=>{
+        res.render('unqualifiedLeadBulkUpload');
+    }
+);
+
+router.post(
+    '/bulk-upload-unqualified',
+    isLoggedIn,
+    isAdmin,
+    uploadExcel.single('excelFile'),
+    async (req, res) => {
+
+        const workbook = XLSX.read(
+            req.file.buffer,
+            { type: 'buffer' }
+        )
+
+        const sheet =
+            workbook.Sheets[
+                workbook.SheetNames[0]
+            ]
+
+        const rows =
+            XLSX.utils.sheet_to_json(
+                sheet,
+                { defval: '' }
+            )
+
+        let importedCount = 0
+        let duplicateCount = 0
+        let invalidCount = 0
+
+        let duplicateMobiles = []
+        let invalidRows = []
+        let missingLocationRequests = []
+
+        for (const row of rows) {
+
+            if (
+                !row.Phone ||
+                !/^\d{10}$/.test(
+                    String(row.Phone)
+                )
+            ) {
+
+                invalidCount++
+
+                invalidRows.push(
+                    row.Name || 'Unknown'
+                )
+
+                continue
+            }
+
+            const existingBuyer =
+                await Buyer.findOne({
+
+                    tenantId:
+                    req.session.tenantId,
+
+                    phone:
+                    String(row.Phone)
+
+                })
+
+            if (existingBuyer) {
+
+                duplicateCount++
+
+                if (
+                    !duplicateMobiles.includes(
+                        String(row.Phone)
+                    )
+                ) {
+                    duplicateMobiles.push(
+                        String(row.Phone)
+                    )
+                }
+
+                continue
+            }
+
+            let preferredLocations = [
+
+                row['Preferred Location 1'],
+
+                row['Preferred Location 2'],
+
+                row['Preferred Location 3']
+
+            ].filter(Boolean)
+
+let locationData = []
+
+const primaryLocationName =
+    preferredLocations[0]
+
+const primaryLocationRecord =
+    await LocationMaster.findOne({
+
+        officeName: {
+            $regex: '^' + primaryLocationName,
+            $options: 'i'
+        }
+
+    })
+
+if (!primaryLocationRecord) {
+
+    invalidCount++
+
+    invalidRows.push(
+        `${row.Name} - ${primaryLocationName}`
+    )
+
+    if (
+        !missingLocationRequests.includes(
+            primaryLocationName
+        )
+    ) {
+        missingLocationRequests.push(
+            primaryLocationName
+        )
+    }
+
+    continue
+}
+
+locationData.push(
+    primaryLocationRecord
+)
+
+for (const locationName of preferredLocations.slice(1)) {
+
+    const location =
+        await LocationMaster.findOne({
+
+            officeName: {
+                $regex: '^' + locationName,
+                $options: 'i'
+            }
+
+        })
+
+    if (location) {
+        locationData.push(location)
+    }
+
+}
+
+
+            const preferredPincodes = [
+                ...new Set(
+                    locationData.map(
+                        l => l.pincode
+                    )
+                )
+            ]
+
+            const preferredDistricts = [
+                ...new Set(
+                    locationData.map(
+                        l => l.district
+                    )
+                )
+            ]
+
+            const preferredDivisionNames = [
+                ...new Set(
+                    locationData.map(
+                        l => l.divisionName
+                    )
+                )
+            ]
+
+            const stateName =
+                locationData.length > 0
+                ? locationData[0].stateName
+                : ""
+
+            const primaryLocation =
+    primaryLocationRecord.officeName
+
+const primaryLocationData =
+    locationData[0]
+
+const buyerLat =
+Number(primaryLocationData?.lat) || 0
+
+const buyerLng =
+Number(primaryLocationData?.lng) || 0
+
+            let requiredPossession =
+                row['Required Possession']
+                || []
+
+            if (
+                requiredPossession &&
+                typeof requiredPossession ===
+                'string'
+            ) {
+
+                requiredPossession =
+                    requiredPossession
+                    .split(',')
+                    .map(x => x.trim())
+                    .filter(Boolean)
+
+            }
+
+
+const transactionType =
+(
+row.TransactionType ||
+'SALE'
+)
+.toUpperCase();
+
+if (
+![
+'SALE',
+'RENT',
+'LEASE'
+]
+.includes(transactionType)
+) {
+
+invalidCount++;
+
+invalidRows.push(
+`${row.Name} - Invalid Transaction Type`
+);
+
+continue;
+
+}
+
+            await Buyer.create({
+
+tenantId: req.session.tenantId,
+
+name: row.Name,
+
+phone: String(row.Phone),
+
+email: row.Email,
+
+status: "Imported",
+
+leadSource: "Excel",
+
+currentOwnerRole: "PreSales",
+
+createdByRole: "Admin",
+
+assignedExecutiveId: null,
+
+assignedExecutiveName: "",
+
+primaryLocation: primaryLocation,
+
+preferredLocations: locationData.map(l=>l.officeName),
+
+preferredPincodes,
+
+preferredDistricts,
+
+preferredDivisionNames,
+
+stateName,
+
+preferredLocation:{
+    type:"Point",
+    coordinates:[
+        buyerLng,
+        buyerLat
+    ]
+}
+
+});
+
+            importedCount++
+
+        }
+
+        if (
+            duplicateMobiles.length > 0
+        ) {
+
+            const tenant =
+                await Tenant.findById(
+                    req.session.tenantId
+                )
+
+            await sendEmail(
+
+                tenant.adminEmail,
+
+                'Buyer Upload Summary',
+
+                `
+                <h2>
+                Buyer Upload Summary
+                </h2>
+
+                <p>
+                Tenant:
+                ${tenant?.name || ''}
+                </p>
+
+                <p>
+                Duplicate Mobiles:
+                </p>
+
+                <pre>
+${duplicateMobiles.join('\n')}
+                </pre>
+                `
+
+            ).catch(console.error)
+
+        }
+
+if (missingLocationRequests.length > 0) {
+
+    const tenant =
+        await Tenant.findById(
+            req.session.tenantId
+        )
+
+    await sendEmail(
+
+        'kbalki2k15@gmail.com',
+
+        'Buyer Upload - New Locations Requested',
+
+        `
+        <h2>Location Master Update Required</h2>
+
+        <p>
+        Tenant:
+        ${tenant?.name || ''}
+        </p>
+
+        <pre>
+${missingLocationRequests.join('\n')}
+        </pre>
+        `
+
+    ).catch(console.error)
+
+}
+
+        res.render(
+            'buyerBulkUploadResult',
+            {
+                importedCount,
+                duplicateCount,
+                invalidCount,
+                duplicateMobiles,
+                invalidRows
+            }
+        )
+
+    }
+)
 
 module.exports = router

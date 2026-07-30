@@ -525,6 +525,7 @@ const executive = new Executive({
     mobile: req.body.mobile,
     email: req.body.email,
     password: hashedPassword,
+    executiveType: req.body.executiveType,
     tenantId: req.session.tenantId,
     assignedLocations: assignedLocations,
     dateOfJoining: req.body.dateOfJoining || "",

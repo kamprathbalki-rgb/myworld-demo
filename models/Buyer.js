@@ -146,6 +146,11 @@ leadOrigin: {
     default: "Manual"
 },
 
+leadSource: {
+    type: String,
+    default: "Manual"
+},
+
 createdByRole: {
     type: String,
     enum: [
@@ -194,5 +199,59 @@ createdAt: {
 }
 
 })
+
+/*
+|--------------------------------------------------------------------------
+| MongoDB Indexes
+|--------------------------------------------------------------------------
+*/
+
+// General tenant lookup
+buyerSchema.index({
+    tenantId: 1
+});
+
+// Duplicate mobile validation
+buyerSchema.index({
+    tenantId: 1,
+    phone: 1
+});
+
+// Status filters
+buyerSchema.index({
+    tenantId: 1,
+    status: 1
+});
+
+// Executive-wise buyers
+buyerSchema.index({
+    tenantId: 1,
+    assignedExecutiveId: 1
+});
+
+// Follow-up reports
+buyerSchema.index({
+    tenantId: 1,
+    nextFollowUp: 1
+});
+
+// Location search
+buyerSchema.index({
+    tenantId: 1,
+    primaryLocation: 1
+});
+
+// Unqualified Leads
+buyerSchema.index({
+    tenantId: 1,
+    leadSource: 1,
+    currentOwnerRole: 1
+});
+
+// Dashboard sorting
+buyerSchema.index({
+    tenantId: 1,
+    createdAt: -1
+});
 
 module.exports = mongoose.model('Buyer', buyerSchema)

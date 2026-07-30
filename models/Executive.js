@@ -24,6 +24,12 @@ dateOfLeaving: String,
 
     assignedLocations: [String],
 
+    executiveType: {
+    type: String,
+    enum: ['PreSales', 'Sales'],
+    default: 'Sales'
+    },
+
     isActive: {
         type: Boolean,
         default: true

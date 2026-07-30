@@ -53,6 +53,11 @@ rescheduledFrom: Date,
     timestamps: true
 })
 
+buyerProjectVisitSchema.index({
+    buyerId: 1,
+    updatedAt: -1
+});
+
 module.exports = mongoose.model(
     'BuyerProjectVisit',
     buyerProjectVisitSchema

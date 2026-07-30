@@ -44,23 +44,74 @@ new Date()
 }
 
 const propertyCount = await Property.countDocuments({ tenantId:req.session.tenantId })
-const buyerCount = await Buyer.countDocuments({ tenantId:req.session.tenantId })
+
+const buyerCount = await Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    $or: [
+        {
+            leadSource: {
+                $ne: "Excel"
+            }
+        },
+        {
+            currentOwnerRole: {
+                $ne: "PreSales"
+            }
+        }
+    ]
+})
 
 const contacted = await Buyer.countDocuments({
-    tenantId:req.session.tenantId,
-    status:'Contacted'
+    tenantId: req.session.tenantId,
+    status: 'Contacted',
+    $or: [
+        {
+            leadSource: {
+                $ne: "Excel"
+            }
+        },
+        {
+            currentOwnerRole: {
+                $ne: "PreSales"
+            }
+        }
+    ]
 })
 
 const negotiation = await Buyer.countDocuments({
-    tenantId:req.session.tenantId,
-    status:'Negotiation'
+    tenantId: req.session.tenantId,
+    status: 'Negotiation',
+    $or: [
+        {
+            leadSource: {
+                $ne: "Excel"
+            }
+        },
+        {
+            currentOwnerRole: {
+                $ne: "PreSales"
+            }
+        }
+    ]
 })
 
 const openBuyers = await Buyer.find({
-    tenantId:req.session.tenantId,
-    status:{
-        $nin:['Deal Closed','Lost']
-    }
+    tenantId: req.session.tenantId,
+    status: {
+        $nin: ['Deal Closed', 'Lost']
+    },
+    $or: [
+        {
+            leadSource: {
+                $ne: "Excel"
+            }
+        },
+        {
+            currentOwnerRole: {
+                $ne: "PreSales"
+            }
+        }
+    ]
 })
 
 const pipelineValue = openBuyers.reduce(
@@ -144,13 +195,94 @@ const agingBuyers = await Buyer.find({
     tenantId: req.session.tenantId,
     status: {
         $nin: ['Deal Closed', 'Lost']
-    }
+    },
+    $or: [
+        {
+            leadSource: {
+                $ne: "Excel"
+            }
+        },
+        {
+            currentOwnerRole: {
+                $ne: "PreSales"
+            }
+        }
+    ]
 }).sort({
     nextFollowUp: 1
 });
 
-
 const leadGroups = groupLeadAging(agingBuyers);
+
+const unqualifiedBuyers = await Buyer.find({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    status: {
+        $nin: [
+            "Deal Closed",
+            "Lost"
+        ]
+    }
+}).sort({
+    createdAt: 1
+});
+
+const unqualifiedLeadGroups = {
+
+    new:
+        unqualifiedBuyers.filter(b => {
+
+            const age =
+                Math.floor(
+                    (agingToday - b.createdAt) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            return age <= 3;
+
+        }),
+
+    fourToSeven:
+        unqualifiedBuyers.filter(b => {
+
+            const age =
+                Math.floor(
+                    (agingToday - b.createdAt) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            return age >= 4 && age <= 7;
+
+        }),
+
+    eightToFifteen:
+        unqualifiedBuyers.filter(b => {
+
+            const age =
+                Math.floor(
+                    (agingToday - b.createdAt) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            return age >= 8 && age <= 15;
+
+        }),
+
+    moreThanFifteen:
+        unqualifiedBuyers.filter(b => {
+
+            const age =
+                Math.floor(
+                    (agingToday - b.createdAt) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            return age > 15;
+
+        })
+
+};
 
 const visitCount = await BuyerProjectVisit.countDocuments({
     tenantId:req.session.tenantId,
@@ -195,6 +327,12 @@ const chatLeadCount = await ChatLead.countDocuments({
     tenantId: req.session.tenantId
 });
 
+const unqualifiedLeadCount = await Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    leadSource: "Excel",
+    currentOwnerRole: "PreSales"
+});
+
 res.render('dashboard',{
 
 tenant,
@@ -218,7 +356,9 @@ tokenProperties,
 lostValue:
 lostValue[0]?.total || 0,
 leadGroups,
-chatLeadCount
+unqualifiedLeadGroups,
+chatLeadCount,
+unqualifiedLeadCount
 
 })
 
@@ -533,6 +673,7 @@ execRevenue
 router.get('/admin-dashboard', async (req,res)=>{
 
 const propertyCount = await Property.countDocuments({ tenantId:req.session.tenantId })
+
 const buyerCount = await Buyer.countDocuments({ tenantId:req.session.tenantId })
 
 const today = new Date()

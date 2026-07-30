@@ -98,6 +98,51 @@ body{
     background:#d9534f;
 }
 
+/* ================================
+   Drop Down With Check Box
+================================ */
+
+.location-checkbox-list{
+
+    max-height:350px;
+
+    overflow-y:auto;
+
+    border:1px solid #ddd;
+
+    border-radius:6px;
+
+    padding:10px;
+
+    background:white;
+
+}
+
+.location-item{
+
+    padding:8px 5px;
+
+    border-bottom:1px solid #f2f2f2;
+
+}
+
+.location-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.location-item label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+}
 
 /* ================================
    ERROR
@@ -620,7 +665,30 @@ value="<%= executive?.password || '' %>"
 
 </div>
 
+<div class="form-group">
 
+    <label>
+        Executive Type
+    </label>
+
+    <select
+        name="executiveType"
+        class="form-control"
+        required
+    >
+        <option value="Sales">Sales</option>
+
+        <option
+            value="PreSales"
+            <%= executive?.executiveType === 'PreSales'
+                ? 'selected'
+                : '' %>>
+            PreSales
+        </option>
+
+    </select>
+
+</div>
 
 <!-- ================================
      ASSIGNED LOCATIONS
@@ -643,59 +711,50 @@ Select all locations that this executive will handle.
 
 <div class="form-group">
 
+    <label>Search Locations</label>
 
-<label>
-Assigned Locations
-</label>
+    <input
+        type="text"
+        id="locationSearch"
+        class="form-control"
+        placeholder="Type location name..."
+    >
 
+</div>
 
-<select
-name="assignedLocations"
-multiple
-size="10"
-required
-class="form-control location-select"
->
-
+<div class="location-checkbox-list" id="locationList">
 
 <% locations.forEach(function(location){ %>
 
-
-<option
-value="<%= location.officeName %>"
-<%= (executive?.assignedLocations || [])
-.includes(location.officeName)
-? 'selected'
-: '' %>
+<div
+    class="location-item"
+    data-name="<%= location.officeName.toLowerCase() %>"
 >
 
+<label>
+
+<input
+    type="checkbox"
+    name="assignedLocations"
+    value="<%= location.officeName %>"
+
+<%= (executive?.assignedLocations || []).includes(location.officeName)
+? "checked"
+: "" %>
+>
 
 <%= location.officeName %>
 
 (
-
 <%= location.divisionName %>,
-
 <%= location.district %>
-
 )
 
-
-</option>
-
-
-<% }) %>
-
-
-</select>
-
-
-<div class="location-help">
-
-On desktop, hold Ctrl / Command while selecting to choose multiple locations.
+</label>
 
 </div>
 
+<% }) %>
 
 </div>
 
@@ -735,7 +794,33 @@ Save Executive
 
 </div>
 
+<script>
+
+const search =
+document.getElementById("locationSearch");
+
+search.addEventListener("input",function(){
+
+    const value =
+    this.value.toLowerCase();
+
+    document
+    .querySelectorAll(".location-item")
+    .forEach(function(item){
+
+        item.style.display =
+        item.dataset.name.includes(value)
+        ? ""
+        : "none";
+
+    });
+
+});
+
+</script>
 
 </body>
+
+
 
 </html>
