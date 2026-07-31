@@ -498,6 +498,7 @@ router.post('/save', async (req, res) => {
 
 const duplicateLocation = await Executive.findOne({
     tenantId: req.session.tenantId,
+    executiveType: req.body.executiveType,
     assignedLocations: { $in: assignedLocations }
 })
 
@@ -1175,6 +1176,7 @@ router.post('/update/:id', async (req, res) => {
 
 const duplicateLocation = await Executive.findOne({
     tenantId: req.session.tenantId,
+    executiveType: req.body.executiveType,
     assignedLocations: { $in: assignedLocations },
     _id: { $ne: req.params.id }
 })
@@ -1199,6 +1201,7 @@ await Executive.findByIdAndUpdate(
         name: req.body.name,
         mobile: req.body.mobile,
         email: req.body.email,
+        executiveType: req.body.executiveType,
         password: req.body.password
     ? await bcrypt.hash(req.body.password, 10)
     : (await Executive.findById(req.params.id)).password,

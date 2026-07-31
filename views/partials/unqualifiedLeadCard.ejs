@@ -1,0 +1,105 @@
+<div class="lead-card">
+
+    <h4><%= buyer.name %></h4>
+
+    <div>📞 <%= buyer.phone %></div>
+
+    <div>💰 <%= buyer.minBudget %> - <%= buyer.maxBudget %></div>
+
+    <div>📍 <%= buyer.primaryLocation || "-" %></div>
+
+    <div>🏢 <%= buyer.requiredFlatType || "-" %></div>
+
+    <div>👨‍💼 <%= buyer.assignedExecutiveName || "Unassigned" %></div>
+
+<div>📅 Last Follow-up:
+    <%= buyer.lastFollowUp
+        ? new Date(buyer.lastFollowUp).toLocaleDateString("en-IN")
+        : "-" %>
+</div>
+
+<div>⏰ Next Follow-up:
+    <%= buyer.nextFollowUp
+        ? new Date(buyer.nextFollowUp).toLocaleDateString("en-IN")
+        : "-" %>
+</div>
+
+    <form method="POST" action="/buyer/status-unqualified/<%= buyer._id %>">
+
+        <select name="status" onchange="this.form.submit()">
+
+            <option value="Imported"
+                <%= buyer.status==="Imported" ? "selected" : "" %>>
+                Imported
+            </option>
+
+            <option value="Contacted"
+                <%= buyer.status==="Contacted" ? "selected" : "" %>>
+                Contacted
+            </option>
+
+            <option value="Site Visit"
+                <%= buyer.status==="Site Visit" ? "selected" : "" %>>
+                Site Visit
+            </option>
+
+            <option value="Negotiation"
+                <%= buyer.status==="Negotiation" ? "selected" : "" %>>
+                Negotiation
+            </option>
+
+            <option value="Qualified"
+                <%= buyer.status==="Qualified" ? "selected" : "" %>>
+                Qualified
+            </option>
+
+        </select>
+
+    </form>
+
+</div>
+
+<div class="card-actions">
+
+    <a href="/buyer/edit-unqualified/<%= buyer._id %>"
+       class="card-btn edit-btn">
+        ✏️ Edit
+    </a>
+
+    <a href="/buyer/matches/<%= buyer._id %>"
+       class="card-btn match-btn">
+        🏠 Matches
+    </a>
+
+</div>
+
+<div class="card-actions">
+
+    <a href="/buyer/edit-unqualified/<%= buyer._id %>"
+       class="card-btn edit-btn">
+        ✏️ Edit
+    </a>
+
+    <button type="button"
+            class="card-btn details-btn"
+            onclick="toggleDetails('<%= buyer._id %>')">
+        👁 Details
+    </button>
+
+</div>
+
+<div id="details-<%= buyer._id %>" class="lead-details" style="display:none;">
+
+    <hr>
+
+    <div><strong>Source:</strong> <%= buyer.leadSource %></div>
+
+    <div><strong>Requirement:</strong> <%= buyer.requiredFlatType || "-" %></div>
+
+    <div><strong>Location:</strong> <%= buyer.primaryLocation || "-" %></div>
+
+    <div><strong>Budget:</strong> ₹<%= buyer.minBudget %> - ₹<%= buyer.maxBudget %></div>
+
+    <div><strong>Status:</strong> <%= buyer.status %></div>
+
+</div>
