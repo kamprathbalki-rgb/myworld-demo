@@ -703,9 +703,16 @@ record.activityLog.push({
     accuracy: req.body.accuracy || null
 })
 
-await record.save()
+await record.save();
 
-    res.redirect('/executive/dashboard')
+console.log("Executive:", executive.name);
+console.log("executiveType:", executive.executiveType);
+
+if (executive.executiveType === 'PreSales') {
+    return res.redirect('/executive/unqualified');
+}
+
+return res.redirect('/executive/dashboard');
 
 })
 

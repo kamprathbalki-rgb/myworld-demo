@@ -108,6 +108,10 @@ router.get(
 isLoggedIn,
 async (req,res)=>{
 
+console.log(">>> HIT /executive/unqualified");
+console.log(req.session);
+
+
 const search = req.query.search || ''
 
 const status = req.query.status || ''
@@ -118,7 +122,8 @@ req.query.transactionType || ''
 let filter = {
     tenantId: req.session.tenantId,
     currentOwnerRole: "PreSales",
-    leadSource: "Excel"
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId
 }
 
 if(search){
@@ -203,7 +208,6 @@ for (const buyer of buyers) {
 }
 
 const [
-    executives,
     newLeads,
     contacted,
     siteVisits,
@@ -212,60 +216,60 @@ const [
     lostDeals
 ] = await Promise.all([
 
-Executive.find({
+
+Buyer.countDocuments({
     tenantId: req.session.tenantId,
-    executiveType: "PreSales",
-    isActive: true
-}).lean(),
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "New Lead"
+}),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "New Lead"
-    }),
+Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "Contacted"
+}),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Contacted"
-    }),
+Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "Site Visit"
+}),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Site Visit"
-    }),
+Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "Negotiation"
+}),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Negotiation"
-    }),
+Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "Deal Closed"
+}),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Deal Closed"
-    }),
-
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Lost"
-    })
+Buyer.countDocuments({
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel",
+    assignedExecutiveId: req.session.executiveId,
+    status: "Lost"
+}),
 
 ]);
 
-res.render('unqualifiedBuyers', {
+res.render('executiveUnqualifiedBuyers', {
     buyers,
     transactionType,
-    executives,
     search,
     status,
     newLeads,
@@ -282,12 +286,18 @@ router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
     console.log("POST STATUS HIT");
     console.log(req.body);
 
-    await Buyer.findByIdAndUpdate(
-        req.params.id,
-        { status: req.body.status }
-    );
+await Buyer.findOneAndUpdate(
+{
+    _id: req.params.id,
+    tenantId: req.session.tenantId,
+    assignedExecutiveId: req.session.executiveId
+},
+{
+    status: req.body.status
+}
+);
 
-    res.redirect('/buyer/unqualified');
+    res.redirect('/executive/unqualified');
 });
 
 router.post(
@@ -297,11 +307,12 @@ router.post(
 
         try {
 
-            await Buyer.findOneAndUpdate(
-                {
-                    _id: req.params.id,
-                    tenantId: req.session.tenantId
-                },
+await Buyer.findOneAndUpdate(
+{
+    _id: req.params.id,
+    tenantId: req.session.tenantId,
+    assignedExecutiveId: req.session.executiveId
+},
                 {
                     status: req.body.status
                 }
@@ -345,7 +356,8 @@ if (!executive) {
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
-    tenantId: req.session.tenantId
+    tenantId: req.session.tenantId,
+    assignedExecutiveId: req.session.executiveId
 },
 {
     assignedExecutiveId: executive._id,
@@ -371,7 +383,7 @@ This lead has been assigned to you.`
 
 );
 
-res.redirect('/buyer/unqualified')
+res.redirect('/executive/unqualified')
 
 })
 
@@ -527,7 +539,7 @@ req.body.transactionType,
 }
 )
 
-res.redirect('/buyer/unqualified')
+res.redirect('/executive/unqualified')
 
 })
 
@@ -578,9 +590,9 @@ res.render(
 
 
 router.get(
-'/edit-unqualified/:id',
-isLoggedIn,
-async (req, res) => {
+    '/edit-unqualified/:id',
+    isLoggedIn,
+    async (req, res) => {
 
     const buyer = await Buyer.findOne({
         _id: req.params.id,

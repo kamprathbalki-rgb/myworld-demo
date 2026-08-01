@@ -175,17 +175,26 @@ textarea{
 
 <div class="page-header">
 
-    <a href="javascript:history.back()" class="header-link">←</a>
+    <a href="<%= buyer.currentOwnerRole === 'PreSales'
+    ? '/executive/unqualified'
+    : 'javascript:history.back()' %>" class="header-link">←</a>
+
+<a href="<%= buyer.currentOwnerRole === 'PreSales'
+    ? '/executive/unqualified'
+    : '/dashboard' %>" class="header-link">🏠</a>
 
     <h1>👤 Edit Buyer</h1>
 
-    <a href="/dashboard" class="header-link">🏠</a>
+    <a href="<%= buyer.currentOwnerRole === 'PreSales'
+    ? '/executive/unqualified'
+    : '/dashboard' %>" class="header-link">🏠</a>
 
 </div>
 
-
-<form method="POST" action="/buyer/update-unqualified/<%= buyer._id %>">
-
+<form method="POST"
+      action="<%= buyer.currentOwnerRole === 'PreSales'
+          ? '/executive/update-unqualified/' + buyer._id
+          : '/buyer/update-unqualified/' + buyer._id %>">
 
 <div class="card">
 

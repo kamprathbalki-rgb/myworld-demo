@@ -30,19 +30,6 @@ const age = getLeadAge(buyer.createdAt);
 
     <div>🏢 <%= buyer.requiredFlatType || "-" %></div>
 
-    <div class="executive-row">
-
-    <span class="executive-name">
-        👨‍💼 <%= buyer.assignedExecutiveName || "Unassigned" %>
-    </span>
-
-    <a href="/buyer/edit-unqualified/<%= buyer._id %>#assignment"
-       class="reassign-link">
-        Reassign
-    </a>
-
-</div>
-
 <div>📅 Last Follow-up:
     <%= buyer.lastFollowUp
         ? new Date(buyer.lastFollowUp).toLocaleDateString("en-IN")
@@ -55,7 +42,7 @@ const age = getLeadAge(buyer.createdAt);
         : "-" %>
 </div>
 
-    <form method="POST" action="/buyer/status-unqualified/<%= buyer._id %>">
+    <form method="POST" action="/executive/status-unqualified/<%= buyer._id %>">
 
         <select name="status" onchange="this.form.submit()">
 
@@ -92,12 +79,12 @@ const age = getLeadAge(buyer.createdAt);
 
 <div class="card-actions">
 
-    <a href="/buyer/edit-unqualified/<%= buyer._id %>"
-       class="card-btn edit-btn">
+<a href="/executive/edit-unqualified/<%= buyer._id %>"
+   class="card-btn edit-btn">
         ✏️ Edit
     </a>
 
-    <a href="/buyer/matches/<%= buyer._id %>"
+<a href="/executive/matches/<%= buyer._id %>"
        class="card-btn match-btn">
         🏠 Matches
     </a>

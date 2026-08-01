@@ -29,6 +29,7 @@ const chatSessionMonitor = require("./services/chatSessionMonitor");
 const chatLeadRoutes = require("./routes/chatLeadRoutes");
 const marketplaceRoutes = require("./routes/marketplaceRoutes");
 const unqualifiedBuyerRoutes = require('./routes/unqualifiedBuyerRoutes')
+const executiveBuyerRoutes = require('./routes/executiveBuyerRoutes')
 
 connectDB()
 
@@ -111,6 +112,7 @@ app.use(chatLeadRoutes);
 app.use('/', websiteRoutes)
 app.use("/marketplace", marketplaceRoutes);
 app.use('/buyer',tenantGuard,companyActiveGuard,unqualifiedBuyerRoutes)
+app.use('/executive', tenantGuard, companyActiveGuard, executiveBuyerRoutes)
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

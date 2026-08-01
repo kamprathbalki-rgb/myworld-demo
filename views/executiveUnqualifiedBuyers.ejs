@@ -945,22 +945,22 @@ Manage imported unqualified leads
 <div class="header-actions">
 
 <a
-href="javascript:history.back()"
-class="header-btn back-btn"
+    href="/executive/unqualified"
+    class="header-btn back-btn"
 >
-← Back
+    Home
 </a>
 
 <a
-href="/dashboard"
-class="header-btn home-btn"
+    href="/executive/unqualified"
+    class="header-btn home-btn"
 >
-Home
+    Home
 </a>
 
 <a
-href="/logout"
-class="header-btn logout-btn"
+    href="/logout"
+    class="header-btn logout-btn"
 >
 Logout
 </a>
@@ -981,7 +981,7 @@ Buyer Pipeline
 
 <div class="summary">
 
-<a href="/buyer/unqualified?status=New Lead">
+<a href="/executive/unqualified?status=New Lead">
 
 <div class="
 summary-card
@@ -1000,7 +1000,7 @@ New Leads
 
 </a>
 
-<a href="/buyer/unqualified?status=Contacted">
+<a href="/executive/unqualified?status=Contacted">
 
 <div class="
 summary-card
@@ -1019,7 +1019,7 @@ Contacted
 
 </a>
 
-<a href="/buyer/unqualified?status=Site Visit">
+<a href="/executive/unqualified?status=Site Visit">
 
 <div class="
 summary-card
@@ -1038,7 +1038,7 @@ Site Visits
 
 </a>
 
-<a href="/buyer/unqualified?status=Negotiation">
+<a href="/executive/unqualified?status=Negotiation">
 
 <div class="
 summary-card
@@ -1057,7 +1057,7 @@ Negotiation
 
 </a>
 
-<a href="/buyer/unqualified?status=Deal Closed">
+<a href="/executive/unqualified?status=Deal Closed">
 
 <div class="
 summary-card
@@ -1076,7 +1076,7 @@ Closed
 
 </a>
 
-<a href="/buyer/unqualified?status=Lost">
+<a href="/executive/unqualified?status=Lost">
 
 <div class="
 summary-card
@@ -1107,7 +1107,7 @@ Lost
 
 <form
 method="GET"
-action="/buyer/unqualified"
+action="/executive/unqualified"
 class="filter-form"
 >
 
@@ -1135,7 +1135,7 @@ class="
 filter-btn
 clear-btn
 "
-onclick="window.location='/buyer/unqualified'"
+onclick="window.location='/executive/unqualified'"
 >
 Clear
 </button>
@@ -1347,7 +1347,7 @@ Imported
         .filter(b => b.status === "Imported")
         .forEach(function(b){ %>
 
-        <%- include("partials/unqualifiedLeadCard", {
+        <%- include("partials/executiveUnqualifiedLeadCard", {
     buyer: b,
     getLeadAge: getLeadAge
 }) %>
@@ -1371,7 +1371,7 @@ Contacted
         .filter(b => b.status === "Contacted")
         .forEach(function(b){ %>
 
-        <%- include("partials/unqualifiedLeadCard", {
+        <%- include("partials/executiveUnqualifiedLeadCard", {
     buyer: b,
     getLeadAge: getLeadAge
 }) %>

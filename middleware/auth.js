@@ -1,11 +1,10 @@
-function isLoggedIn(req,res,next){
+function isLoggedIn(req, res, next) {
 
-if(!req.session.user){
-return res.redirect('/login')
-}
+    if (req.session.user || req.session.executiveId) {
+        return next();
+    }
 
-next()
-
+    return res.redirect('/login');
 }
 
 function isAdmin(req,res,next){
