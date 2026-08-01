@@ -9,7 +9,7 @@ const Tenant =
 require('../models/Tenant')
 
 const Property = require('../models/Property')
-
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const Buyer = require('../models/Buyer')
 const Recommendation = require('../models/Recommendation')
 const calculateScore = require('../services/matchService')
@@ -443,13 +443,41 @@ router.get(
 
 router.get('/shortlist/:propertyId/:buyerId', async (req,res)=>{
 
-await Shortlist.create({
-propertyId:req.params.propertyId,
-buyerId:req.params.buyerId,
-tenantId:req.session.tenantId
-})
+const buyer = await Buyer.findById(
+    req.params.buyerId
+);
 
-res.send("Property Shortlisted")
+const property = await Property.findById(
+    req.params.propertyId
+);
+
+await Shortlist.create({
+
+    propertyId:req.params.propertyId,
+
+    buyerId:req.params.buyerId,
+
+    tenantId:req.session.tenantId
+
+});
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName || "Admin",
+
+    req.session.executiveType || "Admin",
+
+    "Property Shortlisted",
+
+    "",
+
+    property.projectName || property.ownerName
+
+);
+
+res.send("Property Shortlisted");
 
 })
 

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const Visit = require('../models/Visit')
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 
 router.post('/schedule', async (req,res)=>{
 

@@ -186,6 +186,27 @@ textarea{
 
 <form method="POST" action="/buyer/update/<%= buyer._id %>">
 
+<div class="button-group">
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+        Update Buyer
+    </button>
+
+    <a
+        href="/buyer/timeline/<%= buyer._id %>"
+        class="btn">
+        📝 Timeline
+    </a>
+
+    <a
+        href="/buyer/page"
+        class="btn">
+        Back
+    </a>
+
+</div>
 
 <div class="card">
 

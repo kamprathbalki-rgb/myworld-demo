@@ -11,10 +11,8 @@ const Shortlist = require('../models/Shortlist')
 const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
-
-const {
-    notifyExecutive
-} = require('../services/notificationService');
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
+const {notifyExecutive} = require('../services/notificationService');
 
 const XLSX = require('xlsx')
 
@@ -53,12 +51,43 @@ isLoggedIn,
 isAdmin,
 async (req, res) => {
 
-await Buyer.findOneAndDelete({
-    _id: req.params.id,
-    tenantId: req.session.tenantId
-})
+const buyer = await Buyer.findOne({
 
-res.redirect('/buyer/page')
+    _id: req.params.id,
+
+    tenantId: req.session.tenantId
+
+});
+
+if (!buyer) {
+
+    return res.send("Buyer not found");
+
+}
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "PreSales",
+
+    "Buyer Deleted",
+
+    buyer.status,
+
+    "Deleted"
+
+);
+
+await Buyer.deleteOne({
+
+    _id: buyer._id
+
+});
+
+res.redirect('/buyer/page');
 
 })
 
@@ -269,6 +298,18 @@ res.render('executiveUnqualifiedBuyers', {
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
 
+const buyer = await Buyer.findOne({
+
+    _id: req.params.id,
+
+    tenantId: req.session.tenantId,
+
+    assignedExecutiveId: req.session.executiveId
+
+});
+
+const previousStatus = buyer.status;
+
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
@@ -280,6 +321,23 @@ await Buyer.findOneAndUpdate(
 }
 );
 
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "PreSales",
+
+    "Status Changed",
+
+    previousStatus,
+
+    req.body.status
+
+);
+
+
     res.redirect('/executive/unqualified');
 });
 
@@ -289,6 +347,18 @@ router.post(
     async (req, res) => {
 
         try {
+
+const buyer = await Buyer.findOne({
+
+    _id:req.params.id,
+
+    tenantId:req.session.tenantId,
+
+    assignedExecutiveId:req.session.executiveId
+
+});
+
+const previousStatus = buyer.status;
 
 await Buyer.findOneAndUpdate(
 {
@@ -300,6 +370,23 @@ await Buyer.findOneAndUpdate(
                     status: req.body.status
                 }
             );
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "PreSales",
+
+    "Status Changed",
+
+    previousStatus,
+
+    req.body.status
+
+);
+
 
             res.json({
                 success: true
@@ -325,8 +412,6 @@ isLoggedIn,
 isAdmin,
 async (req, res) => {
 
-const Executive = require('../models/Executive')
-
 const executive = await Executive.findOne({
     _id: req.body.executiveId,
     tenantId: req.session.tenantId
@@ -335,6 +420,27 @@ const executive = await Executive.findOne({
 if (!executive) {
     return res.send("Executive not found")
 }
+
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "Admin",
+
+    "Executive Reassigned",
+
+    buyer.assignedExecutiveName,
+
+    executive.name
+
+);
+
 
 await Buyer.findOneAndUpdate(
 {
@@ -349,9 +455,7 @@ await Buyer.findOneAndUpdate(
 }
 )
 
-const buyer = await Buyer.findById(
-    req.params.id
-);
+
 
 await notifyExecutive(
 
@@ -475,6 +579,12 @@ if (duplicateBuyer) {
     )
 }
 
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+const previousStatus = buyer.status;
+
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
@@ -521,6 +631,22 @@ req.body.transactionType,
     followUpNotes: req.body.followUpNotes
 }
 )
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "PreSales",
+
+    "Buyer Updated",
+
+    previousStatus,
+
+    req.body.status
+
+);
 
 res.redirect('/executive/unqualified')
 
@@ -928,7 +1054,7 @@ continue;
 
 }
 
-            await Buyer.create({
+            const buyer = await Buyer.create({
 
 tenantId: req.session.tenantId,
 
@@ -971,6 +1097,22 @@ preferredLocation:{
 }
 
 });
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName || "Admin",
+
+    "Admin",
+
+    "Buyer Imported",
+
+    "",
+
+    "Bulk Upload"
+
+);
 
             importedCount++
 
@@ -1021,26 +1163,26 @@ if (missingLocationRequests.length > 0) {
             req.session.tenantId
         )
 
-    await sendEmail(
+await sendEmail(
 
-        'kbalki2k15@gmail.com',
+    process.env.ADMIN_EMAIL,
 
-        'Buyer Upload - New Locations Requested',
+    'Buyer Upload - New Locations Requested',
 
-        `
-        <h2>Location Master Update Required</h2>
+    `
+    <h2>Location Master Update Required</h2>
 
-        <p>
-        Tenant:
-        ${tenant?.name || ''}
-        </p>
+    <p>
+    Tenant:
+    ${tenant?.name || ''}
+    </p>
 
-        <pre>
+    <pre>
 ${missingLocationRequests.join('\n')}
-        </pre>
-        `
+    </pre>
+    `
 
-    ).catch(console.error)
+).catch(console.error)
 
 }
 

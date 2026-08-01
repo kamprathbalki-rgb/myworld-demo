@@ -11,7 +11,7 @@ const Shortlist = require('../models/Shortlist')
 const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
-
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const {
     notifyExecutive
 } = require('../services/notificationService');

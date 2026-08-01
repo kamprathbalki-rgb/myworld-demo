@@ -11,10 +11,9 @@ const Shortlist = require('../models/Shortlist')
 const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 
-const {
-    notifyExecutive
-} = require('../services/notificationService');
+const {notifyExecutive} = require('../services/notificationService');
 
 const XLSX = require('xlsx')
 
@@ -113,12 +112,46 @@ isLoggedIn,
 isAdmin,
 async (req, res) => {
 
-await Buyer.findOneAndDelete({
-    _id: req.params.id,
-    tenantId: req.session.tenantId
-})
+const buyer = await Buyer.findOne({
 
-res.redirect('/buyer/page')
+    _id: req.params.id,
+
+    tenantId: req.session.tenantId
+
+});
+
+if (!buyer) {
+
+    return res.send("Buyer not found");
+
+}
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    req.session.executiveName,
+
+    req.session.user
+        ? 'Admin'
+        : req.session.executiveType,
+
+    'Buyer Deleted',
+
+    buyer.status,
+
+    'Deleted'
+
+);
+
+await Buyer.deleteOne({
+
+    _id: buyer._id
+
+});
+
+res.redirect('/buyer/page');
 
 })
 
@@ -426,105 +459,108 @@ continue;
 
 }
 
-            await Buyer.create({
+const buyer = await Buyer.create({
 
-                tenantId:
-                req.session.tenantId,
+    tenantId:
+    req.session.tenantId,
 
-                name:
-                row.Name,
+    name:
+    row.Name,
 
-                phone:
-                String(row.Phone),
+    phone:
+    String(row.Phone),
 
-                email:
-                row.Email,
+    email:
+    row.Email,
 
-                minBudget:
-                Number(
-                    row['Min Budget'] || 0
-                ),
+    minBudget:
+    Number(row['Min Budget'] || 0),
 
-                maxBudget:
-                Number(
-                    row['Max Budget'] || 0
-                ),
+    maxBudget:
+    Number(row['Max Budget'] || 0),
 
+    transactionType:
+    transactionType,
 
-transactionType:
-transactionType,
+    requiredPossession:
+    requiredPossession,
 
-                requiredPossession:
-                requiredPossession,
+    requiredFlatType:
+    row['Required Flat Type'],
 
-                requiredFlatType:
-                row['Required Flat Type'],
+    minArea:
+    Number(row['Min Area'] || 0),
 
-                minArea:
-                Number(
-                    row['Min Area'] || 0
-                ),
+    maxArea:
+    Number(row['Max Area'] || 0),
 
-                maxArea:
-                Number(
-                    row['Max Area'] || 0
-                ),
+    radius:
+    Number(row['Radius'] || 0),
 
-                radius:
-                Number(
-                    row['Radius'] || 0
-                ),
+    assignmentType:
+    "AUTO",
 
-                assignmentType:
-                "AUTO",
+    primaryLocation:
+    primaryLocation,
 
-                primaryLocation:
-                primaryLocation,
+    preferredLocations:
+    locationData.map(
+        l => l.officeName
+    ),
 
-                preferredLocations:
-locationData.map(
-    l => l.officeName
-),
+    preferredPincodes:
+    preferredPincodes,
 
-                preferredPincodes:
-                preferredPincodes,
+    preferredDistricts:
+    preferredDistricts,
 
-                preferredDistricts:
-                preferredDistricts,
+    preferredDivisionNames:
+    preferredDivisionNames,
 
-                preferredDivisionNames:
-                preferredDivisionNames,
+    stateName:
+    stateName,
 
-                stateName:
-                stateName,
+    assignedExecutiveId:
+    matchedExecutive
+        ? matchedExecutive._id
+        : null,
 
-                assignedExecutiveId:
-                matchedExecutive
-                ? matchedExecutive._id
-                : null,
+    assignedExecutiveName:
+    matchedExecutive
+        ? matchedExecutive.name
+        : "",
 
-                assignedExecutiveName:
-                matchedExecutive
-                ? matchedExecutive.name
-                : "",
+    preferredLocation: {
 
-preferredLocation: {
-    type: "Point",
+        type: "Point",
 
-    /*
-    GeoJSON order:
-    [longitude, latitude]
-    */
+        coordinates: [
+            buyerLng,
+            buyerLat
+        ]
 
-    coordinates: [
-        buyerLng,
-        buyerLat
-    ]
-}
+    }
 
-            })
+});
 
-            importedCount++
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    'System',
+
+    'System',
+
+    'Buyer Imported',
+
+    '',
+
+    'Bulk Excel Upload'
+
+);
+
+importedCount++;
 
         }
 
@@ -573,26 +609,26 @@ if (missingLocationRequests.length > 0) {
             req.session.tenantId
         )
 
-    await sendEmail(
+await sendEmail(
 
-        'kbalki2k15@gmail.com',
+    process.env.ADMIN_EMAIL,
 
-        'Buyer Upload - New Locations Requested',
+    'Buyer Upload - New Locations Requested',
 
-        `
-        <h2>Location Master Update Required</h2>
+    `
+    <h2>Location Master Update Required</h2>
 
-        <p>
-        Tenant:
-        ${tenant?.name || ''}
-        </p>
+    <p>
+    Tenant:
+    ${tenant?.name || ''}
+    </p>
 
-        <pre>
+    <pre>
 ${missingLocationRequests.join('\n')}
-        </pre>
-        `
+    </pre>
+    `
 
-    ).catch(console.error)
+).catch(console.error)
 
 }
 
@@ -715,52 +751,125 @@ if (duplicateBuyer) {
     )
 }
 
-await Buyer.findOneAndUpdate(
-{
+const buyer = await Buyer.findOne({
+
     _id: req.params.id,
-    tenantId: req.session.tenantId,
-},
-{
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
+    tenantId: req.session.tenantId
 
-    minBudget: req.body.minBudget,
-    maxBudget: req.body.maxBudget,
+});
 
-transactionType:
-req.body.transactionType,
+const oldStatus = buyer.status || '';
 
-    requiredPossession: requiredPossession,
+const oldBudget =
+`${buyer.minBudget} - ${buyer.maxBudget}`;
 
-    requiredFlatType: requiredFlatType,
+const oldExecutive =
+buyer.assignedExecutiveName || '';
 
-    minArea: minArea,
-    maxArea: maxArea,
+const oldLocation =
+buyer.primaryLocation || '';
 
-    radius: req.body.radius,
 
-    preferredLocations: selectedLocations,
-    primaryLocation: primaryLocation,
-    preferredPincodes: preferredPincodes,
-    preferredDistricts: preferredDistricts,
-    preferredDivisionNames: preferredDivisionNames,
-    stateName: stateName,
+Object.assign(
+    buyer,
+    {
 
-    preferredLocation: {
-        type: "Point",
-        coordinates: [
-            parseFloat(req.body.lng) || 0,
-            parseFloat(req.body.lat) || 0
-        ]
-    },
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
 
-    buyerNotes: req.body.buyerNotes,
+        minBudget: req.body.minBudget,
+        maxBudget: req.body.maxBudget,
 
-    status: req.body.status,
-    followUpNotes: req.body.followUpNotes
-}
-)
+        transactionType:
+        req.body.transactionType,
+
+        requiredPossession:
+        requiredPossession,
+
+        requiredFlatType:
+        requiredFlatType,
+
+        minArea:
+        minArea,
+
+        maxArea:
+        maxArea,
+
+        radius:
+        req.body.radius,
+
+        preferredLocations:
+        selectedLocations,
+
+        primaryLocation:
+        primaryLocation,
+
+        preferredPincodes:
+        preferredPincodes,
+
+        preferredDistricts:
+        preferredDistricts,
+
+        preferredDivisionNames:
+        preferredDivisionNames,
+
+        stateName:
+        stateName,
+
+        preferredLocation: {
+
+            type: "Point",
+
+            coordinates: [
+
+                parseFloat(req.body.lng) || 0,
+
+                parseFloat(req.body.lat) || 0
+
+            ]
+
+        },
+
+        buyerNotes:
+        req.body.buyerNotes,
+
+        status:
+        req.body.status,
+
+        followUpNotes:
+        req.body.followUpNotes
+
+    }
+
+);
+
+await buyer.save();
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    req.session.executiveName,
+
+    req.session.user
+        ? 'Admin'
+        : req.session.executiveType,
+
+    'Buyer Updated',
+
+    `Status : ${oldStatus}
+Budget : ${oldBudget}
+Location : ${oldLocation}
+Executive : ${oldExecutive}`,
+
+    `Status : ${buyer.status}
+Budget : ${buyer.minBudget} - ${buyer.maxBudget}
+Location : ${buyer.primaryLocation}
+Executive : ${buyer.assignedExecutiveName}`
+
+);
 
 res.redirect('/buyer/page')
 
@@ -772,22 +881,51 @@ router.post(
 isLoggedIn,
 async (req,res)=>{
 
+const buyer =
+await Buyer.findById(req.params.id);
+
+const oldFollowUp =
+buyer.followUpNotes || '';
+
 await Buyer.findByIdAndUpdate(
 
 req.params.id,
 
 {
-nextFollowUp: req.body.nextFollowUp
-    ? new Date(req.body.nextFollowUp)
-    : null,
-followUpNotes:req.body.followUpNotes
+nextFollowUp:
+req.body.nextFollowUp
+? new Date(req.body.nextFollowUp)
+: null,
+
+followUpNotes:
+req.body.followUpNotes
+
 }
 
-)
+);
 
-res.redirect('/buyer/page')
+appendBuyerTimeline(
 
-})
+buyer,
+
+req.session.user?.name ||
+req.session.executiveName,
+
+req.session.user
+? 'Admin'
+: req.session.executiveType,
+
+'Follow-up Updated',
+
+oldFollowUp,
+
+req.body.followUpNotes
+
+);
+
+res.redirect('/buyer/page');
+
+});
 
 
 router.post(
@@ -795,17 +933,39 @@ router.post(
 isLoggedIn,
 async (req,res)=>{
 
-await Buyer.findByIdAndUpdate(
+const buyer =
+await Buyer.findById(req.params.id);
 
-req.params.id,
+const oldStatus =
+buyer.status || '';
 
-{ status:req.body.status }
+buyer.status =
+req.body.status;
 
-)
+await buyer.save();
 
-res.redirect('/buyer/page')
+appendBuyerTimeline(
 
-})
+buyer,
+
+req.session.user?.name ||
+req.session.executiveName,
+
+req.session.user
+? 'Admin'
+: req.session.executiveType,
+
+'Status Changed',
+
+oldStatus,
+
+buyer.status
+
+);
+
+res.redirect('/buyer/page');
+
+});
 
 router.post(
 '/save',
@@ -1017,6 +1177,25 @@ preferredLocation: {
 })
 
 await buyer.save()
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    req.session.executiveName,
+
+    req.session.user
+        ? 'Admin'
+        : req.session.executiveType,
+
+    'Buyer Created',
+
+    '',
+
+    'New Buyer Added'
+
+);
 
 await notifyExecutive(
 
@@ -1329,6 +1508,25 @@ await BuyerProjectVisit.findOneAndUpdate(
     }
 )
 
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    req.session.executiveName,
+
+    req.session.user
+        ? 'Admin'
+        : req.session.executiveType,
+
+    'Project Visit',
+
+    '',
+
+    `${req.body.visitType} - ${property.projectName}`
+
+);
+
     res.redirect('/buyer/matches/' + buyer._id)
 
 })
@@ -1347,25 +1545,49 @@ const executive = await Executive.findOne({
     tenantId: req.session.tenantId
 })
 
+const buyer = await Buyer.findOne({
+
+    _id: req.params.id,
+
+    tenantId: req.session.tenantId
+
+});
+
+const oldExecutive =
+buyer.assignedExecutiveName || 'Not Assigned';
+
+
 if (!executive) {
     return res.send("Executive not found")
 }
 
-await Buyer.findOneAndUpdate(
-{
-    _id: req.params.id,
-    tenantId: req.session.tenantId
-},
-{
-    assignedExecutiveId: executive._id,
-    assignedExecutiveName: executive.name,
-    assignmentType: "MANUAL"
-}
-)
+buyer.assignedExecutiveId = executive._id;
 
-const buyer = await Buyer.findById(
-    req.params.id
+buyer.assignedExecutiveName = executive.name;
+
+buyer.assignmentType = "MANUAL";
+
+await buyer.save();
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.user?.name ||
+    req.session.executiveName,
+
+    req.session.user
+        ? 'Admin'
+        : req.session.executiveType,
+
+    'Executive Reassigned',
+
+    oldExecutive,
+
+    executive.name
+
 );
+
 
 await notifyExecutive(
 

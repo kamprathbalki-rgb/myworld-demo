@@ -24,6 +24,11 @@ const {
     notifyExecutive
 } = require('../services/notificationService');
 
+const {
+    appendBuyerTimeline
+} = require('./buyerTimelineRoutes');
+
+
 const ExecutiveLocationLog =
 require('../models/ExecutiveLocationLog')
 
@@ -189,6 +194,22 @@ const executive = await Executive.findById(
     req.session.executiveId
 );
 
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "Sales",
+
+    "Project Visit Scheduled",
+
+    "",
+
+    `${property.projectName} - ${req.body.visitType}`
+
+);
+
 await notifyExecutive(
 
     executive,
@@ -209,15 +230,48 @@ ${req.body.scheduledVisitDate}`
 })
 
 router.post('/status/:id', async (req,res)=>{
-    await Buyer.findByIdAndUpdate(
-        req.params.id,
-        { status:req.body.status }
-    )
+const buyer = await Buyer.findById(
+    req.params.id
+);
 
-    res.redirect('/executive/dashboard')
+const previousStatus = buyer.status;
+
+await Buyer.findByIdAndUpdate(
+
+    req.params.id,
+
+    {
+        status:req.body.status
+    }
+
+);
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "Sales",
+
+    "Status Changed",
+
+    previousStatus,
+
+    req.body.status
+
+);
+
+res.redirect('/executive/dashboard');
 })
 
 router.post('/followup/:id', async (req,res)=>{
+
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+const previousStatus = buyer.status;
 
 const updateData = {
 
@@ -245,10 +299,6 @@ const updateData = {
 
 const executive = await Executive.findById(
     req.session.executiveId
-);
-
-const buyer = await Buyer.findById(
-    req.params.id
 );
 
 await notifyExecutive(
@@ -280,10 +330,6 @@ const executive = await Executive.findById(
     req.session.executiveId
 );
 
-const buyer = await Buyer.findById(
-    req.params.id
-);
-
 await notifyExecutive(
 
     executive,
@@ -302,10 +348,6 @@ Value: ${req.body.dealValue || 0} Lakhs`
     }
 
 if(req.body.siteVisitDate){
-
-    const buyer = await Buyer.findById(
-        req.params.id
-    )
 
     await BuyerProjectVisit.create({
 
@@ -332,6 +374,22 @@ if(req.body.siteVisitDate){
         req.params.id,
         updateData
     )
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "Sales",
+
+    "Follow-up Updated",
+
+    previousStatus,
+
+    updateData.status
+
+);
 
     res.redirect('/executive/dashboard')
 
@@ -465,6 +523,12 @@ if (!Array.isArray(requiredPossession)) {
     requiredPossession = [requiredPossession]
 }
 
+const buyer = await Buyer.findById(
+    req.params.id
+);
+
+const previousStatus = buyer.status;
+
     await Buyer.findOneAndUpdate(
         {
             _id: req.params.id,
@@ -480,6 +544,22 @@ if (!Array.isArray(requiredPossession)) {
             preferredLocations: preferredLocations
         }
     )
+
+appendBuyerTimeline(
+
+    buyer,
+
+    req.session.executiveName,
+
+    "Sales",
+
+    "Buyer Updated",
+
+    previousStatus,
+
+    buyer.status
+
+);
 
     res.redirect('/executive/dashboard')
 

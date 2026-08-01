@@ -32,6 +32,7 @@ const unqualifiedBuyerRoutes = require('./routes/unqualifiedBuyerRoutes')
 const executiveBuyerRoutes = require('./routes/executiveBuyerRoutes')
 const hrRoutes = require('./routes/hrRoutes');
 const recruitmentRoutes = require('./routes/recruitmentRoutes');
+const {router: buyerTimelineRoutes} = require('./routes/buyerTimelineRoutes');
 
 connectDB()
 
@@ -117,6 +118,7 @@ app.use('/buyer',tenantGuard,companyActiveGuard,unqualifiedBuyerRoutes)
 app.use('/executive', tenantGuard, companyActiveGuard, executiveBuyerRoutes)
 app.use('/hr', hrRoutes);
 app.use('/recruitment',recruitmentRoutes);
+app.use('/buyer/timeline', buyerTimelineRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

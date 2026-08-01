@@ -22,6 +22,7 @@ const OfficeLocation =
 require('../models/OfficeLocation')
 
 const Executive = require('../models/Executive')
+const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 
 router.get('/login', (req, res) => {
     res.render('login', {
