@@ -7,13 +7,17 @@ function isLoggedIn(req, res, next) {
     return res.redirect('/login');
 }
 
-function isAdmin(req,res,next){
+function isAdmin(req, res, next) {
 
-if(req.session.user.role !== 'admin'){
-return res.send("Access Denied")
-}
+    if (req.session.user?.role === 'admin') {
+        return next();
+    }
 
-next()
+    if (req.session.executiveType === 'HR') {
+        return next();
+    }
+
+    return res.send("Access Denied");
 
 }
 

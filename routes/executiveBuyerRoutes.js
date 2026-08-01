@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-console.log("=== LOADED unqualifiedBuyerRoutes.js ===");
 const { isLoggedIn, isAdmin } = require('../middleware/auth')
 const Buyer = require('../models/Buyer')
 const Property = require('../models/Property')
@@ -108,10 +107,6 @@ router.get(
 isLoggedIn,
 async (req,res)=>{
 
-console.log(">>> HIT /executive/unqualified");
-console.log(req.session);
-
-
 const search = req.query.search || ''
 
 const status = req.query.status || ''
@@ -154,19 +149,9 @@ const explain = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .explain("executionStats");
 
-console.log(
-    JSON.stringify(
-        explain.executionStats,
-        null,
-        2
-    )
-);
-
 const buyers = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .lean();
-
-console.log("2. Buyer Count:", buyers.length);
 
 const buyerIds = buyers.map(b => b._id);
 
@@ -283,8 +268,6 @@ res.render('executiveUnqualifiedBuyers', {
 })
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
-    console.log("POST STATUS HIT");
-    console.log(req.body);
 
 await Buyer.findOneAndUpdate(
 {

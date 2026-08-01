@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Edit Candidate</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+h2{
+    margin-top:0;
+    color:#1f4e79;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.field{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+
+}
+
+textarea{
+    height:100px;
+}
+
+.buttons{
+
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+
+}
+
+.btn{
+
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:bold;
+    cursor:pointer;
+
+}
+
+.save{
+    background:#1f4e79;
+    color:white;
+}
+
+.home{
+    background:#666;
+    color:white;
+}
+
+.resume{
+    display:inline-block;
+    margin-top:8px;
+    text-decoration:none;
+    color:#1f4e79;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+.row{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2>
+✏ Edit Candidate
+</h2>
+
+<form
+method="POST"
+action="/recruitment/update/<%= candidate._id %>"
+enctype="multipart/form-data">
+
+<div class="row">
+
+<div class="field">
+
+<label>Candidate Name</label>
+
+<input
+type="text"
+name="candidateName"
+value="<%= candidate.candidateName %>"
+required>
+
+</div>
+
+<div class="field">
+
+<label>Mobile</label>
+
+<input
+type="text"
+name="mobile"
+value="<%= candidate.mobile %>"
+required>
+
+</div>
+
+<div class="field">
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+value="<%= candidate.email %>">
+
+</div>
+
+<div class="field">
+
+<label>Qualification</label>
+
+<input
+type="text"
+name="qualification"
+value="<%= candidate.qualification %>">
+
+</div>
+
+<div class="field">
+
+<label>Experience</label>
+
+<input
+type="number"
+step="0.5"
+name="experience"
+value="<%= candidate.experience %>">
+
+</div>
+
+<div class="field">
+
+<label>Applied For</label>
+
+<input
+type="text"
+name="appliedFor"
+value="<%= candidate.appliedFor %>">
+
+</div>
+
+<div class="field">
+
+<label>Current Company</label>
+
+<input
+type="text"
+name="currentCompany"
+value="<%= candidate.currentCompany %>">
+
+</div>
+
+<div class="field">
+
+<label>Current Salary</label>
+
+<input
+type="number"
+name="currentSalary"
+value="<%= candidate.currentSalary %>">
+
+</div>
+
+<div class="field">
+
+<label>Expected Salary</label>
+
+<input
+type="number"
+name="expectedSalary"
+value="<%= candidate.expectedSalary %>">
+
+</div>
+
+<div class="field">
+
+<label>Notice Period</label>
+
+<input
+type="text"
+name="noticePeriod"
+value="<%= candidate.noticePeriod %>">
+
+</div>
+
+<div class="field">
+
+<label>Source</label>
+
+<input
+type="text"
+name="source"
+value="<%= candidate.source %>">
+
+</div>
+
+<div class="field">
+
+<label>Interview Status</label>
+
+<select name="interviewStatus">
+
+<%
+[
+'Applied',
+'Screening',
+'Interview Scheduled',
+'Interview Completed',
+'Selected',
+'Offer Released',
+'Joined',
+'Rejected',
+'On Hold'
+].forEach(function(status){
+%>
+
+<option
+value="<%= status %>"
+<%= candidate.interviewStatus===status ? 'selected' : '' %>>
+
+<%= status %>
+
+</option>
+
+<% }) %>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="field">
+
+<label>Upload New Resume</label>
+
+<input
+type="file"
+name="resume"
+accept=".pdf,.doc,.docx">
+
+<% if(candidate.resumeFile){ %>
+
+<br>
+
+<a
+class="resume"
+target="_blank"
+href="/recruitment/download/<%= candidate._id %>">
+
+📄 Download Current Resume
+
+</a>
+
+<% } %>
+
+</div>
+
+<div class="field">
+
+<label>Remarks</label>
+
+<textarea
+name="remarks"><%= candidate.remarks %></textarea>
+
+</div>
+
+<div class="buttons">
+
+<button
+type="submit"
+class="btn save">
+
+Update Candidate
+
+</button>
+
+<a
+href="/recruitment"
+class="btn home">
+
+Back
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

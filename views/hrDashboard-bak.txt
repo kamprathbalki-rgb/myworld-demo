@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Dashboard</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+    *{
+        box-sizing:border-box;
+    }
+
+    body{
+        margin:0;
+        padding:20px;
+        font-family:Arial,sans-serif;
+        background:#f5f7fa;
+        color:#333;
+    }
+
+    .container{
+        max-width:1100px;
+        margin:auto;
+    }
+
+    .header{
+        background:#1f4e79;
+        color:white;
+        padding:20px;
+        border-radius:12px;
+        margin-bottom:20px;
+        box-shadow:0 2px 8px rgba(0,0,0,.12);
+    }
+
+    .header h1{
+        margin:0;
+        font-size:28px;
+    }
+
+    .header p{
+        margin:8px 0 0;
+        opacity:.9;
+    }
+
+    .summary{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:15px;
+        margin-bottom:25px;
+    }
+
+    .summary-card{
+        background:white;
+        border-radius:12px;
+        padding:25px;
+        text-align:center;
+        box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .summary-card h2{
+        margin:0;
+        color:#1f4e79;
+        font-size:38px;
+    }
+
+    .summary-card p{
+        margin:10px 0 0;
+        color:#666;
+        font-weight:bold;
+    }
+
+    .section{
+        background:white;
+        border-radius:12px;
+        padding:20px;
+        margin-bottom:20px;
+        box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .section-title{
+        margin:0 0 18px;
+        color:#1f4e79;
+        font-size:20px;
+        border-bottom:1px solid #eee;
+        padding-bottom:10px;
+    }
+
+    .menu-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:15px;
+    }
+
+    .menu-card{
+        display:block;
+        text-decoration:none;
+        background:#f8fafc;
+        border:1px solid #dbe5ef;
+        border-radius:10px;
+        padding:22px;
+        text-align:center;
+        transition:.2s;
+    }
+
+    .menu-card:hover{
+        transform:translateY(-3px);
+        background:white;
+        box-shadow:0 3px 10px rgba(0,0,0,.08);
+    }
+
+    .icon{
+        font-size:34px;
+    }
+
+    .title{
+        margin-top:12px;
+        font-size:17px;
+        font-weight:bold;
+        color:#1f4e79;
+    }
+
+    .subtitle{
+        margin-top:6px;
+        font-size:12px;
+        color:#666;
+    }
+
+    @media(max-width:700px){
+
+        body{
+            padding:10px;
+        }
+
+        .summary{
+            grid-template-columns:1fr;
+        }
+
+        .header h1{
+            font-size:22px;
+        }
+
+    }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>👋 Welcome <%= hrName %></h1>
+
+        <p>Human Resources Dashboard</p>
+
+    </div>
+
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <h2><%= employeeCount %></h2>
+
+            <p>👥 Total Employees</p>
+
+        </div>
+
+        <div class="summary-card">
+
+            <h2><%= attendanceToday %></h2>
+
+            <p>📅 Today's Attendance</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2 class="section-title">
+            👥 Employees
+        </h2>
+
+        <div class="menu-grid">
+
+            <a href="/hr/employees" class="menu-card">
+
+                <div class="icon">📋</div>
+
+                <div class="title">Employee List</div>
+
+                <div class="subtitle">
+                    View all employees
+                </div>
+
+            </a>
+
+            <a href="/executive/add" class="menu-card">
+
+                <div class="icon">➕</div>
+
+                <div class="title">Add Employee</div>
+
+                <div class="subtitle">
+                    Create new employee
+                </div>
+
+            </a>
+
+            <a href="/hr/attendance" class="menu-card">
+
+                <div class="icon">📅</div>
+
+                <div class="title">Attendance</div>
+
+                <div class="subtitle">
+                    Daily attendance
+                </div>
+
+            </a>
+
+            <a href="/hr/attendance-report" class="menu-card">
+
+                <div class="icon">📊</div>
+
+                <div class="title">Attendance Report</div>
+
+                <div class="subtitle">
+                    Complete attendance history
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2 class="section-title">
+            ⚙️ Account
+        </h2>
+
+        <div class="menu-grid">
+
+            <a href="/change-password" class="menu-card">
+
+                <div class="icon">🔑</div>
+
+                <div class="title">Change Password</div>
+
+                <div class="subtitle">
+                    Update your password
+                </div>
+
+            </a>
+
+            <a href="/hr/logout" class="menu-card">
+
+                <div class="icon">🚪</div>
+
+                <div class="title">Logout</div>
+
+                <div class="subtitle">
+                    Sign out
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

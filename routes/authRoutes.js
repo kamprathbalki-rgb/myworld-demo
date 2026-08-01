@@ -21,7 +21,7 @@ require('../models/ExecutiveLocationLog')
 const OfficeLocation =
 require('../models/OfficeLocation')
 
-
+const Executive = require('../models/Executive')
 
 router.get('/login', (req, res) => {
     res.render('login', {
@@ -231,6 +231,7 @@ else {
 res.render(
 'adminAttendance',
 {
+session: req.session,
 records
 }
 )
@@ -285,7 +286,7 @@ router.get('/attendance/log/:id', async (req, res) => {
     res.render(
         'attendanceLog',
         {
-
+            session: req.session,
             attendance,
 
             siteVisitCount,
@@ -357,21 +358,16 @@ type:'CLIENT'
 })
 
 res.render(
-'executiveDailyRouteReport',
-{
-
-attendance,
-
-locationLogs,
-
-office,
-
-siteVisitCount,
-
-clientVisitCount
-
-}
-)
+    'executiveDailyRouteReport',
+    {
+        session: req.session,
+        attendance,
+        locationLogs,
+        office,
+        siteVisitCount,
+        clientVisitCount
+    }
+);
 
 })
 
@@ -470,6 +466,82 @@ res.render(
 )
 
 })
+
+router.get('/reports/salary', async (req, res) => {
+
+    if (
+        !req.session.user &&
+        req.session.executiveType !== 'HR'
+    ) {
+        return res.redirect('/login');
+    }
+
+    const month = Number(req.query.month || (new Date().getMonth() + 1));
+    const year = Number(req.query.year || new Date().getFullYear());
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const executives = await Executive.find({
+        tenantId: req.session.tenantId,
+        isActive: true
+    }).sort({ name: 1 });
+
+    const report = [];
+
+    for (const executive of executives) {
+
+        const attendanceDays = await ExecutiveAttendance.countDocuments({
+            tenantId: req.session.tenantId,
+            executiveId: executive._id,
+            date: {
+                $gte: startDate.toISOString().slice(0,10),
+                $lt: endDate.toISOString().slice(0,10)
+            }
+        });
+
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        const perDaySalary =
+            (executive.salary || 0) / daysInMonth;
+
+        const payable =
+            Math.round(perDaySalary * attendanceDays);
+
+        report.push({
+            executiveName: executive.name,
+            attendanceDays,
+            salary: executive.salary || 0,
+            perDaySalary,
+            payable
+        });
+
+    }
+
+    res.render('salaryReport', {
+        session: req.session,
+        month,
+        year,
+        report
+    });
+
+});
+
+
+router.get('/reports/salary/excel', async (req, res) => {
+
+    // TODO
+    res.send('Salary Excel Report');
+
+});
+
+router.get('/reports/salary/pdf', async (req, res) => {
+
+    // TODO
+    res.send('Salary PDF Report');
+
+});
+
 
 // ================================
 // LOGOUT

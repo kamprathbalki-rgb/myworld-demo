@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Add Candidate</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+h2{
+    margin-top:0;
+    color:#1f4e79;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.field{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+
+}
+
+textarea{
+
+    height:100px;
+    resize:vertical;
+
+}
+
+.buttons{
+
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+
+}
+
+.btn{
+
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight:bold;
+
+}
+
+.save{
+
+    background:#1f4e79;
+    color:#fff;
+
+}
+
+.home{
+
+    background:#666;
+    color:#fff;
+
+}
+
+@media(max-width:700px){
+
+.row{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2>
+👤 Add Candidate
+</h2>
+
+<form
+method="POST"
+action="/recruitment/add"
+enctype="multipart/form-data">
+
+<div class="row">
+
+<div class="field">
+
+<label>
+Candidate Name
+</label>
+
+<input
+type="text"
+name="candidateName"
+required>
+
+</div>
+
+<div class="field">
+
+<label>
+Mobile
+</label>
+
+<input
+type="text"
+name="mobile"
+required>
+
+</div>
+
+<div class="field">
+
+<label>
+Email
+</label>
+
+<input
+type="email"
+name="email">
+
+</div>
+
+<div class="field">
+
+<label>
+Qualification
+</label>
+
+<input
+type="text"
+name="qualification">
+
+</div>
+
+<div class="field">
+
+<label>
+Experience (Years)
+</label>
+
+<input
+type="number"
+name="experience"
+step="0.5">
+
+</div>
+
+<div class="field">
+
+<label>
+Applied For
+</label>
+
+<input
+type="text"
+name="appliedFor">
+
+</div>
+
+<div class="field">
+
+<label>
+Current Company
+</label>
+
+<input
+type="text"
+name="currentCompany">
+
+</div>
+
+<div class="field">
+
+<label>
+Current Salary
+</label>
+
+<input
+type="number"
+name="currentSalary">
+
+</div>
+
+<div class="field">
+
+<label>
+Expected Salary
+</label>
+
+<input
+type="number"
+name="expectedSalary">
+
+</div>
+
+<div class="field">
+
+<label>
+Notice Period
+</label>
+
+<input
+type="text"
+name="noticePeriod">
+
+</div>
+
+<div class="field">
+
+<label>
+Source
+</label>
+
+<select name="source">
+
+<option>Walk-in</option>
+
+<option>Referral</option>
+
+<option>Naukri</option>
+
+<option>Indeed</option>
+
+<option>LinkedIn</option>
+
+<option>Website</option>
+
+</select>
+
+</div>
+
+<div class="field">
+
+<label>
+Interview Status
+</label>
+
+<select
+name="interviewStatus">
+
+<option>Applied</option>
+
+<option>Screening</option>
+
+<option>Interview Scheduled</option>
+
+<option>Interview Completed</option>
+
+<option>Selected</option>
+
+<option>Offer Released</option>
+
+<option>Joined</option>
+
+<option>Rejected</option>
+
+<option>On Hold</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="field">
+
+<label>
+Upload Resume
+</label>
+
+<input
+type="file"
+name="resume"
+accept=".pdf,.doc,.docx">
+
+</div>
+
+<div class="field">
+
+<label>
+Remarks
+</label>
+
+<textarea
+name="remarks"></textarea>
+
+</div>
+
+<div class="buttons">
+
+<button
+class="btn save"
+type="submit">
+
+Save Candidate
+
+</button>
+
+<a
+href="/recruitment"
+class="btn home">
+
+Back
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

@@ -385,14 +385,7 @@ body{
 👥 Executive Status
 </h1>
 
-
-<a
-href="/dashboard/main"
-class="back-btn"
->
-← Dashboard
-</a>
-
+<a href="<%= session?.executiveType === 'HR' ? '/hr/dashboard' : '/dashboard/main' %>">Home</a>
 
 </div>
 

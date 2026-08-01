@@ -345,21 +345,23 @@ action="/executive/update/<%= executive._id %>"
             name="executiveType"
             required
         >
-            <option
-                value="Sales"
-                <%= executive.executiveType === 'Sales'
-                    ? 'selected'
-                    : '' %>>
-                Sales
-            </option>
+<option
+    value="Sales"
+    <%= executive.executiveType === 'Sales' ? 'selected' : '' %>>
+    Sales
+</option>
 
-            <option
-                value="PreSales"
-                <%= executive.executiveType === 'PreSales'
-                    ? 'selected'
-                    : '' %>>
-                PreSales
-            </option>
+<option
+    value="PreSales"
+    <%= executive.executiveType === 'PreSales' ? 'selected' : '' %>>
+    PreSales
+</option>
+
+<option
+    value="HR"
+    <%= executive.executiveType === 'HR' ? 'selected' : '' %>>
+    HR
+</option>
         </select>
 
 </div>
@@ -387,6 +389,20 @@ action="/executive/update/<%= executive._id %>"
             >
 
         </div>
+
+<div class="field">
+
+    <label>Salary (₹)</label>
+
+    <input
+        type="number"
+        name="salary"
+        value="<%= executive.salary || '' %>"
+        min="0"
+        step="500"
+    >
+
+</div>
 
     </div>
 

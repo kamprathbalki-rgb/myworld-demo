@@ -15,6 +15,11 @@ dateOfJoining: String,
 
 dateOfLeaving: String,
 
+salary: {
+    type: Number,
+    default: 0
+},
+
     password: String,
 
     tenantId: {
@@ -26,7 +31,7 @@ dateOfLeaving: String,
 
     executiveType: {
     type: String,
-    enum: ['PreSales', 'Sales'],
+    enum: ['PreSales', 'Sales','HR'],
     default: 'Sales'
     },
 

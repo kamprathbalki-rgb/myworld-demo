@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Candidate List</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+    margin:0;
+    padding:20px;
+    background:#f5f7fa;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.header h2{
+    margin:0;
+    color:#1f4e79;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    background:#1f4e79;
+    color:#fff;
+    padding:10px 16px;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    background:#163b5d;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1f4e79;
+    color:#fff;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+    text-align:center;
+}
+
+tr:hover{
+    background:#fafafa;
+}
+
+.action-link{
+
+    text-decoration:none;
+    font-weight:bold;
+    margin:0 5px;
+
+}
+
+.uploaded{
+    color:green;
+    font-weight:bold;
+}
+
+.pending{
+    color:#dc3545;
+    font-weight:bold;
+}
+
+@media(max-width:900px){
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h2>
+👥 Recruitment
+</h2>
+
+<div class="actions">
+
+<a
+href="/recruitment/add"
+class="btn">
+➕ Add Candidate
+</a>
+
+<a
+href="<%= isAdmin
+? '/dashboard/main'
+: '/hr/dashboard' %>"
+class="btn">
+🏠 Home
+</a>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<tr>
+
+<th>Name</th>
+
+<th>Mobile</th>
+
+<th>Qualification</th>
+
+<th>Applied For</th>
+
+<th>Experience</th>
+
+<th>Resume</th>
+
+<th>Status</th>
+
+<th>Created On</th>
+
+<th>Actions</th>
+
+</tr>
+
+<% if(candidates.length===0){ %>
+
+<tr>
+
+<td colspan="8">
+
+No Candidates Found
+
+</td>
+
+</tr>
+
+<% } %>
+
+<% candidates.forEach(function(c){ %>
+
+<tr>
+
+<td>
+
+<%= c.candidateName %>
+
+</td>
+
+<td>
+
+<%= c.mobile %>
+
+</td>
+
+<td>
+
+<%= c.qualification %>
+
+</td>
+
+<td>
+
+<%= c.appliedFor %>
+
+</td>
+
+<td>
+
+<%= c.experience %> Years
+
+</td>
+
+<td>
+
+<% if(c.resumeStatus==='Uploaded'){ %>
+
+<span class="uploaded">
+
+Uploaded
+
+</span>
+
+<% }else{ %>
+
+<span class="pending">
+
+Pending
+
+</span>
+
+<% } %>
+
+</td>
+
+<td>
+
+<%= c.interviewStatus %>
+
+</td>
+
+<td>
+
+<%= c.createdAt
+    ? c.createdAt.toLocaleDateString(
+        'en-IN',
+        {
+            day:'2-digit',
+            month:'short',
+            year:'numeric'
+        }
+    )
+    : ''
+%>
+
+</td>
+
+<td>
+
+<a
+class="action-link"
+href="/recruitment/edit/<%= c._id %>">
+
+✏ Edit
+
+</a>
+
+<% if(c.resumeFile){ %>
+
+|
+
+<a
+class="action-link"
+href="/recruitment/download/<%= c._id %>">
+
+📄 Resume
+
+</a>
+
+<% } %>
+
+|
+
+<a
+class="action-link"
+style="color:red;"
+onclick="return confirm('Delete Candidate?')"
+href="/recruitment/delete/<%= c._id %>">
+
+🗑 Delete
+
+</a>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

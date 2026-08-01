@@ -24,13 +24,6 @@ media = new PropertyMedia({
 });
     }
 
-console.log(mediaLimits.amenityPhotos);
-console.log(typeof mediaLimits.amenityPhotos);
-
-console.log("Property:", property);
-console.log("Media:", media);
-console.log("Media Limits:", mediaLimits);
-
     res.render("propertyMedia", {
         property,
         media,
@@ -89,8 +82,7 @@ media.coverPhoto = {
 }
 
 req.files.forEach(file => {
-    console.log(file.fieldname);
-    console.log("  ", file.originalname);
+
 });
 
 req.files.forEach(file => {
@@ -174,9 +166,6 @@ if (builderDocuments.length) {
 }
 
 await media.save();
-
-console.log("Saved cover photo:");
-console.log(media.coverPhoto);
 
 res.redirect("/property-media/" + req.params.propertyId);
 

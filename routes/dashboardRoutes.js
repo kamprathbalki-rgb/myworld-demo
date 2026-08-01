@@ -334,7 +334,7 @@ const unqualifiedLeadCount = await Buyer.countDocuments({
 });
 
 res.render('dashboard',{
-
+session: req.session,
 tenant,
 daysRemaining,
 properties: propertyCount,
@@ -452,7 +452,10 @@ $lt:tomorrow
 }
 })
 
-res.render('followups',{ buyers })
+res.render('followups',{
+    session: req.session,
+    buyers
+})
 
 })
 
@@ -510,7 +513,8 @@ $lt:tomorrow
 .populate('propertyId')
 
 res.render('siteVisits',{
-visits
+    session: req.session,
+    visits
 })
 
 })
@@ -535,7 +539,10 @@ $cond:[ { $eq:["$dealClosed",true] },1,0 ]
 }
 ])
 
-res.render('executiveDashboard',{ data: result })
+res.render('executiveDashboard',{
+    session: req.session,
+    data: result
+})
 
 })
 
@@ -725,12 +732,13 @@ $cond:[ { $eq:["$dealClosed",true] },1,0 ]
 let topExecutive = execStats.length ? execStats[0]._id : "N/A"
 
 res.render('adminDashboard',{
-propertyCount,
-buyerCount,
-visitCount,
-dealsClosed,
-revenue,
-topExecutive
+    session: req.session,
+    propertyCount,
+    buyerCount,
+    visitCount,
+    dealsClosed,
+    revenue,
+    topExecutive
 })
 
 })
@@ -747,6 +755,7 @@ router.get('/attendance-report', async (req, res) => {
     }).sort({ date: -1 })
 
     res.render('adminAttendanceReport', {
+        session: req.session,
         records
     })
 
@@ -1453,9 +1462,6 @@ const productive = calculateProductiveHours(attendance);
     const activity =
         (latestActivity.type || latestActivity.action || '').toLowerCase();
 
-console.log("Latest activity:", latestActivity);
-console.log("Activity value:", activity);
-
     if (activity) {
 
         lastActivity = activity;
@@ -1558,6 +1564,7 @@ console.log("Activity value:", activity);
     res.render(
         'executiveStatus',
         {
+            session: req.session,
             executives:
             executiveStatus
         }

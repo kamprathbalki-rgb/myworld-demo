@@ -177,12 +177,6 @@ router.post('/send', async (req, res) => {
 
     try {
 
-        console.log('==============================');
-        console.log('PHOTO GALLERY SEND REQUEST');
-        console.log('Tenant :', req.session.tenantId);
-        console.log('Body   :', JSON.stringify(req.body, null, 2));
-        console.log('==============================');
-
         res.json({
             success: true,
             message: 'Request received'

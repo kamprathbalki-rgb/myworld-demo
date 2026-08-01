@@ -430,7 +430,7 @@ Attendance and activity records
 <div class="header-actions">
 
 <a
-href="/dashboard/main"
+href="<%= session.executiveType === 'HR' ? '/hr/dashboard' : '/dashboard/main' %>"
 class="header-btn home-btn"
 >
 ← Dashboard

@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-console.log("=== LOADED unqualifiedBuyerRoutes.js ===");
 const { isLoggedIn, isAdmin } = require('../middleware/auth')
 const Buyer = require('../models/Buyer')
 const Property = require('../models/Property')
@@ -149,19 +148,9 @@ const explain = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .explain("executionStats");
 
-console.log(
-    JSON.stringify(
-        explain.executionStats,
-        null,
-        2
-    )
-);
-
 const buyers = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .lean();
-
-console.log("2. Buyer Count:", buyers.length);
 
 const buyerIds = buyers.map(b => b._id);
 
@@ -279,9 +268,6 @@ res.render('unqualifiedBuyers', {
 })
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
-    console.log("POST STATUS HIT");
-    console.log(req.body);
-
     await Buyer.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status }

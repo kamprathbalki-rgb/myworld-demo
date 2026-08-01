@@ -625,7 +625,20 @@ value="<%= executive?.dateOfLeaving || '' %>"
 
 </div>
 
+<div class="form-group">
 
+    <label>Salary (₹)</label>
+
+    <input
+        type="number"
+        name="salary"
+        class="form-control"
+        value="<%= executive?.salary || '' %>"
+        min="0"
+        step="500"
+    >
+
+</div>
 
 <div class="form-group">
 
@@ -676,15 +689,19 @@ value="<%= executive?.password || '' %>"
         class="form-control"
         required
     >
-        <option value="Sales">Sales</option>
+<option value="Sales">Sales</option>
 
-        <option
-            value="PreSales"
-            <%= executive?.executiveType === 'PreSales'
-                ? 'selected'
-                : '' %>>
-            PreSales
-        </option>
+<option
+    value="PreSales"
+    <%= executive?.executiveType === 'PreSales' ? 'selected' : '' %>>
+    PreSales
+</option>
+
+<option
+    value="HR"
+    <%= executive?.executiveType === 'HR' ? 'selected' : '' %>>
+    HR
+</option>
 
     </select>
 

@@ -100,6 +100,7 @@ async (req, res) => {
     }
 
     res.render('editBuyer', {
+        session: req.session,
         buyer,
         locations
     })
@@ -140,6 +141,7 @@ buyerId:req.params.buyerId
 }).populate('propertyId')
 
 res.render('timeline',{
+session: req.session,
 buyer,
 visits,
 shortlists
@@ -1065,6 +1067,7 @@ const locations = await LocationMaster.find({})
 .sort({ officeName: 1 })
 
 res.render('addBuyer', {
+session: req.session,
 locations
 })
 
@@ -1075,8 +1078,6 @@ router.get(
 '/page',
 isLoggedIn,
 async (req,res)=>{
-
-console.log("===== BUYER GET PAGE ROUTE HIT =====");
 
 const routeStart = Date.now();
 
@@ -1125,21 +1126,6 @@ const explain = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .explain("executionStats");
 
-console.log(
-    JSON.stringify(
-        explain.executionStats,
-        null,
-        2
-    )
-);
-
-console.log("1. Buyer Count:", buyers.length);
-
-console.log(
-    "Buyer Query:",
-    Date.now() - routeStart,
-    "ms"
-);
 
 const buyerIds = buyers.map(b => b._id);
 
@@ -1163,15 +1149,7 @@ for (const buyer of buyers) {
 
     for (const property of properties) {
 
-console.log(
-    "Matching:",
-    buyer.name,
-    property.projectName || property.propertyName || property._id
-);
-
         const score = await calculateScore(property, buyer);
-
-console.log("Score:", score);
 
 if (
     property.transactionType === buyer.transactionType &&
@@ -1206,12 +1184,6 @@ const visits = await BuyerProjectVisit.find({
     updatedAt: -1
 })
 .lean();
-
-console.log(
-    "Visits Query:",
-    Date.now() - routeStart,
-    "ms"
-);
 
 const latestVisitMap = new Map();
 
@@ -1290,19 +1262,8 @@ Executive.find({
 
 ]);
 
-console.log(
-    "Dashboard Counts:",
-    Date.now() - routeStart,
-    "ms"
-);
-
-console.log(
-    "Before Render:",
-    Date.now() - routeStart,
-    "ms"
-);
-
 res.render('buyers', {
+    session: req.session,
     buyers,
     transactionType,
     executives,
@@ -1315,12 +1276,6 @@ res.render('buyers', {
     closedDeals,
     lostDeals
 })
-
-console.log(
-    "Total Route:",
-    Date.now() - routeStart,
-    "ms"
-);
 
 })
 
@@ -1510,18 +1465,6 @@ const propertyLocation = normalize(
     property.propertyLocation || ""
 );
 
-console.log("================================");
-console.log("Buyer:", buyer.name);
-console.log("Buyer Transaction:", buyer.transactionType);
-console.log("Property Transaction:", property.transactionType);
-console.log("Buyer Flat Type:", buyer.requiredFlatType);
-console.log(
-    "Property Flat Types:",
-    (property.configurations || []).map(c => c.flatType)
-);
-console.log("Buyer Locations:", buyerLocations);
-console.log("Property Location:", propertyLocation);
-
 if (
     buyerLocations.length &&
     !buyerLocations.includes(propertyLocation)
@@ -1548,6 +1491,7 @@ const visits = await BuyerProjectVisit.find({
 })
 
 res.render('matches', {
+session: req.session,
 buyer,
 matches: results.slice(0, 10),
 visits

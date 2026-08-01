@@ -30,6 +30,8 @@ const chatLeadRoutes = require("./routes/chatLeadRoutes");
 const marketplaceRoutes = require("./routes/marketplaceRoutes");
 const unqualifiedBuyerRoutes = require('./routes/unqualifiedBuyerRoutes')
 const executiveBuyerRoutes = require('./routes/executiveBuyerRoutes')
+const hrRoutes = require('./routes/hrRoutes');
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
 
 connectDB()
 
@@ -113,6 +115,8 @@ app.use('/', websiteRoutes)
 app.use("/marketplace", marketplaceRoutes);
 app.use('/buyer',tenantGuard,companyActiveGuard,unqualifiedBuyerRoutes)
 app.use('/executive', tenantGuard, companyActiveGuard, executiveBuyerRoutes)
+app.use('/hr', hrRoutes);
+app.use('/recruitment',recruitmentRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

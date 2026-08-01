@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Salary Report</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-width:110px;
+    padding:10px 18px;
+    border-radius:8px;
+    color:#fff;
+    text-decoration:none;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    opacity:.92;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#1f4e79;
+    color:white;
+}
+
+tr:nth-child(even){
+    background:#fafafa;
+}
+
+.filter{
+    margin-bottom:20px;
+}
+
+select{
+    padding:8px;
+}
+
+button{
+    padding:8px 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+    <div>
+
+        <h2 style="
+            margin:0;
+            color:#1f4e79;
+            font-size:32px;
+        ">
+            💰 Salary Report
+        </h2>
+
+        <div style="
+            margin-top:6px;
+            color:#666;
+            font-size:14px;
+        ">
+            Monthly Salary Payable Report
+        </div>
+
+    </div>
+
+    <div style="
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        align-items:center;
+    ">
+
+        <a
+            href="<%= session.executiveType==='HR'
+                ? '/hr/dashboard'
+                : '/dashboard/main' %>"
+            class="btn"
+            style="background:#1f4e79;">
+            🏠 Home
+        </a>
+
+        <button
+            type="button"
+            onclick="window.print()"
+            class="btn"
+            style="background:#198754;border:none;cursor:pointer;">
+            🖨 Print
+        </button>
+
+        <a
+            href="/reports/salary/excel"
+            class="btn"
+            style="background:#0d6efd;">
+            📗 Excel
+        </a>
+
+        <a
+            href="/reports/salary/pdf"
+            class="btn"
+            style="background:#dc3545;">
+            📄 PDF
+        </a>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+<form method="GET" action="/reports/salary" class="filter">
+
+<select name="month">
+
+<% for(let i=1;i<=12;i++){ %>
+
+<option
+value="<%= i %>"
+<%= month===i ? "selected" : "" %>>
+<%= new Date(0,i-1).toLocaleString('en',{month:'long'}) %>
+</option>
+
+<% } %>
+
+</select>
+
+<select name="year">
+
+<% for(let y=2025;y<=2035;y++){ %>
+
+<option
+value="<%= y %>"
+<%= year===y ? "selected" : "" %>>
+<%= y %>
+</option>
+
+<% } %>
+
+</select>
+
+<button type="submit">
+Calculate
+</button>
+
+</form>
+
+<table>
+
+<tr>
+
+<th>Executive</th>
+
+<th>Days Attended</th>
+
+<th>Monthly Salary</th>
+
+<th>Per Day Salary</th>
+
+<th>Salary Payable</th>
+
+</tr>
+
+<% if(report.length===0){ %>
+
+<tr>
+<td colspan="5">
+No attendance found.
+</td>
+</tr>
+
+<% } %>
+
+<% report.forEach(function(r){ %>
+
+<tr>
+
+<td><%= r.executiveName %></td>
+
+<td><%= r.attendanceDays %></td>
+
+<td>
+₹ <%= r.salary.toLocaleString('en-IN') %>
+</td>
+
+<td>
+₹ <%= r.perDaySalary.toFixed(2) %>
+</td>
+
+<td>
+₹ <%= r.payable.toLocaleString('en-IN') %>
+</td>
+
+</tr>
+
+<% }) %>
+
+<tr style="font-weight:bold;background:#f2f2f2;">
+
+<td>Total</td>
+
+<td>
+<%= report.reduce((a,b)=>a+b.attendanceDays,0) %>
+</td>
+
+<td>
+₹ <%= report.reduce((a,b)=>a+b.salary,0).toLocaleString('en-IN') %>
+</td>
+
+<td>-</td>
+
+<td>
+₹ <%= report.reduce((a,b)=>a+b.payable,0).toLocaleString('en-IN') %>
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

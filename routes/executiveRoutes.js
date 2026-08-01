@@ -412,6 +412,7 @@ router.get('/add', async (req, res) => {
         .sort({ officeName: 1 })
 
     res.render('addExecutive', {
+        session: req.session,
         locations,
         executive:{},
         error: req.query.error || ''
@@ -529,8 +530,9 @@ const executive = new Executive({
     executiveType: req.body.executiveType,
     tenantId: req.session.tenantId,
     assignedLocations: assignedLocations,
-    dateOfJoining: req.body.dateOfJoining || "",
-    dateOfLeaving: req.body.dateOfLeaving || ""
+dateOfJoining: req.body.dateOfJoining || "",
+dateOfLeaving: req.body.dateOfLeaving || "",
+salary: Number(req.body.salary || 0)
 })
 
     await executive.save()
@@ -546,6 +548,7 @@ router.get('/list', async (req, res) => {
     })
 
     res.render('executives', {
+        session: req.session,
         executives
     })
 
@@ -580,6 +583,7 @@ if (!valid) {
 req.session.executiveId = executive._id
 req.session.executiveName = executive.name
 req.session.tenantId = executive.tenantId
+req.session.executiveType = executive.executiveType
 
 const office =
 await OfficeLocation.findOne({
@@ -712,6 +716,9 @@ if (executive.executiveType === 'PreSales') {
     return res.redirect('/executive/unqualified');
 }
 
+console.log("Executive Type:", req.session.executiveType);
+console.log("Session:", req.session);
+
 return res.redirect('/executive/dashboard');
 
 })
@@ -738,6 +745,7 @@ await ExecutiveAttendance.findOne({
 })
 
     res.render('executiveReports', {
+        session: req.session,
         attendance
     })
 
@@ -1061,6 +1069,9 @@ const productive =
     calculateProductiveHours(attendance);
 
 res.render('executiveMyDashboard', {
+
+executiveType: req.session.executiveType,
+
     motivation,
     productive,
     buyers,
@@ -1147,6 +1158,7 @@ router.get('/property-map', async (req, res) => {
     res.render(
         'executivePropertyMap',
         {
+            session: req.session,
             properties
         }
     )
@@ -1166,6 +1178,7 @@ const executive = await Executive.findById(req.params.id)
     }
 
     res.render('editExecutive', {
+        session: req.session,
         executive,
         locations,
     error: req.query.error || null
@@ -1213,8 +1226,9 @@ await Executive.findByIdAndUpdate(
     ? await bcrypt.hash(req.body.password, 10)
     : (await Executive.findById(req.params.id)).password,
         assignedLocations: assignedLocations,
-        dateOfJoining: req.body.dateOfJoining || "",
-        dateOfLeaving: req.body.dateOfLeaving || ""
+dateOfJoining: req.body.dateOfJoining || "",
+dateOfLeaving: req.body.dateOfLeaving || "",
+salary: Number(req.body.salary || 0)
     }
 )
 
@@ -1354,6 +1368,7 @@ router.get('/attendance-report', async (req, res) => {
     }).sort({ date: -1 })
 
     res.render('executiveAttendanceReport', {
+        session: req.session,
         records
     })
 
@@ -1376,6 +1391,7 @@ const buyers = await Buyer.find({
 })
 
 res.render('executiveFollowUps',{
+    session: req.session,
     buyers
 })
 
@@ -1408,6 +1424,7 @@ const visits = await BuyerProjectVisit.find({
 const filteredVisits = visits.filter(v => v.buyerId)
 
 res.render('executiveSiteVisits',{
+    session: req.session,
     visits: filteredVisits
 })
 
@@ -1421,6 +1438,7 @@ const buyers = await Buyer.find({
 })
 
 res.render('executiveDeals',{
+    session: req.session,
     buyers
 })
 
@@ -1434,6 +1452,7 @@ const buyers = await Buyer.find({
 })
 
 res.render('executiveLost',{
+    session: req.session,
     buyers
 })
 
@@ -1588,6 +1607,7 @@ router.get('/properties', async (req, res) => {
     res.render(
         'executiveProperties',
         {
+            session: req.session,
             properties
         }
     )
@@ -1673,6 +1693,7 @@ await ExecutiveLocationLog
 res.render(
 'locationHistory',
 {
+    session: req.session,
     logs
 }
 )
@@ -1731,7 +1752,12 @@ res.json({
 
 router.get('/route-map', async(req,res)=>{
 
-    res.render('executiveRouteMap')
+    res.render(
+    'executiveRouteMap',
+    {
+        session: req.session
+    }
+)
 
 })
 

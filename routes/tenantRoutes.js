@@ -88,8 +88,6 @@ const tenant = new Tenant({
 
 await tenant.save()
 
-console.log('Generated tenant code:', tenant.tenantCode)
-
 const hashed =
 await bcrypt.hash(
     req.body.password,
