@@ -36,7 +36,7 @@ const age = getLeadAge(buyer.createdAt);
         👨‍💼 <%= buyer.assignedExecutiveName || "Unassigned" %>
     </span>
 
-    <a href="/buyer/edit-unqualified/<%= buyer._id %>#assignment"
+    <a href="/executive/edit-unqualified/<%= buyer._id %>#assignment"
        class="reassign-link">
         Reassign
     </a>
@@ -57,42 +57,63 @@ const age = getLeadAge(buyer.createdAt);
 
     <form method="POST" action="/buyer/status-unqualified/<%= buyer._id %>">
 
-        <select name="status" onchange="this.form.submit()">
+        <select
+    name="status"
+    <%= (typeof locals !== "undefined" && locals.disableStatus) ? "disabled" : "" %>
+    onchange="this.form.submit()">
 
-            <option value="Imported"
-                <%= buyer.status==="Imported" ? "selected" : "" %>>
-                Imported
-            </option>
+<% if (buyer.status === "Imported") { %>
 
-            <option value="Contacted"
-                <%= buyer.status==="Contacted" ? "selected" : "" %>>
-                Contacted
-            </option>
+    <option value="Imported" selected>Imported</option>
+    <option value="Phone Call">Phone Call</option>
 
-            <option value="Site Visit"
-                <%= buyer.status==="Site Visit" ? "selected" : "" %>>
-                Site Visit
-            </option>
+<% } else if (buyer.status === "Phone Call") { %>
 
-            <option value="Negotiation"
-                <%= buyer.status==="Negotiation" ? "selected" : "" %>>
-                Negotiation
-            </option>
+    <option value="Phone Call" selected>Phone Call</option>
+    <option value="Imported">Imported</option>
 
-            <option value="Qualified"
-                <%= buyer.status==="Qualified" ? "selected" : "" %>>
-                Qualified
-            </option>
+<% } else if (buyer.status === "Qualified") { %>
 
+    <option value="Qualified" selected>Qualified</option>
+    <option value="Site Visit">Site Visit</option>
+    <option value="Not Responding">Not Responding</option>
+
+<% } else if (buyer.status === "Site Visit") { %>
+
+    <option value="Site Visit" selected>Site Visit</option>
+    <option value="Negotiation">Negotiation</option>
+    <option value="No Show">No Show</option>
+
+<% } else if (buyer.status === "Negotiation") { %>
+
+    <option value="Negotiation" selected>Negotiation</option>
+    <option value="Deal Won">Deal Won</option>
+    <option value="Lost">Lost</option>
+
+<% } else { %>
+
+    <option value="Imported" <%= buyer.status === "Imported" ? "selected" : "" %>>Imported</option>
+    <option value="Phone Call" <%= buyer.status === "Phone Call" ? "selected" : "" %>>Phone Call</option>
+    <option value="Qualified" <%= buyer.status === "Qualified" ? "selected" : "" %>>Qualified</option>
+    <option value="WhatsApp Verification" <%= buyer.status === "WhatsApp Verification" ? "selected" : "" %>>WhatsApp Verification</option>
+    <option value="Contacted" <%= buyer.status === "Contacted" ? "selected" : "" %>>Contacted</option>
+    <option value="Follow-Up" <%= buyer.status === "Follow-Up" ? "selected" : "" %>>Follow-Up</option>
+    <option value="Site Visit" <%= buyer.status === "Site Visit" ? "selected" : "" %>>Site Visit</option>
+    <option value="Negotiation" <%= buyer.status === "Negotiation" ? "selected" : "" %>>Negotiation</option>
+    <option value="Transaction" <%= buyer.status === "Transaction" ? "selected" : "" %>>Transaction</option>
+    <option value="Lost" <%= buyer.status === "Lost" ? "selected" : "" %>>Lost</option>
+    <option value="Not Responding" <%= buyer.status === "Not Responding" ? "selected" : "" %>>Not Responding</option>
+
+<% } %>
         </select>
+
+<%- include("workflowFields", { buyer: buyer }) %>
 
     </form>
 
-</div>
-
 <div class="card-actions">
 
-    <a href="/buyer/edit-unqualified/<%= buyer._id %>"
+    <a href="/executive/edit-unqualified/<%= buyer._id %>"
        class="card-btn edit-btn">
         ✏️ Edit
     </a>
@@ -100,15 +121,6 @@ const age = getLeadAge(buyer.createdAt);
     <a href="/buyer/matches/<%= buyer._id %>"
        class="card-btn match-btn">
         🏠 Matches
-    </a>
-
-</div>
-
-<div class="card-actions">
-
-    <a href="/buyer/edit-unqualified/<%= buyer._id %>"
-       class="card-btn edit-btn">
-        ✏️ Edit
     </a>
 
     <button type="button"
@@ -137,6 +149,8 @@ const age = getLeadAge(buyer.createdAt);
 
 <div>
     <strong>Latest Remarks</strong>
+</div>
+
 </div>
 
 <div style="

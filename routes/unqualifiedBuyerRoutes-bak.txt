@@ -1,4 +1,4 @@
-const express = require('express')
++const express = require('express')
 const router = express.Router()
 const { isLoggedIn, isAdmin } = require('../middleware/auth')
 const Buyer = require('../models/Buyer')
@@ -12,7 +12,9 @@ const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
-const {notifyExecutive} = require('../services/notificationService');
+const {
+    notifyExecutive
+} = require('../services/notificationService');
 
 const XLSX = require('xlsx')
 
@@ -51,43 +53,12 @@ isLoggedIn,
 isAdmin,
 async (req, res) => {
 
-const buyer = await Buyer.findOne({
-
+await Buyer.findOneAndDelete({
     _id: req.params.id,
-
     tenantId: req.session.tenantId
+})
 
-});
-
-if (!buyer) {
-
-    return res.send("Buyer not found");
-
-}
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName,
-
-    "PreSales",
-
-    "Buyer Deleted",
-
-    buyer.status,
-
-    "Deleted"
-
-);
-
-await Buyer.deleteOne({
-
-    _id: buyer._id
-
-});
-
-res.redirect('/buyer/page');
+res.redirect('/buyer/page')
 
 })
 
@@ -146,8 +117,7 @@ req.query.transactionType || ''
 let filter = {
     tenantId: req.session.tenantId,
     currentOwnerRole: "PreSales",
-    leadSource: "Excel",
-    assignedExecutiveId: req.session.executiveId
+    leadSource: "Excel"
 }
 
 if(search){
@@ -221,110 +191,89 @@ for (const buyer of buyers) {
 
 }
 
-const baseFilter = {
-    tenantId: req.session.tenantId,
-    currentOwnerRole: "PreSales",
-    leadSource: "Excel",
-    assignedExecutiveId: req.session.executiveId
-};
-
 const [
     executives,
-    imported,
-    phoneCall,
-    qualified,
+    newLeads,
     contacted,
-    followUp,
-    siteVisit,
-    negotiation,
-    transaction,
-    lost,
-    notResponding
+    siteVisits,
+    negotiations,
+    closedDeals,
+    lostDeals
 ] = await Promise.all([
 
-    Executive.find({
-        tenantId: req.session.tenantId,
-        executiveType: "PreSales",
-        isActive: true
-    }).lean(),
+Executive.find({
+    tenantId: req.session.tenantId,
+    executiveType: "PreSales",
+    isActive: true
+}).lean(),
 
-    Buyer.countDocuments({ ...baseFilter, status: "Imported" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Phone Call" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Qualified" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Contacted" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Follow-Up" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Site Visit" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Negotiation" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Transaction" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Lost" }),
-    Buyer.countDocuments({ ...baseFilter, status: "Not Responding" })
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "New Lead"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Contacted"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Site Visit"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Negotiation"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Deal Closed"
+    }),
+
+    Buyer.countDocuments({
+        tenantId: req.session.tenantId,
+        currentOwnerRole: "PreSales",
+        leadSource: "Excel",
+        status: "Lost"
+    })
 
 ]);
 
-res.render("unqualifiedbuyers", {
+res.render('unqualifiedBuyers', {
     buyers,
-    search,
-    status,
     transactionType,
     executives,
-
-    imported,
-    phoneCall,
-    qualified,
+    search,
+    status,
+    newLeads,
     contacted,
-    followUp,
-    siteVisit,
-    negotiation,
-    transaction,
-    lost,
-    notResponding
+    siteVisits,
+    negotiations,
+    closedDeals,
+    lostDeals
 })
 
 })
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
+    await Buyer.findByIdAndUpdate(
+        req.params.id,
+        { status: req.body.status }
+    );
 
-const buyer = await Buyer.findOne({
-
-    _id: req.params.id,
-
-    tenantId: req.session.tenantId,
-
-    assignedExecutiveId: req.session.executiveId
-
-});
-
-const previousStatus = buyer.status;
-
-await Buyer.findOneAndUpdate(
-{
-    _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
-},
-{
-    status: req.body.status
-}
-);
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName,
-
-    "PreSales",
-
-    "Status Changed",
-
-    previousStatus,
-
-    req.body.status
-
-);
-
-
-    res.redirect('/executive/unqualified');
+    res.redirect('/buyer/unqualified');
 });
 
 router.post(
@@ -334,45 +283,15 @@ router.post(
 
         try {
 
-const buyer = await Buyer.findOne({
-
-    _id:req.params.id,
-
-    tenantId:req.session.tenantId,
-
-    assignedExecutiveId:req.session.executiveId
-
-});
-
-const previousStatus = buyer.status;
-
-await Buyer.findOneAndUpdate(
-{
-    _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
-},
+            await Buyer.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    tenantId: req.session.tenantId
+                },
                 {
                     status: req.body.status
                 }
             );
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName,
-
-    "PreSales",
-
-    "Status Changed",
-
-    previousStatus,
-
-    req.body.status
-
-);
-
 
             res.json({
                 success: true
@@ -398,6 +317,8 @@ isLoggedIn,
 isAdmin,
 async (req, res) => {
 
+const Executive = require('../models/Executive')
+
 const executive = await Executive.findOne({
     _id: req.body.executiveId,
     tenantId: req.session.tenantId
@@ -407,32 +328,10 @@ if (!executive) {
     return res.send("Executive not found")
 }
 
-const buyer = await Buyer.findById(
-    req.params.id
-);
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName,
-
-    "Admin",
-
-    "Executive Reassigned",
-
-    buyer.assignedExecutiveName,
-
-    executive.name
-
-);
-
-
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
+    tenantId: req.session.tenantId
 },
 {
     assignedExecutiveId: executive._id,
@@ -441,7 +340,9 @@ await Buyer.findOneAndUpdate(
 }
 )
 
-
+const buyer = await Buyer.findById(
+    req.params.id
+);
 
 await notifyExecutive(
 
@@ -456,7 +357,7 @@ This lead has been assigned to you.`
 
 );
 
-res.redirect('/executive/unqualified')
+res.redirect('/buyer/unqualified')
 
 })
 
@@ -565,75 +466,6 @@ if (duplicateBuyer) {
     )
 }
 
-const buyer = await Buyer.findById(
-    req.params.id
-);
-
-const previousStatus = buyer.status;
-
-let qualificationDate = buyer.qualificationDate;
-
-if (
-    req.body.buyingInterest === "Yes" &&
-    req.body.purchaseTimeline &&
-    buyer.purchaseTimeline !== req.body.purchaseTimeline
-) {
-    qualificationDate = new Date();
-}
-
-
-let status = req.body.status;
-
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-if (req.body.buyingInterest === "Yes") {
-
-    if (req.body.purchaseTimeline === "Immediate") {
-
-        currentOwnerRole = "Sales";
-
-        if (
-            req.body.siteVisitDate &&
-            new Date(req.body.siteVisitDate) >= today
-        ) {
-            status = "Site Visit";
-        } else {
-            status = "Qualified";
-        }
-
-    } else if (req.body.purchaseTimeline === "1 Month") {
-
-        status = "Qualified";
-        currentOwnerRole = "Sales";
-
-    } else if (
-        req.body.purchaseTimeline === "3 Months" ||
-        req.body.purchaseTimeline === "6 Months" ||
-        req.body.purchaseTimeline === "6+ Months"
-    ) {
-
-        status = "Future Prospects";
-
-    }
-
-} else if (req.body.buyingInterest === "No") {
-
-    status = "Qualified - No Purchase";
-
-}
-
-if (
-    req.body.status === "Site Visit" ||
-    req.body.status === "Negotiation" ||
-    req.body.status === "Deal Won" ||
-    req.body.status === "Lost"
-) {
-    status = req.body.status;
-}
-
-let currentOwnerRole = buyer.currentOwnerRole;
-
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
@@ -644,30 +476,14 @@ await Buyer.findOneAndUpdate(
     phone: req.body.phone,
     email: req.body.email,
 
-    whatsappNumber: req.body.isWhatsAppSame === "true"
-        ? req.body.phone
-        : req.body.whatsappNumber,
-
-    isWhatsAppSame: req.body.isWhatsAppSame === "true",
-    emailStatus: req.body.emailStatus,
-
-buyingInterest: req.body.buyingInterest,
-notInterestedReason: req.body.notInterestedReason,
-
-purchaseTimeline: req.body.purchaseTimeline,
-qualificationStatus: req.body.qualificationStatus,
-siteVisitStatus: req.body.siteVisitStatus,
-negotiationStatus: req.body.negotiationStatus,
-qualificationDate: qualificationDate,
-
-
-
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
 
-    transactionType: req.body.transactionType,
+transactionType:
+req.body.transactionType,
 
     requiredPossession: requiredPossession,
+
     requiredFlatType: requiredFlatType,
 
     minArea: minArea,
@@ -692,35 +508,12 @@ qualificationDate: qualificationDate,
 
     buyerNotes: req.body.buyerNotes,
 
-    status: status,
-
-    currentOwnerRole: currentOwnerRole,
-
-nextFollowUp: req.body.nextFollowUp || null,
-siteVisitDate: req.body.siteVisitDate || null,
-
+    status: req.body.status,
     followUpNotes: req.body.followUpNotes
-});
+}
+)
 
-const savedBuyer = await Buyer.findById(req.params.id);
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName,
-
-    "PreSales",
-
-    "Buyer Updated",
-
-    previousStatus,
-
-    req.body.status
-
-);
-
-res.redirect('/executive/unqualified')
+res.redirect('/buyer/unqualified')
 
 })
 
@@ -771,28 +564,28 @@ res.render(
 
 
 router.get(
-    '/edit-unqualified/:id',
-    isLoggedIn,
-    async (req, res) => {
+'/edit-unqualified/:id',
+isLoggedIn,
+async (req, res) => {
 
-        const buyer = await Buyer.findOne({
-            _id: req.params.id,
-            tenantId: req.session.tenantId
-        })
-
-        const locations = await LocationMaster.find({})
-            .sort({ officeName: 1 })
-
-        if (!buyer) {
-            return res.send("Buyer not found")
-        }
-
-        res.render('editUnqualifiedBuyer', {
-            buyer,
-            locations
-        })
-
+    const buyer = await Buyer.findOne({
+        _id: req.params.id,
+        tenantId: req.session.tenantId
     })
+
+    const locations = await LocationMaster.find({})
+        .sort({ officeName: 1 })
+
+    if (!buyer) {
+        return res.send("Buyer not found")
+    }
+
+    res.render('editUnqualifiedBuyer', {
+        buyer,
+        locations
+    })
+
+})
 
 
 
@@ -1126,7 +919,7 @@ continue;
 
 }
 
-            const buyer = await Buyer.create({
+            await Buyer.create({
 
 tenantId: req.session.tenantId,
 
@@ -1169,22 +962,6 @@ preferredLocation:{
 }
 
 });
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName || "Admin",
-
-    "Admin",
-
-    "Buyer Imported",
-
-    "",
-
-    "Bulk Upload"
-
-);
 
             importedCount++
 
@@ -1235,26 +1012,26 @@ if (missingLocationRequests.length > 0) {
             req.session.tenantId
         )
 
-await sendEmail(
+    await sendEmail(
 
-    process.env.ADMIN_EMAIL,
+        'kbalki2k15@gmail.com',
 
-    'Buyer Upload - New Locations Requested',
+        'Buyer Upload - New Locations Requested',
 
-    `
-    <h2>Location Master Update Required</h2>
+        `
+        <h2>Location Master Update Required</h2>
 
-    <p>
-    Tenant:
-    ${tenant?.name || ''}
-    </p>
+        <p>
+        Tenant:
+        ${tenant?.name || ''}
+        </p>
 
-    <pre>
+        <pre>
 ${missingLocationRequests.join('\n')}
-    </pre>
-    `
+        </pre>
+        `
 
-).catch(console.error)
+    ).catch(console.error)
 
 }
 

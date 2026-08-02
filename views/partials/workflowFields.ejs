@@ -1,0 +1,159 @@
+<% if (buyer.status === "Phone Call") { %>
+
+<div class="workflow-fields">
+
+    <label>Call Result</label>
+
+    <select name="phoneCallResult">
+        <option value="">Select</option>
+        <option value="Answered">Answered</option>
+        <option value="Not Reachable">Not Reachable</option>
+        <option value="Switched Off">Switched Off</option>
+        <option value="Disconnected">Disconnected</option>
+        <option value="Invalid">Invalid</option>
+        <option value="Not Answering">Not Answering</option>
+    </select>
+
+</div>
+
+<% } %>
+
+<% if (buyer.status === "Qualified") { %>
+
+<div class="workflow-fields">
+
+<label>Qualification Status</label>
+
+<select name="qualificationStatus">
+
+    <option value="">Select</option>
+
+    <option value="Called 1"
+        <%= buyer.qualificationStatus==="Called 1" ? "selected" : "" %>>
+        Called 1
+    </option>
+
+    <option value="Called 2"
+        <%= buyer.qualificationStatus==="Called 2" ? "selected" : "" %>>
+        Called 2
+    </option>
+
+    <option value="Called 3"
+        <%= buyer.qualificationStatus==="Called 3" ? "selected" : "" %>>
+        Called 3
+    </option>
+
+    <option value="Connected"
+        <%= buyer.qualificationStatus==="Connected" ? "selected" : "" %>>
+        Connected
+    </option>
+
+</select>
+
+</div>
+
+<% } %>
+
+<% if (buyer.status === "Site Visit") { %>
+
+<div class="workflow-fields">
+
+    <label>Site Visit Status</label>
+
+    <select name="siteVisitStatus">
+
+        <option value="">Select</option>
+
+        <option value="No Show 1"
+            <%= buyer.siteVisitStatus==="No Show 1" ? "selected" : "" %>>
+            No Show 1
+        </option>
+
+        <option value="No Show 2"
+            <%= buyer.siteVisitStatus==="No Show 2" ? "selected" : "" %>>
+            No Show 2
+        </option>
+
+        <option value="No Show 3"
+            <%= buyer.siteVisitStatus==="No Show 3" ? "selected" : "" %>>
+            No Show 3
+        </option>
+
+        <option value="Site Visited"
+            <%= buyer.siteVisitStatus==="Site Visited" ? "selected" : "" %>>
+            Site Visited
+        </option>
+
+    </select>
+
+</div>
+
+<% } %>
+
+<% if (buyer.status === "Contacted") { %>
+
+<div class="workflow-fields">
+
+    <label>Contact Result</label>
+
+    <select name="contactResult">
+        <option value="">Select</option>
+        <option value="Interested">Interested</option>
+        <option value="Need Follow-up">Need Follow-up</option>
+        <option value="Not Interested">Not Interested</option>
+    </select>
+
+</div>
+
+<% } %>
+
+<% if (buyer.status === "Negotiation") { %>
+
+<div class="workflow-fields">
+
+    <label>Negotiation Status</label>
+
+    <select name="negotiationStatus">
+
+        <option value="">Select</option>
+
+        <option value="Decision Pending"
+            <%= buyer.negotiationStatus==="Decision Pending" ? "selected" : "" %>>
+            Decision Pending
+        </option>
+
+        <option value="Budget Issue"
+            <%= buyer.negotiationStatus==="Budget Issue" ? "selected" : "" %>>
+            Budget Issue
+        </option>
+
+        <option value="Location Issue"
+            <%= buyer.negotiationStatus==="Location Issue" ? "selected" : "" %>>
+            Location Issue
+        </option>
+
+        <option value="Project Issue"
+            <%= buyer.negotiationStatus==="Project Issue" ? "selected" : "" %>>
+            Project Issue
+        </option>
+
+        <option value="Loan Rejected"
+            <%= buyer.negotiationStatus==="Loan Rejected" ? "selected" : "" %>>
+            Loan Rejected
+        </option>
+
+        <option value="Lost to Competitor"
+            <%= buyer.negotiationStatus==="Lost to Competitor" ? "selected" : "" %>>
+            Lost to Competitor
+        </option>
+
+        <option value="Dropped"
+            <%= buyer.negotiationStatus==="Dropped" ? "selected" : "" %>>
+            Dropped
+        </option>
+
+    </select>
+
+</div>
+
+<% } %>

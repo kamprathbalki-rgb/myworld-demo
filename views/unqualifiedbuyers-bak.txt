@@ -12,7 +12,7 @@ content="width=device-width, initial-scale=1.0"
 >
 
 <title>
-Buyers
+Unqualified Buyers List
 </title>
 
 
@@ -344,75 +344,61 @@ body{
 ================================ */
 
 .table-wrapper{
+    width:100%;
+
     overflow-x:auto;
-}
 
-.kanban-board{
-    display:flex;
-    gap:18px;
-    align-items:flex-start;
-    overflow-x:auto;
-    padding-bottom:10px;
-}
+    border:1px solid #eee;
 
-.kanban-column{
-    min-width:320px;
-    width:320px;
-    background:#eef2f7;
-    border-radius:12px;
-    padding:12px;
-}
-
-.kanban-header{
-    font-size:15px;
-    font-weight:bold;
-    color:#1f4e79;
-    margin-bottom:12px;
-    position:sticky;
-    top:0;
-    background:#eef2f7;
-    padding-bottom:8px;
-}
-
-.buyer-card{
-    background:#fff;
     border-radius:10px;
-    padding:14px;
-    margin-bottom:12px;
-    cursor:pointer;
-    box-shadow:0 2px 6px rgba(0,0,0,.08);
-    transition:.2s;
 }
 
-.buyer-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 6px 16px rgba(0,0,0,.12);
+.buyer-table{
+    width:100%;
+
+    min-width:2200px;
+
+    border-collapse:collapse;
 }
 
-.buyer-card-name{
-    font-size:16px;
-    font-weight:bold;
-    color:#1f4e79;
-    margin-bottom:8px;
+.buyer-table th{
+    padding:11px 9px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.3px;
+
+    white-space:nowrap;
 }
 
-.buyer-card-phone,
-.buyer-card-budget,
-.buyer-card-flat,
-.buyer-card-location,
-.buyer-card-exec,
-.buyer-card-matches{
-    font-size:12px;
-    color:#555;
-    margin-bottom:6px;
+.buyer-table td{
+    padding:10px 9px;
+
+    border-bottom:1px solid #eee;
+
+    color:#444;
+
+    font-size:11px;
+
+    vertical-align:top;
 }
 
-.buyer-card-matches{
-    margin-top:10px;
-    padding-top:8px;
-    border-top:1px solid #eee;
-    font-weight:bold;
+.buyer-table tbody tr:hover{
+    background:#f8fafc;
 }
+
+.buyer-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
 
 /* ================================
    BUYER NAME
@@ -715,19 +701,95 @@ body{
         border:none;
     }
 
+    .buyer-table{
+        min-width:0;
+    }
 
-.kanban-board{
-    display:block;
-}
+    .buyer-table thead{
+        display:none;
+    }
 
-.kanban-column{
-    width:100%;
-    min-width:0;
-    margin-bottom:18px;
-}
+    .buyer-table,
+    .buyer-table tbody,
+    .buyer-table tr,
+    .buyer-table td{
+        display:block;
+
+        width:100%;
+    }
+
+    .buyer-table tr{
+        margin-bottom:14px;
+
+        padding:14px;
+
+        background:white;
+
+        border:1px solid #e5e5e5;
+
+        border-left:
+        4px solid #1f4e79;
+
+        border-radius:10px;
+
+        box-shadow:
+        0 2px 7px rgba(0,0,0,.07);
+    }
+
+    .buyer-table td{
+        display:flex;
+
+        justify-content:space-between;
+        align-items:flex-start;
+
+        gap:15px;
+
+        padding:8px 0;
+
+        border-bottom:
+        1px solid #f0f0f0;
+
+        text-align:right;
+
+        font-size:11px;
+
+        line-height:1.5;
+    }
+
+    .buyer-table td:last-child{
+        border-bottom:none;
+    }
+
+    .buyer-table td::before{
+        content:
+        attr(data-label);
+
+        flex:0 0 37%;
+
+        color:#777;
+
+        font-size:9px;
+
+        font-weight:bold;
+
+        text-transform:uppercase;
+
+        text-align:left;
+    }
+
+    .buyer-table .buyer-name{
+        font-size:15px;
+
+        color:#1f4e79;
+    }
+
+    .buyer-table td form{
+        flex:1;
+
+        text-align:right;
+    }
 
     .table-select,
-
     .table-input{
         width:100%;
 
@@ -746,6 +808,16 @@ body{
         font-size:10px;
     }
 
+    .mobile-actions{
+        display:flex;
+
+        justify-content:flex-end;
+
+        flex-wrap:wrap;
+
+        gap:5px;
+    }
+
 }
 
 /* ================================
@@ -761,65 +833,88 @@ body{
 
 }
 
-.buyer-drawer{
-    position:fixed;
-    top:0;
-    right:-460px;
-    width:460px;
-    height:100%;
-    background:#fff;
-    box-shadow:-5px 0 18px rgba(0,0,0,.18);
-    transition:.25s;
-    z-index:9999;
-    overflow:auto;
-}
 
-.buyer-drawer.open{
-    right:0;
-}
-
-.drawer-header{
-    padding:18px;
-    background:#1f4e79;
-    color:#fff;
-}
-
-.drawer-header h2{
-    margin:0;
-}
-
-#drawerClose{
-    float:right;
-    cursor:pointer;
-    font-size:28px;
-}
-
-.drawer-content{
-    padding:20px;
-}
-
-.drawer-content p{
-    margin:18px 0 5px;
-    color:#777;
-    font-size:12px;
-}
-
-.drawer-buttons{
+.kanban-board{
     display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:25px;
+    gap:20px;
+    overflow-x:auto;
+    align-items:flex-start;
 }
 
-@media(max-width:700px){
-
-    .buyer-drawer{
-        width:100%;
-        right:-100%;
-    }
-
+.kanban-column{
+    min-width:320px;
+    background:#f8f9fa;
+    border-radius:10px;
+    padding:15px;
 }
 
+.kanban-column h3{
+    margin:0 0 15px;
+    color:#1f4e79;
+}
+
+.lead-card{
+    background:#fff;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    border-left:4px solid #1f4e79;
+}
+
+.lead-card h4{
+    margin:0 0 10px;
+    color:#1f4e79;
+}
+
+.lead-card div{
+    margin:6px 0;
+    font-size:13px;
+}
+
+.lead-card select{
+    width:100%;
+    margin-top:10px;
+    padding:8px;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+.card-actions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.card-btn{
+    flex:1;
+    text-align:center;
+    padding:8px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+    color:white;
+}
+
+.edit-btn{
+    background:#6f42c1;
+}
+
+.match-btn{
+    background:#1f4e79;
+}
+
+.details-btn{
+    background:#17a2b8;
+    border:none;
+    cursor:pointer;
+}
+
+.drag-over{
+    background:#d8ecff;
+    border:2px dashed #1f4e79;
+}
 
 </style>
 
@@ -838,11 +933,11 @@ body{
 <div class="header-info">
 
 <h1>
-Buyer List
+Unqualified Buyer List
 </h1>
 
 <p>
-Manage buyers, follow-ups and assignments
+Manage imported unqualified leads
 </p>
 
 </div>
@@ -886,7 +981,7 @@ Buyer Pipeline
 
 <div class="summary">
 
-<a href="/buyer/page?status=New Lead">
+<a href="/buyer/unqualified?status=New Lead">
 
 <div class="
 summary-card
@@ -905,7 +1000,7 @@ New Leads
 
 </a>
 
-<a href="/buyer/page?status=Contacted">
+<a href="/buyer/unqualified?status=Contacted">
 
 <div class="
 summary-card
@@ -924,7 +1019,7 @@ Contacted
 
 </a>
 
-<a href="/buyer/page?status=Site Visit">
+<a href="/buyer/unqualified?status=Site Visit">
 
 <div class="
 summary-card
@@ -943,7 +1038,7 @@ Site Visits
 
 </a>
 
-<a href="/buyer/page?status=Negotiation">
+<a href="/buyer/unqualified?status=Negotiation">
 
 <div class="
 summary-card
@@ -962,7 +1057,7 @@ Negotiation
 
 </a>
 
-<a href="/buyer/page?status=Deal Closed">
+<a href="/buyer/unqualified?status=Deal Closed">
 
 <div class="
 summary-card
@@ -981,7 +1076,7 @@ Closed
 
 </a>
 
-<a href="/buyer/page?status=Lost">
+<a href="/buyer/unqualified?status=Lost">
 
 <div class="
 summary-card
@@ -1012,7 +1107,7 @@ Lost
 
 <form
 method="GET"
-action="/buyer/page"
+action="/buyer/unqualified"
 class="filter-form"
 >
 
@@ -1040,7 +1135,7 @@ class="
 filter-btn
 clear-btn
 "
-onclick="window.location='/buyer/page'"
+onclick="window.location='/buyer/unqualified'"
 >
 Clear
 </button>
@@ -1153,282 +1248,202 @@ Lease
 </div>
 
 <!-- ================================
-     BUYER RECORDS
+     Unqualified Lead Records
 ================================ -->
 
 <div class="buyer-section">
 
 <h2 class="section-title">
-Buyer Records
+Unqualified Lead Records
 </h2>
 
-<div class="table-wrapper">
+<%
+function getColumnValue(status){
+
+    return buyers
+        .filter(b => b.status === status)
+        .reduce((total, b) => {
+
+            const min = Number(b.minBudget) || 0;
+            const max = Number(b.maxBudget) || 0;
+
+            return total + ((min + max) / 2);
+
+        }, 0);
+
+}
+
+function formatAmount(value){
+
+    if(value >= 10000000){
+        return "₹" + (value / 10000000).toFixed(2) + " Cr";
+    }
+
+    if(value >= 100000){
+        return "₹" + (value / 100000).toFixed(2) + " L";
+    }
+
+    return "₹" + value.toLocaleString("en-IN");
+
+}
+
+function getLeadAge(createdAt){
+
+    if(!createdAt){
+        return {
+            days: 0,
+            color: "#6c757d",
+            label: "0 Days"
+        };
+    }
+
+    const created = new Date(createdAt);
+    const today = new Date();
+
+    const days = Math.floor(
+        (today - created) / (1000 * 60 * 60 * 24)
+    );
+
+    if(days <= 7){
+        return {
+            days,
+            color: "#28a745",
+            label: days + " Days"
+        };
+    }
+
+    if(days <= 15){
+        return {
+            days,
+            color: "#ffc107",
+            label: days + " Days"
+        };
+    }
+
+    return {
+        days,
+        color: "#dc3545",
+        label: days + " Days"
+    };
+
+}
+
+%>
 
 <div class="kanban-board">
 
-<%
-const columns = [
-    "New Lead",
-    "Contacted",
-    "Site Visit",
-    "Negotiation",
-    "Deal Closed",
-    "Lost"
-];
-%>
+<div class="kanban-column"
+     data-status="Imported"
+     ondragover="allowDrop(event)"
+     ondrop="dropLead(event)">
 
-<% columns.forEach(function(column){ %>
-
-<div class="kanban-column">
-
-    <div class="kanban-header">
-        <%= column %>
-        (<%= buyers.filter(x=>x.status===column).length %>)
-    </div>
+    <h3>
+Imported
+(<%= buyers.filter(b => b.status === "Imported").length %> |
+<%= formatAmount(getColumnValue("Imported")) %>)
+    </h3>
 
     <% buyers
-        .filter(x=>x.status===column)
+        .filter(b => b.status === "Imported")
         .forEach(function(b){ %>
 
-<div
-    class="buyer-card"
-    data-id="<%= b._id %>"
-    data-name="<%= b.name %>"
-    data-phone="<%= b.phone %>"
-    data-budget="₹<%= b.minBudget %> - ₹<%= b.maxBudget %>"
-    data-flat="<%= b.requiredFlatType || '' %>"
-    data-location="<%= b.primaryLocation || '' %>"
-    data-status="<%= b.status || '' %>"
-    data-executive="<%= b.assignedExecutiveName || 'Not Assigned' %>"
-    data-matches="<%= b.matchCount %>"
-    data-possession="<%= (b.requiredPossession || []).join(', ') %>"
-    data-preferred="<%= (b.preferredLocations || []).join(', ') %>"
-    data-visit="<%= b.latestVisitStatus || 'No Visit' %>"
-    data-activity="<%= b.lastActivity ? new Date(b.lastActivity).toLocaleString('en-IN') : '-' %>"
->
-
-        <div class="buyer-card-name">
-            <%= b.name %>
-        </div>
-
-        <div class="buyer-card-phone">
-            📞 <%= b.phone %>
-        </div>
-
-        <div class="buyer-card-budget">
-            ₹<%= b.minBudget %> - ₹<%= b.maxBudget %>
-        </div>
-
-        <div class="buyer-card-flat">
-            <%= b.requiredFlatType || "-" %>
-        </div>
-
-        <div class="buyer-card-location">
-            📍 <%= b.primaryLocation || "-" %>
-        </div>
-
-        <div class="buyer-card-exec">
-            👤 <%= b.assignedExecutiveName || "Not Assigned" %>
-        </div>
-
-        <div class="buyer-card-matches">
-            🏠 <%= b.matchCount %> Matches
-        </div>
-
-    </div>
+        <%- include("partials/unqualifiedLeadCard", {
+    buyer: b,
+    getLeadAge: getLeadAge
+}) %>
 
     <% }) %>
 
 </div>
 
-<% }) %>
+<div class="kanban-column"
+     data-status="Contacted"
+     ondragover="allowDrop(event)"
+     ondrop="dropLead(event)">
 
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-<div id="buyerDrawer" class="buyer-drawer">
-
-    <div class="drawer-header">
-
-        <span id="drawerClose">&times;</span>
-
-        <h2 id="drawerName"></h2>
-
-    </div>
-
-<div class="drawer-content">
-
-    <h3 style="margin:0 0 18px;color:#1f4e79;">
-        Buyer Snapshot
+    <h3>
+Contacted
+(<%= buyers.filter(b => b.status === "Contacted").length %> |
+<%= formatAmount(getColumnValue("Contacted")) %>)
     </h3>
 
-<table style="
-    width:100%;
-    border-collapse:collapse;
-    font-size:14px;
-">
+    <% buyers
+        .filter(b => b.status === "Contacted")
+        .forEach(function(b){ %>
 
-    <tr>
-        <td style="width:38%;padding:10px;border-bottom:1px solid #eee;"><strong>Name</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerNameValue"></td>
-    </tr>
+        <%- include("partials/unqualifiedLeadCard", {
+    buyer: b,
+    getLeadAge: getLeadAge
+}) %>
 
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Phone</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;">
-            <a
-                id="drawerPhone"
-                href="#"
-                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
-            </a>
-        </td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Budget</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerBudget"></td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Flat Type</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerFlat"></td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Primary Location</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerLocation"></td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Executive</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;" id="drawerExecutive"></td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;border-bottom:1px solid #eee;"><strong>Matches</strong></td>
-        <td style="padding:10px;border-bottom:1px solid #eee;">
-            <a
-                id="drawerMatchesBtn"
-                href="#"
-                style="color:#1f4e79;font-weight:bold;text-decoration:none;">
-            </a>
-        </td>
-    </tr>
-
-    <tr>
-        <td style="padding:10px;"><strong>Aging</strong></td>
-        <td style="padding:10px;" id="drawerAging"></td>
-    </tr>
-
-</table>    
-
+    <% }) %>
 
 </div>
 
+    <div class="kanban-column">
+        <h3>Site Visit</h3>
+    </div>
 
+    <div class="kanban-column">
+        <h3>Negotiation</h3>
+    </div>
+
+    <div class="kanban-column">
+        <h3>Qualified</h3>
     </div>
 
 </div>
+
+
+</div>
+
+
+</div>
+
 
 <script>
 
-const drawer = document.getElementById("buyerDrawer");
+let draggedLeadId = null;
+let draggedCard = null;
 
-const closeBtn = document.getElementById("drawerClose");
+function dragLead(event) {
 
-document.querySelectorAll(".buyer-card").forEach(card=>{
+    draggedCard = event.currentTarget;
 
-    card.addEventListener("click",()=>{
+    draggedLeadId = draggedCard.dataset.id;
 
-document.getElementById("drawerName").textContent =
-    card.dataset.name;
+    event.dataTransfer.setData("text/plain", draggedLeadId);
 
-document.getElementById("drawerNameValue").textContent =
-    card.dataset.name;
+}
 
-const phoneLink =
-    document.getElementById("drawerPhone");
+function toggleDetails(id) {
+    const div = document.getElementById("details-" + id);
+    div.style.display = div.style.display === "none" ? "block" : "none";
+}
 
-phoneLink.innerHTML = "📞 " + card.dataset.phone;
+function dropLead(event) {
 
-phoneLink.href = "tel:" + card.dataset.phone;
+    event.preventDefault();
 
-document.getElementById("drawerAging").textContent =
-    "";
+    document.querySelectorAll(".kanban-column")
+        .forEach(column => {
+            column.classList.remove("drag-over");
+        });
 
-        document.getElementById("drawerBudget").textContent =
-            card.dataset.budget;
+    event.currentTarget.appendChild(draggedCard);
 
-        document.getElementById("drawerFlat").textContent =
-            card.dataset.flat;
+    draggedLeadId = null;
+    draggedCard = null;
 
-        document.getElementById("drawerLocation").textContent =
-            card.dataset.location;
+}
 
-        document.getElementById("drawerStatus").textContent =
-            card.dataset.status;
+function allowDrop(event) {
 
-        document.getElementById("drawerExecutive").textContent =
-            card.dataset.executive;
+    event.preventDefault();
 
-        document.getElementById("drawerMatches").textContent =
-            card.dataset.matches;
+    event.currentTarget.classList.add("drag-over");
 
-        document.getElementById("drawerPossession").textContent =
-            card.dataset.possession;
-
-        document.getElementById("drawerPreferred").textContent =
-            card.dataset.preferred;
-
-        document.getElementById("drawerVisit").textContent =
-            card.dataset.visit;
-
-        document.getElementById("drawerActivity").textContent =
-            card.dataset.activity;
-
-        document.getElementById("drawerEditBtn").href =
-            "/buyer/edit/" + card.dataset.id;
-
-        document.getElementById("drawerDeleteForm").action =
-            "/buyer/delete/" + card.dataset.id;
-
-const matchesLink =
-    document.getElementById("drawerMatchesBtn");
-
-matchesLink.href =
-    "/buyer/matches/" + card.dataset.id;
-
-matchesLink.innerHTML =
-    "🏠 " + card.dataset.matches + " Matches";
-
-        drawer.classList.add("open");
-
-    });
-
-});
-
-closeBtn.addEventListener("click",()=>{
-
-    drawer.classList.remove("open");
-
-});
-
-window.addEventListener("click",(e)=>{
-
-    if(e.target===drawer){
-
-        drawer.classList.remove("open");
-
-    }
-
-});
+}
 
 </script>
 

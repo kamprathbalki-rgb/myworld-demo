@@ -28,11 +28,14 @@ const chatbotAdminRoutes = require("./routes/chatbotAdminRoutes");
 const chatSessionMonitor = require("./services/chatSessionMonitor");
 const chatLeadRoutes = require("./routes/chatLeadRoutes");
 const marketplaceRoutes = require("./routes/marketplaceRoutes");
-const unqualifiedBuyerRoutes = require('./routes/unqualifiedBuyerRoutes')
+
 const executiveBuyerRoutes = require('./routes/executiveBuyerRoutes')
 const hrRoutes = require('./routes/hrRoutes');
 const recruitmentRoutes = require('./routes/recruitmentRoutes');
 const {router: buyerTimelineRoutes} = require('./routes/buyerTimelineRoutes');
+
+const futureBuyerRoutes = require("./routes/futureBuyerRoutes");
+const qualifiedNoPurchaseRoutes = require("./routes/qualifiedNoPurchaseRoutes");
 
 connectDB()
 
@@ -114,11 +117,14 @@ app.use("/", chatbotAdminRoutes);
 app.use(chatLeadRoutes);
 app.use('/', websiteRoutes)
 app.use("/marketplace", marketplaceRoutes);
-app.use('/buyer',tenantGuard,companyActiveGuard,unqualifiedBuyerRoutes)
+
 app.use('/executive', tenantGuard, companyActiveGuard, executiveBuyerRoutes)
 app.use('/hr', hrRoutes);
 app.use('/recruitment',recruitmentRoutes);
 app.use('/buyer/timeline', buyerTimelineRoutes);
+
+app.use("/", tenantGuard, companyActiveGuard, futureBuyerRoutes);
+app.use("/", tenantGuard, companyActiveGuard, qualifiedNoPurchaseRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

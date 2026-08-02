@@ -427,10 +427,7 @@ body{
 ⚪ Logged Out
 </div>
 
-
 </div>
-
-
 
 <!-- ================================
      EXECUTIVES
@@ -438,30 +435,20 @@ body{
 
 <% if(executives && executives.length){ %>
 
-
 <div class="executive-grid">
 
-
 <% executives.forEach(function(executive){ %>
-
-
-<pre>
-Status: <%= executive.status %>
-Running: <%= !['Tea Break','Lunch Break','Logged Out','Not Checked In'].includes(executive.status) %>
-</pre>
 
 <div class="
 executive-card
 <%= executive.statusClass %>
 ">
 
-
 <h3 class="executive-name">
 
 <%= executive.name %>
 
 </h3>
-
 
 <div class="executive-status">
 
@@ -470,7 +457,6 @@ executive-card
 <%= executive.status %>
 
 </div>
-
 
 <div class="last-activity">
 

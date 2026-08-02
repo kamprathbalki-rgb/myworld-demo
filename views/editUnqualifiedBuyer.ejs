@@ -6,166 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+<link rel="stylesheet" href="/css/editUnqualifiedBuyer.css">
 
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f4f6f9;
-    color:#222;
-}
-
-.container{
-    max-width:900px;
-    margin:auto;
-    padding:18px;
-}
-
-.page-header{
-    background:#1f4e79;
-    color:white;
-    padding:15px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:16px;
-}
-
-.page-header h1{
-    margin:0;
-    font-size:19px;
-}
-
-.header-link{
-    color:white;
-    text-decoration:none;
-    font-size:22px;
-}
-
-.card{
-    background:white;
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:15px;
-    box-shadow:0 1px 6px rgba(0,0,0,.08);
-}
-
-.section-title{
-    font-size:16px;
-    font-weight:bold;
-    color:#1f4e79;
-    border-bottom:1px solid #eee;
-    padding-bottom:10px;
-    margin-bottom:15px;
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-}
-
-.full-width{
-    grid-column:1/-1;
-}
-
-.field label,
-.field-label{
-    display:block;
-    font-size:12px;
-    font-weight:bold;
-    color:#555;
-    margin-bottom:7px;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #d8dde3;
-    border-radius:8px;
-    font-size:14px;
-    font-family:Arial,sans-serif;
-    background:white;
-}
-
-textarea{
-    resize:vertical;
-}
-
-.checkbox-group{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-}
-
-.check-option{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    background:#f5f7fa;
-    padding:10px;
-    border-radius:8px;
-    font-size:12px;
-}
-
-.check-option input{
-    width:auto;
-    margin:0;
-}
-
-.tabs{
-    display:flex;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.tab-btn{
-    flex:1;
-    border:1px solid #1f4e79;
-    background:white;
-    color:#1f4e79;
-    padding:11px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.update-btn{
-    width:100%;
-    border:none;
-    background:#1f4e79;
-    color:white;
-    padding:14px;
-    border-radius:9px;
-    font-size:14px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-@media(max-width:600px){
-
-    .container{padding:10px}
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .full-width{
-        grid-column:auto;
-    }
-
-    .tabs{
-        flex-direction:column;
-    }
-
-}
-
-</style>
 
 </head>
 
@@ -192,9 +34,7 @@ textarea{
 </div>
 
 <form method="POST"
-      action="<%= buyer.currentOwnerRole === 'PreSales'
-          ? '/executive/update-unqualified/' + buyer._id
-          : '/buyer/update-unqualified/' + buyer._id %>">
+action="/executive/update-unqualified/<%= buyer._id %>"
 
 <div class="card">
 
@@ -210,16 +50,197 @@ textarea{
 </div>
 
 <div class="field">
-<label>📱 Phone</label>
-<input type="text" name="phone" value="<%= buyer.phone || '' %>">
+    <label>📱 Mobile Number</label>
+    <input
+        type="text"
+        name="phone"
+        value="<%= buyer.phone || '' %>">
 </div>
 
 <div class="field full-width">
-<label>📧 Email</label>
-<input type="text" name="email" value="<%= buyer.email || '' %>">
+
+    <label>WhatsApp Number</label>
+
+    <div style="display:flex;align-items:center;gap:15px;">
+
+<input
+    type="text"
+    name="whatsappNumber"
+    value="<%= buyer.whatsappNumber || '' %>"
+    style="flex:1;height:42px;">
+
+        <label style="display:flex;align-items:center;gap:5px;white-space:nowrap;margin:0;">
+            <input
+                type="radio"
+                name="isWhatsAppSame"
+                value="true"
+                <%= buyer.isWhatsAppSame !== false ? "checked" : "" %>>
+            Same
+        </label>
+
+        <label style="display:flex;align-items:center;gap:5px;white-space:nowrap;margin:0;">
+            <input
+                type="radio"
+                name="isWhatsAppSame"
+                value="false"
+                <%= buyer.isWhatsAppSame === false ? "checked" : "" %>>
+            Different
+        </label>
+
+    </div>
+
+</div>
+
+<div class="field">
+
+    <label>📧 Email</label>
+
+    <input
+        type="email"
+        name="email"
+        value="<%= buyer.email || '' %>">
+
+    <div style="margin-top:10px;display:flex;gap:20px;">
+
+        <label style="display:flex;align-items:center;gap:5px;">
+            <input
+                type="radio"
+                name="emailStatus"
+                value="Verified"
+                <%= buyer.emailStatus === "Verified" ? "checked" : "" %>>
+            Verified
+        </label>
+
+        <label style="display:flex;align-items:center;gap:5px;">
+            <input
+                type="radio"
+                name="emailStatus"
+                value="Not Available"
+                <%= buyer.emailStatus === "Not Available" ? "checked" : "" %>>
+            Not Available
+        </label>
+
+        <label style="display:flex;align-items:center;gap:5px;">
+            <input
+                type="radio"
+                name="emailStatus"
+                value="Will Share Later"
+                <%= buyer.emailStatus === "Will Share Later" || !buyer.emailStatus ? "checked" : "" %>>
+            Will Share Later
+        </label>
+
+    </div>
+
 </div>
 
 </div>
+
+<div class="card">
+
+<div class="section-title">
+🏠 Buying Interest
+</div>
+
+<div class="field">
+
+<label>Are you interested in buying a property?</label>
+
+<div style="display:flex;gap:25px;margin-top:10px;">
+
+<label>
+<input type="radio"
+       name="buyingInterest"
+       value="Yes"
+       <%= buyer.buyingInterest === "Yes" ? "checked" : "" %>>
+Yes
+</label>
+
+<label>
+<input type="radio"
+       name="buyingInterest"
+       value="No"
+       <%= buyer.buyingInterest === "No" ? "checked" : "" %>>
+No
+</label>
+
+</div>
+
+</div>
+
+<div id="notInterestedBlock"
+     style="<%= buyer.buyingInterest === 'No' ? '' : 'display:none' %>;margin-top:15px;">
+
+<label>Reason</label>
+
+<select name="notInterestedReason">
+
+<option value="">Select</option>
+
+<option value="Already Bought"
+<%= buyer.notInterestedReason==="Already Bought"?"selected":"" %>>
+Already Bought
+</option>
+
+<option value="Not Interested"
+<%= buyer.notInterestedReason==="Not Interested"?"selected":"" %>>
+Not Interested
+</option>
+
+</select>
+
+<div id="alreadyBoughtBlock"
+     style="<%= buyer.notInterestedReason === 'Already Bought' ? '' : 'display:none' %>">
+
+<label>Builder / Project</label>
+
+<input
+    type="text"
+    name="boughtBuilder"
+    value="<%= buyer.boughtBuilder || '' %>"
+    placeholder="Builder or Project Name">
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="yesBlock"
+     style="<%= buyer.buyingInterest === 'Yes' ? '' : 'display:none' %>;margin-top:15px;">
+
+<label>Purchase Timeline</label>
+
+<select name="purchaseTimeline">
+
+<option value="">Select</option>
+
+<option value="Immediate"
+<%= buyer.purchaseTimeline==="Immediate"?"selected":"" %>>
+Immediate
+</option>
+
+<option value="1 Month"
+<%= buyer.purchaseTimeline==="1 Month"?"selected":"" %>>
+1 Month
+</option>
+
+<option value="3 Months"
+<%= buyer.purchaseTimeline==="3 Months"?"selected":"" %>>
+3 Months
+</option>
+
+<option value="6 Months"
+<%= buyer.purchaseTimeline==="6 Months"?"selected":"" %>>
+6 Months
+</option>
+
+<option value="6+ Months"
+<%= buyer.purchaseTimeline==="6+ Months"?"selected":"" %>>
+6+ Months
+</option>
+
+</select>
 
 </div>
 
@@ -547,6 +568,26 @@ value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buye
 <input type="text" name="status" value="<%= buyer.status || '' %>">
 </div>
 
+<br><br>
+
+<div class="field">
+    <label>Follow Up Date</label>
+    <input
+        type="date"
+        name="nextFollowUp"
+        value="<%= buyer.nextFollowUp ? buyer.nextFollowUp.toISOString().slice(0,10) : '' %>">
+</div>
+
+<div class="field">
+    <label>Site Visit Date</label>
+    <input
+        type="date"
+        name="siteVisitDate"
+        value="<%= buyer.siteVisitDate ? buyer.siteVisitDate.toISOString().slice(0,10) : '' %>">
+</div>
+
+<br><br>
+
 <div class="field full-width">
 <label>Follow Up Notes</label>
 <textarea name="followUpNotes" rows="4"><%= buyer.followUpNotes || '' %></textarea>
@@ -562,10 +603,14 @@ value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buye
 </button>
 
 
+<input
+    type="hidden"
+    name="qualificationDate"
+    value="<%= buyer.qualificationDate ? buyer.qualificationDate.toISOString() : '' %>">
+
 </form>
 
 </div>
-
 
 <script>
 
@@ -601,6 +646,31 @@ document.querySelector('form')
     }
 
 })
+
+const radios = document.querySelectorAll('input[name="buyingInterest"]');
+
+const noBlock = document.getElementById("notInterestedBlock");
+const yesBlock = document.getElementById("yesBlock");
+
+radios.forEach(r => {
+
+    r.addEventListener("change", function () {
+
+        if (this.value === "Yes") {
+
+            yesBlock.style.display = "block";
+            noBlock.style.display = "none";
+
+        } else {
+
+            yesBlock.style.display = "none";
+            noBlock.style.display = "block";
+
+        }
+
+    });
+
+});
 
 </script>
 

@@ -12,31 +12,16 @@ const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
-const {
-    notifyExecutive
-} = require('../services/notificationService');
+const {notifyExecutive} = require('../services/notificationService');
+const LeadWorkflow = require("../models/LeadWorkflow");
 
 const XLSX = require('xlsx')
-
 const multer = require('multer')
-
-const { sendEmail } =
-require('../utils/emailService')
-
-const Tenant =
-require('../models/Tenant')
-
-const uploadExcel = multer({
-    storage: multer.memoryStorage()
-})
-
-const WhatsappGroup =
-require('../models/WhatsappGroup');
-
-const clientManager =
-require(
-'../services/tenantWhatsapp/clientManager'
-)
+const { sendEmail } = require('../utils/emailService')
+const Tenant = require('../models/Tenant')
+const uploadExcel = multer({storage: multer.memoryStorage()})
+const WhatsappGroup = require('../models/WhatsappGroup');
+const clientManager = require('../services/tenantWhatsapp/clientManager')
 
 const {
     downloadCSV,
@@ -71,6 +56,15 @@ const buyer = await Buyer.findOne({
 _id:req.params.buyerId,
 tenantId:req.session.tenantId
 })
+
+console.log("Unqualified Buyer Route GET Buyer:", {
+    id: buyer._id,
+    phone: buyer.phone,
+    whatsappNumber: buyer.whatsappNumber,
+    isWhatsAppSame: buyer.isWhatsAppSame,
+    email: buyer.email,
+    emailStatus: buyer.emailStatus
+});
 
 const visits = await Visit.find({
 buyerId:req.params.buyerId
@@ -191,78 +185,62 @@ for (const buyer of buyers) {
 
 }
 
+
+const baseFilter = {
+    tenantId: req.session.tenantId,
+    currentOwnerRole: "PreSales",
+    leadSource: "Excel"
+};
+
 const [
     executives,
-    newLeads,
+    imported,
+    phoneCall,
+    qualified,
     contacted,
-    siteVisits,
-    negotiations,
-    closedDeals,
-    lostDeals
+    followUp,
+    siteVisit,
+    negotiation,
+    transaction,
+    lost,
+    notResponding
 ] = await Promise.all([
 
-Executive.find({
-    tenantId: req.session.tenantId,
-    executiveType: "PreSales",
-    isActive: true
-}).lean(),
-
-    Buyer.countDocuments({
+    Executive.find({
         tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "New Lead"
-    }),
+        executiveType: "PreSales",
+        isActive: true
+    }).lean(),
 
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Contacted"
-    }),
-
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Site Visit"
-    }),
-
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Negotiation"
-    }),
-
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Deal Closed"
-    }),
-
-    Buyer.countDocuments({
-        tenantId: req.session.tenantId,
-        currentOwnerRole: "PreSales",
-        leadSource: "Excel",
-        status: "Lost"
-    })
+    Buyer.countDocuments({ ...baseFilter, status: "Imported" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Phone Call" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Qualified" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Contacted" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Follow-Up" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Site Visit" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Negotiation" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Transaction" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Lost" }),
+    Buyer.countDocuments({ ...baseFilter, status: "Not Responding" })
 
 ]);
-
-res.render('unqualifiedBuyers', {
+res.render("unqualifiedbuyers", {
     buyers,
-    transactionType,
-    executives,
     search,
     status,
-    newLeads,
+    transactionType,
+    executives,
+
+    imported,
+    phoneCall,
+    qualified,
     contacted,
-    siteVisits,
-    negotiations,
-    closedDeals,
-    lostDeals
+    followUp,
+    siteVisit,
+    negotiation,
+    transaction,
+    lost,
+    notResponding
 })
 
 })
@@ -361,162 +339,6 @@ res.redirect('/buyer/unqualified')
 
 })
 
-router.post(
-'/update-unqualified/:id',
-isLoggedIn,
-async (req, res) => {
-
-if (!/^\d{10}$/.test(req.body.phone || '')) {
-
-    return res.send(
-        'Mobile number must be exactly 10 digits'
-    )
-
-}
-
-if (
-    Number(req.body.minBudget) >
-    Number(req.body.maxBudget)
-) {
-
-    return res.send(
-        'Minimum budget cannot exceed maximum budget'
-    )
-
-}
-
-let selectedLocations = []
-
-if (req.body.preferredLocation1)
-    selectedLocations.push(req.body.preferredLocation1)
-
-if (
-    req.body.preferredLocation2 &&
-    req.body.preferredLocation2 !== req.body.preferredLocation1
-)
-    selectedLocations.push(req.body.preferredLocation2)
-
-if (
-    req.body.preferredLocation3 &&
-    !selectedLocations.includes(req.body.preferredLocation3)
-)
-    selectedLocations.push(req.body.preferredLocation3)
-
-if (!Array.isArray(selectedLocations)) {
-    selectedLocations = [selectedLocations]
-}
-
-const locationData = await LocationMaster.find({
-    officeName: { $in: selectedLocations }
-})
-
-const preferredPincodes = [
-    ...new Set(locationData.map(l => l.pincode))
-]
-
-const preferredDistricts = [
-    ...new Set(locationData.map(l => l.district))
-]
-
-const preferredDivisionNames = [
-    ...new Set(locationData.map(l => l.divisionName))
-]
-
-const stateName =
-locationData.length > 0
-? locationData[0].stateName
-: ""
-
-const requiredFlatType =
-    req.body.apartmentFlatType ||
-    req.body.otherFlatType ||
-    ""
-
-const minArea =
-    req.body.apartmentMinArea ||
-    req.body.otherMinArea ||
-    null
-
-const maxArea =
-    req.body.apartmentMaxArea ||
-    req.body.otherMaxArea ||
-    null
-
-let requiredPossession = req.body.requiredPossession || []
-
-if (!Array.isArray(requiredPossession)) {
-    requiredPossession = [requiredPossession]
-}
-
-let primaryLocation = req.body.primaryLocation
-
-if (!primaryLocation && selectedLocations.length > 0) {
-    primaryLocation = selectedLocations[0]
-}
-
-const duplicateBuyer = await Buyer.findOne({
-    tenantId: req.session.tenantId,
-    phone: req.body.phone,
-    _id: { $ne: req.params.id }
-})
-
-if (duplicateBuyer) {
-    return res.send(
-        'Another buyer already uses this mobile number'
-    )
-}
-
-await Buyer.findOneAndUpdate(
-{
-    _id: req.params.id,
-    tenantId: req.session.tenantId,
-},
-{
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-
-    minBudget: req.body.minBudget,
-    maxBudget: req.body.maxBudget,
-
-transactionType:
-req.body.transactionType,
-
-    requiredPossession: requiredPossession,
-
-    requiredFlatType: requiredFlatType,
-
-    minArea: minArea,
-    maxArea: maxArea,
-
-    radius: req.body.radius,
-
-    preferredLocations: selectedLocations,
-    primaryLocation: primaryLocation,
-    preferredPincodes: preferredPincodes,
-    preferredDistricts: preferredDistricts,
-    preferredDivisionNames: preferredDivisionNames,
-    stateName: stateName,
-
-    preferredLocation: {
-        type: "Point",
-        coordinates: [
-            parseFloat(req.body.lng) || 0,
-            parseFloat(req.body.lat) || 0
-        ]
-    },
-
-    buyerNotes: req.body.buyerNotes,
-
-    status: req.body.status,
-    followUpNotes: req.body.followUpNotes
-}
-)
-
-res.redirect('/buyer/unqualified')
-
-})
-
 
 router.get('/map', async (req,res)=>{
 
@@ -561,33 +383,6 @@ res.render(
 );
 
 });
-
-
-router.get(
-'/edit-unqualified/:id',
-isLoggedIn,
-async (req, res) => {
-
-    const buyer = await Buyer.findOne({
-        _id: req.params.id,
-        tenantId: req.session.tenantId
-    })
-
-    const locations = await LocationMaster.find({})
-        .sort({ officeName: 1 })
-
-    if (!buyer) {
-        return res.send("Buyer not found")
-    }
-
-    res.render('editUnqualifiedBuyer', {
-        buyer,
-        locations
-    })
-
-})
-
-
 
 router.get(
     "/export/csv",

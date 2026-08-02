@@ -12,7 +12,7 @@ content="width=device-width, initial-scale=1.0"
 >
 
 <title>
-Unqualified Buyers List
+Qualified - No Purchase
 </title>
 
 
@@ -948,11 +948,11 @@ body{
 <div class="header-info">
 
 <h1>
-Unqualified Buyer List
+Qualified - No Purchase
 </h1>
 
 <p>
-Manage imported unqualified leads
+Manage Qualified - No Purchase
 </p>
 
 </div>
@@ -981,66 +981,9 @@ Logout
 </a>
 
 </div>
-
 </div>
 
-<!-- ================================
-     BUYER PIPELINE SUMMARY
-================================ -->
 
-<div class="summary-section">
-
-<h2 class="section-title">
-Buyer Pipeline
-</h2>
-
-<div class="summary">
-
-<a href="/executive/unqualified?status=Imported">
-    <div class="summary-card new-card">
-        <h3>Imported</h3>
-        <h2><%= imported %></h2>
-    </div>
-</a>
-
-<a href="/executive/unqualified?status=Phone Call">
-    <div class="summary-card contacted-card">
-        <h3>Phone Call</h3>
-        <h2><%= phoneCall %></h2>
-    </div>
-</a>
-
-<a href="/executive/unqualified?status=Qualified">
-    <div class="summary-card visit-card">
-        <h3>Qualified</h3>
-        <h2><%= qualified %></h2>
-    </div>
-</a>
-
-<a href="/executive/unqualified?status=Contacted">
-    <div class="summary-card negotiation-card">
-        <h3>Contacted</h3>
-        <h2><%= contacted %></h2>
-    </div>
-</a>
-
-<a href="/executive/unqualified?status=Follow-Up">
-    <div class="summary-card closed-card">
-        <h3>Follow-Up</h3>
-        <h2><%= followUp %></h2>
-    </div>
-</a>
-
-<a href="/executive/unqualified?status=Lost">
-    <div class="summary-card lost-card">
-        <h3>Lost</h3>
-        <h2><%= lost %></h2>
-    </div>
-</a>
-
-</div>
-
-</div>
 
 <!-- ================================
      SEARCH & FILTER
@@ -1050,7 +993,7 @@ Buyer Pipeline
 
 <form
 method="GET"
-action="/executive/unqualified"
+action="/dashboard/qualified-no-purchase"
 class="filter-form"
 >
 
@@ -1078,115 +1021,23 @@ class="
 filter-btn
 clear-btn
 "
-onclick="window.location='/executive/unqualified'"
+onclick="window.location='/dashboard/qualified-no-purchase'"
 >
 Clear
 </button>
-
-<select
-name="status"
-onchange="this.form.submit()"
->
-
-<option value="">All Status</option>
-
-<option value="Imported"
-<%= status === 'Imported' ? 'selected' : '' %>>
-Imported
-</option>
-
-<option value="Phone Call"
-<%= status === 'Phone Call' ? 'selected' : '' %>>
-Phone Call
-</option>
-
-<option value="Qualified"
-<%= status === 'Qualified' ? 'selected' : '' %>>
-Qualified
-</option>
-
-<option value="Site Visit"
-<%= status === 'Site Visit' ? 'selected' : '' %>>
-Site Visit
-</option>
-
-<option value="Follow-Up"
-<%= status === 'Follow-Up' ? 'selected' : '' %>>
-Follow-Up
-</option>
-
-<option value="Negotiation"
-<%= status === 'Negotiation' ? 'selected' : '' %>>
-Negotiation
-</option>
-
-<option value="Transaction"
-<%= status === 'Transaction' ? 'selected' : '' %>>
-Transaction
-</option>
-
-<option value="Lost"
-<%= status === 'Lost' ? 'selected' : '' %>>
-Lost
-</option>
-
-<option value="Not Responding"
-<%= status === 'Not Responding' ? 'selected' : '' %>>
-Not Responding
-</option>
-
-</select>
-
-<select
-name="transactionType"
-onchange="this.form.submit()"
->
-
-<option value="">
-All Transactions
-</option>
-
-<option
-value="SALE"
-<%= transactionType === 'SALE'
-? 'selected'
-: '' %>
->
-Sale
-</option>
-
-<option
-value="RENT"
-<%= transactionType === 'RENT'
-? 'selected'
-: '' %>
->
-Rent
-</option>
-
-<option
-value="LEASE"
-<%= transactionType === 'LEASE'
-? 'selected'
-: '' %>
->
-Lease
-</option>
-
-</select>
 
 </form>
 
 </div>
 
 <!-- ================================
-     Unqualified Lead Records
+     Qualified - No Purchase
 ================================ -->
 
 <div class="buyer-section">
 
 <h2 class="section-title">
-Unqualified Lead Records
+Qualified - No Purchase
 </h2>
 
 <%
@@ -1264,248 +1115,39 @@ function getLeadAge(createdAt){
 
 <div class="kanban-board">
 
-<div class="kanban-column"
-     data-status="Imported">
+<div class="kanban-column">
 
-    <div class="drop-zone"
-         ondragover="allowDrop(event)"
-         ondrop="dropLead(event)">
-
-    <h3>
-Imported
-(<%= buyers.filter(b => b.status === "Imported").length %> |
-<%= formatAmount(getColumnValue("Imported")) %>)
-    </h3>
-
-    <% buyers
-        .filter(b => b.status === "Imported")
-        .forEach(function(b){ %>
-
-        <%- include("partials/unqualifiedLeadCard", {
-    buyer: b,
-    getLeadAge: getLeadAge
-}) %>
-
-    <% }) %>
-
-</div>
-
-</div>
-
-<div class="kanban-column"
-     data-status="Phone Call">
-
-    <div class="drop-zone"
-         ondragover="allowDrop(event)"
-         ondrop="dropLead(event)">
+<div class="drop-zone">
 
 <h3>
-Phone Call
-(<%= buyers.filter(b => b.status === "Phone Call").length %> |
-<%= formatAmount(getColumnValue("Phone Call")) %>)
+Qualified - No Purchase
+(<%= buyers.length %> |
+<%= formatAmount(
+buyers.reduce((t,b)=>{
+    const min = Number(b.minBudget) || 0;
+    const max = Number(b.maxBudget) || 0;
+    return t + ((min + max)/2);
+},0)
+) %>)
 </h3>
 
-<% buyers
-.filter(b => b.status === "Phone Call")
-.forEach(function(b){ %>
+<% buyers.forEach(function(b){ %>
 
 <%- include("partials/unqualifiedLeadCard",{
 buyer:b,
-getLeadAge:getLeadAge
+getLeadAge:getLeadAge,
+disableStatus:true
 }) %>
 
 <% }) %>
 
 </div>
-
-</div>
-
-<div class="kanban-column"
-     data-status="Qualified">
-
-    <div class="drop-zone"
-     ondragover="allowDrop(event)"
-     ondrop="dropLead(event)">
-
-<h3>
-Qualified
-(<%= buyers.filter(b => b.status === "Qualified").length %> |
-<%= formatAmount(getColumnValue("Qualified")) %>)
-</h3>
-
-<% buyers
-.filter(b => b.status === "Qualified")
-.forEach(function(b){ %>
-
-<%- include("partials/unqualifiedLeadCard",{
-buyer:b,
-getLeadAge:getLeadAge
-}) %>
-
-<% }) %>
-
-</div>
-
-</div>
-
-<div class="kanban-column"
-     data-status="Site Visit">
-
-    <div class="drop-zone"
-     ondragover="allowDrop(event)"
-     ondrop="dropLead(event)">
-
-<h3>
-Site Visit
-(<%= buyers.filter(b => b.status === "Site Visit").length %> |
-<%= formatAmount(getColumnValue("Site Visit")) %>)
-</h3>
-
-<% buyers
-.filter(b => b.status === "Site Visit")
-.forEach(function(b){ %>
-
-<%- include("partials/unqualifiedLeadCard",{
-buyer:b,
-getLeadAge:getLeadAge
-}) %>
-
-<% }) %>
-
-</div>
-
-</div>
-
-<div class="kanban-column"
-     data-status="Negotiation">
-
-    <div class="drop-zone"
-     ondragover="allowDrop(event)"
-     ondrop="dropLead(event)">
-
-<h3>
-Negotiation
-(<%= buyers.filter(b => b.status === "Negotiation").length %> |
-<%= formatAmount(getColumnValue("Negotiation")) %>)
-</h3>
-
-<% buyers
-    .filter(b => b.status === "Negotiation")
-    .forEach(function(b){ %>
-
-        <%- include("partials/unqualifiedLeadCard", {
-    buyer: b,
-    getLeadAge: getLeadAge
-}) %>
-
-    <% }) %>
-
-</div>
-
-</div>
-
 </div>
 
 
 </div>
-
-
 </div>
-
-
-<script>
-
-let draggedLeadId = null;
-let draggedCard = null;
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".lead-card").forEach(card => {
-        card.draggable = true;
-    });
-});
-
-function dragLead(event) {
-
-    draggedCard = event.currentTarget;
-    draggedLeadId = draggedCard.dataset.id;
-
-    console.log("Lead:", draggedLeadId);
-
-    event.dataTransfer.setData("text/plain", draggedLeadId);
-    event.dataTransfer.effectAllowed = "move";
-
-}
-
-function toggleDetails(id) {
-    const div = document.getElementById("details-" + id);
-    div.style.display = div.style.display === "none" ? "block" : "none";
-}
-
-async function dropLead(event) {
-
-const dropZone = event.currentTarget;
-
-    event.preventDefault();
-
-const newStatus =
-    dropZone.closest(".kanban-column").dataset.status;
-
-    try {
-
-console.log("Before fetch");
-
-        const response = await fetch(
-
-            "/buyer/status-unqualified-drag/" + draggedLeadId,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: "status=" + encodeURIComponent(newStatus)
-            }
-        );
-
-const result = await response.json();
-
-if (!result.success) {
-    alert("Unable to update lead status.");
-    return;
-}
-
-if (!draggedCard) {
-    console.error("draggedCard is null");
-    return;
-}
-
-dropZone.appendChild(draggedCard);
-
-document
-    .querySelectorAll(".drag-over")
-    .forEach(el => el.classList.remove("drag-over"));
-
-    } catch (err) {
-
-        console.error(err);
-        alert("Unable to update lead.");
-
-    }
-
-    draggedLeadId = null;
-    draggedCard = null;
-
-}
-
-function allowDrop(event) {
-
-    event.preventDefault();
-
-    event.currentTarget.classList.add("drag-over");
-
-}
-
-</script>
+</div>
 
 </body>
-
 </html>

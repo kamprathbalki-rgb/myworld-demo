@@ -2118,4 +2118,33 @@ router.get(
     }
 );
 
+router.post(
+    "/status-unqualified/:id",
+    isLoggedIn,
+    (req, res) => {
+
+        res.redirect(
+            307,
+            `/executive/status-unqualified/${req.params.id}`
+        );
+
+    }
+);
+
+router.post(
+    "/status-unqualified-drag/:id",
+    isLoggedIn,
+    (req, res) => {
+
+        res.redirect(
+            307,
+            `/executive/status-unqualified-drag/${req.params.id}`
+        );
+
+    }
+);
+
+
+
+
 module.exports = router

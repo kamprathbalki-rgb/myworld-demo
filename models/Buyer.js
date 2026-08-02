@@ -6,7 +6,50 @@ name: String,
 
 phone: String,
 
-email: String,
+email: {
+    type: String,
+    default: ""
+},
+
+whatsappNumber: {
+    type: String,
+    default: ""
+},
+
+isWhatsAppSame: {
+    type: Boolean,
+    default: true
+},
+
+emailStatus: {
+    type: String,
+    enum: [
+        "Verified",
+        "Not Available",
+        "Will Share Later"
+    ],
+    default: "Will Share Later"
+},
+
+buyingInterest: {
+    type: String,
+    default: ""
+},
+
+notInterestedReason: {
+    type: String,
+    default: ""
+},
+
+boughtBuilder: {
+    type: String,
+    default: ""
+},
+
+purchaseTimeline: {
+    type: String,
+    default: ""
+},
 
 minBudget: Number,
 
@@ -193,11 +236,19 @@ chatLeadId: {
     default: null
 },
 
+qualificationDate: {
+    type: Date,
+    default: null
+},
+
 createdAt: {
     type: Date,
     default: Date.now
 }
 
+},
+{
+    timestamps: true
 })
 
 /*
