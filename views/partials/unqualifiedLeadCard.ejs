@@ -3,12 +3,50 @@
      data-id="<%= buyer._id %>"
      ondragstart="dragLead(event)">
 
-    <h4><%= buyer.name %></h4>
-
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <strong><%= buyer.name %></strong>
+    <span>📞 <%= buyer.phone %></span>
+</div>
+<hr>
+<div style="display:flex;justify-content:space-between;">
+    <span>🏢 <%= buyer.requiredFlatType || "-" %></span>
+    <span>💰 <%= buyer.minBudget %> - <%= buyer.maxBudget %></span>
+</div>
+<hr>
+<div>
+📍
+<%= (buyer.preferredLocations || [])
+    .map(l => l.replace(/\s+(B\.O|S\.O|H\.O)$/i, ""))
+    .join(" • ") %>
+</div>
+<hr>
 <%
 const age = getLeadAge(buyer.createdAt);
 %>
 
+
+
+    <div class="executive-row">
+
+<div class="executive-row">
+
+<div class="executive-row">
+    👨‍💼 <%= buyer.preSalesExecutiveName || "Unassigned" %>
+</div>
+<hr>
+
+<div>📅 Last Follow-up:
+    <%= buyer.lastFollowUp
+        ? new Date(buyer.lastFollowUp).toLocaleDateString("en-IN")
+        : "-" %>
+</div>
+
+<div>⏰ Next Follow-up:
+    <%= buyer.nextFollowUp
+        ? new Date(buyer.nextFollowUp).toLocaleDateString("en-IN")
+        : "-" %>
+</div>
+<hr>
 <div style="
     display:inline-block;
     padding:4px 8px;
@@ -22,69 +60,20 @@ const age = getLeadAge(buyer.createdAt);
     ⏳ <%= age.label %>
 </div>
 
-    <div>📞 <%= buyer.phone %></div>
-
-    <div>💰 <%= buyer.minBudget %> - <%= buyer.maxBudget %></div>
-
-    <div>📍 <%= buyer.primaryLocation || "-" %></div>
-
-    <div>🏢 <%= buyer.requiredFlatType || "-" %></div>
-
-    <div class="executive-row">
-
-<div class="executive-row">
-
-    👨‍💼
+</div>
 
 </div>
+
+<div style="margin:8px 0;">
 
 <form
     method="POST"
-    action="/executive/reassign-unqualified/<%= buyer._id %>">
+    action="/buyer/status-unqualified/<%= buyer._id %>">
 
     <select
-        name="executiveId"
+        name="status"
+        style="width:100%;"
         onchange="this.form.submit()">
-
-        <% executives.forEach(function(exec){ %>
-
-            <option
-                value="<%= exec._id %>"
-                <%= buyer.preSalesExecutiveId &&
-                    buyer.preSalesExecutiveId.toString() === exec._id.toString()
-                    ? "selected"
-                    : "" %>>
-
-                <%= exec.name %>
-
-            </option>
-
-        <% }) %>
-
-    </select>
-
-</form>
-
-</div>
-
-<div>📅 Last Follow-up:
-    <%= buyer.lastFollowUp
-        ? new Date(buyer.lastFollowUp).toLocaleDateString("en-IN")
-        : "-" %>
-</div>
-
-<div>⏰ Next Follow-up:
-    <%= buyer.nextFollowUp
-        ? new Date(buyer.nextFollowUp).toLocaleDateString("en-IN")
-        : "-" %>
-</div>
-
-    <form method="POST" action="/buyer/status-unqualified/<%= buyer._id %>">
-
-        <select
-    name="status"
-    <%= (typeof locals !== "undefined" && locals.disableStatus) ? "disabled" : "" %>
-    onchange="this.form.submit()">
 
 <% if (buyer.status === "Imported") { %>
 
@@ -133,7 +122,9 @@ const age = getLeadAge(buyer.createdAt);
 
 <%- include("workflowFields", { buyer: buyer }) %>
 
-    </form>
+</form>
+
+</div>
 
 <div class="card-actions">
 
@@ -159,15 +150,41 @@ const age = getLeadAge(buyer.createdAt);
 
     <hr>
 
+<div style="margin-bottom:10px;">
+    <strong>Executive</strong>
+
+    <form
+        method="POST"
+        action="/executive/reassign-unqualified/<%= buyer._id %>">
+
+        <select
+            name="executiveId"
+            onchange="this.form.submit()">
+
+            <% executives.forEach(function(exec){ %>
+
+                <option
+                    value="<%= exec._id %>"
+                    <%= buyer.preSalesExecutiveId &&
+                        buyer.preSalesExecutiveId.toString() === exec._id.toString()
+                        ? "selected"
+                        : "" %>>
+
+                    <%= exec.name %>
+
+                </option>
+
+            <% }) %>
+
+        </select>
+
+    </form>
+
+</div>
+
+<hr>
+
     <div><strong>Source:</strong> <%= buyer.leadSource %></div>
-
-    <div><strong>Requirement:</strong> <%= buyer.requiredFlatType || "-" %></div>
-
-    <div><strong>Location:</strong> <%= buyer.primaryLocation || "-" %></div>
-
-    <div><strong>Budget:</strong> ₹<%= buyer.minBudget %> - ₹<%= buyer.maxBudget %></div>
-
-    <div><strong>Status:</strong> <%= buyer.status %></div>
 
     <hr>
 
@@ -177,6 +194,8 @@ const age = getLeadAge(buyer.createdAt);
 
 </div>
 
+<% if (buyer.notes) { %>
+
 <div style="
     background:#f8f9fa;
     padding:8px;
@@ -184,7 +203,9 @@ const age = getLeadAge(buyer.createdAt);
     margin-top:5px;
     font-size:12px;
 ">
-    <%= buyer.notes || "No remarks available." %>
+    <%= buyer.notes %>
 </div>
+
+<% } %>
 
 </div>

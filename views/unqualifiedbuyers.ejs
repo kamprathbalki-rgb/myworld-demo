@@ -836,12 +836,12 @@ body{
 
 .kanban-board{
     display:flex;
-    flex-wrap:nowrap;
     gap:20px;
     overflow-x:auto;
+    overflow-y:hidden;
+    width:100%;
+    max-width:100%;
     align-items:flex-start;
-    width:max-content;
-    min-width:100%;
 }
 
 .kanban-column{
@@ -852,8 +852,10 @@ body{
     padding:15px;
 }
 
-.kanban-column h3{
-    margin:0 0 15px;
+.kanban-column{
+    flex:1 0 320px;
+    min-width:320px;
+    max-width:320px;
     color:#1f4e79;
 }
 
@@ -1185,6 +1187,9 @@ Lease
 
 <div class="buyer-section">
 
+<div class="kanban-container">
+
+
 <h2 class="section-title">
 Unqualified Lead Records
 </h2>
@@ -1271,11 +1276,34 @@ function getLeadAge(createdAt){
          ondragover="allowDrop(event)"
          ondrop="dropLead(event)">
 
-    <h3>
-Imported
-(<%= buyers.filter(b => b.status === "Imported").length %> |
-<%= formatAmount(getColumnValue("Imported")) %>)
-    </h3>
+<h3>
+    Imported
+    (<%= buyers.filter(b => b.status === "Imported").length %> |
+    <%= formatAmount(getColumnValue("Imported")) %>)
+</h3>
+
+<div
+    class="page-nav"
+    data-column="Imported">
+
+    <button
+        type="button"
+        class="prev-btn"
+        disabled>
+        ◀
+    </button>
+
+    <span class="page-range">
+        1–5
+    </span>
+
+    <button
+        type="button"
+        class="next-btn">
+        ▶
+    </button>
+
+</div>
 
     <% buyers
         .filter(b => b.status === "Imported")
@@ -1290,7 +1318,6 @@ Imported
     <% }) %>
 
 </div>
-
 </div>
 
 <div class="kanban-column"
@@ -1407,12 +1434,11 @@ Negotiation
 
 </div>
 
+</div>
 
 </div>
 
-
 </div>
-
 
 <script>
 
