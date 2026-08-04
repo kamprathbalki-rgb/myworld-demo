@@ -32,14 +32,38 @@ const age = getLeadAge(buyer.createdAt);
 
     <div class="executive-row">
 
-    <span class="executive-name">
-        👨‍💼 <%= buyer.assignedExecutiveName || "Unassigned" %>
-    </span>
+<div class="executive-row">
 
-    <a href="/executive/edit-unqualified/<%= buyer._id %>#assignment"
-       class="reassign-link">
-        Reassign
-    </a>
+    👨‍💼
+
+</div>
+
+<form
+    method="POST"
+    action="/executive/reassign-unqualified/<%= buyer._id %>">
+
+    <select
+        name="executiveId"
+        onchange="this.form.submit()">
+
+        <% executives.forEach(function(exec){ %>
+
+            <option
+                value="<%= exec._id %>"
+                <%= buyer.preSalesExecutiveId &&
+                    buyer.preSalesExecutiveId.toString() === exec._id.toString()
+                    ? "selected"
+                    : "" %>>
+
+                <%= exec.name %>
+
+            </option>
+
+        <% }) %>
+
+    </select>
+
+</form>
 
 </div>
 

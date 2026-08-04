@@ -338,6 +338,22 @@ Possession Soon
 
 <div class="form-grid">
 
+
+<div class="field">
+<label>Property Type</label>
+
+<select name="propertyType">
+    <option <%= buyer.propertyType==='Apartment'?'selected':'' %>>Apartment</option>
+    <option <%= buyer.propertyType==='Villa'?'selected':'' %>>Villa</option>
+    <option <%= buyer.propertyType==='Plot'?'selected':'' %>>Plot</option>
+    <option <%= buyer.propertyType==='Office'?'selected':'' %>>Office</option>
+    <option <%= buyer.propertyType==='Showroom'?'selected':'' %>>Showroom</option>
+    <option <%= buyer.propertyType==='Retail'?'selected':'' %>>Retail</option>
+    <option <%= buyer.propertyType==='Shop'?'selected':'' %>>Shop</option>
+</select>
+</div>
+
+
 <div class="field">
 
 <label>Required Flat Type</label>

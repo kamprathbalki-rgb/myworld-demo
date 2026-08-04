@@ -1,2 +1,3 @@
-Name,Phone,Email,Min Budget,Max Budget,Required Possession,Required Flat Type,Min Area,Max Area,Preferred Location 1,Preferred Location 2,Preferred Location 3,Radius
-Raghav,9106159210,raghav@gmail.com,95,120,Immediate,2.5 BHK,700,1200,9 DRD,,,5000
+Name,Phone,Email,Buying Interest,Purchase Timeline,Min Budget,Max Budget,TransactionType,Property Type,Required Flat Type,Min Area,Max Area,Radius,Preferred Location 1,Preferred Location 2,Preferred Location 3,Required Possession
+Baner,9876500000,k001@example.com,Yes,Immediate,120,150,SALE,Apartment,3 BHK,1300,1400,,Baner,,,Ready
+Sales Test,9090909090,testsales@example.com,Yes,Immediate,80,120,SALE,Apartment,2 BHK,888,1211,,Baner,,,Ready

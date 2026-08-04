@@ -37,6 +37,8 @@ const {router: buyerTimelineRoutes} = require('./routes/buyerTimelineRoutes');
 const futureBuyerRoutes = require("./routes/futureBuyerRoutes");
 const qualifiedNoPurchaseRoutes = require("./routes/qualifiedNoPurchaseRoutes");
 
+const buyerBulkUploadRoutes = require('./routes/buyerBulkUploadRoutes');
+
 connectDB()
 
 if (
@@ -125,6 +127,8 @@ app.use('/buyer/timeline', buyerTimelineRoutes);
 
 app.use("/", tenantGuard, companyActiveGuard, futureBuyerRoutes);
 app.use("/", tenantGuard, companyActiveGuard, qualifiedNoPurchaseRoutes);
+
+app.use('/buyer', tenantGuard, companyActiveGuard, buyerBulkUploadRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 

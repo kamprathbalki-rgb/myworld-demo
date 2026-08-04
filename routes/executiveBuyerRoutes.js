@@ -13,6 +13,7 @@ const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const {notifyExecutive} = require('../services/notificationService');
+const {mapBuyerExecutives} = require("../services/executiveMappingService");
 
 const XLSX = require('xlsx')
 
@@ -145,9 +146,29 @@ req.query.transactionType || ''
 
 let filter = {
     tenantId: req.session.tenantId,
-    currentOwnerRole: "PreSales",
     leadSource: "Excel",
-    assignedExecutiveId: req.session.executiveId
+    assignedExecutiveId: req.session.executiveId,
+
+    $or: [
+
+        {
+            department: "PreSales"
+        },
+
+        {
+            department: "Sales",
+            status: {
+                $in: [
+                    "Qualified",
+                    "Contacted",
+                    "Follow-Up",
+                    "Site Visit",
+                    "Negotiation"
+                ]
+            }
+        }
+
+    ]
 }
 
 if(search){
@@ -223,7 +244,7 @@ for (const buyer of buyers) {
 
 const baseFilter = {
     tenantId: req.session.tenantId,
-    currentOwnerRole: "PreSales",
+    department: "PreSales",
     leadSource: "Excel",
     assignedExecutiveId: req.session.executiveId
 };
@@ -324,6 +345,8 @@ appendBuyerTimeline(
 );
 
 
+
+
     res.redirect('/executive/unqualified');
 });
 
@@ -358,21 +381,14 @@ await Buyer.findOneAndUpdate(
             );
 
 appendBuyerTimeline(
-
     buyer,
-
     req.session.executiveName,
-
     "PreSales",
-
     "Status Changed",
-
     previousStatus,
-
     req.body.status
 
 );
-
 
             res.json({
                 success: true
@@ -411,37 +427,27 @@ const buyer = await Buyer.findById(
     req.params.id
 );
 
+
 appendBuyerTimeline(
-
     buyer,
-
     req.session.executiveName,
-
     "Admin",
-
     "Executive Reassigned",
-
-    buyer.assignedExecutiveName,
-
+    buyer.preSalesExecutiveName,
     executive.name
-
 );
-
 
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
+    tenantId: req.session.tenantId
 },
 {
-    assignedExecutiveId: executive._id,
-    assignedExecutiveName: executive.name,
+    preSalesExecutiveId: executive._id,
+    preSalesExecutiveName: executive.name,
     assignmentType: "MANUAL"
 }
 )
-
-
 
 await notifyExecutive(
 
@@ -455,6 +461,9 @@ Mobile: ${buyer.phone}
 This lead has been assigned to you.`
 
 );
+
+buyer.preSalesExecutiveId = executive._id;
+buyer.preSalesExecutiveName = executive.name;
 
 res.redirect('/executive/unqualified')
 
@@ -583,6 +592,14 @@ if (
 
 
 let status = req.body.status;
+let currentOwnerRole = buyer.currentOwnerRole;
+let assignedExecutiveId = buyer.assignedExecutiveId;
+let assignedExecutiveName = buyer.assignedExecutiveName;
+let assignmentType = buyer.assignmentType;
+let department = buyer.department || "PreSales";
+
+let salesExecutiveId = buyer.salesExecutiveId || null;
+let salesExecutiveName = buyer.salesExecutiveName || "";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -591,6 +608,7 @@ if (req.body.buyingInterest === "Yes") {
 
     if (req.body.purchaseTimeline === "Immediate") {
 
+        department = "Sales";
         currentOwnerRole = "Sales";
 
         if (
@@ -605,6 +623,7 @@ if (req.body.buyingInterest === "Yes") {
     } else if (req.body.purchaseTimeline === "1 Month") {
 
         status = "Qualified";
+        department = "Sales";
         currentOwnerRole = "Sales";
 
     } else if (
@@ -613,12 +632,14 @@ if (req.body.buyingInterest === "Yes") {
         req.body.purchaseTimeline === "6+ Months"
     ) {
 
+        department = "PreSales";
         status = "Future Prospects";
 
     }
 
 } else if (req.body.buyingInterest === "No") {
 
+    department = "PreSales";
     status = "Qualified - No Purchase";
 
 }
@@ -632,7 +653,25 @@ if (
     status = req.body.status;
 }
 
-let currentOwnerRole = buyer.currentOwnerRole;
+
+const executiveMapping =
+    await mapBuyerExecutives(
+        buyer.tenantId,
+        primaryLocation
+    );
+
+const preSalesExecutiveId =
+    executiveMapping.preSalesExecutiveId;
+
+const preSalesExecutiveName =
+    executiveMapping.preSalesExecutiveName;
+
+salesExecutiveId =
+    executiveMapping.salesExecutiveId;
+
+salesExecutiveName =
+    executiveMapping.salesExecutiveName;
+
 
 await Buyer.findOneAndUpdate(
 {
@@ -660,7 +699,16 @@ siteVisitStatus: req.body.siteVisitStatus,
 negotiationStatus: req.body.negotiationStatus,
 qualificationDate: qualificationDate,
 
+department: department,
 
+salesExecutiveId: salesExecutiveId,
+salesExecutiveName: salesExecutiveName,
+
+preSalesExecutiveId: preSalesExecutiveId,
+preSalesExecutiveName: preSalesExecutiveName,
+
+salesExecutiveId: salesExecutiveId,
+salesExecutiveName: salesExecutiveName,
 
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
@@ -894,382 +942,5 @@ router.get(
     }
 );
 
-router.post(
-    '/bulk-upload-unqualified',
-    isLoggedIn,
-    isAdmin,
-    uploadExcel.single('excelFile'),
-    async (req, res) => {
-
-        const workbook = XLSX.read(
-            req.file.buffer,
-            { type: 'buffer' }
-        )
-
-        const sheet =
-            workbook.Sheets[
-                workbook.SheetNames[0]
-            ]
-
-        const rows =
-            XLSX.utils.sheet_to_json(
-                sheet,
-                { defval: '' }
-            )
-
-        let importedCount = 0
-        let duplicateCount = 0
-        let invalidCount = 0
-
-        let duplicateMobiles = []
-        let invalidRows = []
-        let missingLocationRequests = []
-
-        for (const row of rows) {
-
-            if (
-                !row.Phone ||
-                !/^\d{10}$/.test(
-                    String(row.Phone)
-                )
-            ) {
-
-                invalidCount++
-
-                invalidRows.push(
-                    row.Name || 'Unknown'
-                )
-
-                continue
-            }
-
-            const existingBuyer =
-                await Buyer.findOne({
-
-                    tenantId:
-                    req.session.tenantId,
-
-                    phone:
-                    String(row.Phone)
-
-                })
-
-            if (existingBuyer) {
-
-                duplicateCount++
-
-                if (
-                    !duplicateMobiles.includes(
-                        String(row.Phone)
-                    )
-                ) {
-                    duplicateMobiles.push(
-                        String(row.Phone)
-                    )
-                }
-
-                continue
-            }
-
-            let preferredLocations = [
-
-                row['Preferred Location 1'],
-
-                row['Preferred Location 2'],
-
-                row['Preferred Location 3']
-
-            ].filter(Boolean)
-
-let locationData = []
-
-const primaryLocationName =
-    preferredLocations[0]
-
-const primaryLocationRecord =
-    await LocationMaster.findOne({
-
-        officeName: {
-            $regex: '^' + primaryLocationName,
-            $options: 'i'
-        }
-
-    })
-
-if (!primaryLocationRecord) {
-
-    invalidCount++
-
-    invalidRows.push(
-        `${row.Name} - ${primaryLocationName}`
-    )
-
-    if (
-        !missingLocationRequests.includes(
-            primaryLocationName
-        )
-    ) {
-        missingLocationRequests.push(
-            primaryLocationName
-        )
-    }
-
-    continue
-}
-
-locationData.push(
-    primaryLocationRecord
-)
-
-for (const locationName of preferredLocations.slice(1)) {
-
-    const location =
-        await LocationMaster.findOne({
-
-            officeName: {
-                $regex: '^' + locationName,
-                $options: 'i'
-            }
-
-        })
-
-    if (location) {
-        locationData.push(location)
-    }
-
-}
-
-
-            const preferredPincodes = [
-                ...new Set(
-                    locationData.map(
-                        l => l.pincode
-                    )
-                )
-            ]
-
-            const preferredDistricts = [
-                ...new Set(
-                    locationData.map(
-                        l => l.district
-                    )
-                )
-            ]
-
-            const preferredDivisionNames = [
-                ...new Set(
-                    locationData.map(
-                        l => l.divisionName
-                    )
-                )
-            ]
-
-            const stateName =
-                locationData.length > 0
-                ? locationData[0].stateName
-                : ""
-
-            const primaryLocation =
-    primaryLocationRecord.officeName
-
-const primaryLocationData =
-    locationData[0]
-
-const buyerLat =
-Number(primaryLocationData?.lat) || 0
-
-const buyerLng =
-Number(primaryLocationData?.lng) || 0
-
-            let requiredPossession =
-                row['Required Possession']
-                || []
-
-            if (
-                requiredPossession &&
-                typeof requiredPossession ===
-                'string'
-            ) {
-
-                requiredPossession =
-                    requiredPossession
-                    .split(',')
-                    .map(x => x.trim())
-                    .filter(Boolean)
-
-            }
-
-
-const transactionType =
-(
-row.TransactionType ||
-'SALE'
-)
-.toUpperCase();
-
-if (
-![
-'SALE',
-'RENT',
-'LEASE'
-]
-.includes(transactionType)
-) {
-
-invalidCount++;
-
-invalidRows.push(
-`${row.Name} - Invalid Transaction Type`
-);
-
-continue;
-
-}
-
-            const buyer = await Buyer.create({
-
-tenantId: req.session.tenantId,
-
-name: row.Name,
-
-phone: String(row.Phone),
-
-email: row.Email,
-
-status: "Imported",
-
-leadSource: "Excel",
-
-currentOwnerRole: "PreSales",
-
-createdByRole: "Admin",
-
-assignedExecutiveId: null,
-
-assignedExecutiveName: "",
-
-primaryLocation: primaryLocation,
-
-preferredLocations: locationData.map(l=>l.officeName),
-
-preferredPincodes,
-
-preferredDistricts,
-
-preferredDivisionNames,
-
-stateName,
-
-preferredLocation:{
-    type:"Point",
-    coordinates:[
-        buyerLng,
-        buyerLat
-    ]
-}
-
-});
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.executiveName || "Admin",
-
-    "Admin",
-
-    "Buyer Imported",
-
-    "",
-
-    "Bulk Upload"
-
-);
-
-            importedCount++
-
-        }
-
-        if (
-            duplicateMobiles.length > 0
-        ) {
-
-            const tenant =
-                await Tenant.findById(
-                    req.session.tenantId
-                )
-
-            await sendEmail(
-
-                tenant.adminEmail,
-
-                'Buyer Upload Summary',
-
-                `
-                <h2>
-                Buyer Upload Summary
-                </h2>
-
-                <p>
-                Tenant:
-                ${tenant?.name || ''}
-                </p>
-
-                <p>
-                Duplicate Mobiles:
-                </p>
-
-                <pre>
-${duplicateMobiles.join('\n')}
-                </pre>
-                `
-
-            ).catch(console.error)
-
-        }
-
-if (missingLocationRequests.length > 0) {
-
-    const tenant =
-        await Tenant.findById(
-            req.session.tenantId
-        )
-
-await sendEmail(
-
-    process.env.ADMIN_EMAIL,
-
-    'Buyer Upload - New Locations Requested',
-
-    `
-    <h2>Location Master Update Required</h2>
-
-    <p>
-    Tenant:
-    ${tenant?.name || ''}
-    </p>
-
-    <pre>
-${missingLocationRequests.join('\n')}
-    </pre>
-    `
-
-).catch(console.error)
-
-}
-
-        res.render(
-            'buyerBulkUploadResult',
-            {
-                importedCount,
-                duplicateCount,
-                invalidCount,
-                duplicateMobiles,
-                invalidRows
-            }
-        )
-
-    }
-)
 
 module.exports = router

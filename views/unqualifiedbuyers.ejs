@@ -1281,9 +1281,10 @@ Imported
         .filter(b => b.status === "Imported")
         .forEach(function(b){ %>
 
-        <%- include("partials/unqualifiedLeadCard", {
+<%- include("partials/unqualifiedLeadCard", {
     buyer: b,
-    getLeadAge: getLeadAge
+    getLeadAge: getLeadAge,
+    executives: executives
 }) %>
 
     <% }) %>

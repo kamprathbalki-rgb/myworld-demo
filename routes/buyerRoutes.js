@@ -12,7 +12,7 @@ const Executive = require('../models/Executive')
 const { sendWhatsApp } = require('../services/whatsappService')
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
-
+const {mapBuyerExecutives} = require("../services/executiveMappingService");
 const {notifyExecutive} = require('../services/notificationService');
 
 const XLSX = require('xlsx')
@@ -206,446 +206,6 @@ res.render('shortlist',{ list })
 
 })
 
-router.get(
-    '/bulk-upload',
-    isLoggedIn,
-    isAdmin,
-    (req, res) => {
-
-        res.render(
-            'buyerBulkUpload'
-        )
-
-    }
-)
-
-router.post(
-    '/bulk-upload',
-    isLoggedIn,
-    isAdmin,
-    uploadExcel.single('excelFile'),
-    async (req, res) => {
-
-        const workbook = XLSX.read(
-            req.file.buffer,
-            { type: 'buffer' }
-        )
-
-        const sheet =
-            workbook.Sheets[
-                workbook.SheetNames[0]
-            ]
-
-        const rows =
-            XLSX.utils.sheet_to_json(
-                sheet,
-                { defval: '' }
-            )
-
-        let importedCount = 0
-        let duplicateCount = 0
-        let invalidCount = 0
-
-        let duplicateMobiles = []
-        let invalidRows = []
-        let missingLocationRequests = []
-
-        for (const row of rows) {
-
-            if (
-                !row.Phone ||
-                !/^\d{10}$/.test(
-                    String(row.Phone)
-                )
-            ) {
-
-                invalidCount++
-
-                invalidRows.push(
-                    row.Name || 'Unknown'
-                )
-
-                continue
-            }
-
-            const existingBuyer =
-                await Buyer.findOne({
-
-                    tenantId:
-                    req.session.tenantId,
-
-                    phone:
-                    String(row.Phone)
-
-                })
-
-            if (existingBuyer) {
-
-                duplicateCount++
-
-                if (
-                    !duplicateMobiles.includes(
-                        String(row.Phone)
-                    )
-                ) {
-                    duplicateMobiles.push(
-                        String(row.Phone)
-                    )
-                }
-
-                continue
-            }
-
-            let preferredLocations = [
-
-                row['Preferred Location 1'],
-
-                row['Preferred Location 2'],
-
-                row['Preferred Location 3']
-
-            ].filter(Boolean)
-
-let locationData = []
-
-const primaryLocationName =
-    preferredLocations[0]
-
-const primaryLocationRecord =
-    await LocationMaster.findOne({
-
-        officeName: {
-            $regex: '^' + primaryLocationName,
-            $options: 'i'
-        }
-
-    })
-
-if (!primaryLocationRecord) {
-
-    invalidCount++
-
-    invalidRows.push(
-        `${row.Name} - ${primaryLocationName}`
-    )
-
-    if (
-        !missingLocationRequests.includes(
-            primaryLocationName
-        )
-    ) {
-        missingLocationRequests.push(
-            primaryLocationName
-        )
-    }
-
-    continue
-}
-
-locationData.push(
-    primaryLocationRecord
-)
-
-for (const locationName of preferredLocations.slice(1)) {
-
-    const location =
-        await LocationMaster.findOne({
-
-            officeName: {
-                $regex: '^' + locationName,
-                $options: 'i'
-            }
-
-        })
-
-    if (location) {
-        locationData.push(location)
-    }
-
-}
-
-
-            const preferredPincodes = [
-                ...new Set(
-                    locationData.map(
-                        l => l.pincode
-                    )
-                )
-            ]
-
-            const preferredDistricts = [
-                ...new Set(
-                    locationData.map(
-                        l => l.district
-                    )
-                )
-            ]
-
-            const preferredDivisionNames = [
-                ...new Set(
-                    locationData.map(
-                        l => l.divisionName
-                    )
-                )
-            ]
-
-            const stateName =
-                locationData.length > 0
-                ? locationData[0].stateName
-                : ""
-
-            const primaryLocation =
-    primaryLocationRecord.officeName
-
-const primaryLocationData =
-    locationData[0]
-
-const buyerLat =
-Number(primaryLocationData?.lat) || 0
-
-const buyerLng =
-Number(primaryLocationData?.lng) || 0
-
-const matchedExecutive =
-    await Executive.findOne({
-        tenantId: req.session.tenantId,
-        executiveType: "PreSales",
-        assignedLocations: primaryLocation,
-        isActive: true
-    })
-
-            let requiredPossession =
-                row['Required Possession']
-                || []
-
-            if (
-                requiredPossession &&
-                typeof requiredPossession ===
-                'string'
-            ) {
-
-                requiredPossession =
-                    requiredPossession
-                    .split(',')
-                    .map(x => x.trim())
-                    .filter(Boolean)
-
-            }
-
-
-const transactionType =
-(
-row.TransactionType ||
-'SALE'
-)
-.toUpperCase();
-
-if (
-![
-'SALE',
-'RENT',
-'LEASE'
-]
-.includes(transactionType)
-) {
-
-invalidCount++;
-
-invalidRows.push(
-`${row.Name} - Invalid Transaction Type`
-);
-
-continue;
-
-}
-
-const buyer = await Buyer.create({
-
-    tenantId:
-    req.session.tenantId,
-
-    name:
-    row.Name,
-
-    phone:
-    String(row.Phone),
-
-    email:
-    row.Email,
-
-    minBudget:
-    Number(row['Min Budget'] || 0),
-
-    maxBudget:
-    Number(row['Max Budget'] || 0),
-
-    transactionType:
-    transactionType,
-
-    requiredPossession:
-    requiredPossession,
-
-    requiredFlatType:
-    row['Required Flat Type'],
-
-    minArea:
-    Number(row['Min Area'] || 0),
-
-    maxArea:
-    Number(row['Max Area'] || 0),
-
-    radius:
-    Number(row['Radius'] || 0),
-
-    assignmentType:
-    "AUTO",
-
-    primaryLocation:
-    primaryLocation,
-
-    preferredLocations:
-    locationData.map(
-        l => l.officeName
-    ),
-
-    preferredPincodes:
-    preferredPincodes,
-
-    preferredDistricts:
-    preferredDistricts,
-
-    preferredDivisionNames:
-    preferredDivisionNames,
-
-    stateName:
-    stateName,
-
-    assignedExecutiveId:
-    matchedExecutive
-        ? matchedExecutive._id
-        : null,
-
-    assignedExecutiveName:
-    matchedExecutive
-        ? matchedExecutive.name
-        : "",
-
-    preferredLocation: {
-
-        type: "Point",
-
-        coordinates: [
-            buyerLng,
-            buyerLat
-        ]
-
-    }
-
-});
-
-appendBuyerTimeline(
-
-    buyer,
-
-    req.session.user?.name ||
-    'System',
-
-    'System',
-
-    'Buyer Imported',
-
-    '',
-
-    'Bulk Excel Upload'
-
-);
-
-importedCount++;
-
-        }
-
-        if (
-            duplicateMobiles.length > 0
-        ) {
-
-            const tenant =
-                await Tenant.findById(
-                    req.session.tenantId
-                )
-
-            await sendEmail(
-
-                tenant.adminEmail,
-
-                'Buyer Upload Summary',
-
-                `
-                <h2>
-                Buyer Upload Summary
-                </h2>
-
-                <p>
-                Tenant:
-                ${tenant?.name || ''}
-                </p>
-
-                <p>
-                Duplicate Mobiles:
-                </p>
-
-                <pre>
-${duplicateMobiles.join('\n')}
-                </pre>
-                `
-
-            ).catch(console.error)
-
-        }
-
-if (missingLocationRequests.length > 0) {
-
-    const tenant =
-        await Tenant.findById(
-            req.session.tenantId
-        )
-
-await sendEmail(
-
-    process.env.ADMIN_EMAIL,
-
-    'Buyer Upload - New Locations Requested',
-
-    `
-    <h2>Location Master Update Required</h2>
-
-    <p>
-    Tenant:
-    ${tenant?.name || ''}
-    </p>
-
-    <pre>
-${missingLocationRequests.join('\n')}
-    </pre>
-    `
-
-).catch(console.error)
-
-}
-
-        res.render(
-            'buyerBulkUploadResult',
-            {
-                importedCount,
-                duplicateCount,
-                invalidCount,
-                duplicateMobiles,
-                invalidRows
-            }
-        )
-
-    }
-)
-
 router.post(
 '/update/:id',
 isLoggedIn,
@@ -690,6 +250,12 @@ if (
 if (!Array.isArray(selectedLocations)) {
     selectedLocations = [selectedLocations]
 }
+
+const executiveMapping =
+    await mapBuyerExecutives(
+        req.session.tenantId,
+        primaryLocation
+    );
 
 const locationData = await LocationMaster.find({
     officeName: { $in: selectedLocations }
@@ -784,11 +350,27 @@ Object.assign(
         transactionType:
         req.body.transactionType,
 
-        requiredPossession:
-        requiredPossession,
+requiredPossession:
+requiredPossession,
 
-        requiredFlatType:
-        requiredFlatType,
+propertyType:
+req.body.propertyType,
+
+requiredFlatType:
+requiredFlatType,
+
+preSalesExecutiveId:
+    executiveMapping.preSalesExecutiveId,
+
+preSalesExecutiveName:
+    executiveMapping.preSalesExecutiveName,
+
+salesExecutiveId:
+    executiveMapping.salesExecutiveId,
+
+salesExecutiveName:
+    executiveMapping.salesExecutiveName,
+
 
         minArea:
         minArea,
@@ -1075,13 +657,11 @@ Number.isFinite(submittedLng)
 ? submittedLng
 : Number(primaryLocationData?.lng) || 0
 
-const matchedExecutive =
-    await Executive.findOne({
-        tenantId: req.session.tenantId,
-        executiveType: "PreSales",
-        assignedLocations: primaryLocation,
-        isActive: true
-    })
+const executiveMapping =
+    await mapBuyerExecutives(
+        req.session.tenantId,
+        primaryLocation
+    );
 
 const requiredFlatType =
     (req.body.apartmentFlatType && req.body.apartmentFlatType.trim() !== "")
@@ -1133,6 +713,8 @@ req.body.transactionType,
 
     requiredPossession: requiredPossession,
 
+propertyType: req.body.propertyType,
+
     requiredFlatType: requiredFlatType,
 
     minArea: minArea,
@@ -1142,8 +724,17 @@ req.body.transactionType,
 
     tenantId: req.session.tenantId,
 
-    assignedExecutiveId: matchedExecutive ? matchedExecutive._id : null,
-    assignedExecutiveName: matchedExecutive ? matchedExecutive.name : "",
+preSalesExecutiveId:
+    executiveMapping.preSalesExecutiveId,
+
+preSalesExecutiveName:
+    executiveMapping.preSalesExecutiveName,
+
+salesExecutiveId:
+    executiveMapping.salesExecutiveId,
+
+salesExecutiveName:
+    executiveMapping.salesExecutiveName,
 
     /*
     Selected locations
@@ -1197,9 +788,15 @@ appendBuyerTimeline(
 
 );
 
-await notifyExecutive(
+if (executiveMapping.preSalesExecutiveId) {
 
-    matchedExecutive,
+    const preSalesExecutive =
+        await Executive.findById(
+            executiveMapping.preSalesExecutiveId
+        );
+
+    await notifyExecutive(
+        preSalesExecutive,
 
     `New Lead Assigned
 
@@ -1208,6 +805,7 @@ Mobile: ${buyer.phone}
 Location: ${buyer.primaryLocation}`
 
 );
+}
 
 
 if (matchedExecutive && matchedExecutive.mobile) {
@@ -2143,8 +1741,5 @@ router.post(
 
     }
 );
-
-
-
 
 module.exports = router

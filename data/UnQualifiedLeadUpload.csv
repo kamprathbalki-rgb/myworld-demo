@@ -1,0 +1,15 @@
+﻿Name,Phone,Email,Min Budget,Max Budget,TransactionType,Required Flat Type,Min Area,Max Area,Radius,Preferred Location 1,Preferred Location 2,Preferred Location 3,Required Possession
+Test Baner,9000000001,test9000000001@example.com,80,120,SALE,Apartment,800,1200,10,Baner,,,Ready
+Test Balewadi,9000000002,test9000000002@example.com,80,120,SALE,Apartment,800,1200,10,Balewadi,,,Ready
+Test Wakad,9000000003,test9000000003@example.com,80,120,SALE,Apartment,800,1200,10,Wakad,,,Ready
+Test Hinjewadi,9000000004,test9000000004@example.com,80,120,SALE,Apartment,800,1200,10,Hinjewadi,,,Ready
+Test Warje,9000000021,test9000000021@example.com,80,120,SALE,Apartment,800,1200,10,Warje,,,Ready
+Test Karve Nagar,9000000022,test9000000022@example.com,80,120,SALE,Apartment,800,1200,10,Karve Nagar,,,Ready
+Test Kothrud,9000000023,test9000000023@example.com,80,120,SALE,Apartment,800,1200,10,Kothrud,,,Ready
+Test Bavdhan,9000000024,test9000000024@example.com,80,120,SALE,Apartment,800,1200,10,Bavdhan,,,Ready
+Test Pashan,9000000025,test9000000025@example.com,80,120,SALE,Apartment,800,1200,10,Pashan,,,Ready
+Test Sus,9000000026,test9000000026@example.com,80,120,SALE,Apartment,800,1200,10,Sus,,,Ready
+Test Mahalunge,9000000027,test9000000027@example.com,80,120,SALE,Apartment,800,1200,10,Mahalunge,,,Ready
+Test Bhugaon,9000000091,test9000000091@example.com,80,120,SALE,Apartment,800,1200,10,Bhugaon,,,Ready
+Test Bhukum,9000000092,test9000000092@example.com,80,120,SALE,Apartment,800,1200,10,Bhukum,,,Ready
+Test Lavale,9000000093,test9000000093@example.com,80,120,SALE,Apartment,800,1200,10,Lavale,,,Ready

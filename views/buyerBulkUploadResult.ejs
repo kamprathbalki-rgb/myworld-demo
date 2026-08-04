@@ -518,39 +518,129 @@ No duplicate mobile numbers found.
 
 <div class="result-section">
 
-
 <h2>
 Invalid Rows
 </h2>
 
+<% if (invalidRows && invalidRows.length) { %>
 
-<% if(
-invalidRows &&
-invalidRows.length
-){ %>
+<table
+style="
+width:100%;
+border-collapse:collapse;
+">
 
+<tr
+style="
+background:#f5f5f5;
+">
 
-<ul class="result-list">
+<th
+style="
+padding:8px;
+border:1px solid #ddd;
+">
+Row
+</th>
 
+<th
+style="
+padding:8px;
+border:1px solid #ddd;
+">
+Buyer
+</th>
 
-<% invalidRows.forEach(row => { %>
+<th
+style="
+padding:8px;
+border:1px solid #ddd;
+">
+Mobile
+</th>
 
+<th
+style="
+padding:8px;
+border:1px solid #ddd;
+">
+Validation Errors
+</th>
+
+</tr>
+
+<%
+invalidRows.forEach(item=>{
+%>
+
+<tr>
+
+<td
+style="
+padding:8px;
+border:1px solid #ddd;
+vertical-align:top;
+">
+<%= item.row %>
+</td>
+
+<td
+style="
+padding:8px;
+border:1px solid #ddd;
+vertical-align:top;
+">
+<%= item.buyer %>
+</td>
+
+<td
+style="
+padding:8px;
+border:1px solid #ddd;
+vertical-align:top;
+">
+<%= item.mobile %>
+</td>
+
+<td
+style="
+padding:8px;
+border:1px solid #ddd;
+">
+
+<ul
+style="
+margin:0;
+padding-left:18px;
+">
+
+<%
+item.errors.forEach(error=>{
+%>
 
 <li>
 
-<%= row %>
+<%= error %>
 
 </li>
 
-
-<% }) %>
-
+<%
+})
+%>
 
 </ul>
 
+</td>
+
+</tr>
+
+<%
+})
+%>
+
+</table>
 
 <% } else { %>
-
 
 <p class="empty-message">
 
@@ -558,12 +648,9 @@ No invalid rows found.
 
 </p>
 
-
 <% } %>
 
-
 </div>
-
 
 
 <!-- ================================

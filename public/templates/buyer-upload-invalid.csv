@@ -1,2 +1,13 @@
-Name,Phone,Email,Min Budget,Max Budget,Required Possession,Required Flat Type,Min Area,Max Area,Preferred Location 1,Preferred Location 2,Preferred Location 3,Radius
-Adiqa,9606599211,adiqa@gmail.com,80,120,Immediate,2 BHK,700,1200,Hinjewadi,,,5000
+Name,Phone,Email,Buying Interest,Purchase Timeline,Min Budget,Max Budget,TransactionType,Property Type,Required Flat Type,Min Area,Max Area,Radius,Preferred Location 1,Preferred Location 2,Preferred Location 3,Required Possession
+Test Buyer 1,98700123,test234@example.com,Yes,Immediate,80,90,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 2,9870012334,test234@example.com,Y,Immediate,80,90,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 3,9870012335,test234@example.com,Yes,Immediat,80,90,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 4,9870012336,test234@example.com,Yes,Immediate,,,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 5,9870012337,test234@example.com,Yes,Immediate,80,9,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 6,9870012338,test234@example.com,Yes,Immediate,80,90,SALE,,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 7,9870012339,test234@example.com,Yes,Immediate,80,90,SALE,Apartment, BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 8,9870012330,test234@example.com,Yes,Immediate,80,90,SALE,Apartment,2 BHK,,,,Bhugaon,,,Ready
+Test Buyer 10,9870012344,test234@example.com,Yes,Immediate,80,90,,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+Test Buyer 9,9870012344,test234@example.com,Yes,Immediate,80,90,SALE,Apartment,2 BHK,1100,1000,,,,,Ready
+Test Buyer 11,9875912344,test234@example.com,Yes,Immediate,80,90,SALE,Apartment,2 BHK,1111,1115,,Bhugaon,,,Ready
+

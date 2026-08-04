@@ -29,11 +29,16 @@ salary: {
 
     assignedLocations: [String],
 
-    executiveType: {
+executiveType: {
     type: String,
-    enum: ['PreSales', 'Sales','HR'],
-    default: 'Sales'
-    },
+    enum: [
+        'Admin',
+        'HR',
+        'PreSales',
+        'Sales'
+    ],
+    default: 'PreSales'
+},
 
     isActive: {
         type: Boolean,

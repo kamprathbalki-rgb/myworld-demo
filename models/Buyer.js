@@ -65,6 +65,20 @@ enum:[
 default:'SALE'
 },
 
+propertyType: {
+    type: String,
+    enum: [
+        "Apartment",
+        "Villa",
+        "Plot",
+        "Office",
+        "Showroom",
+        "Retail",
+        "Shop"
+    ],
+    default: "Apartment"
+},
+
 requiredFlatType: {
     type: String,
     enum: [
@@ -121,6 +135,31 @@ primaryLocation: {
     type: String,
     default: ""
 },
+
+// PreSales Owner
+preSalesExecutiveId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Executive",
+    default: null
+},
+
+preSalesExecutiveName: {
+    type: String,
+    default: ""
+},
+
+// Sales Owner
+salesExecutiveId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Executive",
+    default: null
+},
+
+salesExecutiveName: {
+    type: String,
+    default: ""
+},
+
 
 buyerNotes: String,
 
@@ -223,6 +262,49 @@ currentOwnerRole: {
         "PostSales"
     ],
     default: "Executive"
+},
+
+// Department owning the buyer
+department: {
+    type: String,
+    enum: [
+        "PreSales",
+        "Sales"
+    ],
+    default: "PreSales"
+},
+
+// Executive who qualified the buyer
+preSalesExecutiveId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Executive"
+},
+
+preSalesExecutiveName: {
+    type: String,
+    default: ""
+},
+
+// Executive handling sales
+salesExecutiveId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Executive"
+},
+
+salesExecutiveName: {
+    type: String,
+    default: ""
+},
+
+// Date of handover
+handoverDate: {
+    type: Date
+},
+
+// Admin / Auto / Manual
+handoverMode: {
+    type: String,
+    default: "AUTO"
 },
 
 chatSessionId: {

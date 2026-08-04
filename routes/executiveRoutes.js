@@ -11,6 +11,7 @@ const calculateScore = require('../services/matchService')
 const groupLeadAging = require('../services/leadAgingService');
 const calculateProductiveHours = require('../services/productiveHoursService');
 
+const {remapExecutiveTerritory} = require("../services/executiveMappingService");
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 
@@ -615,7 +616,13 @@ dateOfLeaving: req.body.dateOfLeaving || "",
 salary: Number(req.body.salary || 0)
 })
 
-    await executive.save()
+    await executive.save();
+
+await remapExecutiveTerritory(
+    req.session.tenantId,
+    executive.executiveType,
+    executive.assignedLocations
+);
 
     res.redirect('/executive/list')
 
@@ -1311,6 +1318,16 @@ dateOfLeaving: req.body.dateOfLeaving || "",
 salary: Number(req.body.salary || 0)
     }
 )
+
+const executive = await Executive.findById(
+    req.params.id
+);
+
+await remapExecutiveTerritory(
+    req.session.tenantId,
+    executive.executiveType,
+    executive.assignedLocations
+);
 
     res.redirect('/executive/list')
 

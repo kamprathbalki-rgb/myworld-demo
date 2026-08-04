@@ -217,7 +217,7 @@ const leadGroups = groupLeadAging(agingBuyers);
 
 const unqualifiedBuyers = await Buyer.find({
     tenantId: req.session.tenantId,
-    currentOwnerRole: "PreSales",
+    department: "PreSales",
     leadSource: "Excel",
     status: {
         $nin: [
@@ -331,7 +331,7 @@ const chatLeadCount = await ChatLead.countDocuments({
 const unqualifiedLeadCount = await Buyer.countDocuments({
     tenantId: req.session.tenantId,
     leadSource: "Excel",
-    currentOwnerRole: "PreSales"
+    department: "PreSales"
 });
 
 res.render('dashboard',{
