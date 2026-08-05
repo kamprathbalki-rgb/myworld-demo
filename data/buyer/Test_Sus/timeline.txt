@@ -1,60 +1,54 @@
 ========================================================
-Timestamp : Monday, 03 August 2026 at 09:43:50 pm IST
-User      : undefined
-Role      : Admin
-Action    : Executive Reassigned
---------------------------------------------------------
-Previous : Tanu
-Current  : Sheetal Chawarai
-========================================================
-
-========================================================
-Timestamp : Monday, 03 August 2026 at 10:09:09 pm IST
-User      : undefined
-Role      : Admin
-Action    : Executive Reassigned
---------------------------------------------------------
-Previous : Tanu
-Current  : Sheetal Chawarai
-========================================================
-
-========================================================
-Timestamp : Monday, 03 August 2026 at 10:18:56 pm IST
-User      : undefined
-Role      : Admin
-Action    : Executive Reassigned
---------------------------------------------------------
-Previous : Tanu
-Current  : Sheetal Chawarai
-========================================================
-
-========================================================
-Timestamp : Tuesday, 04 August 2026 at 11:46:15 am IST
-User      : undefined
-Role      : PreSales
-Action    : Status Changed
---------------------------------------------------------
-Previous : Imported
-Current  : Phone Call
-========================================================
-
-========================================================
-Timestamp : Tuesday, 04 August 2026 at 11:46:21 am IST
-User      : undefined
-Role      : PreSales
-Action    : Status Changed
---------------------------------------------------------
-Previous : Phone Call
-Current  : Imported
-========================================================
-
-========================================================
-Timestamp : Tuesday, 04 August 2026 at 05:15:16 pm IST
+Timestamp : Tuesday, 04 August 2026 at 05:06:30 pm IST
 User      : Tanu
 Role      : PreSales
 Action    : Status Changed
 --------------------------------------------------------
 Previous : Imported
 Current  : Phone Call
+========================================================
+
+========================================================
+Timestamp : Tuesday, 04 August 2026 at 05:08:20 pm IST
+User      : Tanu
+Role      : PreSales
+Action    : Buyer Updated
+--------------------------------------------------------
+Changes
+
+Status
+   Old : Phone Call
+   New : Phone Call
+
+========================================================
+
+========================================================
+Timestamp : Tuesday, 04 August 2026 at 05:10:20 pm IST
+User      : Tanu
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Qualified
+Current  : Site Visit
+========================================================
+
+========================================================
+Timestamp : Tuesday, 04 August 2026 at 05:10:39 pm IST
+User      : Tanu
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Site Visit
+Current  : Negotiation
+========================================================
+
+========================================================
+Timestamp : Tuesday, 04 August 2026 at 05:24:32 pm IST
+User      : Tanu
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Negotiation
+Current  : Deal Won
 ========================================================
 

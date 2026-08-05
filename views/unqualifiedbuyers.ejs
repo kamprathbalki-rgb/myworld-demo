@@ -339,8 +339,8 @@ body{
 }
 
 .kanban-container{
-    height:calc(100vh - 260px);
-    overflow:auto;
+    overflow-x:auto;
+    overflow-y:hidden;
 }
 
 .drop-zone h3{
@@ -854,10 +854,29 @@ body{
 
 }
 
+.kanban-header-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.kanban-header{
+    flex:1 0 290px;
+    min-width:290px;
+    max-width:290px;
+
+    background:#f8f9fa;
+    border-radius:10px;
+
+    padding:15px;
+
+    color:#1f4e79;
+    font-weight:bold;
+}
 
 .kanban-board{
     display:flex;
-    gap:20px;
+    gap:10px;
     overflow-x:auto;
     overflow-y:hidden;
     width:100%;
@@ -866,18 +885,17 @@ body{
 }
 
 .kanban-column{
-    flex:0 0 320px;
-    min-width:320px;
+    flex:1 0 290px;
+    min-width:290px;
+    max-width:290px;
+
+    height:calc(100vh - 340px);
+    overflow-y:auto;
+    overflow-x:hidden;
+
     background:#f8f9fa;
     border-radius:10px;
     padding:15px;
-}
-
-.kanban-column{
-    flex:1 0 320px;
-    min-width:320px;
-    max-width:320px;
-    color:#1f4e79;
 }
 
 .lead-card{
@@ -1208,12 +1226,46 @@ Lease
 
 <div class="buyer-section">
 
-<div class="kanban-container">
-
-
 <h2 class="section-title">
 Unqualified Lead Records
 </h2>
+
+<div class="kanban-header-row">
+
+    <div class="kanban-header">
+        Imported
+        (<%= buyers.filter(b => b.status==="Imported").length %> |
+        <%= formatAmount(getColumnValue("Imported")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Phone Call
+        (<%= buyers.filter(b => b.status==="Phone Call").length %> |
+        <%= formatAmount(getColumnValue("Phone Call")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Qualified
+        (<%= buyers.filter(b => b.status==="Qualified").length %> |
+        <%= formatAmount(getColumnValue("Qualified")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Site Visit
+        (<%= buyers.filter(b => b.status==="Site Visit").length %> |
+        <%= formatAmount(getColumnValue("Site Visit")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Negotiation
+        (<%= buyers.filter(b => b.status==="Negotiation").length %> |
+        <%= formatAmount(getColumnValue("Negotiation")) %>)
+    </div>
+
+</div>
+
+
+<div class="kanban-container">
 
 <%
 function getColumnValue(status){
@@ -1288,6 +1340,8 @@ function getLeadAge(createdAt){
 
 %>
 
+
+
 <div class="kanban-board">
 
 <div class="kanban-column"
@@ -1296,35 +1350,6 @@ function getLeadAge(createdAt){
     <div class="drop-zone"
          ondragover="allowDrop(event)"
          ondrop="dropLead(event)">
-
-<h3>
-    Imported
-    (<%= buyers.filter(b => b.status === "Imported").length %> |
-    <%= formatAmount(getColumnValue("Imported")) %>)
-</h3>
-
-<div
-    class="page-nav"
-    data-column="Imported">
-
-    <button
-        type="button"
-        class="prev-btn"
-        disabled>
-        ◀
-    </button>
-
-    <span class="page-range">
-        1–5
-    </span>
-
-    <button
-        type="button"
-        class="next-btn">
-        ▶
-    </button>
-
-</div>
 
     <% buyers
         .filter(b => b.status === "Imported")
@@ -1348,12 +1373,6 @@ function getLeadAge(createdAt){
          ondragover="allowDrop(event)"
          ondrop="dropLead(event)">
 
-<h3>
-Phone Call
-(<%= buyers.filter(b => b.status === "Phone Call").length %> |
-<%= formatAmount(getColumnValue("Phone Call")) %>)
-</h3>
-
 <% buyers
 .filter(b => b.status === "Phone Call")
 .forEach(function(b){ %>
@@ -1375,12 +1394,6 @@ getLeadAge:getLeadAge
     <div class="drop-zone"
      ondragover="allowDrop(event)"
      ondrop="dropLead(event)">
-
-<h3>
-Qualified
-(<%= buyers.filter(b => b.status === "Qualified").length %> |
-<%= formatAmount(getColumnValue("Qualified")) %>)
-</h3>
 
 <% buyers
 .filter(b => b.status === "Qualified")
@@ -1404,12 +1417,6 @@ getLeadAge:getLeadAge
      ondragover="allowDrop(event)"
      ondrop="dropLead(event)">
 
-<h3>
-Site Visit
-(<%= buyers.filter(b => b.status === "Site Visit").length %> |
-<%= formatAmount(getColumnValue("Site Visit")) %>)
-</h3>
-
 <% buyers
 .filter(b => b.status === "Site Visit")
 .forEach(function(b){ %>
@@ -1431,12 +1438,6 @@ getLeadAge:getLeadAge
     <div class="drop-zone"
      ondragover="allowDrop(event)"
      ondrop="dropLead(event)">
-
-<h3>
-Negotiation
-(<%= buyers.filter(b => b.status === "Negotiation").length %> |
-<%= formatAmount(getColumnValue("Negotiation")) %>)
-</h3>
 
 <% buyers
     .filter(b => b.status === "Negotiation")
@@ -1472,12 +1473,220 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+async function updateStatus(select) {
+
+    const form = select.form;
+
+const currentStatus =
+    form.closest(".lead-card").dataset.status;
+
+console.log("Transition:", currentStatus, "→", select.value);
+
+
+const buyerValueInput =
+    form.querySelector('[name="buyerValue"]');
+
+const confirmCheckbox =
+    form.querySelector('[name="confirmBuyerValue"]');
+
+const negotiationStatusSelect =
+    form.querySelector('[name="negotiationStatus"]');
+
+const buyerValue =
+    buyerValueInput?.value || "";
+
+const negotiationStatus =
+    negotiationStatusSelect?.value || "";
+
+const buyerValueConfirmed =
+    confirmCheckbox?.checked
+        ? "true"
+        : "false";
+
+if (
+    select.value === "Deal Won" ||
+    select.value === "Lost"
+) {
+
+const lostReason =
+    negotiationStatusSelect?.value || "";
+
+if (select.value === "Lost") {
+
+    const lostReason = negotiationStatus;
+
+    if (!lostReason) {
+        alert("Please select the Lost Reason.");
+        select.value = "Negotiation";
+        return;
+    }
+
+}
+
+    if (buyerValue <= 0) {
+        alert("Please enter the Final Buyer Value.");
+        select.value = "Negotiation";
+        return;
+    }
+
+    if (!form.querySelector('[name="confirmBuyerValue"]').checked) {
+        alert("Please check 'I confirm this is the final Buyer Value.'");
+        select.value = "Negotiation";
+        return;
+    }
+
+const message =
+    select.value === "Deal Won"
+        ? `You are about to mark this buyer as Deal Won.
+
+Final Buyer Value: ₹${buyerValue}
+
+This action will close the opportunity.
+
+Do you want to continue?`
+        : `You are about to mark this buyer as Lost.
+
+Lost Reason: ${lostReason}
+
+Final Buyer Value: ₹${buyerValue}
+
+This action will close the opportunity.
+
+Do you want to continue?`;
+
+const confirmed = confirm(message);
+
+    if (!confirmed) {
+        select.value = "Negotiation";
+        return;
+    }
+}
+
+if (
+    currentStatus === "Phone Call" &&
+    select.value === "Qualified"
+) {
+
+    const followUpInput =
+        form.querySelector('[name="nextFollowUp"]');
+
+    if (!followUpInput?.value) {
+        alert("Please select the Next Follow-up Date & Time.");
+        select.value = "Phone Call";
+        return;
+    }
+
+    if (new Date(followUpInput.value) < new Date()) {
+        alert("Next Follow-up Date & Time must be today or a future date and time.");
+        select.value = "Phone Call";
+        return;
+    }
+
+}
+
+if (
+    currentStatus === "Qualified" &&
+    select.value === "Site Visit"
+) {
+
+    const followUpInput =
+        form.querySelector('[name="nextFollowUp"]');
+
+    const siteVisitInput =
+        form.querySelector('[name="siteVisitDate"]');
+
+    if (!followUpInput?.value) {
+        alert("Please select the Next Follow-up Date & Time.");
+        select.value = "Qualified";
+        return;
+    }
+
+    if (!siteVisitInput?.value) {
+        alert("Please select the Site Visit Date & Time.");
+        select.value = "Qualified";
+        return;
+    }
+
+if (new Date(siteVisitInput.value) < new Date()) {
+    alert("Site Visit Date & Time must be today or a future date and time.");
+    select.value = "Qualified";
+    return;
+}
+
+
+}
+
+if (
+    currentStatus === "Site Visit" &&
+    select.value === "Negotiation"
+) {
+
+    const followUpInput =
+        form.querySelector('[name="nextFollowUp"]');
+
+    const buyerValueInput =
+        form.querySelector('[name="buyerValue"]');
+
+    if (!followUpInput?.value) {
+        alert("Please select the Next Follow-up Date & Time.");
+        select.value = "Site Visit";
+        return;
+    }
+
+if (new Date(followUpInput.value) < new Date()) {
+    alert("Next Follow-up Date & Time must be today or a future date and time.");
+    select.value = "Site Visit";
+    return;
+}
+
+    if (Number(buyerValueInput?.value || 0) <= 0) {
+        alert("Buyer Value must be greater than zero.");
+        select.value = "Site Visit";
+        return;
+    }
+
+}
+
+const followUp =
+    form.querySelector('[name="nextFollowUp"]')?.value || "";
+
+const siteVisit =
+    form.querySelector('[name="siteVisitDate"]')?.value || "";
+
+const body =
+    "status=" + encodeURIComponent(select.value) +
+    "&nextFollowUp=" + encodeURIComponent(followUp) +
+    "&siteVisitDate=" + encodeURIComponent(siteVisit) +
+    "&buyerValue=" + encodeURIComponent(buyerValue) +
+    "&negotiationStatus=" + encodeURIComponent(negotiationStatus) +
+    "&buyerValueConfirmed=" + buyerValueConfirmed;
+
+console.log("POST", form.action);
+console.log("BODY", body);
+
+const response = await fetch(form.action, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body
+});
+
+const text = await response.text();
+
+if (!response.ok) {
+    alert(text);
+    return;
+}
+
+location.reload();
+
+}
+
 function dragLead(event) {
 
     draggedCard = event.currentTarget;
     draggedLeadId = draggedCard.dataset.id;
-
-    console.log("Lead:", draggedLeadId);
 
     event.dataTransfer.setData("text/plain", draggedLeadId);
     event.dataTransfer.effectAllowed = "move";
@@ -1500,8 +1709,6 @@ const newStatus =
 
     try {
 
-console.log("Before fetch");
-
         const response = await fetch(
 
             "/buyer/status-unqualified-drag/" + draggedLeadId,
@@ -1516,15 +1723,17 @@ console.log("Before fetch");
 
 const result = await response.json();
 
+if (result.requireBuyerValueConfirmation) {
+    window.location =
+        "/executive/edit-unqualified/" + draggedLeadId;
+    return;
+}
+
 if (!result.success) {
     alert("Unable to update lead status.");
     return;
 }
 
-if (!draggedCard) {
-    console.error("draggedCard is null");
-    return;
-}
 
 dropZone.appendChild(draggedCard);
 
@@ -1553,6 +1762,59 @@ function allowDrop(event) {
 }
 
 </script>
+
+<div id="confirmationModal"
+     style="display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.55);
+            z-index:99999;
+            justify-content:center;
+            align-items:center;">
+
+    <div style="background:#fff;
+                width:420px;
+                max-width:95%;
+                border-radius:12px;
+                overflow:hidden;
+                box-shadow:0 10px 35px rgba(0,0,0,.35);">
+
+        <div id="confirmationHeader"
+             style="padding:15px 20px;
+                    background:#1976d2;
+                    color:#fff;
+                    font-size:18px;
+                    font-weight:bold;">
+        </div>
+
+        <div id="confirmationBody"
+             style="padding:20px;
+                    line-height:1.8;
+                    font-size:15px;">
+        </div>
+
+        <div style="padding:15px;
+                    text-align:right;
+                    border-top:1px solid #ddd;">
+
+            <button type="button"
+                    id="confirmCancel"
+                    class="btn btn-secondary">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="confirmOK"
+                    class="btn btn-success">
+                Confirm
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </body>
 

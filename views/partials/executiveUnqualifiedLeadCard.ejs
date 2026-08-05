@@ -42,9 +42,14 @@ const age = getLeadAge(buyer.createdAt);
         : "-" %>
 </div>
 
-    <form method="POST" action="/executive/status-unqualified/<%= buyer._id %>">
+    <form
+    method="POST"
+    action="/executive/status-unqualified/<%= buyer._id %>"
+    onsubmit="return false;">
 
-        <select name="status" onchange="this.form.submit()">
+<select
+    name="status"
+    onchange="alert('JS Running');changeBuyerStatus(this);">
 
             <option value="Imported"
                 <%= buyer.status==="Imported" ? "selected" : "" %>>
@@ -74,6 +79,45 @@ const age = getLeadAge(buyer.createdAt);
         </select>
 
     </form>
+
+<script>
+
+async function changeBuyerStatus(select) {
+
+    console.log("========== changeBuyerStatus ==========");
+
+    const form = select.form;
+
+    console.log("Action:", form.action);
+
+    console.log("Status:", select.value);
+
+    const formData = new FormData(form);
+
+    for (const pair of formData.entries()) {
+        console.log(pair[0], "=", pair[1]);
+    }
+
+    const response = await fetch(form.action, {
+        method: "POST",
+        body: formData
+    });
+
+    console.log("HTTP Status:", response.status);
+
+    const text = await response.text();
+
+    console.log("Response:", text);
+
+    if (response.ok && text === "") {
+        location.reload();
+        return;
+    }
+
+    alert(text);
+}
+
+</script>
 
 </div>
 

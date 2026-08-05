@@ -416,6 +416,18 @@ salesExecutiveName:
         buyerNotes:
         req.body.buyerNotes,
 
+buyerValue:
+    req.body.buyerValue
+        ? Number(req.body.buyerValue)
+        : null,
+
+buyerValueConfirmedBy:
+    req.session.user?.name ||
+    req.session.executiveName,
+
+buyerValueConfirmedAt:
+    new Date(),
+
         status:
         req.body.status,
 
@@ -427,6 +439,10 @@ salesExecutiveName:
 );
 
 await buyer.save();
+
+console.log("Buyer Value:", buyer.buyerValue);
+console.log("Confirmed By:", buyer.buyerValueConfirmedBy);
+console.log("Confirmed At:", buyer.buyerValueConfirmedAt);
 
 appendBuyerTimeline(
 
@@ -474,6 +490,9 @@ await Buyer.findByIdAndUpdate(
 req.params.id,
 
 {
+
+lastFollowUp: buyer.nextFollowUp,
+
 nextFollowUp:
 req.body.nextFollowUp
 ? new Date(req.body.nextFollowUp)

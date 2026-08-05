@@ -119,7 +119,7 @@ router.post('/unlock-contact/:id', async (req, res) => {
 
     const buyer = await Buyer.findOne({
         _id: req.params.id,
-        assignedExecutiveId: req.session.executiveId
+        salesExecutiveId: req.session.executiveId
     })
 
     if (!buyer) {
@@ -149,7 +149,7 @@ router.post('/project-visit/:buyerId/:propertyId', async (req, res) => {
 
     const buyer = await Buyer.findOne({
         _id: req.params.buyerId,
-        assignedExecutiveId: req.session.executiveId
+        salesExecutiveId: req.session.executiveId
     })
 
     if (!buyer) {
@@ -278,9 +278,13 @@ const updateData = {
 
     status: req.body.status,
 
+    lastFollowUp: buyer.nextFollowUp,
+
     nextFollowUp: req.body.nextFollowUp
         ? new Date(req.body.nextFollowUp)
         : null,
+
+   lastSiteVisitDate: buyer.siteVisitDate,
 
     siteVisitDate: req.body.siteVisitDate
         ? new Date(req.body.siteVisitDate)
@@ -405,7 +409,7 @@ router.get('/matches/:buyerId', async (req, res) => {
 
     const buyer = await Buyer.findOne({
         _id: req.params.buyerId,
-        assignedExecutiveId: req.session.executiveId
+        salesExecutiveId: req.session.executiveId
     })
 
     if (!buyer) {
@@ -488,7 +492,7 @@ router.get('/buyer/edit/:id', async (req, res) => {
 
     const buyer = await Buyer.findOne({
         _id: req.params.id,
-        assignedExecutiveId: req.session.executiveId
+        salesExecutiveId: req.session.executiveId
     })
 
     if (!buyer) {
@@ -533,7 +537,7 @@ const previousStatus = buyer.status;
     await Buyer.findOneAndUpdate(
         {
             _id: req.params.id,
-            assignedExecutiveId: req.session.executiveId
+            salesExecutiveId: req.session.executiveId
         },
         {
             minBudget: req.body.minBudget,
@@ -796,15 +800,9 @@ record.activityLog.push({
 
 await record.save();
 
-console.log("Executive:", executive.name);
-console.log("executiveType:", executive.executiveType);
-
 if (executive.executiveType === 'PreSales') {
     return res.redirect('/executive/unqualified');
 }
-
-console.log("Executive Type:", req.session.executiveType);
-console.log("Session:", req.session);
 
 return res.redirect('/executive/dashboard');
 
@@ -866,16 +864,16 @@ let buyers = await Buyer.find({
 
         // Explicit admin assignment
         {
-            assignedExecutiveId: req.session.executiveId
+            salesExecutiveId: req.session.executiveId
         },
 
         // Auto area allocation
-        {
-            assignedExecutiveId: null,
-            preferredLocations: {
-                $in: executive.assignedLocations
-            }
-        }
+{
+    salesExecutiveId: null,
+    preferredLocations: {
+        $in: executive.assignedLocations
+    }
+}
 
     ],
 
@@ -887,6 +885,13 @@ let buyers = await Buyer.find({
 }).sort({
     createdAt: -1
 })
+
+    buyers.map(b => ({
+        name: b.name,
+        salesExecutive: b.salesExecutiveName,
+        salesExecutiveId: String(b.salesExecutiveId),
+        status: b.status
+    }));
 
 const leadGroups = groupLeadAging(buyers);
 
@@ -926,12 +931,12 @@ const lostValue = await Buyer.aggregate([
 
 
 const contacted = await Buyer.countDocuments({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status: 'Contacted'
 })
 
 const negotiation = await Buyer.countDocuments({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status: 'Negotiation'
 })
 
@@ -994,7 +999,7 @@ const pipelineValue = openBuyers.reduce(
 )
 
 const followUps = await Buyer.countDocuments({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
 
     nextFollowUp: {
         $gte: startOfDay,
@@ -1027,12 +1032,12 @@ const siteVisits =
 
 
 const closedDeals = await Buyer.countDocuments({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status: 'Deal Closed'
 })
 
 const lost = await Buyer.countDocuments({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status: 'Lost'
 })
 
@@ -1302,6 +1307,9 @@ if (duplicateLocation) {
     )
 }
 
+
+const oldExecutive = await Executive.findById(req.params.id);
+
 await Executive.findByIdAndUpdate(
     req.params.id,
     {
@@ -1323,11 +1331,18 @@ const executive = await Executive.findById(
     req.params.id
 );
 
-await remapExecutiveTerritory(
-    req.session.tenantId,
-    executive.executiveType,
-    executive.assignedLocations
-);
+const territoryChanged =
+    oldExecutive.executiveType !== req.body.executiveType ||
+    JSON.stringify([...oldExecutive.assignedLocations].sort()) !==
+    JSON.stringify([...assignedLocations].sort());
+
+if (territoryChanged) {
+    await remapExecutiveTerritory(
+        req.session.tenantId,
+        req.body.executiveType,
+        assignedLocations
+    );
+}
 
     res.redirect('/executive/list')
 
@@ -1480,7 +1495,7 @@ const tomorrow = new Date(today)
 tomorrow.setDate(today.getDate() + 1)
 
 const buyers = await Buyer.find({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     nextFollowUp:{
         $gte: today,
         $lt: tomorrow
@@ -1530,7 +1545,7 @@ res.render('executiveSiteVisits',{
 router.get('/deals', async (req,res)=>{
 
 const buyers = await Buyer.find({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status:'Deal Closed'
 })
 
@@ -1544,7 +1559,7 @@ res.render('executiveDeals',{
 router.get('/lost', async (req,res)=>{
 
 const buyers = await Buyer.find({
-    assignedExecutiveId: req.session.executiveId,
+    salesExecutiveId: req.session.executiveId,
     status:'Lost'
 })
 

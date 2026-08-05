@@ -1,15 +1,5 @@
 ========================================================
-Timestamp : Monday, 03 August 2026 at 06:00:30 pm IST
-User      : undefined
-Role      : PreSales
-Action    : Status Changed
---------------------------------------------------------
-Previous : Imported
-Current  : Phone Call
-========================================================
-
-========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:46:18 pm IST
+Timestamp : Wednesday, 05 August 2026 at 11:38:43 pm IST
 User      : PreSales
 Role      : Status Changed
 Action    : Imported
@@ -18,7 +8,7 @@ Previous : Phone Call
 ========================================================
 
 ========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:46:18 pm IST
+Timestamp : Wednesday, 05 August 2026 at 11:38:43 pm IST
 User      : Admin
 Role      : PreSales
 Action    : Final Buyer Value Confirmed
@@ -28,8 +18,46 @@ Current  : Phone Call
 ========================================================
 
 ========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:47:15 pm IST
-User      : Tanu
+Timestamp : Wednesday, 05 August 2026 at 11:38:52 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Phone Call
+--------------------------------------------------------
+Previous : Imported
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 11:38:52 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Imported
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 11:39:09 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Imported
+--------------------------------------------------------
+Previous : Phone Call
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 11:39:09 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Phone Call
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 11:40:26 pm IST
+User      : undefined
 Role      : PreSales
 Action    : Buyer Updated
 --------------------------------------------------------
@@ -42,40 +70,16 @@ Status
 ========================================================
 
 ========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:47:31 pm IST
-User      : PreSales
-Role      : Status Changed
-Action    : Qualified
---------------------------------------------------------
-Previous : Site Visit
-========================================================
-
-========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:47:31 pm IST
-User      : Admin
+Timestamp : Wednesday, 05 August 2026 at 11:41:19 pm IST
+User      : undefined
 Role      : PreSales
-Action    : Final Buyer Value Confirmed
+Action    : Buyer Updated
 --------------------------------------------------------
-Previous : ₹123
-Current  : Site Visit
-========================================================
+Changes
 
-========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:47:40 pm IST
-User      : PreSales
-Role      : Status Changed
-Action    : Site Visit
---------------------------------------------------------
-Previous : Negotiation
-========================================================
+Status
+   Old : Qualified
+   New : Qualified
 
-========================================================
-Timestamp : Wednesday, 05 August 2026 at 06:47:40 pm IST
-User      : Admin
-Role      : PreSales
-Action    : Final Buyer Value Confirmed
---------------------------------------------------------
-Previous : ₹123
-Current  : Negotiation
 ========================================================
 

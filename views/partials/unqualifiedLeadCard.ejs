@@ -1,6 +1,7 @@
 <div class="lead-card"
      draggable="true"
      data-id="<%= buyer._id %>"
+     data-status="<%= buyer.status %>"
      ondragstart="dragLead(event)">
 
 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -23,8 +24,6 @@
 <%
 const age = getLeadAge(buyer.createdAt);
 %>
-
-
 
     <div class="executive-row">
 
@@ -73,7 +72,7 @@ const age = getLeadAge(buyer.createdAt);
     <select
         name="status"
         style="width:100%;"
-        onchange="this.form.submit()">
+        onchange="updateStatus(this)">
 
 <% if (buyer.status === "Imported") { %>
 

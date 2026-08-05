@@ -129,9 +129,6 @@ res.json(buyers)
 
 })
 
-
-
-
 router.get(
 '/unqualified',
 isLoggedIn,
@@ -144,10 +141,12 @@ const status = req.query.status || ''
 const transactionType =
 req.query.transactionType || ''
 
+const isAdmin =
+!req.session.executiveId;
+
 let filter = {
     tenantId: req.session.tenantId,
     leadSource: "Excel",
-    assignedExecutiveId: req.session.executiveId,
 
     $or: [
 
@@ -169,19 +168,42 @@ let filter = {
         }
 
     ]
+};
+
+if (req.session.executiveId) {
+    filter.preSalesExecutiveId = req.session.executiveId;
 }
 
-if(search){
+if (search) {
 
-    filter.$or = [
+    filter.$and = [
+        {
+            $or: [
+                { department: "PreSales" },
+                {
+                    department: "Sales",
+                    status: {
+                        $in: [
+                            "Qualified",
+                            "Contacted",
+                            "Follow-Up",
+                            "Site Visit",
+                            "Negotiation"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            $or: [
+                { name: { $regex: search, $options: "i" } },
+                { phone: { $regex: search, $options: "i" } },
+                { primaryLocation: { $regex: search, $options: "i" } }
+            ]
+        }
+    ];
 
-        { name: { $regex: search, $options:'i' } },
-
-        { phone: { $regex: search, $options:'i' } },
-
-        { primaryLocation: { $regex: search, $options:'i' } }
-
-    ]
+    delete filter.$or;
 }
 
 if(status){
@@ -199,9 +221,11 @@ const explain = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .explain("executionStats");
 
+
 const buyers = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .lean();
+
 
 const buyerIds = buyers.map(b => b._id);
 
@@ -246,7 +270,7 @@ const baseFilter = {
     tenantId: req.session.tenantId,
     department: "PreSales",
     leadSource: "Excel",
-    assignedExecutiveId: req.session.executiveId
+    preSalesExecutiveId: req.session.executiveId
 };
 
 const [
@@ -305,47 +329,176 @@ res.render("unqualifiedbuyers", {
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
 
-const buyer = await Buyer.findOne({
+const buyer = await Buyer.findById(req.params.id);
 
-    _id: req.params.id,
-
-    tenantId: req.session.tenantId,
-
-    assignedExecutiveId: req.session.executiveId
-
-});
+if (!buyer) {
+    return res.status(404).json({
+        success: false,
+        message: "Buyer not found."
+    });
+}
 
 const previousStatus = buyer.status;
+
+// -------------------------------
+// Workflow Validation
+// -------------------------------
+
+const newStatus = req.body.status;
+
+console.log("========== WORKFLOW VALIDATION ==========");
+console.log("Buyer:", buyer.phone);
+console.log("Previous Status:", previousStatus);
+console.log("New Status:", newStatus);
+console.log("nextFollowUp:", buyer.nextFollowUp);
+console.log("siteVisitDate:", buyer.siteVisitDate);
+console.log("buyerValue:", buyer.buyerValue);
+
+if (
+    previousStatus === "Phone Call" &&
+    status !== previousStatus &&
+    status === "Qualified"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+if (
+    previousStatus === "Qualified" &&
+    newStatus === "Site Visit"
+) {
+
+    if (!req.body.siteVisitDate) {
+        return res.send(
+            "Site Visit Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.siteVisitDate) < new Date()) {
+        return res.send(
+            "Site Visit Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+
+if (
+    previousStatus === "Site Visit" &&
+    newStatus === "Negotiation"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+    if ((Number(req.body.buyerValue) || 0) <= 0) {
+        return res.send(
+            "Buyer Value must be greater than zero."
+        );
+    }
+
+}
+
+
+if (
+    previousStatus === "Negotiation" &&
+    ["Deal Won", "Lost"].includes(req.body.status)
+) {
+
+const finalBuyerValue = Number(req.body.buyerValue);
+
+if (!finalBuyerValue || finalBuyerValue <= 0) {
+    return res.status(400).json({
+        success: false,
+        message: "Please confirm the Final Buyer Value before closing the deal."
+    });
+}
+
+await Buyer.updateOne(
+    { _id: buyer._id },
+    {
+        $set: {
+            buyerValue: finalBuyerValue
+        }
+    }
+);
+
+}
+
+const confirmedBy = "Admin";
 
 await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
+    tenantId: req.session.tenantId
 },
 {
-    status: req.body.status
+    status: req.body.status,
+
+    negotiationStatus: req.body.negotiationStatus,
+
+    lastFollowUp: buyer.nextFollowUp,
+
+    nextFollowUp: req.body.nextFollowUp
+        ? new Date(req.body.nextFollowUp)
+        : buyer.nextFollowUp,
+
+    lastSiteVisitDate: buyer.siteVisitDate,
+
+    siteVisitDate: req.body.siteVisitDate
+        ? new Date(req.body.siteVisitDate)
+        : buyer.siteVisitDate,
+
+    buyerValue: req.body.buyerValue
+        ? Number(req.body.buyerValue)
+        : buyer.buyerValue,
+
+    buyerValueConfirmedBy: confirmedBy,
+
+    buyerValueConfirmedAt: new Date()
 }
 );
 
+const verifyBuyer = await Buyer.findById(req.params.id);
+
+const updatedBuyer = await Buyer.findById(req.params.id);
+
 appendBuyerTimeline(
-
     buyer,
-
-    req.session.executiveName,
-
     "PreSales",
-
     "Status Changed",
-
     previousStatus,
-
     req.body.status
-
 );
 
-
-
+appendBuyerTimeline(
+    buyer,
+    confirmedBy,
+    "PreSales",
+    "Final Buyer Value Confirmed",
+    `₹${buyer.buyerValue}`,
+    req.body.status
+);
 
     res.redirect('/executive/unqualified');
 });
@@ -357,38 +510,130 @@ router.post(
 
         try {
 
-const buyer = await Buyer.findOne({
+            const buyer = await Buyer.findOne({
+                _id: req.params.id,
+                tenantId: req.session.tenantId,
+                preSalesExecutiveId: req.session.executiveId
+            });
 
-    _id:req.params.id,
+            if (!buyer) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Buyer not found"
+                });
+            }
 
-    tenantId:req.session.tenantId,
+            const previousStatus = buyer.status;
 
-    assignedExecutiveId:req.session.executiveId
+// -------------------------------
+// Workflow Validation
+// -------------------------------
 
-});
+const newStatus = req.body.status;
 
-const previousStatus = buyer.status;
+console.log("========== WORKFLOW DRAG VALIDATION ==========");
+console.log("Buyer:", buyer.phone);
+console.log("Previous Status:", previousStatus);
+console.log("New Status:", newStatus);
+console.log("nextFollowUp:", buyer.nextFollowUp);
+console.log("siteVisitDate:", buyer.siteVisitDate);
+console.log("buyerValue:", buyer.buyerValue);
 
-await Buyer.findOneAndUpdate(
+if (
+    previousStatus === "Phone Call" &&
+    status !== previousStatus &&
+    status === "Qualified"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+if (
+    previousStatus === "Qualified" &&
+    newStatus === "Site Visit"
+) {
+
+    if (!req.body.siteVisitDate) {
+        return res.send(
+            "Site Visit Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.siteVisitDate) < new Date()) {
+        return res.send(
+            "Site Visit Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+
+if (
+    previousStatus === "Site Visit" &&
+    newStatus === "Negotiation"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+    if ((Number(req.body.buyerValue) || 0) <= 0) {
+        return res.send(
+            "Buyer Value must be greater than zero."
+        );
+    }
+
+}
+
+            if (
+                previousStatus === "Negotiation" &&
+                ["Deal Won", "Lost", "Dropped"].includes(req.body.status)
+            ) {
+                return res.json({
+                    success: false,
+                    requireBuyerValueConfirmation: true
+                });
+            }
+
+            await Buyer.findOneAndUpdate(
 {
     _id: req.params.id,
-    tenantId: req.session.tenantId,
-    assignedExecutiveId: req.session.executiveId
+    tenantId: req.session.tenantId
 },
                 {
                     status: req.body.status
                 }
             );
 
-appendBuyerTimeline(
-    buyer,
-    req.session.executiveName,
-    "PreSales",
-    "Status Changed",
-    previousStatus,
-    req.body.status
+const verifyBuyer = await Buyer.findById(req.params.id);
 
-);
+            appendBuyerTimeline(
+                buyer,
+                req.session.executiveName,
+                "PreSales",
+                "Status Changed",
+                previousStatus,
+                req.body.status
+            );
 
             res.json({
                 success: true
@@ -579,8 +824,18 @@ const buyer = await Buyer.findById(
 );
 
 const previousStatus = buyer.status;
-
+let status = req.body.status;
 let qualificationDate = buyer.qualificationDate;
+
+console.log("========== EDIT WORKFLOW ==========");
+console.log("Buyer:", buyer.phone);
+console.log("Previous:", previousStatus);
+console.log("Requested:", status);
+console.log("nextFollowUp:", req.body.nextFollowUp);
+console.log("siteVisitDate:", req.body.siteVisitDate);
+console.log("buyerValue:", req.body.buyerValue);
+console.log("negotiationStatus:", req.body.negotiationStatus);
+
 
 if (
     req.body.buyingInterest === "Yes" &&
@@ -591,9 +846,76 @@ if (
 }
 
 
-let status = req.body.status;
+// ======================================
+// Workflow Validation (Edit Buyer)
+// ======================================
+
+if (
+    previousStatus === "Phone Call" &&
+    status !== previousStatus &&
+    status === "Qualified"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Next Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Next Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+if (
+    previousStatus === "Qualified" &&
+    status === "Site Visit"
+) {
+
+    if (!req.body.siteVisitDate) {
+        return res.send(
+            "Site Visit Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.siteVisitDate) < new Date()) {
+        return res.send(
+            "Site Visit Date & Time cannot be in the past."
+        );
+    }
+
+}
+
+if (
+    previousStatus === "Site Visit" &&
+    status === "Negotiation"
+) {
+
+    if (!req.body.nextFollowUp) {
+        return res.send(
+            "Follow-up Date & Time is mandatory."
+        );
+    }
+
+    if (new Date(req.body.nextFollowUp) < new Date()) {
+        return res.send(
+            "Follow-up Date & Time cannot be in the past."
+        );
+    }
+
+    if ((Number(req.body.buyerValue) || 0) <= 0) {
+        return res.send(
+            "Buyer Value must be greater than zero."
+        );
+    }
+
+}
+
 let currentOwnerRole = buyer.currentOwnerRole;
-let assignedExecutiveId = buyer.assignedExecutiveId;
+let preSalesExecutiveId = buyer.preSalesExecutiveId;
 let assignedExecutiveName = buyer.assignedExecutiveName;
 let assignmentType = buyer.assignmentType;
 let department = buyer.department || "PreSales";
@@ -660,9 +982,6 @@ const executiveMapping =
         primaryLocation
     );
 
-const preSalesExecutiveId =
-    executiveMapping.preSalesExecutiveId;
-
 const preSalesExecutiveName =
     executiveMapping.preSalesExecutiveName;
 
@@ -671,6 +990,15 @@ salesExecutiveId =
 
 salesExecutiveName =
     executiveMapping.salesExecutiveName;
+
+console.log("========== SAVING ==========");
+console.log({
+    status,
+    nextFollowUp: req.body.nextFollowUp,
+    siteVisitDate: req.body.siteVisitDate,
+    buyerValue: req.body.buyerValue,
+    negotiationStatus: req.body.negotiationStatus
+});
 
 
 await Buyer.findOneAndUpdate(
@@ -713,6 +1041,11 @@ salesExecutiveName: salesExecutiveName,
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
 
+buyerValue: req.body.buyerValue
+    ? Number(req.body.buyerValue)
+    : null,
+
+
     transactionType: req.body.transactionType,
 
     requiredPossession: requiredPossession,
@@ -744,13 +1077,28 @@ salesExecutiveName: salesExecutiveName,
 
     currentOwnerRole: currentOwnerRole,
 
+lastFollowUp: buyer.nextFollowUp,
+
 nextFollowUp: req.body.nextFollowUp || null,
+
+lastSiteVisitDate: buyer.siteVisitDate,
+
 siteVisitDate: req.body.siteVisitDate || null,
 
     followUpNotes: req.body.followUpNotes
 });
 
 const savedBuyer = await Buyer.findById(req.params.id);
+
+console.log("========== SAVED ==========");
+console.log({
+    status: savedBuyer.status,
+    nextFollowUp: savedBuyer.nextFollowUp,
+    siteVisitDate: savedBuyer.siteVisitDate,
+    buyerValue: savedBuyer.buyerValue,
+    negotiationStatus: savedBuyer.negotiationStatus
+});
+
 
 appendBuyerTimeline(
 

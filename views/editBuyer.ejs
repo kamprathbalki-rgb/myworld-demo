@@ -250,8 +250,20 @@ textarea{
 </div>
 
 <div class="field">
-<label>Max Budget</label>
-<input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>">
+    <label>Max Budget</label>
+    <input
+        type="number"
+        name="maxBudget"
+        value="<%= buyer.maxBudget || '' %>">
+</div>
+
+<div class="field">
+    <label>Buyer Value (₹)</label>
+    <input
+        type="number"
+        name="buyerValue"
+        value="<%= buyer.buyerValue || '' %>"
+        placeholder="Buyer Value">
 </div>
 
 <div class="field full-width">

@@ -338,6 +338,27 @@ body{
     0 2px 8px rgba(0,0,0,.08);
 }
 
+.kanban-container{
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+.drop-zone h3{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:#f8f9fa;
+    padding:10px 0;
+    margin:0;
+}
+
+.drop-zone{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:#f8f9fa;
+    padding-bottom:10px;
+}
 
 /* ================================
    TABLE
@@ -833,24 +854,48 @@ body{
 
 }
 
+.kanban-header-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.kanban-header{
+    flex:1 0 290px;
+    min-width:290px;
+    max-width:290px;
+
+    background:#f8f9fa;
+    border-radius:10px;
+
+    padding:15px;
+
+    color:#1f4e79;
+    font-weight:bold;
+}
 
 .kanban-board{
     display:flex;
-    gap:20px;
+    gap:10px;
     overflow-x:auto;
+    overflow-y:hidden;
+    width:100%;
+    max-width:100%;
     align-items:flex-start;
 }
 
 .kanban-column{
-    min-width:320px;
+    flex:1 0 290px;
+    min-width:290px;
+    max-width:290px;
+
+    height:calc(100vh - 340px);
+    overflow-y:auto;
+    overflow-x:hidden;
+
     background:#f8f9fa;
     border-radius:10px;
     padding:15px;
-}
-
-.kanban-column h3{
-    margin:0 0 15px;
-    color:#1f4e79;
 }
 
 .lead-card{
@@ -884,6 +929,17 @@ body{
     display:flex;
     gap:8px;
     margin-top:12px;
+}
+
+.card-btn{
+    flex:1;
+    text-align:center;
+    padding:8px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+    color:white;
 }
 
 .card-btn{
@@ -981,118 +1037,46 @@ Buyer Pipeline
 
 <div class="summary">
 
-<a href="/buyer/unqualified?status=New Lead">
-
-<div class="
-summary-card
-new-card
-">
-
-<h3>
-New Leads
-</h3>
-
-<h2>
-<%= newLeads %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Imported">
+    <div class="summary-card new-card">
+        <h3>Imported</h3>
+        <h2><%= imported %></h2>
+    </div>
 </a>
 
-<a href="/buyer/unqualified?status=Contacted">
-
-<div class="
-summary-card
-contacted-card
-">
-
-<h3>
-Contacted
-</h3>
-
-<h2>
-<%= contacted %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Phone Call">
+    <div class="summary-card contacted-card">
+        <h3>Phone Call</h3>
+        <h2><%= phoneCall %></h2>
+    </div>
 </a>
 
-<a href="/buyer/unqualified?status=Site Visit">
-
-<div class="
-summary-card
-visit-card
-">
-
-<h3>
-Site Visits
-</h3>
-
-<h2>
-<%= siteVisits %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Qualified">
+    <div class="summary-card visit-card">
+        <h3>Qualified</h3>
+        <h2><%= qualified %></h2>
+    </div>
 </a>
 
-<a href="/buyer/unqualified?status=Negotiation">
-
-<div class="
-summary-card
-negotiation-card
-">
-
-<h3>
-Negotiation
-</h3>
-
-<h2>
-<%= negotiations %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Contacted">
+    <div class="summary-card negotiation-card">
+        <h3>Contacted</h3>
+        <h2><%= contacted %></h2>
+    </div>
 </a>
 
-<a href="/buyer/unqualified?status=Deal Closed">
-
-<div class="
-summary-card
-closed-card
-">
-
-<h3>
-Closed
-</h3>
-
-<h2>
-<%= closedDeals %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Follow-Up">
+    <div class="summary-card closed-card">
+        <h3>Follow-Up</h3>
+        <h2><%= followUp %></h2>
+    </div>
 </a>
 
-<a href="/buyer/unqualified?status=Lost">
-
-<div class="
-summary-card
-lost-card
-">
-
-<h3>
-Lost
-</h3>
-
-<h2>
-<%= lostDeals %>
-</h2>
-
-</div>
-
+<a href="/executive/unqualified?status=Lost">
+    <div class="summary-card lost-card">
+        <h3>Lost</h3>
+        <h2><%= lost %></h2>
+    </div>
 </a>
 
 </div>
@@ -1107,7 +1091,7 @@ Lost
 
 <form
 method="GET"
-action="/buyer/unqualified"
+action="/executive/unqualified"
 class="filter-form"
 >
 
@@ -1135,7 +1119,7 @@ class="
 filter-btn
 clear-btn
 "
-onclick="window.location='/buyer/unqualified'"
+onclick="window.location='/executive/unqualified'"
 >
 Clear
 </button>
@@ -1145,62 +1129,51 @@ name="status"
 onchange="this.form.submit()"
 >
 
-<option value="">
-All Status
+<option value="">All Status</option>
+
+<option value="Imported"
+<%= status === 'Imported' ? 'selected' : '' %>>
+Imported
 </option>
 
-<option
-value="New Lead"
-<%= status === 'New Lead'
-? 'selected'
-: '' %>
->
-New Lead
+<option value="Phone Call"
+<%= status === 'Phone Call' ? 'selected' : '' %>>
+Phone Call
 </option>
 
-<option
-value="Contacted"
-<%= status === 'Contacted'
-? 'selected'
-: '' %>
->
-Contacted
+<option value="Qualified"
+<%= status === 'Qualified' ? 'selected' : '' %>>
+Qualified
 </option>
 
-<option
-value="Site Visit"
-<%= status === 'Site Visit'
-? 'selected'
-: '' %>
->
+<option value="Site Visit"
+<%= status === 'Site Visit' ? 'selected' : '' %>>
 Site Visit
 </option>
 
-<option
-value="Negotiation"
-<%= status === 'Negotiation'
-? 'selected'
-: '' %>
->
+<option value="Follow-Up"
+<%= status === 'Follow-Up' ? 'selected' : '' %>>
+Follow-Up
+</option>
+
+<option value="Negotiation"
+<%= status === 'Negotiation' ? 'selected' : '' %>>
 Negotiation
 </option>
 
-<option
-value="Deal Closed"
-<%= status === 'Deal Closed'
-? 'selected'
-: '' %>
->
-Deal Closed
+<option value="Transaction"
+<%= status === 'Transaction' ? 'selected' : '' %>>
+Transaction
 </option>
 
-<option
-value="Lost"
-<%= status === 'Lost'
-? 'selected'
-: '' %>
->
+<option value="Lost"
+<%= status === 'Lost' ? 'selected' : '' %>>
 Lost
+</option>
+
+<option value="Not Responding"
+<%= status === 'Not Responding' ? 'selected' : '' %>>
+Not Responding
 </option>
 
 </select>
@@ -1256,6 +1229,43 @@ Lease
 <h2 class="section-title">
 Unqualified Lead Records
 </h2>
+
+<div class="kanban-header-row">
+
+    <div class="kanban-header">
+        Imported
+        (<%= buyers.filter(b => b.status==="Imported").length %> |
+        <%= formatAmount(getColumnValue("Imported")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Phone Call
+        (<%= buyers.filter(b => b.status==="Phone Call").length %> |
+        <%= formatAmount(getColumnValue("Phone Call")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Qualified
+        (<%= buyers.filter(b => b.status==="Qualified").length %> |
+        <%= formatAmount(getColumnValue("Qualified")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Site Visit
+        (<%= buyers.filter(b => b.status==="Site Visit").length %> |
+        <%= formatAmount(getColumnValue("Site Visit")) %>)
+    </div>
+
+    <div class="kanban-header">
+        Negotiation
+        (<%= buyers.filter(b => b.status==="Negotiation").length %> |
+        <%= formatAmount(getColumnValue("Negotiation")) %>)
+    </div>
+
+</div>
+
+
+<div class="kanban-container">
 
 <%
 function getColumnValue(status){
@@ -1330,46 +1340,108 @@ function getLeadAge(createdAt){
 
 %>
 
+
+
 <div class="kanban-board">
 
 <div class="kanban-column"
-     data-status="Imported"
-     ondragover="allowDrop(event)"
-     ondrop="dropLead(event)">
+     data-status="Imported">
 
-    <h3>
-Imported
-(<%= buyers.filter(b => b.status === "Imported").length %> |
-<%= formatAmount(getColumnValue("Imported")) %>)
-    </h3>
+    <div class="drop-zone"
+         ondragover="allowDrop(event)"
+         ondrop="dropLead(event)">
 
     <% buyers
         .filter(b => b.status === "Imported")
         .forEach(function(b){ %>
 
-        <%- include("partials/unqualifiedLeadCard", {
+<%- include("partials/unqualifiedLeadCard", {
     buyer: b,
-    getLeadAge: getLeadAge
+    getLeadAge: getLeadAge,
+    executives: executives
 }) %>
 
     <% }) %>
+
+</div>
+</div>
+
+<div class="kanban-column"
+     data-status="Phone Call">
+
+    <div class="drop-zone"
+         ondragover="allowDrop(event)"
+         ondrop="dropLead(event)">
+
+<% buyers
+.filter(b => b.status === "Phone Call")
+.forEach(function(b){ %>
+
+<%- include("partials/unqualifiedLeadCard",{
+buyer:b,
+getLeadAge:getLeadAge
+}) %>
+
+<% }) %>
+
+</div>
 
 </div>
 
 <div class="kanban-column"
-     data-status="Contacted"
+     data-status="Qualified">
+
+    <div class="drop-zone"
      ondragover="allowDrop(event)"
      ondrop="dropLead(event)">
 
-    <h3>
-Contacted
-(<%= buyers.filter(b => b.status === "Contacted").length %> |
-<%= formatAmount(getColumnValue("Contacted")) %>)
-    </h3>
+<% buyers
+.filter(b => b.status === "Qualified")
+.forEach(function(b){ %>
 
-    <% buyers
-        .filter(b => b.status === "Contacted")
-        .forEach(function(b){ %>
+<%- include("partials/unqualifiedLeadCard",{
+buyer:b,
+getLeadAge:getLeadAge
+}) %>
+
+<% }) %>
+
+</div>
+
+</div>
+
+<div class="kanban-column"
+     data-status="Site Visit">
+
+    <div class="drop-zone"
+     ondragover="allowDrop(event)"
+     ondrop="dropLead(event)">
+
+<% buyers
+.filter(b => b.status === "Site Visit")
+.forEach(function(b){ %>
+
+<%- include("partials/unqualifiedLeadCard",{
+buyer:b,
+getLeadAge:getLeadAge
+}) %>
+
+<% }) %>
+
+</div>
+
+</div>
+
+<div class="kanban-column"
+     data-status="Negotiation">
+
+    <div class="drop-zone"
+     ondragover="allowDrop(event)"
+     ondrop="dropLead(event)">
+
+<% buyers
+    .filter(b => b.status === "Negotiation")
+    .forEach(function(b){ %>
 
         <%- include("partials/unqualifiedLeadCard", {
     buyer: b,
@@ -1380,39 +1452,143 @@ Contacted
 
 </div>
 
-    <div class="kanban-column">
-        <h3>Site Visit</h3>
-    </div>
-
-    <div class="kanban-column">
-        <h3>Negotiation</h3>
-    </div>
-
-    <div class="kanban-column">
-        <h3>Qualified</h3>
-    </div>
+</div>
 
 </div>
 
+</div>
 
 </div>
 
-
 </div>
-
 
 <script>
 
 let draggedLeadId = null;
 let draggedCard = null;
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".lead-card").forEach(card => {
+        card.draggable = true;
+    });
+});
+
+async function updateStatus(select) {
+
+    const form = select.form;
+
+if (
+    select.value === "Deal Won" ||
+    select.value === "Lost"
+) {
+
+const lostReason =
+    negotiationStatusSelect?.value || "";
+
+if (select.value === "Lost") {
+
+    const lostReason =
+        form.querySelector('[name="negotiationStatus"]').value;
+
+    if (!lostReason) {
+        alert("Please select the Lost Reason.");
+        select.value = "Negotiation";
+        return;
+    }
+
+}
+
+    if (buyerValue <= 0) {
+        alert("Please enter the Final Buyer Value.");
+        select.value = "Negotiation";
+        return;
+    }
+
+    if (!form.querySelector('[name="confirmBuyerValue"]').checked) {
+        alert("Please check 'I confirm this is the final Buyer Value.'");
+        select.value = "Negotiation";
+        return;
+    }
+
+const message =
+    select.value === "Deal Won"
+        ? `You are about to mark this buyer as Deal Won.
+
+Final Buyer Value: ₹${buyerValue}
+
+This action will close the opportunity.
+
+Do you want to continue?`
+        : `You are about to mark this buyer as Lost.
+
+Lost Reason: ${lostReason}
+
+Final Buyer Value: ₹${buyerValue}
+
+This action will close the opportunity.
+
+Do you want to continue?`;
+
+const confirmed = confirm(message);
+
+    if (!confirmed) {
+        select.value = "Negotiation";
+        return;
+    }
+}
+
+const buyerValueInput =
+    form.querySelector('[name="buyerValue"]');
+
+const confirmCheckbox =
+    form.querySelector('[name="confirmBuyerValue"]');
+
+const negotiationStatusSelect =
+    form.querySelector('[name="negotiationStatus"]');
+
+const buyerValue =
+    buyerValueInput?.value || "";
+
+const negotiationStatus =
+    negotiationStatusSelect?.value || "";
+
+const buyerValueConfirmed =
+    confirmCheckbox?.checked
+        ? "true"
+        : "false";
+
+const body =
+    "status=" + encodeURIComponent(select.value) +
+    "&buyerValue=" + encodeURIComponent(buyerValue) +
+    "&negotiationStatus=" + encodeURIComponent(negotiationStatus) +
+    "&buyerValueConfirmed=" + buyerValueConfirmed;
+
+const response = await fetch(form.action, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body
+});
+
+const text = await response.text();
+
+if (!response.ok) {
+    alert(text);
+    return;
+}
+
+location.reload();
+
+}
+
 function dragLead(event) {
 
     draggedCard = event.currentTarget;
-
     draggedLeadId = draggedCard.dataset.id;
 
     event.dataTransfer.setData("text/plain", draggedLeadId);
+    event.dataTransfer.effectAllowed = "move";
 
 }
 
@@ -1421,16 +1597,55 @@ function toggleDetails(id) {
     div.style.display = div.style.display === "none" ? "block" : "none";
 }
 
-function dropLead(event) {
+async function dropLead(event) {
+
+const dropZone = event.currentTarget;
 
     event.preventDefault();
 
-    document.querySelectorAll(".kanban-column")
-        .forEach(column => {
-            column.classList.remove("drag-over");
-        });
+const newStatus =
+    dropZone.closest(".kanban-column").dataset.status;
 
-    event.currentTarget.appendChild(draggedCard);
+    try {
+
+        const response = await fetch(
+
+            "/buyer/status-unqualified-drag/" + draggedLeadId,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "status=" + encodeURIComponent(newStatus)
+            }
+        );
+
+const result = await response.json();
+
+if (result.requireBuyerValueConfirmation) {
+    window.location =
+        "/executive/edit-unqualified/" + draggedLeadId;
+    return;
+}
+
+if (!result.success) {
+    alert("Unable to update lead status.");
+    return;
+}
+
+
+dropZone.appendChild(draggedCard);
+
+document
+    .querySelectorAll(".drag-over")
+    .forEach(el => el.classList.remove("drag-over"));
+
+    } catch (err) {
+
+        console.error(err);
+        alert("Unable to update lead.");
+
+    }
 
     draggedLeadId = null;
     draggedCard = null;
@@ -1446,6 +1661,59 @@ function allowDrop(event) {
 }
 
 </script>
+
+<div id="confirmationModal"
+     style="display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.55);
+            z-index:99999;
+            justify-content:center;
+            align-items:center;">
+
+    <div style="background:#fff;
+                width:420px;
+                max-width:95%;
+                border-radius:12px;
+                overflow:hidden;
+                box-shadow:0 10px 35px rgba(0,0,0,.35);">
+
+        <div id="confirmationHeader"
+             style="padding:15px 20px;
+                    background:#1976d2;
+                    color:#fff;
+                    font-size:18px;
+                    font-weight:bold;">
+        </div>
+
+        <div id="confirmationBody"
+             style="padding:20px;
+                    line-height:1.8;
+                    font-size:15px;">
+        </div>
+
+        <div style="padding:15px;
+                    text-align:right;
+                    border-top:1px solid #ddd;">
+
+            <button type="button"
+                    id="confirmCancel"
+                    class="btn btn-secondary">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="confirmOK"
+                    class="btn btn-success">
+                Confirm
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </body>
 

@@ -99,7 +99,7 @@ const negotiation = await Buyer.countDocuments({
 const openBuyers = await Buyer.find({
     tenantId: req.session.tenantId,
     status: {
-        $nin: ['Deal Closed', 'Lost']
+        $nin: ['Deal Won', 'Lost']
     },
     $or: [
         {
@@ -135,7 +135,7 @@ const closedValue = await Buyer.aggregate([
 {
     $match:{
     tenantId:req.session.tenantId,
-    status:'Deal Closed'
+    status:'Deal Won'
 }
 },
 {
@@ -168,13 +168,13 @@ const lostValue = await Buyer.aggregate([
 const pipelineCount = await Buyer.countDocuments({
     tenantId:req.session.tenantId,
     status:{
-        $nin:['Deal Closed','Lost']
+        $nin:['Deal Won','Lost']
     }
 })
 
 const closedCount = await Buyer.countDocuments({
     tenantId:req.session.tenantId,
-    status:'Deal Closed'
+    status:'Deal Won'
 })
 
 const lostCount = await Buyer.countDocuments({
@@ -195,7 +195,7 @@ agingToday.setHours(0,0,0,0);
 const agingBuyers = await Buyer.find({
     tenantId: req.session.tenantId,
     status: {
-        $nin: ['Deal Closed', 'Lost']
+        $nin: ['Deal Won', 'Lost']
     },
     $or: [
         {
@@ -221,7 +221,7 @@ const unqualifiedBuyers = await Buyer.find({
     leadSource: "Excel",
     status: {
         $nin: [
-            "Deal Closed",
+            "Deal Won",
             "Lost"
         ]
     }
@@ -1080,7 +1080,7 @@ const deals = await Buyer.aggregate([
 {
 $match:{
 tenantId:req.session.tenantId,
-status:'Deal Closed'
+status:'Deal Won'
 }
 },
 {
@@ -1174,7 +1174,7 @@ const deals = await Buyer.aggregate([
 {
 $match:{
 tenantId:req.session.tenantId,
-status:'Deal Closed'
+status:'Deal Won'
 }
 },
 {

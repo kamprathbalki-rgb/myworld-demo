@@ -1,0 +1,283 @@
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:35:18 am IST
+User      : undefined
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Imported
+Current  : Phone Call
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:35:19 am IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Phone Call
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:36:03 am IST
+User      : undefined
+Role      : PreSales
+Action    : Buyer Updated
+--------------------------------------------------------
+Changes
+
+Status
+   Old : Phone Call
+   New : Phone Call
+
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:36:10 am IST
+User      : undefined
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Qualified
+Current  : Site Visit
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:36:10 am IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Site Visit
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:36:17 am IST
+User      : undefined
+Role      : PreSales
+Action    : Status Changed
+--------------------------------------------------------
+Previous : Site Visit
+Current  : Negotiation
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 09:36:17 am IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Negotiation
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:18:49 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:18:49 pm IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹null
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:31:59 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:31:59 pm IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹160
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:37:27 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:37:27 pm IST
+User      : undefined
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹160
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:41:57 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:41:57 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹160
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:45:17 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:45:17 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹160
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:52:34 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 02:52:34 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹160
+Current  : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:06:45 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:06:45 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹1
+Current  : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:10:46 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:10:46 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹1
+Current  : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:18:34 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:18:34 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹1
+Current  : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:23:25 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:23:25 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹1
+Current  : Lost
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:43:33 pm IST
+User      : PreSales
+Role      : Status Changed
+Action    : Negotiation
+--------------------------------------------------------
+Previous : Deal Won
+========================================================
+
+========================================================
+Timestamp : Wednesday, 05 August 2026 at 03:43:33 pm IST
+User      : Admin
+Role      : PreSales
+Action    : Final Buyer Value Confirmed
+--------------------------------------------------------
+Previous : ₹1
+Current  : Deal Won
+========================================================
+

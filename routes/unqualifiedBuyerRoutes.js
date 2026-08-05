@@ -246,49 +246,125 @@ res.render("unqualifiedbuyers", {
 })
 
 router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
-    await Buyer.findByIdAndUpdate(
-        req.params.id,
-        { status: req.body.status }
-    );
 
-    res.redirect('/buyer/unqualified');
-});
+    console.log("========== STATUS UPDATE START ==========");
 
-router.post(
-    '/status-unqualified-drag/:id',
-    isLoggedIn,
-    async (req, res) => {
+    console.log("Route Hit");
+    console.log("Buyer Id:", req.params.id);
+    console.log("Session:", {
+        tenantId: req.session.tenantId,
+        adminName: req.session.adminName,
+        executiveName: req.session.executiveName
+    });
 
-        try {
+    console.log("Request Body:", req.body);
 
-            await Buyer.findOneAndUpdate(
-                {
-                    _id: req.params.id,
-                    tenantId: req.session.tenantId
-                },
-                {
-                    status: req.body.status
-                }
-            );
+    const buyer = await Buyer.findById(req.params.id);
 
-            res.json({
-                success: true
-            });
+    console.log("Buyer Before Update:", {
+        found: !!buyer,
+        status: buyer?.status,
+        buyerValue: buyer?.buyerValue,
+        buyerValueConfirmedBy: buyer?.buyerValueConfirmedBy
+    });
 
-        } catch (err) {
+    if (!buyer) {
+        console.log("Buyer not found.");
+        return res.status(404).json({
+            success: false,
+            message: "Buyer not found."
+        });
+    }
 
-            console.error(err);
+    const previousStatus = buyer.status;
 
-            res.status(500).json({
+    if (req.body.buyerValue) {
+        buyer.buyerValue = Number(req.body.buyerValue);
+        await buyer.save();
+        console.log("Buyer Value Saved:", buyer.buyerValue);
+    }
+
+    if (
+        previousStatus === "Negotiation" &&
+        ["Deal Won", "Lost"].includes(req.body.status)
+    ) {
+
+        console.log("Closing Deal Validation");
+
+        if (!buyer.buyerValue || buyer.buyerValue <= 0) {
+
+            console.log("Validation Failed");
+
+            return res.status(400).json({
                 success: false,
-                message: "Unable to update status."
+                message: "Please confirm the Final Buyer Value before closing the deal."
             });
 
         }
 
     }
-);
 
+    const confirmedBy =
+        req.session.adminName
+            ? `Admin - ${req.session.adminName}`
+            : req.session.executiveName;
+
+    console.log("Confirmed By:", confirmedBy);
+
+    const result = await Buyer.findByIdAndUpdate(
+        req.params.id,
+        {
+            status: req.body.status,
+            buyerValue: Number(req.body.buyerValue),
+            buyerValueConfirmedBy: confirmedBy,
+            buyerValueConfirmedAt: new Date()
+        },
+        { new: true }
+    );
+
+    console.log("Update Result:", {
+        found: !!result,
+        status: result?.status,
+        buyerValue: result?.buyerValue,
+        buyerValueConfirmedBy: result?.buyerValueConfirmedBy
+    });
+
+    appendBuyerTimeline(
+        buyer,
+        confirmedBy,
+        "PreSales",
+        "Status Changed",
+        previousStatus,
+        req.body.status
+    );
+
+    console.log("Status Timeline Added");
+
+    appendBuyerTimeline(
+        buyer,
+        confirmedBy,
+        "PreSales",
+        "Final Buyer Value Confirmed",
+        `₹${buyer.buyerValue}`,
+        req.body.status
+    );
+
+    console.log("Buyer Value Timeline Added");
+
+    const verify = await Buyer.findById(req.params.id);
+
+    console.log("Database After Update:", {
+        status: verify.status,
+        buyerValue: verify.buyerValue,
+        buyerValueConfirmedBy: verify.buyerValueConfirmedBy,
+        buyerValueConfirmedAt: verify.buyerValueConfirmedAt
+    });
+
+    console.log("========== STATUS UPDATE END ==========");
+
+    res.redirect('/buyer/unqualified');
+
+});
 router.post(
 '/reassign-unqualified/:id',
 isLoggedIn,

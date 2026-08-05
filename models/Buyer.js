@@ -155,12 +155,6 @@ salesExecutiveId: {
     default: null
 },
 
-salesExecutiveName: {
-    type: String,
-    default: ""
-},
-
-
 buyerNotes: String,
 
 assignmentType: {
@@ -175,15 +169,9 @@ ref:'Tenant'
 
 radius: Number,
 
-assignedExecutiveId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Executive',
+lastFollowUp: {
+    type: Date,
     default: null
-},
-
-assignedExecutiveName: {
-    type: String,
-    default: ""
 },
 
 nextFollowUp: {
@@ -191,26 +179,14 @@ nextFollowUp: {
     default: null
 },
 
-siteVisitDate:{
-    type:Date
+lastSiteVisitDate: {
+    type: Date,
+    default: null
 },
 
-dealValue:{
-    type:Number,
-    default:0
-},
-
-dealClosedDate:{
-    type:Date
-},
-
-lostValue:{
-    type:Number,
-    default:0
-},
-
-lostDate:{
-    type:Date
+siteVisitDate: {
+    type: Date,
+    default: null
 },
 
 emailVerified: {
@@ -274,23 +250,6 @@ department: {
     default: "PreSales"
 },
 
-// Executive who qualified the buyer
-preSalesExecutiveId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Executive"
-},
-
-preSalesExecutiveName: {
-    type: String,
-    default: ""
-},
-
-// Executive handling sales
-salesExecutiveId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Executive"
-},
-
 salesExecutiveName: {
     type: String,
     default: ""
@@ -326,9 +285,29 @@ qualificationDate: {
 createdAt: {
     type: Date,
     default: Date.now
-}
-
 },
+
+buyerValue: {
+    type: Number,
+    default: null
+},
+
+buyerValueConfirmedBy: {
+    type: String,
+    default: ""
+},
+
+negotiationStatus: {
+    type: String,
+    default: ""
+},
+
+buyerValueConfirmedAt: {
+    type: Date,
+    default: null
+}
+},
+
 {
     timestamps: true
 })

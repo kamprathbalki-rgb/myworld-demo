@@ -33,8 +33,11 @@
 
 </div>
 
-<form method="POST"
-action="/executive/update-unqualified/<%= buyer._id %>"
+<form
+    id="buyerForm"
+    method="POST"
+    action="/executive/update-unqualified/<%= buyer._id %>"
+>
 
 <div class="card">
 
@@ -261,6 +264,29 @@ Immediate
 <div class="field">
 <label>Max Budget</label>
 <input type="number" name="maxBudget" value="<%= buyer.maxBudget || '' %>">
+</div>
+
+<div class="field">
+    <label>Buyer Value (₹)</label>
+    <input
+        type="number"
+        name="buyerValue"
+        value="<%= buyer.buyerValue || '' %>">
+</div>
+
+<div
+    class="field full-width"
+    id="buyerValueConfirmationBlock"
+    style="display:none;">
+
+    <label>
+        <input
+            type="checkbox"
+            id="confirmBuyerValue"
+            name="confirmBuyerValue">
+        I confirm this is the final Buyer Value.
+    </label>
+
 </div>
 
 <div class="field full-width">
@@ -571,19 +597,35 @@ value="<%= buyer.preferredLocation && buyer.preferredLocation.coordinates ? buye
 <br><br>
 
 <div class="field">
-    <label>Follow Up Date</label>
+    <label>Last Follow-up</label>
     <input
-        type="date"
-        name="nextFollowUp"
-        value="<%= buyer.nextFollowUp ? buyer.nextFollowUp.toISOString().slice(0,10) : '' %>">
+        type="text"
+        value="<%= buyer.lastFollowUp ? buyer.lastFollowUp.toLocaleString('en-IN',{ timeZone:'Asia/Kolkata' }) : '' %>"
+        readonly>
 </div>
 
 <div class="field">
-    <label>Site Visit Date</label>
+    <label>Follow-up Date & Time</label>
     <input
-        type="date"
+        type="datetime-local"
+        name="nextFollowUp"
+        value="<%= buyer.nextFollowUp ? new Date(buyer.nextFollowUp.getTime() + 330*60000).toISOString().slice(0,16) : '' %>">
+</div>
+
+<div class="field">
+    <label>Last Site Visit</label>
+    <input
+        type="text"
+        value="<%= buyer.lastSiteVisitDate ? buyer.lastSiteVisitDate.toLocaleString('en-IN',{ timeZone:'Asia/Kolkata' }) : '' %>"
+        readonly>
+</div>
+
+<div class="field">
+    <label>Site Visit Date & Time</label>
+    <input
+        type="datetime-local"
         name="siteVisitDate"
-        value="<%= buyer.siteVisitDate ? buyer.siteVisitDate.toISOString().slice(0,10) : '' %>">
+        value="<%= buyer.siteVisitDate ? new Date(buyer.siteVisitDate.getTime() + 330*60000).toISOString().slice(0,16) : '' %>">
 </div>
 
 <br><br>
@@ -642,10 +684,128 @@ document.querySelector('form')
 .addEventListener('submit', function(e){
 
     if (!validateLocations()) {
-        e.preventDefault()
+        e.preventDefault();
+        return;
     }
 
-})
+    const status =
+        document.querySelector('[name="status"]').value;
+
+const previousStatus = "<%= buyer.status %>";
+
+const nextFollowUp =
+    document.querySelector('[name="nextFollowUp"]').value;
+
+const siteVisitDate =
+    document.querySelector('[name="siteVisitDate"]').value;
+
+const buyerValue =
+    Number(document.querySelector('[name="buyerValue"]').value || 0);
+
+const now = new Date();
+
+if (
+    previousStatus === "Phone Call" &&
+    previousStatus !== status &&
+    status === "Qualified"
+) {
+
+    if (!nextFollowUp) {
+        alert("Next Follow-up Date & Time is mandatory.");
+        e.preventDefault();
+        return;
+    }
+
+    if (new Date(nextFollowUp) < now) {
+        alert("Next Follow-up Date & Time cannot be in the past.");
+        e.preventDefault();
+        return;
+    }
+
+}
+
+if (
+    previousStatus === "Qualified" &&
+    status === "Site Visit"
+) {
+
+    if (!nextFollowUp) {
+        alert("Next Follow-up Date & Time is mandatory.");
+        e.preventDefault();
+        return;
+    }
+
+    if (new Date(nextFollowUp) < now) {
+        alert("Next Follow-up Date & Time cannot be in the past.");
+        e.preventDefault();
+        return;
+    }
+
+    if (!siteVisitDate) {
+        alert("Site Visit Date & Time is mandatory.");
+        e.preventDefault();
+        return;
+    }
+
+    if (new Date(siteVisitDate) < now) {
+        alert("Site Visit Date & Time cannot be in the past.");
+        e.preventDefault();
+        return;
+    }
+
+}
+
+if (
+    previousStatus === "Site Visit" &&
+    status === "Negotiation"
+) {
+
+    if (!nextFollowUp) {
+        alert("Next Follow-up Date & Time is mandatory.");
+        e.preventDefault();
+        return;
+    }
+
+    if (new Date(nextFollowUp) < now) {
+        alert("Next Follow-up Date & Time cannot be in the past.");
+        e.preventDefault();
+        return;
+    }
+
+    if (buyerValue <= 0) {
+        alert("Buyer Value must be greater than zero.");
+        e.preventDefault();
+        return;
+    }
+
+}
+
+
+
+
+    if (
+        ["Deal Won", "Lost", "Dropped"].includes(status)
+    ) {
+
+        if (
+            !document.querySelector('[name="buyerValue"]').value
+        ) {
+            alert("Enter Buyer Value.");
+            e.preventDefault();
+            return;
+        }
+
+        if (
+            !document.getElementById("confirmBuyerValue").checked
+        ) {
+            alert("Please confirm the Buyer Value.");
+            e.preventDefault();
+            return;
+        }
+
+    }
+
+});
 
 const radios = document.querySelectorAll('input[name="buyingInterest"]');
 
@@ -671,6 +831,28 @@ radios.forEach(r => {
     });
 
 });
+
+const statusInput = document.querySelector('[name="status"]');
+const confirmationBlock = document.getElementById("buyerValueConfirmationBlock");
+
+function toggleBuyerValueConfirmation() {
+
+    if (
+        ["Deal Won", "Lost", "Dropped"].includes(statusInput.value)
+    ) {
+        confirmationBlock.style.display = "block";
+    } else {
+        confirmationBlock.style.display = "none";
+    }
+
+}
+
+toggleBuyerValueConfirmation();
+
+statusInput.addEventListener(
+    "change",
+    toggleBuyerValueConfirmation
+);
 
 </script>
 
