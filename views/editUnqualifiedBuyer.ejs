@@ -469,9 +469,15 @@ Possession Soon
 
 <option
 value="<%= location.officeName %>"
-<%= buyer.preferredLocations &&
-buyer.preferredLocations[0] === location.officeName
-? 'selected' : '' %>
+
+<%=
+buyer.preferredLocations &&
+buyer.preferredLocations[0].replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
+location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+? "selected"
+: ""
+%>
+
 >
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
@@ -482,7 +488,6 @@ buyer.preferredLocations[0] === location.officeName
 </select>
 
 </div>
-
 
 <div class="field">
 
@@ -496,9 +501,15 @@ buyer.preferredLocations[0] === location.officeName
 
 <option
 value="<%= location.officeName %>"
-<%= buyer.preferredLocations &&
-buyer.preferredLocations[1] === location.officeName
-? 'selected' : '' %>
+
+<%=
+buyer.preferredLocations &&
+buyer.preferredLocations[1].replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
+location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+? "selected"
+: ""
+%>
+
 >
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
@@ -523,9 +534,15 @@ buyer.preferredLocations[1] === location.officeName
 
 <option
 value="<%= location.officeName %>"
-<%= buyer.preferredLocations &&
-buyer.preferredLocations[2] === location.officeName
-? 'selected' : '' %>
+
+<%=
+buyer.preferredLocations &&
+buyer.preferredLocations[2].replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
+location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+? "selected"
+: ""
+%>
+
 >
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
