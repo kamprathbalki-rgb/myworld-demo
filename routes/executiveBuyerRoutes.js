@@ -14,6 +14,7 @@ const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const {notifyExecutive} = require('../services/notificationService');
 const {mapBuyerExecutives} = require("../services/executiveMappingService");
+const BuyerWorkflowHistory = require("../models/BuyerWorkflowHistory");
 
 const XLSX = require('xlsx')
 
@@ -356,8 +357,8 @@ console.log("buyerValue:", buyer.buyerValue);
 
 if (
     previousStatus === "Phone Call" &&
-    status !== previousStatus &&
-    status === "Qualified"
+    newStatus !== previousStatus &&
+    newStatus === "Qualified"
 ) {
 
     if (!req.body.nextFollowUp) {
@@ -479,6 +480,30 @@ await Buyer.findOneAndUpdate(
 }
 );
 
+
+await BuyerWorkflowHistory.create({
+
+    buyerId: buyer._id,
+
+    tenantId: buyer.tenantId,
+
+changedById:
+    req.session.executiveId || req.session.user?._id,
+
+changedByName:
+    req.session.executiveName || req.session.user?.name,
+
+changedByRole:
+    req.session.executiveId ? "Executive" : "Admin",
+
+    previousStatus,
+
+    newStatus,
+
+    changedAt: new Date()
+
+});
+
 const verifyBuyer = await Buyer.findById(req.params.id);
 
 const updatedBuyer = await Buyer.findById(req.params.id);
@@ -541,8 +566,8 @@ console.log("buyerValue:", buyer.buyerValue);
 
 if (
     previousStatus === "Phone Call" &&
-    status !== previousStatus &&
-    status === "Qualified"
+    newStatus !== previousStatus &&
+    newStatus === "Qualified"
 ) {
 
     if (!req.body.nextFollowUp) {
@@ -623,6 +648,30 @@ if (
                     status: req.body.status
                 }
             );
+
+
+await BuyerWorkflowHistory.create({
+
+    buyerId: buyer._id,
+
+    tenantId: buyer.tenantId,
+
+changedById:
+    req.session.executiveId || req.session.user?._id,
+
+changedByName:
+    req.session.executiveName || req.session.user?.name,
+
+changedByRole:
+    req.session.executiveId ? "Executive" : "Admin",
+
+    previousStatus,
+
+    newStatus,
+
+    changedAt: new Date()
+
+});
 
 const verifyBuyer = await Buyer.findById(req.params.id);
 
@@ -852,8 +901,8 @@ if (
 
 if (
     previousStatus === "Phone Call" &&
-    status !== previousStatus &&
-    status === "Qualified"
+    newStatus !== previousStatus &&
+    newStatus === "Qualified"
 ) {
 
     if (!req.body.nextFollowUp) {

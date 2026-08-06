@@ -23,6 +23,8 @@ const uploadExcel = multer({storage: multer.memoryStorage()})
 const WhatsappGroup = require('../models/WhatsappGroup');
 const clientManager = require('../services/tenantWhatsapp/clientManager')
 
+const BuyerWorkflowHistory = require("../models/BuyerWorkflowHistory");
+
 const {
     downloadCSV,
     downloadExcel,
@@ -278,6 +280,8 @@ router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
 
     const previousStatus = buyer.status;
 
+const newStatus = req.body.status;
+
     if (req.body.buyerValue) {
         buyer.buyerValue = Number(req.body.buyerValue);
         await buyer.save();
@@ -321,6 +325,29 @@ router.post('/status-unqualified/:id', isLoggedIn, async (req, res) => {
         },
         { new: true }
     );
+
+await BuyerWorkflowHistory.create({
+
+    buyerId: buyer._id,
+
+    tenantId: buyer.tenantId,
+
+changedById:
+    req.session.executiveId || req.session.user?._id,
+
+changedByName:
+    req.session.executiveName || req.session.user?.name,
+
+changedByRole:
+    req.session.executiveId ? "Executive" : "Admin",
+
+    previousStatus,
+
+    newStatus,
+
+    changedAt: new Date()
+
+});
 
     console.log("Update Result:", {
         found: !!result,

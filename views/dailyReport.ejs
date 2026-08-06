@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Daily Report</title>
+
+<style>
+
+body{
+
+    font-family:Arial;
+
+    margin:20px;
+
+    background:#f5f5f5;
+
+}
+
+.section{
+
+    background:white;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border-radius:8px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+td{
+
+    padding:8px;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+textarea{
+
+    width:100%;
+
+    height:80px;
+
+}
+
+button{
+
+    padding:10px 25px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>PreSales Executive Daily Report</h2>
+
+<form
+method="POST"
+action="/executive/daily-report">
+
+<div class="section">
+
+<h3>1. Executive Summary</h3>
+
+<table>
+
+<tr><td>Executive</td><td><%= report.executiveName %></td></tr>
+
+<tr><td>Date</td><td><%= report.reportDate %></td></tr>
+
+<tr><td>Login</td><td><%= report.loginTime %></td></tr>
+
+<tr><td>Logout</td><td><%= report.logoutTime %></td></tr>
+
+<tr><td>Working Hours</td><td><%= report.workingMinutes %> Minutes</td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>2. Lead Activity</h3>
+
+<table>
+
+<tr><td>Opening Pending</td><td><%= report.openingPending %></td></tr>
+
+<tr><td>New Assigned</td><td><%= report.newAssigned %></td></tr>
+
+<tr><td>Total Handled</td><td><%= report.handled %></td></tr>
+
+<tr><td>Pending</td><td><%= report.pending %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>3. Calls</h3>
+
+<table>
+
+<tr><td>Calls Made</td><td><%= report.callsMade %></td></tr>
+
+<tr><td>Connected</td><td><%= report.connected %></td></tr>
+
+<tr><td>Not Reachable</td><td><%= report.notReachable %></td></tr>
+
+<tr><td>Busy</td><td><%= report.busy %></td></tr>
+
+<tr><td>Switched Off</td><td><%= report.switchedOff %></td></tr>
+
+<tr><td>Wrong Number</td><td><%= report.wrongNumber %></td></tr>
+
+<tr><td>Invalid Number</td><td><%= report.invalidNumber %></td></tr>
+
+<tr><td>Not Interested</td><td><%= report.notInterested %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>4. Workflow Movement</h3>
+
+<table>
+
+<tr><td>Imported → Phone</td><td><%= report.importedToPhone %></td></tr>
+
+<tr><td>Phone → Qualified</td><td><%= report.phoneToQualified %></td></tr>
+
+<tr><td>Qualified → Site Visit</td><td><%= report.qualifiedToSiteVisit %></td></tr>
+
+<tr><td>Site Visit → Negotiation</td><td><%= report.siteVisitToNegotiation %></td></tr>
+
+<tr><td>Negotiation → Won</td><td><%= report.negotiationToWon %></td></tr>
+
+<tr><td>Negotiation → Lost</td><td><%= report.negotiationToLost %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>5. Follow Ups</h3>
+
+<table>
+
+<tr><td>Due Today</td><td><%= report.followupDue %></td></tr>
+
+<tr><td>Completed</td><td><%= report.followupCompleted %></td></tr>
+
+<tr><td>Missed</td><td><%= report.followupMissed %></td></tr>
+
+<tr><td>Tomorrow</td><td><%= report.followupTomorrow %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>6. Site Visits</h3>
+
+<table>
+
+<tr><td>Scheduled</td><td><%= report.siteVisitScheduled %></td></tr>
+
+<tr><td>Completed</td><td><%= report.siteVisitCompleted %></td></tr>
+
+<tr><td>Cancelled</td><td><%= report.siteVisitCancelled %></td></tr>
+
+<tr><td>Rescheduled</td><td><%= report.siteVisitRescheduled %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>7. Negotiation</h3>
+
+<table>
+
+<tr><td>Negotiation Buyers</td><td><%= report.buyersInNegotiation %></td></tr>
+
+<tr><td>Total Value</td><td><%= report.totalBuyerValue %></td></tr>
+
+<tr><td>Highest Value</td><td><%= report.highestBuyerValue %></td></tr>
+
+<tr><td>Average Value</td><td><%= report.averageBuyerValue %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>8. Closures</h3>
+
+<table>
+
+<tr><td>Deals Won</td><td><%= report.dealsWon %></td></tr>
+
+<tr><td>Deals Lost</td><td><%= report.dealsLost %></td></tr>
+
+<tr><td>Revenue</td><td><%= report.revenue %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>9. Productivity</h3>
+
+<table>
+
+<tr><td>Calls / Hour</td><td><%= report.callsPerHour %></td></tr>
+
+<tr><td>Qualification %</td><td><%= report.qualificationRate %></td></tr>
+
+<tr><td>Site Visit %</td><td><%= report.siteVisitRate %></td></tr>
+
+<tr><td>Negotiation %</td><td><%= report.negotiationRate %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>10. Pending Work</h3>
+
+<table>
+
+<tr><td>Overdue Followups</td><td><%= report.overdueFollowups %></td></tr>
+
+<tr><td>Overdue Site Visits</td><td><%= report.overdueSiteVisits %></td></tr>
+
+<tr><td>Waiting Qualification</td><td><%= report.waitingQualification %></td></tr>
+
+<tr><td>Waiting Negotiation</td><td><%= report.waitingNegotiation %></td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h3>11. Remarks</h3>
+
+<label>Major Issues</label>
+
+<textarea
+name="majorIssues"><%= report.majorIssues || "" %></textarea>
+
+<label>Customer Feedback</label>
+
+<textarea
+name="customerFeedback"><%= report.customerFeedback || "" %></textarea>
+
+<label>Support Required</label>
+
+<textarea
+name="supportRequired"><%= report.supportRequired || "" %></textarea>
+
+<label>Tomorrow Plan</label>
+
+<textarea
+name="tomorrowPlan"><%= report.tomorrowPlan || "" %></textarea>
+
+</div>
+
+<button type="submit">
+
+Submit Daily Report
+
+</button>
+
+</form>
+
+</body>
+
+</html>

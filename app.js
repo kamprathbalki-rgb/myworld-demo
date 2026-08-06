@@ -39,6 +39,8 @@ const qualifiedNoPurchaseRoutes = require("./routes/qualifiedNoPurchaseRoutes");
 
 const buyerBulkUploadRoutes = require('./routes/buyerBulkUploadRoutes');
 
+const dailyReportRoutes = require("./routes/dailyReportRoutes");
+
 connectDB()
 
 if (
@@ -129,6 +131,8 @@ app.use("/", tenantGuard, companyActiveGuard, futureBuyerRoutes);
 app.use("/", tenantGuard, companyActiveGuard, qualifiedNoPurchaseRoutes);
 
 app.use('/buyer', tenantGuard, companyActiveGuard, buyerBulkUploadRoutes);
+
+app.use(dailyReportRoutes);
 
 app.get('/', (req, res) => { res.send('MyWorld Server Running'); });
 
