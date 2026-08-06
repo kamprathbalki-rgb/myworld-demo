@@ -503,16 +503,20 @@ location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
 value="<%= location.officeName %>"
 
 <%=
-buyer.preferredLocations &&
-buyer.preferredLocations[1].replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
-location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+(
+    ((buyer.preferredLocations && buyer.preferredLocations[1]) || "")
+        .replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
+    location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+)
 ? "selected"
 : ""
 %>
 
 >
+
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
+
 </option>
 
 <% }) %>
@@ -536,16 +540,20 @@ location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
 value="<%= location.officeName %>"
 
 <%=
-buyer.preferredLocations &&
-buyer.preferredLocations[2].replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
-location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+(
+    ((buyer.preferredLocations && buyer.preferredLocations[2]) || "")
+        .replace(/\s+(B\.O|S\.O|H\.O)$/i, "") ===
+    location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
+)
 ? "selected"
 : ""
 %>
 
 >
+
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
+
 </option>
 
 <% }) %>
