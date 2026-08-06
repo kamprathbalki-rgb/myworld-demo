@@ -1008,7 +1008,7 @@ class="header-btn back-btn"
 </a>
 
 <a
-href="/dashboard"
+href="<%= session.executiveId ? '/executive/dashboard' : '/dashboard' %>"
 class="header-btn home-btn"
 >
 Home

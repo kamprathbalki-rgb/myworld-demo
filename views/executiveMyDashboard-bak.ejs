@@ -597,23 +597,23 @@ color:#1f4e79;
 
 <div class="top-nav">
 
-    <a href="/executive/unqualified">
-        📋<br>
-        Current Leads
-        <span class="nav-count"><%= myLeads %></span>
-    </a>
-
     <a href="/executive/followups">
         📞<br>
-        Follow-ups
+        Followups
         <span class="nav-count"><%= followUps %></span>
     </a>
 
     <a href="/executive/sitevisits">
         🏢<br>
-        Site Visits
+        Visits
         <span class="nav-count"><%= siteVisits %></span>
     </a>
+
+    <div class="top-nav-card">
+        🤝<br>
+        Negotiation
+        <span class="nav-count"><%= negotiation %></span>
+    </div>
 
 </div>
 
@@ -653,11 +653,7 @@ id="logoutAccuracy"
     currentStatus === 'In Meeting' ? '🤝' :
     currentStatus === 'On Site' ? '🏗️' : '🏢' %>
 <br>
-<strong>
-
 <%= currentStatus %>
-
-</strong>
 </div>
 
 <div class="top-info-item">
@@ -705,19 +701,12 @@ gap:10px;
     flex-wrap:wrap;
 ">
 
-<div style="
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:#eef7ee;
-    border:1px solid #b7dfb7;
-    border-radius:10px;
-    padding:8px 12px;
-">
-
-    <span style="font-size:22px;">⏱️</span>
-
-    <div>
+    <div style="
+        background:#eef7ee;
+        border:1px solid #b7dfb7;
+        border-radius:10px;
+        padding:8px 14px;
+    ">
 
         <div style="
             font-size:11px;
@@ -730,7 +719,7 @@ gap:10px;
         <div
             id="productiveTimer"
             style="
-                font-size:18px;
+                font-size:26px;
                 font-weight:bold;
                 color:#0b7a0b;
             "
@@ -739,8 +728,6 @@ gap:10px;
         </div>
 
     </div>
-
-</div>
 
 </div>
 
@@ -764,162 +751,77 @@ System logged out at 20:30 hrs
 
 
 <div style="
-margin-top:12px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
+margin-top:10px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+font-weight:bold;
+color:#1f4e79;
 ">
+
+<div>
+🏆 Closed Deals:
+<%= closedDeals %>
+</div>
+
+<div>
+💰 Total Value:
+₹ <%= closedValue.toLocaleString('en-IN') %>
+</div>
 
 </div>
 
 <div style="
 margin-top:10px;
-padding:10px 12px;
-background:#f8f9fa;
-border-left:4px solid #1f4e79;
-border-radius:8px;
-font-size:14px;
+padding:12px;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:10px;
+">
+
+<div style="
+font-size:11px;
+font-weight:bold;
+color:#1f4e79;
+text-transform:uppercase;
+margin-bottom:5px;
+">
+Today's Insight
+</div>
+
+<div style="
 font-style:italic;
 color:#555;
 ">
-
-💡 <%= motivation %>
-
+<%= motivation %>
 </div>
 
 </div>
+
 </div>
 </div>
-
-<form
-method="GET"
-action="/executive/unqualified">
-
-<input
-type="text"
-name="search"
-placeholder="Search Mobile / Name">
-
-<button type="submit">
-
-🔍
-
-</button>
-
-</form>
-
+</div>
 
 <div class="quick-actions">
 
-<a href="/executive/unqualified" class="quick-card">
-    🔥<br>
-    Today's Work
-    <br>
-    <%= leadGroups.followUpRequired.overdue.length +
-        leadGroups.followUpRequired.today.length +
-        leadGroups.noFollowUpAssigned.new.length %>
+<a href="/executive/dashboard" class="quick-card">
+👥 Leads<br><%= myLeads %>
 </a>
 
-<a href="/executive/unqualified?filter=overdue" class="quick-card">
-🔴<br>
-Missed Follow-ups
-<br>
-<%= missedFollowUps %>
+<a href="/executive/properties" class="quick-card">
+🏢 Properties<br><%= myProperties %>
 </a>
 
 <div class="quick-card">
-✅<br>
-Updated Today
-<br>
-<%= updatedToday %>
-</div>
-
-<a href="/executive/sitevisits" class="quick-card">
-🏢<br>
-Site Visits Today
-<br>
-<%= siteVisitsToday %>
-</a>
-
-<a href="/executive/unqualified?status=Phone%20Call"
-class="quick-card">
-☎<br>
-Pending Calls
-<br>
-<%= pendingCalls %>
-</a>
-
-<div class="quick-card">
-
-⏰<br>
-
-Next Follow-up
-
-<br>
-
-<%= (nextFollowUp && nextFollowUp.nextFollowUp)
-    ? new Date(nextFollowUp.nextFollowUp).toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit"
-      })
-    : "--"
-%>
-
-<br>
-
-<%= nextFollowUp
-? nextFollowUp.name
-: ""
-%>
-
+📞 Contacted<br><%= contacted %>
 </div>
 
 <div class="quick-card">
-
-Last Activity
-
-<br>
-
-<%= (lastUpdatedBuyer && lastUpdatedBuyer.lastWorkedOn)
-    ? new Date(lastUpdatedBuyer.lastWorkedOn).toLocaleTimeString("en-IN")
-    : "--"
-%>
-
-<br>
-
-<%= lastUpdatedBuyer
-? lastUpdatedBuyer.name
-: ""
-%>
-
+💰 Pipeline<br>
+₹ <%= pipelineValue.toLocaleString('en-IN') %>
 </div>
 
-<div class="quick-card">
-
-Today's Progress
-
-<br>
-
-<%= todayProgress %>
-
-/
-
-<%= dailyTarget %>
-
 </div>
-
-
-    <a href="/executive/reports" class="quick-card">
-        📊<br>
-        Reports
-    </a>
-
-
-</div>
-
-<% if (false) { %>
-
-<!-- ===== My Leads Hidden ===== -->
 
 <h2 style="margin-top:20px;">
     My Leads (<%= buyers.length %>)
@@ -1172,7 +1074,6 @@ value="<%= b.lostValue || '' %>"
 
 <% }) %>
 
-
 </div>
 
 </details>
@@ -1182,9 +1083,6 @@ value="<%= b.lostValue || '' %>"
 <% } %>
 
 <% }) %>
-
-<!-- ===== End My Leads Hidden ===== -->
-<% } %>
 
 <div id="buyerModal">
 
@@ -2000,31 +1898,11 @@ Close
 
 <div class="mobile-bottom-nav">
 
-<div
-style="
-text-align:center;
-font-size:12px;
-color:#666;
-margin-top:15px;
-">
+<a href="<%= executiveType === 'HR' ? '/hr/dashboard' : '/executive/dashboard' %>">
+🏠<br>Home
+</a>
 
-Last Refreshed
-
-<%= dashboardLoadedAt.toLocaleTimeString("en-IN") %>
-
-</div>
-
-<div class="bottom-nav-item">
-    🏆<br>
-    <%= closedDeals %>
-</div>
-
-<div class="bottom-nav-item">
-    💰<br>
-    ₹ <%= closedValue.toLocaleString('en-IN') %>
-</div>
-
-<div class="bottom-nav-item">
+<div class="bottom-nav-item lost-value-nav">
     💸<br>
     ₹ <%= lostValue.toLocaleString('en-IN') %>
 </div>
@@ -2039,7 +1917,6 @@ onclick="document.getElementById('logoutForm').requestSubmit();return false;">
 </a>
 
 </div>
-
 
 <script>
 

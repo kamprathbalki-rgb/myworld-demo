@@ -799,7 +799,7 @@ record.activityLog.push({
 })
 
 if (executive.executiveType === 'PreSales') {
-    return res.redirect('/executive/unqualified');
+    return res.redirect('/executive/dashboard');
 }
 
 return res.redirect('/executive/dashboard');
@@ -958,6 +958,10 @@ startOfDay.setHours(0,0,0,0)
 const endOfDay = new Date(startOfDay)
 
 endOfDay.setDate(endOfDay.getDate() + 1)
+
+const todayStart = startOfDay;
+
+const todayEnd = endOfDay;
 
 const myLeads = buyers.length
 
@@ -1158,6 +1162,57 @@ motivations[state.index]
 const productive =
     calculateProductiveHours(attendance);
 
+const updatedToday =
+await Buyer.countDocuments({
+    preSalesExecutiveName: executive.name,
+    lastWorkedOn: {
+        $gte: todayStart,
+        $lte: todayEnd
+    }
+});
+
+const siteVisitsToday =
+await Buyer.countDocuments({
+    preSalesExecutiveName: executive.name,
+    status: "Site Visit",
+    siteVisitDate: {
+        $gte: todayStart,
+        $lte: todayEnd
+    }
+});
+
+const pendingCalls =
+await Buyer.countDocuments({
+    preSalesExecutiveName: executive.name,
+    status: "Phone Call"
+});
+
+const nextFollowUp =
+await Buyer.findOne({
+    preSalesExecutiveName: executive.name,
+    nextFollowUp: {
+        $gte: new Date()
+    }
+})
+.sort({nextFollowUp:1})
+.lean();
+
+const lastUpdatedBuyer =
+await Buyer.findOne({
+    preSalesExecutiveName: executive.name,
+    lastWorkedOn: {$exists:true}
+})
+.sort({lastWorkedOn:-1})
+.lean();
+
+
+const dailyTarget=50;
+
+const todayProgress=
+updatedToday;
+
+const missedFollowUps = leadGroups.followUpRequired.overdue.length;
+
 res.render('executiveMyDashboard', {
 
 executiveType: req.session.executiveType,
@@ -1173,22 +1228,26 @@ executiveType: req.session.executiveType,
     myLeads,
     myProperties,
     followUps,
+    nextFollowUp,
+    pendingCalls,
     siteVisits,
+    siteVisitsToday,
     closedDeals,
     lost,
     currentStatus,
 teaOutCount,
 teaActive,
-
+missedFollowUps,
 lunchOutCount,
 lunchActive,
-
+updatedToday,
 meetingOutCount,
 meetingActive,
-
+lastUpdatedBuyer,
 siteOutCount,
 siteActive,
-
+dailyTarget,
+todayProgress,
 clientCounter,
 siteCounter,
 
@@ -1206,6 +1265,9 @@ lunchCompleted,
 displayLogoutTime,
 
 pipelineValue,
+
+dashboardLoadedAt:
+new Date(),
 
 closedValue:
 closedValue[0]?.total || 0,

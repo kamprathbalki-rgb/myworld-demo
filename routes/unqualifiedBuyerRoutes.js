@@ -248,6 +248,7 @@ const [
 
 ]);
 res.render("unqualifiedbuyers", {
+    session: req.session,
     buyers,
     search,
     status,
