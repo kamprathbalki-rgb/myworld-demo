@@ -455,18 +455,16 @@ Possession Soon
 📍 Location Preferences
 </div>
 
+
+<div id="locationSelects" style="display:none;">
 <div class="form-grid">
 
 <div class="field full-width">
 
 <label>1st Preference (Required)</label>
-
 <select name="preferredLocation1" required>
-
 <option value="">Select Location</option>
-
 <% locations.forEach(function(location){ %>
-
 <option
 value="<%= location.officeName %>"
 
@@ -484,21 +482,15 @@ location.officeName.replace(/\s+(B\.O|S\.O|H\.O)$/i, "")
 </option>
 
 <% }) %>
-
 </select>
-
 </div>
 
 <div class="field">
 
 <label>2nd Preference (Optional)</label>
-
 <select name="preferredLocation2">
-
 <option value="">Not Required</option>
-
 <% locations.forEach(function(location){ %>
-
 <option
 value="<%= location.officeName %>"
 
@@ -513,29 +505,20 @@ value="<%= location.officeName %>"
 %>
 
 >
-
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
-
 </option>
-
 <% }) %>
-
 </select>
-
 </div>
 
 
 <div class="field">
 
 <label>3rd Preference (Optional)</label>
-
 <select name="preferredLocation3">
-
 <option value="">Not Required</option>
-
 <% locations.forEach(function(location){ %>
-
 <option
 value="<%= location.officeName %>"
 
@@ -553,16 +536,127 @@ value="<%= location.officeName %>"
 
 <%= location.officeName %>
 (<%= location.divisionName %>, <%= location.district %>)
-
 </option>
-
 <% }) %>
-
 </select>
+</div>
+</div>
+</div>
+
+<div class="card">
+
+    <div class="section-title">
+        🔍 Location Search
+    </div>
+
+    <div class="field">
+
+        <label>Search Location</label>
+
+        <input
+            type="text"
+            id="locationSearch"
+            placeholder="Type Bavdhan, Baner, Wakad..."
+            autocomplete="off">
+
+    </div>
+
+    <div
+        id="locationResults"
+        class="location-results">
+    </div>
+
+    <div
+        id="selectedLocations"
+        class="selected-locations">
+
+        <div
+            class="selected-location">
+
+            <div>
+
+                <span class="priority">
+                    1️⃣
+                </span>
+
+                <span id="selectedLocation1">
+                    <%= buyer.preferredLocations && buyer.preferredLocations[0]
+                        ? buyer.preferredLocations[0]
+                        : "Not Selected" %>
+                </span>
+
+            </div>
+
+            <span
+                class="remove-location"
+                onclick="changeLocation(1)">
+
+                Change
+
+            </span>
+
+        </div>
+
+        <div
+            class="selected-location">
+
+            <div>
+
+                <span class="priority">
+                    2️⃣
+                </span>
+
+                <span id="selectedLocation2">
+                    <%= buyer.preferredLocations && buyer.preferredLocations[1]
+                        ? buyer.preferredLocations[1]
+                        : "Not Selected" %>
+                </span>
+
+            </div>
+
+            <span
+                class="remove-location"
+                onclick="changeLocation(2)">
+
+                Change
+
+            </span>
+
+        </div>
+
+        <div
+            class="selected-location">
+
+            <div>
+
+                <span class="priority">
+                    3️⃣
+                </span>
+
+                <span id="selectedLocation3">
+                    <%= buyer.preferredLocations && buyer.preferredLocations[2]
+                        ? buyer.preferredLocations[2]
+                        : "Not Selected" %>
+                </span>
+
+            </div>
+
+            <span
+                class="remove-location"
+                onclick="changeLocation(3)">
+
+                Change
+
+            </span>
+
+        </div>
+
+    </div>
 
 </div>
 
-</div>
+
+
 
 <div class="form-group full-width">
     <label>Buyer Notes</label>
@@ -878,6 +972,115 @@ statusInput.addEventListener(
     "change",
     toggleBuyerValueConfirmation
 );
+
+let editingPreference = 1;
+
+function changeLocation(preference) {
+
+    editingPreference = preference;
+
+    document.getElementById("locationSearch").focus();
+
+    document.getElementById("locationSearch").select();
+
+}
+
+const searchBox = document.getElementById("locationSearch");
+const resultsBox = document.getElementById("locationResults");
+
+searchBox.addEventListener("input", function () {
+
+    const keyword = this.value.trim().toLowerCase();
+
+    if (keyword.length < 2) {
+
+        resultsBox.style.display = "none";
+        resultsBox.innerHTML = "";
+
+        return;
+
+    }
+
+    const select =
+        document.querySelector(
+            '[name="preferredLocation1"]'
+        );
+
+    resultsBox.innerHTML = "";
+
+    Array.from(select.options).forEach(option => {
+
+        if (!option.value) return;
+
+        if (
+            option.text.toLowerCase().includes(keyword)
+        ) {
+
+            const row =
+                document.createElement("div");
+
+            row.className = "location-item";
+
+            row.innerHTML =
+                "<strong>" +
+                option.value +
+                "</strong>";
+
+row.onclick = function () {
+
+    const p1 = document.querySelector('[name="preferredLocation1"]').value;
+    const p2 = document.querySelector('[name="preferredLocation2"]').value;
+    const p3 = document.querySelector('[name="preferredLocation3"]').value;
+
+    const selected = [p1, p2, p3];
+
+    const duplicate =
+        selected.some((value, index) =>
+            value === option.value &&
+            index !== (editingPreference - 1)
+        );
+
+    if (duplicate) {
+
+        alert("Location already selected.");
+
+        return;
+
+    }
+
+    const hiddenSelect =
+        document.querySelector(
+            '[name="preferredLocation' +
+            editingPreference +
+            '"]'
+        );
+
+    hiddenSelect.value = option.value;
+
+    document.getElementById(
+        "selectedLocation" +
+        editingPreference
+    ).innerText = option.value;
+
+    resultsBox.innerHTML = "";
+    resultsBox.style.display = "none";
+    searchBox.value = "";
+
+};
+
+            resultsBox.appendChild(row);
+
+        }
+
+    });
+
+    resultsBox.style.display =
+        resultsBox.innerHTML
+            ? "block"
+            : "none";
+
+});
+
 
 </script>
 
