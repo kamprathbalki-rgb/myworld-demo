@@ -1013,7 +1013,16 @@ if (req.body.buyingInterest === "Yes") {
 } else if (req.body.buyingInterest === "No") {
 
     department = "PreSales";
-    status = "Qualified - No Purchase";
+
+    if (req.body.notInterestedReason === "Not Interested") {
+
+        status = "Lost";
+
+    } else {
+
+        status = "Qualified - No Purchase";
+
+    }
 
 }
 
@@ -1125,6 +1134,8 @@ buyerValue: req.body.buyerValue
     buyerNotes: req.body.buyerNotes,
 
     status: status,
+
+    callStatus: req.body.callStatus || "",
 
     currentOwnerRole: currentOwnerRole,
 
