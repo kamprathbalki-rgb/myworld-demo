@@ -23,45 +23,81 @@
 <hr>
 <%
 const age = getLeadAge(buyer.createdAt);
+
+let workedToday = false;
+let workedTime = "";
+
+if (buyer.lastWorkedOn) {
+
+    const worked = new Date(buyer.lastWorkedOn);
+    const today = new Date();
+
+    workedToday =
+        worked.toDateString() === today.toDateString();
+
+    workedTime = worked.toLocaleTimeString(
+        "en-IN",
+        {
+            timeZone: "Asia/Kolkata",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        }
+    );
+
+}
 %>
-
-    <div class="executive-row">
-
-<div class="executive-row">
 
 <div class="executive-row">
     👨‍💼 <%= buyer.preSalesExecutiveName || "Unassigned" %>
 </div>
+
 <hr>
 
-<div>📅 Last Follow-up:
+<div>
+    📅 Last Follow-up:
     <%= buyer.lastFollowUp
         ? new Date(buyer.lastFollowUp).toLocaleDateString("en-IN")
         : "-" %>
 </div>
 
-<div>⏰ Next Follow-up:
+<div>
+    ⏰ Next Follow-up:
     <%= buyer.nextFollowUp
         ? new Date(buyer.nextFollowUp).toLocaleDateString("en-IN")
         : "-" %>
 </div>
+
 <hr>
-<div style="
-    display:inline-block;
-    padding:4px 8px;
-    margin-bottom:8px;
-    border-radius:12px;
-    background:<%= age.color %>;
-    color:white;
-    font-size:11px;
-    font-weight:bold;
-">
-    ⏳ <%= age.label %>
-</div>
+
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+
+    <span style="
+        display:inline-block;
+        padding:4px 8px;
+        border-radius:12px;
+        background:<%= age.color %>;
+        color:white;
+        font-size:11px;
+        font-weight:bold;
+    ">
+        ⏳ <%= age.label %>
+    </span>
+
+    <% if (workedToday) { %>
+
+        <span style="
+            color:#198754;
+            font-size:11px;
+            font-weight:bold;
+        ">
+            ☎ Updated Today @ <%= workedTime %>
+        </span>
+
+    <% } %>
 
 </div>
 
-</div>
 
 <div style="margin:8px 0;">
 

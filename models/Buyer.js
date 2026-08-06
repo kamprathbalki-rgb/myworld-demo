@@ -174,6 +174,11 @@ lastFollowUp: {
     default: null
 },
 
+lastWorkedOn: {
+    type: Date,
+    default: null
+},
+
 nextFollowUp: {
     type: Date,
     default: null

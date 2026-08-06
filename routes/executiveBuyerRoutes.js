@@ -227,6 +227,26 @@ const buyers = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .lean();
 
+buyers.sort((a, b) => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const aWorkedToday =
+        a.lastWorkedOn &&
+        new Date(a.lastWorkedOn) >= today;
+
+    const bWorkedToday =
+        b.lastWorkedOn &&
+        new Date(b.lastWorkedOn) >= today;
+
+    if (aWorkedToday !== bWorkedToday) {
+        return aWorkedToday ? 1 : -1;
+    }
+
+    return new Date(b.createdAt) - new Date(a.createdAt);
+
+});
 
 const buyerIds = buyers.map(b => b._id);
 
@@ -1140,6 +1160,8 @@ buyerValue: req.body.buyerValue
     currentOwnerRole: currentOwnerRole,
 
 lastFollowUp: buyer.nextFollowUp,
+
+lastWorkedOn: new Date(),
 
 nextFollowUp: req.body.nextFollowUp || null,
 
