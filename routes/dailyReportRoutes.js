@@ -75,72 +75,284 @@ router.get(
 
             });
 
+const openingPending =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    status:{
+        $nin:[
+            "Deal Won",
+            "Lost"
+        ]
+    }
+
+});
+
+const newAssigned =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    createdAt:{
+        $gte:today,
+        $lt:tomorrow
+    }
+
+});
+
+const handled =
+workflow.length;
+
+const pending =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    status:{
+        $nin:[
+            "Deal Won",
+            "Lost"
+        ]
+    }
+
+});
+
+
+const connected =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    status:"Phone Call"
+
+});
+
+const notReachable =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Not Reachable"
+
+});
+
+const busy =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Busy"
+
+});
+
+const switchedOff =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Switched Off"
+
+});
+
+const wrongNumber =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Wrong Number"
+
+});
+
+const invalidNumber =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Invalid Number"
+
+});
+
+const notInterested =
+await Buyer.countDocuments({
+
+    tenantId:req.session.tenantId,
+
+    preSalesExecutiveId:executiveId,
+
+    callStatus:"Not Interested"
+
+});
+
+
+
         const report = {
 
-            executiveName:
-                req.session.executiveName,
+    executiveName:
+        req.session.executiveName,
 
-            reportDate: today,
+    reportDate: today,
 
-            loginTime:
-                attendance?.loginLocations?.[0]?.time || "",
+    loginTime:
+        attendance?.loginLocations?.[0]?.time || "",
 
-            logoutTime:
-                attendance?.logoutLocations?.[
-                    attendance.logoutLocations.length - 1
-                ]?.time || "",
+    logoutTime:
+        attendance?.logoutLocations?.[
+            attendance.logoutLocations.length - 1
+        ]?.time || "",
 
-            callsMade:
-                workflow.filter(w =>
-                    w.previousStatus === "Imported" &&
-                    w.newStatus === "Phone Call"
-                ).length,
+    workingMinutes: 0,
 
-            qualified:
-                workflow.filter(w =>
-                    w.previousStatus === "Phone Call" &&
-                    w.newStatus === "Qualified"
-                ).length,
+    openingPending,
 
-            siteVisitConversions:
-                workflow.filter(w =>
-                    w.previousStatus === "Qualified" &&
-                    w.newStatus === "Site Visit"
-                ).length,
+    newAssigned,
 
-            negotiationConversions:
-                workflow.filter(w =>
-                    w.previousStatus === "Site Visit" &&
-                    w.newStatus === "Negotiation"
-                ).length,
+    handled,
 
-            dealsWon:
-                workflow.filter(w =>
-                    w.previousStatus === "Negotiation" &&
-                    w.newStatus === "Deal Won"
-                ).length,
+    pending,
 
-            dealsLost:
-                workflow.filter(w =>
-                    w.previousStatus === "Negotiation" &&
-                    w.newStatus === "Lost"
-                ).length,
+    callsMade:
+        workflow.filter(w =>
+            w.previousStatus === "Imported" &&
+            w.newStatus === "Phone Call"
+        ).length,
 
-            followUpsThisWeek:
-                followUps,
+    connected,
 
-            siteVisitsThisWeek:
-                siteVisits
+    notReachable,
 
-        };
+    busy,
 
-        res.render(
-            "dailyReport",
-            {
-                session: req.session,
-                report
-            }
-        );
+    switchedOff,
+
+    wrongNumber,
+
+    invalidNumber,
+
+    notInterested,
+
+    importedToPhone:
+        workflow.filter(w =>
+            w.previousStatus === "Imported" &&
+            w.newStatus === "Phone Call"
+        ).length,
+
+    phoneToQualified:
+        workflow.filter(w =>
+            w.previousStatus === "Phone Call" &&
+            w.newStatus === "Qualified"
+        ).length,
+
+    qualifiedToSiteVisit:
+        workflow.filter(w =>
+            w.previousStatus === "Qualified" &&
+            w.newStatus === "Site Visit"
+        ).length,
+
+    siteVisitToNegotiation:
+        workflow.filter(w =>
+            w.previousStatus === "Site Visit" &&
+            w.newStatus === "Negotiation"
+        ).length,
+
+    negotiationToWon:
+        workflow.filter(w =>
+            w.previousStatus === "Negotiation" &&
+            w.newStatus === "Deal Won"
+        ).length,
+
+    negotiationToLost:
+        workflow.filter(w =>
+            w.previousStatus === "Negotiation" &&
+            w.newStatus === "Lost"
+        ).length,
+
+    followupDue: 0,
+
+    followupCompleted: 0,
+
+    followupMissed: 0,
+
+    followupTomorrow: 0,
+
+    siteVisitScheduled: 0,
+
+    siteVisitCompleted: 0,
+
+    siteVisitCancelled: 0,
+
+    siteVisitRescheduled: 0,
+
+    buyersInNegotiation: 0,
+
+    totalBuyerValue: 0,
+
+    highestBuyerValue: 0,
+
+    averageBuyerValue: 0,
+
+    dealsWon:
+        workflow.filter(w =>
+            w.previousStatus === "Negotiation" &&
+            w.newStatus === "Deal Won"
+        ).length,
+
+    dealsLost:
+        workflow.filter(w =>
+            w.previousStatus === "Negotiation" &&
+            w.newStatus === "Lost"
+        ).length,
+
+    revenue: 0,
+
+    callsPerHour: 0,
+
+    qualificationRate: 0,
+
+    siteVisitRate: 0,
+
+    negotiationRate: 0,
+
+    overdueFollowups: 0,
+
+    overdueSiteVisits: 0,
+
+    waitingQualification: 0,
+
+    waitingNegotiation: 0,
+
+    majorIssues: "",
+
+    customerFeedback: "",
+
+    supportRequired: "",
+
+    tomorrowPlan: ""
+
+};
+
+res.render("dailyReport", {
+    session: req.session,
+    report
+});
 
     }
 );

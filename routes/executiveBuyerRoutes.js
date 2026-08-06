@@ -899,6 +899,8 @@ if (
 // Workflow Validation (Edit Buyer)
 // ======================================
 
+const newStatus = req.body.status;
+
 if (
     previousStatus === "Phone Call" &&
     newStatus !== previousStatus &&

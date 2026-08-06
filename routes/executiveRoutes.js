@@ -798,15 +798,13 @@ record.activityLog.push({
     accuracy: req.body.accuracy || null
 })
 
-await record.save();
-
 if (executive.executiveType === 'PreSales') {
     return res.redirect('/executive/unqualified');
 }
 
 return res.redirect('/executive/dashboard');
 
-})
+});
 
 router.get('/reports', async (req, res) => {
 
