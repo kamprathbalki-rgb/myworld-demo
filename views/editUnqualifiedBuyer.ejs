@@ -566,92 +566,97 @@ value="<%= location.officeName %>"
         class="location-results">
     </div>
 
-    <div
-        id="selectedLocations"
-        class="selected-locations">
 
-        <div
-            class="selected-location">
+    <div id="selectedLocations">
 
-            <div>
+    <div class="location-row">
 
-                <span class="priority">
-                    1️⃣
-                </span>
-
-                <span id="selectedLocation1">
-                    <%= buyer.preferredLocations && buyer.preferredLocations[0]
-                        ? buyer.preferredLocations[0]
-                        : "Not Selected" %>
-                </span>
-
+        <div>
+            <div class="location-label">
+                1st Preference
             </div>
 
-            <span
-                class="remove-location"
-                onclick="changeLocation(1)">
+            <div
+                id="selectedLocation1"
+                class="selected-location-text">
 
-                Change
-
-            </span>
-
-        </div>
-
-        <div
-            class="selected-location">
-
-            <div>
-
-                <span class="priority">
-                    2️⃣
-                </span>
-
-                <span id="selectedLocation2">
-                    <%= buyer.preferredLocations && buyer.preferredLocations[1]
-                        ? buyer.preferredLocations[1]
-                        : "Not Selected" %>
-                </span>
+                <%= buyer.preferredLocations && buyer.preferredLocations[0]
+                    ? buyer.preferredLocations[0]
+                    : "Not Selected" %>
 
             </div>
-
-            <span
-                class="remove-location"
-                onclick="changeLocation(2)">
-
-                Change
-
-            </span>
-
         </div>
 
-        <div
-            class="selected-location">
-
-            <div>
-
-                <span class="priority">
-                    3️⃣
-                </span>
-
-                <span id="selectedLocation3">
-                    <%= buyer.preferredLocations && buyer.preferredLocations[2]
-                        ? buyer.preferredLocations[2]
-                        : "Not Selected" %>
-                </span>
-
-            </div>
-
-            <span
-                class="remove-location"
-                onclick="changeLocation(3)">
-
-                Change
-
-            </span>
-
-        </div>
+        <button
+            type="button"
+            class="location-select-btn"
+            onclick="changeLocation(1)">
+            Select-1
+        </button>
 
     </div>
+
+
+    <div class="location-row">
+
+        <div>
+
+            <div class="location-label">
+                2nd Preference
+            </div>
+
+            <div
+                id="selectedLocation2"
+                class="selected-location-text">
+
+                <%= buyer.preferredLocations && buyer.preferredLocations[1]
+                    ? buyer.preferredLocations[1]
+                    : "Not Selected" %>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="location-select-btn"
+            onclick="changeLocation(2)">
+            Select-2
+        </button>
+
+    </div>
+
+
+    <div class="location-row">
+
+        <div>
+
+            <div class="location-label">
+                3rd Preference
+            </div>
+
+            <div
+                id="selectedLocation3"
+                class="selected-location-text">
+
+                <%= buyer.preferredLocations && buyer.preferredLocations[2]
+                    ? buyer.preferredLocations[2]
+                    : "Not Selected" %>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="location-select-btn"
+            onclick="changeLocation(3)">
+            Select-3
+        </button>
+
+    </div>
+
+</div>
 
 </div>
 

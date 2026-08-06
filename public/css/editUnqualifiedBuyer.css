@@ -166,4 +166,44 @@ textarea{
     padding:12px;
 }
 
+.location-row{
+    display:grid;
+    grid-template-columns:1fr 90px;
+    gap:15px;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #ececec;
+}
+
+.location-row:last-child{
+    border-bottom:none;
+}
+
+.location-label{
+    font-size:12px;
+    font-weight:600;
+    color:#666;
+    margin-bottom:4px;
+}
+
+.selected-location-text{
+    font-size:15px;
+    font-weight:700;
+    color:#1f4e79;
+    word-break:break-word;
+}
+
+.location-select-btn{
+    height:38px;
+    border:none;
+    border-radius:8px;
+    background:#1f4e79;
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.location-select-btn:hover{
+    background:#163a5c;
+}
 </style>
