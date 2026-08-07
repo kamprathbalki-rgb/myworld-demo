@@ -735,7 +735,7 @@ gap:10px;
                 color:#0b7a0b;
             "
         >
-            <%= productive.productiveHHMMSS %>
+            <%= working.workingHHMMSS %>
         </div>
 
     </div>
@@ -2043,7 +2043,7 @@ onclick="document.getElementById('logoutForm').requestSubmit();return false;">
 
 <script>
 
-let productiveSeconds = <%= productive.productiveSeconds %>;
+let productiveSeconds = <%= working.workingSeconds %>;
 
 const pauseProductive =
     <%= teaActive || lunchActive ? 'true' : 'false' %>;

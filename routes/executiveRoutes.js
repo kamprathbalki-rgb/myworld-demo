@@ -9,7 +9,7 @@ const ContactAccessLog = require('../models/ContactAccessLog')
 const Property = require('../models/Property')
 const calculateScore = require('../services/matchService')
 const groupLeadAging = require('../services/leadAgingService');
-const calculateProductiveHours = require('../services/productiveHoursService');
+const calculateProductiveHours = require('../services/workingHoursService');
 
 const {remapExecutiveTerritory} = require("../services/executiveMappingService");
 
@@ -1160,7 +1160,7 @@ const motivation =
 motivations[state.index]
 
 const productive =
-    calculateProductiveHours(attendance);
+    calculateWorkingHours(attendance);
 
 const updatedToday =
 await Buyer.countDocuments({
@@ -1218,7 +1218,7 @@ res.render('executiveMyDashboard', {
 executiveType: req.session.executiveType,
 
     motivation,
-    productive,
+    working,
     buyers,
     leadGroups,
     executiveName: req.session.executiveName,
