@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Buyer Upload Preview</title>
+
+<style>
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid #ccc;
+
+padding:8px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>
+
+Buyer Upload Preview
+
+</h2>
+
+<p>
+
+Total Buyers :
+
+<b>
+
+<%= buyers.length %>
+
+</b>
+
+</p>
+
+<table>
+
+<tr>
+
+<th>Name</th>
+
+<th>Mobile</th>
+
+<th>Email</th>
+
+<th>Location</th>
+
+</tr>
+
+<%
+
+buyers.forEach(function(buyer){
+
+%>
+
+<tr>
+
+<td><%= buyer.name %></td>
+
+<td><%= buyer.phone %></td>
+
+<td><%= buyer.email %></td>
+
+<td><%= buyer.preferredLocation %></td>
+
+</tr>
+
+<%
+
+});
+
+%>
+
+</table>
+
+<br>
+
+<form
+action="/buyer/upload-buyers/save"
+method="POST"
+>
+
+<button>
+
+Import Buyers
+
+</button>
+
+</form>
+
+</body>
+
+</html>

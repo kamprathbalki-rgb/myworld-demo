@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<div style="margin-bottom:20px;">
+
+<a
+    href="javascript:history.back()"
+    style="
+        display:inline-block;
+        padding:10px 16px;
+        background:#6c757d;
+        color:white;
+        text-decoration:none;
+        border-radius:6px;
+        margin-right:10px;
+    "
+>
+← Back
+</a>
+
+<a
+    href="/dashboard/main"
+    style="
+        display:inline-block;
+        padding:10px 16px;
+        background:#1f4e79;
+        color:white;
+        text-decoration:none;
+        border-radius:6px;
+    "
+>
+🏠 Home
+</a>
+
+</div>
+
+<meta charset="UTF-8">
+
+<title>Column Mapping</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    margin:30px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+select{
+    width:100%;
+    padding:8px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Column Mapping</h2>
+
+<form
+action="/buyer/upload-buyers/import"
+method="POST"
+>
+
+<input
+type="hidden"
+name="uploadedFile"
+value="<%= uploadedFile %>"
+>
+
+<input
+type="hidden"
+name="originalFileName"
+value="<%= originalFileName %>"
+>
+
+<input
+type="hidden"
+name="hasHeader"
+value="<%= hasHeader %>"
+>
+
+<%
+
+const crmFields = [
+
+"Full Name",
+
+"First Name",
+
+"Middle Name",
+
+"Last Name",
+
+"Mobile Number",
+
+"Alternate Mobile",
+
+"WhatsApp Number",
+
+"Email",
+
+"Preferred Location 1",
+
+"Preferred Location 2",
+
+"Preferred Location 3",
+
+"Required Flat Type",
+
+"Min Budget",
+
+"Max Budget",
+
+"Buying Interest",
+
+"Purchase Timeline",
+
+"Transaction Type"
+
+];
+
+%>
+
+<% crmFields.forEach(function(field){ %>
+
+<div style="margin-bottom:18px;">
+
+<label
+style="
+display:inline-block;
+width:240px;
+font-weight:bold;
+"
+>
+
+<%= field %>
+
+</label>
+
+<select
+name="<%= field %>"
+>
+
+<option value="">-- Not Available --</option>
+
+<%
+columns.forEach(function(column,index){
+%>
+
+<option value="<%= index %>">
+
+Column <%= String.fromCharCode(65 + index) %>
+
+</option>
+
+<%
+});
+%>
+
+</select>
+
+</div>
+
+<%
+});
+%>
+
+<br>
+
+<button
+type="submit"
+>
+
+Continue
+
+</button>
+
+</form>
+
+</body>
+
+</html>

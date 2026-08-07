@@ -256,15 +256,6 @@ let buyerLat = 0;
 let buyerLng = 0;
 let matchedExecutive = null;
 
-console.log({
-    buyingInterest: row["Buying Interest"],
-    purchaseTimeline: row["Purchase Timeline"],
-    transactionType: row["TransactionType"],
-    propertyType: row["Property Type"],
-    minBudget: row["Min Budget"],
-    configuration: row["Required Flat Type"]
-});
-
 const buyingInterest =
 String(
     row['Buying Interest'] || ''
@@ -946,6 +937,42 @@ ${missingLocationRequests.join('\n')}
 
 async function importUnqualifiedRows(rows, req, res) {
 
+    // Cut everything from
+
+    let importedCount = 0;
+
+    // ...
+
+    // up to
+
+    res.render('buyerBulkUploadResult', ...);
+
+}
+
+
+router.post(
+    '/bulk-upload-unqualified',
+    isLoggedIn,
+    isAdmin,
+    uploadExcel.single('excelFile'),
+    async (req, res) => {
+
+        const workbook = XLSX.read(
+            req.file.buffer,
+            { type: 'buffer' }
+        )
+
+        const sheet =
+            workbook.Sheets[
+                workbook.SheetNames[0]
+            ]
+
+        const rows =
+            XLSX.utils.sheet_to_json(
+                sheet,
+                { defval: '' }
+            )
+
         let importedCount = 0
         let duplicateCount = 0
         let invalidCount = 0
@@ -1309,86 +1336,8 @@ ${missingLocationRequests.join('\n')}
             }
         )
 
-}
-
-
-router.post(
-    '/bulk-upload-unqualified',
-    isLoggedIn,
-    isAdmin,
-    uploadExcel.single('excelFile'),
-    async (req, res) => {
-
-        const workbook = XLSX.read(
-            req.file.buffer,
-            { type: 'buffer' }
-        )
-
-        const sheet =
-            workbook.Sheets[
-                workbook.SheetNames[0]
-            ]
-
-        const rows =
-            XLSX.utils.sheet_to_json(
-                sheet,
-                { defval: '' }
-            )
-
-await importUnqualifiedRows(rows, req, res);
-
     }
 )
-
-function parseBudget(value) {
-
-    if (!value) return 0;
-
-    let text = String(value)
-        .toLowerCase()
-        .replace(/,/g, '')
-        .replace(/₹|rs\.?/g, '')
-        .replace(/lakhs?/g, '')
-        .replace(/lakh/g, '')
-        .trim();
-
-    // 1.25 Cr
-    if (
-        text.includes('cr') ||
-        text.includes('crore')
-    ) {
-
-        const match =
-            text.match(/\d+(\.\d+)?/);
-
-        return match
-            ? parseFloat(match[0]) * 100
-            : 0;
-    }
-
-    // 80-90 / 80 to 90 / 80/90
-    const match =
-        text.match(/\d+(\.\d+)?/);
-
-    if (!match) return 0;
-
-    let number =
-        parseFloat(match[0]);
-
-    // Rupee value
-    if (number >= 100000) {
-
-        return Math.round(
-            number / 100000
-        );
-
-    }
-
-    // Already Lakhs
-    return Math.round(number);
-
-}
-
 
 router.post(
     '/bulk-upload-unqualified-map',
@@ -1438,114 +1387,16 @@ const sheet =
             const emailCol = columnToIndex(req.body.map_email);
             const locationCol = columnToIndex(req.body.map_primaryLocation);
 
-const budgetCol =
-    columnToIndex(
-        req.body.map_budget
-    );
+            const mappedRows = rows.map(r => ({
 
-const areaCol =
-    columnToIndex(
-        req.body.map_area
-    );
+                Name: r[nameCol] || '',
+                Phone: r[phoneCol] || '',
+                Email: r[emailCol] || '',
+                "Preferred Location 1": r[locationCol] || ''
 
-const mappedRows = rows.map(r => {
+            }));
 
-    const budget =
-        parseBudget(
-            r[budgetCol]
-        );
-
-const area =
-    parseArea(
-        r[areaCol]
-    );
-
-const configurationCol =
-    columnToIndex(
-        req.body.map_configuration
-    );
-
-
-    return {
-
-        Name: r[nameCol] || "",
-
-        Phone: r[phoneCol] || "",
-
-        Email: r[emailCol] || "",
-
-        "Required Flat Type":
-    r[configurationCol] || "",
-
-        "Preferred Location 1":
-            r[locationCol] || "",
-
-        "Min Budget":
-            budget,
-
-        "Max Budget":
-            Math.round(
-                budget * 1.15
-            ),
-
-"Min Area": area,
-
-"Max Area": Math.round(
-    area * 1.15
-),
-
-"Buying Interest": "Yes",
-
-"Purchase Timeline": "1 Month",
-
-"TransactionType": "SALE",
-
-"Property Type": "Apartment",
-
-"Required Possession": [
-    "READY"
-],
-
-"Radius": 2000
-
-    };
-
-});
-
-function parseArea(value) {
-
-    if (!value) return 0;
-
-    let text = String(value)
-        .toLowerCase()
-        .replace(/,/g, '')
-        .replace(/sq\.?\s*ft|sqft|square\s*feet|sq\s*ft|sft/gi, '')
-        .replace(/carpet/gi, '')
-        .replace(/built.?up/gi, '')
-        .replace(/super.?built.?up/gi, '')
-        .trim();
-
-    const match =
-        text.match(/\d+(\.\d+)?/);
-
-    if (!match) return 0;
-
-    return Math.round(
-        parseFloat(match[0])
-    );
-
-}
-
-
-
-
-await importUnqualifiedRows(
-    mappedRows,
-    req,
-    res
-);
-
-return;
+            console.log(mappedRows.slice(0,5));
 
         } catch (err) {
 

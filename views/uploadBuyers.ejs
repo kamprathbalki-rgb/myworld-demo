@@ -1,0 +1,108 @@
+<h1>Upload Buyers</h1>
+
+<div style="margin-bottom:20px;">
+
+<a
+    href="javascript:history.back()"
+    style="
+        display:inline-block;
+        padding:10px 16px;
+        background:#6c757d;
+        color:white;
+        text-decoration:none;
+        border-radius:6px;
+        margin-right:10px;
+    "
+>
+← Back
+</a>
+
+<a
+    href="/dashboard/main"
+    style="
+        display:inline-block;
+        padding:10px 16px;
+        background:#1f4e79;
+        color:white;
+        text-decoration:none;
+        border-radius:6px;
+    "
+>
+🏠 Home
+</a>
+
+</div>
+
+<form
+    action="/buyer/upload-buyers"
+    method="POST"
+    enctype="multipart/form-data"
+>
+
+<div>
+
+<label>
+
+Buyer File
+
+</label>
+
+<br>
+
+<input
+    type="file"
+    name="buyerFile"
+    accept=".csv,.xlsx,.xls"
+    required
+>
+
+</div>
+
+<br>
+
+<div>
+
+<label>
+
+<input
+    type="radio"
+    name="hasHeader"
+    value="yes"
+    checked
+>
+
+Yes
+
+</label>
+
+<label style="margin-left:20px;">
+
+<input
+    type="radio"
+    name="hasHeader"
+    value="no"
+>
+
+No
+
+</label>
+
+<br>
+
+<small>
+
+Does your file contain a header row?
+
+</small>
+
+</div>
+
+<br>
+
+<button type="submit">
+
+Continue
+
+</button>
+
+</form>
