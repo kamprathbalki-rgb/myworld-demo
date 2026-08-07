@@ -222,10 +222,19 @@ const explain = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .explain("executionStats");
 
+console.log("Session Executive ID:", String(req.session.executiveId));
+console.log("Filter:", filter);
+
 
 const buyers = await Buyer.find(filter)
 .sort({ createdAt: -1 })
 .lean();
+
+console.log("Buyer Count:", buyers.length);
+
+if (buyers.length > 0) {
+    console.log("First Buyer:", buyers[0].name);
+}
 
 buyers.sort((a, b) => {
 

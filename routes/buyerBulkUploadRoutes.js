@@ -83,7 +83,21 @@ router.post(
                 { defval: '' }
             );
 
-        let importedCount = 0;
+  await importQualifiedRows(
+    rows,
+    req,
+    res
+);
+
+});
+
+async function importQualifiedRows(
+    rows,
+    req,
+    res
+) {
+
+      let importedCount = 0;
         let duplicateCount = 0;
         let invalidCount = 0;
 
@@ -940,9 +954,7 @@ ${missingLocationRequests.join('\n')}
 
         );
 
-    }
-
-);
+}
 
 async function importUnqualifiedRows(rows, req, res) {
 
@@ -1536,14 +1548,32 @@ function parseArea(value) {
 
 }
 
+const isQualified =
+    mappedRows.every(row =>
 
+        row["Required Flat Type"] &&
+        row["Min Area"] > 0 &&
+        row["Min Budget"] > 0
 
+    );
 
-await importUnqualifiedRows(
-    mappedRows,
-    req,
-    res
-);
+if (isQualified) {
+
+    await importQualifiedRows(
+        mappedRows,
+        req,
+        res
+    );
+
+} else {
+
+    await importUnqualifiedRows(
+        mappedRows,
+        req,
+        res
+    );
+
+}
 
 return;
 
