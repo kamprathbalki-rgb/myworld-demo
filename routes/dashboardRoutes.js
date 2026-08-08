@@ -15,6 +15,8 @@ const PropertyMedia = require('../models/PropertyMedia')
 const mediaLimits = require('../data/propertyMediaLimits')
 const ChatLead = require("../models/ChatLead");
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
+const BuyerWorkflowHistory = require('../models/BuyerWorkflowHistory');
+const XLSX = require('xlsx');
 
 router.get('/main', isLoggedIn, isAdmin, async (req,res)=>{
 
@@ -365,6 +367,50 @@ unqualifiedLeadCount
 
 })
 
+router.get('/executive-performance/export', async (req,res)=>{
+
+    const executives = await Executive.find({
+        tenantId,
+        isActive:true
+    }).sort({name:1});
+
+    const result = [];
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(result);
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Executive Performance"
+    );
+
+    const buffer =
+        XLSX.write(
+            workbook,
+            {
+                type:"buffer",
+                bookType:"xlsx"
+            }
+        );
+
+    res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=ExecutivePerformance.xlsx"
+    );
+
+    res.type(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    res.send(buffer);
+
+});
+
+
 router.post('/match-config', async (req,res)=>{
 
 const config = new MatchConfig({
@@ -597,45 +643,113 @@ dealConversion
 })
 
 
-router.get('/executive-performance', async (req,res)=>{
+router.get('/executive-performance', isLoggedIn, async (req, res) => {
 
-const data = await Visit.aggregate([
-{
-$match:{ tenantId:req.session.tenantId }
-},
-{
-$group:{
-_id:"$executiveName",
-visits:{ $sum:1 },
-deals:{
-$sum:{
-$cond:[ { $eq:["$dealClosed",true] },1,0 ]
+console.log("SESSION:", {
+    executiveId: req.session.executiveId,
+    tenantId: req.session.tenantId,
+    role: req.session.role,
+    userType: req.session.userType
+});
+
+
+    const report =
+        await getExecutivePerformanceData(
+
+            req.session.tenantId,
+
+            req.query.fromDate,
+
+            req.query.toDate
+
+        );
+
+if (
+    req.session.executiveId &&
+    req.session.executiveType !== "HR"
+) {
+
+    console.log("Before Filter:", report.result.length);
+
+    report.result = report.result.filter(r =>
+        String(r.executiveId) === String(req.session.executiveId)
+    );
+
+    console.log("Session Executive:", req.session.executiveId);
+
+    console.log(
+        "Executive IDs:",
+        report.result.map(r => String(r.executiveId))
+    );
+
+    console.log("After Filter:", report.result.length);
+
+report.totals = {
+
+    imported: 0,
+    phoneCall: 0,
+    qualified: 0,
+    siteVisit: 0,
+    negotiation: 0,
+    won: 0,
+    lost: 0,
+
+    importedToPhone: 0,
+    phoneToQualified: 0,
+    qualifiedToSiteVisit: 0,
+    siteVisitToNegotiation: 0,
+    negotiationToWon: 0,
+    negotiationToLost: 0
+
+};
+
+report.result.forEach(r => {
+
+    report.totals.imported += r.imported;
+    report.totals.phoneCall += r.phoneCall;
+    report.totals.qualified += r.qualified;
+    report.totals.siteVisit += r.siteVisit;
+    report.totals.negotiation += r.negotiation;
+    report.totals.won += r.won;
+    report.totals.lost += r.lost;
+
+    report.totals.importedToPhone += r.importedToPhone;
+    report.totals.phoneToQualified += r.phoneToQualified;
+    report.totals.qualifiedToSiteVisit += r.qualifiedToSiteVisit;
+    report.totals.siteVisitToNegotiation += r.siteVisitToNegotiation;
+    report.totals.negotiationToWon += r.negotiationToWon;
+    report.totals.negotiationToLost += r.negotiationToLost;
+
+});
+
+    console.log("Session Executive:", req.session.executiveId);
+
+    console.log(
+        "Executive IDs:",
+        report.result.map(r => String(r.executiveId))
+    );
+
+    console.log("After Filter:", report.result.length);
+
 }
-}
-}
-}
-])
 
-const result = data.map(d=>{
+res.render("executivePerformance", {
 
-let conversion = 0
+    isExecutive:
+        !!req.session.executiveId &&
+        req.session.executiveType !== "HR",
 
-if(d.visits > 0){
-conversion = ((d.deals/d.visits)*100).toFixed(1)
-}
+    isHR:
+        req.session.executiveType === "HR",
 
-return{
-executive:d._id,
-visits:d.visits,
-deals:d.deals,
-conversion
-}
+    data: report.result,
+    totals: report.totals,
+    fromDate: req.query.fromDate,
+    toDate: req.query.toDate
 
-})
+});
 
-res.render('executivePerformance',{ data:result })
-
-})
+});
 
 
 router.get('/revenue-dashboard', async (req,res)=>{
@@ -676,6 +790,26 @@ execRevenue
 })
 
 })
+
+
+router.get('/executive-buyers/:executiveId/:status', async (req, res) => {
+
+    const executive = await Executive.findById(req.params.executiveId);
+
+    const buyers = await Buyer.find({
+        tenantId: req.session.tenantId,
+        preSalesExecutiveId: req.params.executiveId,
+        status: req.params.status
+    }).sort({ createdAt: -1 });
+
+    res.render('executiveBuyers', {
+        executive,
+        status: req.params.status,
+        buyers
+    });
+
+});
+
 
 
 router.get('/admin-dashboard', async (req,res)=>{
@@ -1587,5 +1721,284 @@ const productive = calculateProductiveHours(attendance);
 
 })
 
+async function getExecutivePerformanceData(
+    tenantId,
+    fromDate,
+    toDate
+){
+
+    const buyerFilter = {
+        tenantId
+    };
+
+    if(fromDate || toDate){
+
+        buyerFilter.createdAt = {};
+
+        if(fromDate)
+            buyerFilter.createdAt.$gte = new Date(fromDate);
+
+        if(toDate){
+
+            const end = new Date(toDate);
+
+            end.setHours(23,59,59,999);
+
+            buyerFilter.createdAt.$lte = end;
+
+        }
+
+    }
+
+    const historyFilter = {
+        tenantId
+    };
+
+    if(fromDate || toDate){
+
+        historyFilter.changedAt = {};
+
+        if(fromDate)
+            historyFilter.changedAt.$gte = new Date(fromDate);
+
+        if(toDate){
+
+            const end = new Date(toDate);
+
+            end.setHours(23,59,59,999);
+
+            historyFilter.changedAt.$lte = end;
+
+        }
+
+    }
+
+const executives = await Executive.find({
+        tenantId,
+        isActive: true
+    }).sort({ name: 1 });
+
+    const result = [];
+
+    for (const executive of executives) {
+
+const imported = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    status: "Imported"
+});
+
+const won = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    status: "Won"
+});
+
+const lost = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    status: "Lost"
+});
+
+const phoneCall = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    status: "Phone Call"
+});
+
+const qualified = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    status: "Qualified"
+});
+
+const siteVisit = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    siteVisitDate: { $ne: null }
+});
+
+const negotiation = await Buyer.countDocuments({
+    ...buyerFilter,
+    preSalesExecutiveId: executive._id,
+    negotiationStatus: { $ne: "" }
+});
+
+const importedToPhone =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Imported",
+
+    newStatus: "Phone Call"
+
+});
+
+const phoneToQualified =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Phone Call",
+
+    newStatus: "Qualified"
+
+});
+
+const qualifiedToSiteVisit =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Qualified",
+
+    newStatus: "Site Visit"
+
+});
+
+const siteVisitToNegotiation =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Site Visit",
+
+    newStatus: "Negotiation"
+
+});
+
+const negotiationToWon =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Negotiation",
+
+    newStatus: "Negotiation To Won"
+
+});
+
+const negotiationToLost =
+await BuyerWorkflowHistory.countDocuments({
+
+    ...historyFilter,
+
+    changedById: executive._id,
+
+    previousStatus: "Negotiation",
+
+    newStatus: "Negotiation To Lost"
+
+});
+
+        result.push({
+
+    executiveId: executive._id,
+
+    executive: executive.name,
+
+    imported,
+
+    phoneCall,
+
+    qualified,
+
+    siteVisit,
+
+    negotiation,
+
+    won,
+
+    lost,
+
+    importedToPhone,
+
+    phoneToQualified,
+
+    qualifiedToSiteVisit,
+
+    siteVisitToNegotiation,
+
+    negotiationToWon,
+
+    negotiationToLost
+
+});
+
+}
+
+    result.sort((a,b)=>{
+
+        if(b.won!==a.won)
+            return b.won-a.won;
+
+        if(b.qualified!==a.qualified)
+            return b.qualified-a.qualified;
+
+        return b.imported-a.imported;
+
+    });
+
+    result.forEach((r,index)=>{
+
+        r.rank=index+1;
+
+    });
+
+    const totals={
+
+        imported:0,
+        phoneCall:0,
+        qualified:0,
+        siteVisit:0,
+        negotiation:0,
+        won:0,
+        lost:0,
+
+        importedToPhone:0,
+        phoneToQualified:0,
+        qualifiedToSiteVisit:0,
+        siteVisitToNegotiation:0,
+        negotiationToWon:0,
+        negotiationToLost:0
+
+    };
+
+    result.forEach(r=>{
+
+        totals.imported+=r.imported;
+        totals.phoneCall+=r.phoneCall;
+        totals.qualified+=r.qualified;
+        totals.siteVisit+=r.siteVisit;
+        totals.negotiation+=r.negotiation;
+        totals.won+=r.won;
+        totals.lost+=r.lost;
+
+        totals.importedToPhone+=r.importedToPhone;
+        totals.phoneToQualified+=r.phoneToQualified;
+        totals.qualifiedToSiteVisit+=r.qualifiedToSiteVisit;
+        totals.siteVisitToNegotiation+=r.siteVisitToNegotiation;
+        totals.negotiationToWon+=r.negotiationToWon;
+        totals.negotiationToLost+=r.negotiationToLost;
+
+    });
+
+    return{
+        result,
+        totals
+    };
+
+}
 
 module.exports = router

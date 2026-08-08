@@ -1686,6 +1686,11 @@ res.render('executiveLost',{
 
 router.get('/logout', async (req, res) => {
 
+console.log("===== EXECUTIVE LOGOUT =====");
+console.log("LOGOUT SESSION:", req.sessionID);
+console.log("EXECUTIVE:", req.session.executiveId);
+console.log("NAME:", req.session.executiveName);
+
     const today = getISTDate()
 
     let record = await ExecutiveAttendance.findOne({
@@ -1825,10 +1830,18 @@ await logActivity({
 
 });
 
-    delete req.session.executiveId
-    delete req.session.executiveName
+req.session.destroy(err => {
 
-    res.redirect('/executive/login')
+    if (err) {
+        console.error("Logout Error:", err);
+        return res.redirect("/executive/dashboard");
+    }
+
+    res.clearCookie("connect.sid");
+
+    return res.redirect("/executive/login");
+
+});
 
 });
 

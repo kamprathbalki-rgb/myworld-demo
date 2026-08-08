@@ -12,11 +12,21 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
 
+console.log("===== HR LOGIN =====");
+console.log("RAW EMAIL:", req.body.email);
+
+const email = (req.body.email || "").trim().toLowerCase();
+
+console.log("NORMALIZED EMAIL:", email);
+
 const hr = await Executive.findOne({
-    email: req.body.email,
-    executiveType: 'HR',
+    email: email,
+    executiveType: "HR",
     isActive: true
 });
+
+console.log("HR FOUND:", hr ? hr.name : "NOT FOUND");
+
 
 if (!hr) {
     return res.send('HR NOT FOUND');
@@ -92,8 +102,16 @@ router.get('/attendance', (req, res) => {
 
 router.get('/logout', (req, res) => {
 
-    req.session.destroy(() => {
-        return res.redirect('/hr/login');
+    req.session.destroy(err => {
+
+        if (err) {
+            return res.redirect('/hr/dashboard');
+        }
+
+        res.clearCookie('connect.sid');
+
+        res.redirect('/hr/login');
+
     });
 
 });

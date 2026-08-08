@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Executive Buyers</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f6f9;
+    margin:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#2c3e50;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>
+<%= executive.name %> - <%= status %>
+</h2>
+
+<a href="/dashboard/executive-performance">
+⬅ Back to Executive Performance
+</a>
+
+<br><br>
+
+<form method="GET">
+
+From
+
+<input
+type="date"
+name="fromDate"
+value="<%= typeof fromDate !== 'undefined' ? fromDate : '' %>">
+
+To
+
+<input
+type="date"
+name="toDate"
+value="<%= typeof toDate !== 'undefined' ? toDate : '' %>">
+
+<button type="submit">
+
+Filter
+
+</button>
+
+</form>
+
+<br>
+
+<br><br>
+
+<table>
+
+<tr>
+<th>#</th>
+<th>Buyer</th>
+<th>Mobile</th>
+<th>Status</th>
+<th>Location</th>
+<th>Budget</th>
+<th>Last Follow-up</th>
+</tr>
+
+<% buyers.forEach(function(b){ %>
+
+<tr>
+
+<td><%= b.buyerId || b._id %></td>
+
+<td>
+<a href="/buyer/matches/<%= b._id %>">
+<%= b.name %>
+</a>
+</td>
+
+<td><%= b.phone || "" %></td>
+
+<td><%= b.status %></td>
+
+<td><%= b.primaryLocation || "" %></td>
+
+<td>
+₹
+<%= Number(b.minBudget || 0).toLocaleString('en-IN') %>
+-
+₹
+<%= Number(b.maxBudget || 0).toLocaleString('en-IN') %>
+</td>
+
+<td>
+<%= b.nextFollowUp ? new Date(b.nextFollowUp).toLocaleDateString('en-IN') : "-" %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</body>
+
+</html>
