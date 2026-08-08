@@ -849,6 +849,8 @@ record.activityLog.push({
 
 await record.save();
 
+console.log("LOGIN SESSION:", req.sessionID);
+
 return res.redirect('/executive/dashboard');
 
 });
@@ -884,6 +886,10 @@ await ExecutiveAttendance.findOne({
 const Buyer = require('../models/Buyer')
 
 router.get('/dashboard', async (req, res) => {
+
+console.log("===== DASHBOARD =====");
+console.log("DASHBOARD SESSION:", req.sessionID);
+console.log("EXECUTIVE:", req.session.executiveId);
 
     if (!req.session.executiveId) {
         return res.redirect('/executive/login')

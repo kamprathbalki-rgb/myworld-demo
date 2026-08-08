@@ -32,6 +32,11 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req,res)=>{
 
+console.log("AUTH ROUTE HIT:", req.method, req.originalUrl);
+
+console.log("BODY:", req.body);
+
+
 const user = await User.findOne({ email:req.body.email })
 
 if(!user){
