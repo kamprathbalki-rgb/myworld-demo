@@ -618,7 +618,7 @@ await bcrypt.hash(req.body.password, 10)
 const executive = new Executive({
     name: req.body.name,
     mobile: req.body.mobile,
-    email: req.body.email,
+    email: req.body.email.trim().toLowerCase(),
     password: hashedPassword,
     executiveType: req.body.executiveType,
     tenantId: req.session.tenantId,
@@ -660,10 +660,19 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
 
+const email = (req.body.email || "").trim().toLowerCase();
+
+console.log("========== EXEC LOGIN ==========");
+console.log("RAW EMAIL:", req.body.email);
+
+console.log("NORMALIZED EMAIL:", email);
+
 const executive = await Executive.findOne({
-    email: req.body.email,
+    email,
     isActive: true
-})
+});
+
+console.log("EXECUTIVE FOUND:", executive ? executive.name : "NOT FOUND");
 
 if (!executive) {
     return res.send("Invalid Email or Password")
@@ -674,6 +683,10 @@ await bcrypt.compare(
     req.body.password,
     executive.password
 )
+
+console.log("LOGIN SUCCESS:", executive.name);
+
+console.log("PASSWORD VALID:", valid);
 
 if (!valid) {
     return res.send("Invalid Email or Password")
@@ -1409,7 +1422,7 @@ await Executive.findByIdAndUpdate(
     {
         name: req.body.name,
         mobile: req.body.mobile,
-        email: req.body.email,
+        email: req.body.email.trim().toLowerCase(),
         executiveType: req.body.executiveType,
         password: req.body.password
     ? await bcrypt.hash(req.body.password, 10)
