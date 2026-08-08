@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Company Features</title>
+
+</head>
+
+<body>
+
+<h2>
+Company Features
+</h2>
+
+<h3>
+<%= tenant.name %>
+</h3>
+
+<p>
+<h3>💬 WhatsApp Integration</h3>
+
+<p>
+
+Status :
+
+<% if(tenant.features &&
+      tenant.features.whatsapp){ %>
+
+<span style="color:green;font-weight:bold">
+
+Enabled
+
+</span>
+
+<% } else { %>
+
+<span style="color:red;font-weight:bold">
+
+Disabled
+
+</span>
+
+<% } %>
+
+</p>
+
+<a
+href="/saas/company/<%= tenant._id %>/feature/whatsapp">
+
+<% if(
+tenant.features &&
+tenant.features.whatsapp
+){ %>
+
+🔴 Disable
+
+<% } else { %>
+
+🟢 Enable
+
+<% } %>
+
+</a>
+</p>
+
+<p>
+
+<a href="/saas/dashboard">
+
+⬅ Back
+
+</a>
+
+</p>
+
+</body>
+
+</html>

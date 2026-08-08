@@ -728,7 +728,7 @@ gap:10px;
         </div>
 
         <div
-            id="productiveTimer"
+            id="workingTimer"
             style="
                 font-size:18px;
                 font-weight:bold;
@@ -744,10 +744,18 @@ gap:10px;
 
 </div>
 
-<%#
-System logout banner temporarily disabled.
-Will be reimplemented after Working Time migration.
-%>
+<% if (working.systemLogout) { %>
+
+<div style="
+    color:#c62828;
+    margin-top:6px;
+    font-size:12px;
+">
+    🔒 Last Logout:
+    <%= working.lastLogoutTime %>
+</div>
+
+<% } %>
 
 <p style="color:#666;margin:10px 0 0 0;">
     Manage Leads, Follow Ups & Site Visits
@@ -2072,7 +2080,7 @@ setInterval(function(){
 if (!pauseWorking) {
     workingSeconds++;
 
-    document.getElementById('productiveTimer').innerText =
+    document.getElementById('workingTimer').innerText =
         formatWorking(workingSeconds);
 }
 

@@ -1907,59 +1907,56 @@ title="Bulk Upload"
 
 <!-- WHATSAPP -->
 
+<% if(
+    tenant.features &&
+    tenant.features.whatsapp
+){ %>
+
+<!-- WHATSAPP -->
+
 <div class="floater-item">
 
+    <div
+        class="floater-menu"
+        id="whatsappMenu">
 
-<div
-class="floater-menu"
-id="whatsappMenu"
->
+        <div class="floater-menu-title">
+            💬 WhatsApp
+        </div>
 
+        <a href="/tenant-whatsapp">
+            ⚙️ WhatsApp Setup
+        </a>
 
-<div class="floater-menu-title">
-💬 WhatsApp
-</div>
+        <a href="/whatsapp-data/inventory">
+            🏠 WhatsApp Inventory
+        </a>
 
+        <a href="/whatsapp-data/requirements">
+            👥 WhatsApp Requirements
+        </a>
 
-<a href="/tenant-whatsapp">
-⚙️ WhatsApp Setup
-</a>
+        <a href="/buyer/whatsapp-groups">
+            👥 WhatsApp Groups
+        </a>
 
+        <a href="/buyer/broadcasts">
+            📢 WhatsApp Broadcasts
+        </a>
 
-<a href="/whatsapp-data/inventory">
-🏠 WhatsApp Inventory
-</a>
+    </div>
 
-
-<a href="/whatsapp-data/requirements">
-👥 WhatsApp Requirements
-</a>
-
-
-<a href="/buyer/whatsapp-groups">
-👥 WhatsApp Groups
-</a>
-
-
-<a href="/buyer/broadcasts">
-📢 WhatsApp Broadcasts
-</a>
-
-
-</div>
-
-
-<button
-type="button"
-class="floater-btn whatsapp-float-btn"
-onclick="toggleFloatMenu('whatsappMenu')"
-title="WhatsApp"
->
-💬
-</button>
-
+    <button
+        type="button"
+        class="floater-btn whatsapp-float-btn"
+        onclick="toggleFloatMenu('whatsappMenu')"
+        title="WhatsApp">
+        💬
+    </button>
 
 </div>
+
+<% } %>
 
 <div class="floater-item">
 

@@ -76,14 +76,26 @@ function calculateWorkingHours(attendance) {
     const workingSeconds =
         Math.max(0, end - start);
 
-    return {
+return {
 
-        workingSeconds,
+    workingSeconds,
 
-        workingHHMMSS:
-            format(workingSeconds)
+    workingHHMMSS:
+        format(workingSeconds),
 
-    };
+    systemLogout:
+        attendance.logoutTimes &&
+        attendance.logoutTimes.length > 0,
+
+    lastLogoutTime:
+        attendance.logoutTimes &&
+        attendance.logoutTimes.length > 0
+            ? attendance.logoutTimes[
+                attendance.logoutTimes.length - 1
+              ]
+            : null
+
+};
 
 }
 

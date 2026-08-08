@@ -8,6 +8,11 @@ require('../middleware/auth')
 const TenantWhatsapp =
 require('../models/TenantWhatsapp')
 
+
+const Tenant =
+require('../models/Tenant')
+
+
 const createClient =
 require(
 '../services/tenantWhatsapp/createClient'
@@ -26,10 +31,46 @@ require(
 const QRCode =
 require('qrcode')
 
+async function isWhatsappEnabled(req,res){
+
+    const tenant =
+    await Tenant.findById(
+        req.session.tenantId
+    )
+
+    if(
+        !tenant ||
+        !tenant.features ||
+        !tenant.features.whatsapp
+    ){
+        res
+        .status(403)
+        .send(
+        "WhatsApp feature is not enabled."
+        )
+
+        return null
+    }
+
+    return tenant
+
+}
+
+
 router.get(
 '/qr',
 isLoggedIn,
 async (req,res)=>{
+
+
+const tenant =
+await isWhatsappEnabled(
+    req,res
+)
+
+if(!tenant){
+    return
+}
 
 const tenantId =
 req.session.tenantId
@@ -80,6 +121,15 @@ router.get(
 isLoggedIn,
 async (req,res)=>{
 
+    const tenant =
+    await isWhatsappEnabled(
+        req,res
+    )
+
+    if(!tenant){
+        return
+    }
+
 const whatsapp =
 await TenantWhatsapp.findOne({
 
@@ -101,6 +151,15 @@ router.get(
 '/connect',
 isLoggedIn,
 async (req,res)=>{
+
+const tenant =
+await isWhatsappEnabled(
+    req,res
+)
+
+if(!tenant){
+    return
+}
 
 const tenantId =
 req.session.tenantId

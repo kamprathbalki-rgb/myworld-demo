@@ -31,12 +31,13 @@ salary: {
 
 executiveType: {
     type: String,
-    enum: [
-        'Admin',
-        'HR',
-        'PreSales',
-        'Sales'
-    ],
+enum: [
+    'Admin',
+    'HR',
+    'PreSales',
+    'Sales',
+    'Digital Marketing'
+],
     default: 'PreSales'
 },
 

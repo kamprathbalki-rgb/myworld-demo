@@ -104,6 +104,40 @@ businessDescription: {
     default: ""
 },
 
+features:{
+
+    whatsapp:{
+        type:Boolean,
+        default:false
+    },
+
+    whatsappAI:{
+        type:Boolean,
+        default:false
+    },
+
+    website:{
+        type:Boolean,
+        default:false
+    },
+
+    digitalMarketing:{
+        type:Boolean,
+        default:false
+    },
+
+    mobileApp:{
+        type:Boolean,
+        default:false
+    },
+
+    api:{
+        type:Boolean,
+        default:false
+    }
+
+},
+
     credits:{
         type:Number,
         default:0

@@ -16,6 +16,9 @@ require('../services/workingHoursService');
 const calculateProductiveHours =
 require('../services/productiveHoursService');
 
+const logActivity =
+require("../services/applicationLogService");
+
 const {remapExecutiveTerritory} = require("../services/executiveMappingService");
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
@@ -681,6 +684,34 @@ req.session.executiveName = executive.name
 req.session.tenantId = executive.tenantId
 req.session.executiveType = executive.executiveType
 
+await logActivity({
+
+    tenantId:
+        executive.tenantId,
+
+    userType:
+        "Executive",
+
+    userId:
+        executive._id,
+
+    userName:
+        executive.name,
+
+    action:
+        "LOGIN",
+
+    ip:
+        req.ip,
+
+    userAgent:
+        req.headers["user-agent"],
+
+    sessionId:
+        req.sessionID
+
+});
+
 const office =
 await OfficeLocation.findOne({
 
@@ -801,11 +832,9 @@ record.activityLog.push({
     latitude: req.body.latitude || null,
     longitude: req.body.longitude || null,
     accuracy: req.body.accuracy || null
-})
+});
 
-if (executive.executiveType === 'PreSales') {
-    return res.redirect('/executive/dashboard');
-}
+await record.save();
 
 return res.redirect('/executive/dashboard');
 
@@ -1749,12 +1778,40 @@ record.autoLogout = false
         await record.save()
     }
 
+await logActivity({
+
+    tenantId:
+        req.session.tenantId,
+
+    userType:
+        "Executive",
+
+    userId:
+        req.session.executiveId,
+
+    userName:
+        req.session.executiveName,
+
+    action:
+        "LOGOUT",
+
+    ip:
+        req.ip,
+
+    userAgent:
+        req.headers["user-agent"],
+
+    sessionId:
+        req.sessionID
+
+});
+
     delete req.session.executiveId
     delete req.session.executiveName
 
     res.redirect('/executive/login')
 
-})
+});
 
 router.get('/properties', async (req, res) => {
 
@@ -2000,4 +2057,4 @@ await OfficeLocation.findOne({
 
 
 
-module.exports = router
+module.exports = router;

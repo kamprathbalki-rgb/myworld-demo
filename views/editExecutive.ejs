@@ -362,6 +362,15 @@ action="/executive/update/<%= executive._id %>"
     <%= executive.executiveType === 'HR' ? 'selected' : '' %>>
     HR
 </option>
+
+<option
+    value="Digital Marketing"
+    <%= executive.executiveType === 'Digital Marketing'
+        ? 'selected'
+        : '' %>>
+    Digital Marketing
+</option>
+
         </select>
 
 </div>

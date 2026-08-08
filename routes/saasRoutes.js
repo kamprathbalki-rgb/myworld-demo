@@ -250,6 +250,83 @@ res.render(
 
 })
 
+router.get(
+'/saas/company/:id/features',
+async (req,res)=>{
+
+    if(
+        !req.session.user ||
+        req.session.user.role !== 'saasadmin'
+    ){
+        return res.redirect('/login')
+    }
+
+    const tenant =
+    await Tenant.findById(
+        req.params.id
+    )
+
+    if(!tenant){
+        return res.redirect(
+            '/saas/dashboard'
+        )
+    }
+
+    res.render(
+        'companyFeatures',
+        {
+            tenant
+        }
+    )
+
+})
+
+router.get(
+'/saas/company/:id/feature/:feature',
+async(req,res)=>{
+
+    if(
+        !req.session.user ||
+        req.session.user.role !== 'saasadmin'
+    ){
+        return res.redirect('/login')
+    }
+
+    const tenant =
+    await Tenant.findById(
+        req.params.id
+    )
+
+    if(!tenant){
+
+        return res.redirect(
+            '/saas/dashboard'
+        )
+
+    }
+
+    const feature =
+    req.params.feature
+
+    if(
+        !tenant.features
+    ){
+        tenant.features = {}
+    }
+
+    tenant.features[feature] =
+    !tenant.features[feature]
+
+    await tenant.save()
+
+    res.redirect(
+        '/saas/company/' +
+        tenant._id +
+        '/features'
+    )
+
+})
+
 router.post(
 '/saas/company/:id',
 async (req,res)=>{
