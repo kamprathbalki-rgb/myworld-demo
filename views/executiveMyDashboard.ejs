@@ -744,19 +744,10 @@ gap:10px;
 
 </div>
 
-<% if(productive.systemLogout){ %>
-
-<div style="
-    color:#c62828;
-    margin-top:6px;
-    font-size:12px;
-">
-
-System logged out at 20:30 hrs
-
-</div>
-
-<% } %>
+<%#
+System logout banner temporarily disabled.
+Will be reimplemented after Working Time migration.
+%>
 
 <p style="color:#666;margin:10px 0 0 0;">
     Manage Leads, Follow Ups & Site Visits
@@ -2043,9 +2034,9 @@ onclick="document.getElementById('logoutForm').requestSubmit();return false;">
 
 <script>
 
-let productiveSeconds = <%= working.workingSeconds %>;
+let workingSeconds = <%= working.workingSeconds %>;
 
-const pauseProductive =
+const pauseWorking =
     <%= teaActive || lunchActive ? 'true' : 'false' %>;
 
 </script>
@@ -2062,7 +2053,7 @@ document
 
 })
 
-function formatProductive(seconds){
+function formatWorking(seconds){
 
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -2078,14 +2069,12 @@ function formatProductive(seconds){
 
 setInterval(function(){
 
-    if(!pauseProductive){
+if (!pauseWorking) {
+    workingSeconds++;
 
-        productiveSeconds++;
-
-        document.getElementById('productiveTimer').innerText =
-            formatProductive(productiveSeconds);
-
-    }
+    document.getElementById('productiveTimer').innerText =
+        formatWorking(workingSeconds);
+}
 
 },1000);
 

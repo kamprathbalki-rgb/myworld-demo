@@ -9,7 +9,12 @@ const ContactAccessLog = require('../models/ContactAccessLog')
 const Property = require('../models/Property')
 const calculateScore = require('../services/matchService')
 const groupLeadAging = require('../services/leadAgingService');
-const calculateProductiveHours = require('../services/workingHoursService');
+
+const calculateWorkingHours =
+require('../services/workingHoursService');
+
+const calculateProductiveHours =
+require('../services/productiveHoursService');
 
 const {remapExecutiveTerritory} = require("../services/executiveMappingService");
 
@@ -1159,7 +1164,7 @@ if(state.date !== today){
 const motivation =
 motivations[state.index]
 
-const productive =
+const working =
     calculateWorkingHours(attendance);
 
 const updatedToday =
