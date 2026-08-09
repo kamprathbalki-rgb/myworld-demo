@@ -480,6 +480,14 @@ Executive : ${buyer.assignedExecutiveName}`
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} updated buyer ${buyer.name}`
+
+);
+
 res.redirect('/buyer/page')
 
 })
@@ -539,7 +547,6 @@ res.redirect('/buyer/page');
 
 });
 
-
 router.post(
 '/status/:id',
 isLoggedIn,
@@ -578,6 +585,7 @@ buyer.status
 res.redirect('/buyer/page');
 
 });
+
 
 router.post(
 '/save',
@@ -815,6 +823,14 @@ appendBuyerTimeline(
     '',
 
     'New Buyer Added'
+
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} created buyer ${buyer.name}`
 
 );
 
@@ -1216,6 +1232,13 @@ appendBuyerTimeline(
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} reassigned ${buyer.name} from ${oldExecutive} to ${executive.name}`
+
+);
 
 await notifyExecutive(
 

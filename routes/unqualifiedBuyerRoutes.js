@@ -23,6 +23,8 @@ const uploadExcel = multer({storage: multer.memoryStorage()})
 const WhatsappGroup = require('../models/WhatsappGroup');
 const clientManager = require('../services/tenantWhatsapp/clientManager')
 
+const { appendDailyLog } = require("../services/dailyLogService");
+
 const BuyerWorkflowHistory = require("../models/BuyerWorkflowHistory");
 
 const {
@@ -387,6 +389,14 @@ changedByRole:
         req.body.status
     );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.adminName || req.session.executiveName} changed ${buyer.name} from ${previousStatus} to ${req.body.status}`
+
+);
+
     console.log("Status Timeline Added");
 
     appendBuyerTimeline(
@@ -397,6 +407,14 @@ changedByRole:
         `₹${buyer.buyerValue}`,
         req.body.status
     );
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${confirmedBy} confirmed buyer value for ${buyer.name} (₹${buyer.buyerValue})`
+
+);
 
     console.log("Buyer Value Timeline Added");
 

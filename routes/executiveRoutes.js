@@ -221,6 +221,14 @@ appendBuyerTimeline(
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} scheduled ${req.body.visitType} for ${buyer.name} at ${property.projectName}`
+
+);
+
 await notifyExecutive(
 
     executive,
@@ -273,8 +281,19 @@ appendBuyerTimeline(
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} changed ${buyer.name} from ${previousStatus} to ${req.body.status}`
+
+);
+
 res.redirect('/executive/dashboard');
+
 })
+
+
 
 router.post('/followup/:id', async (req,res)=>{
 
@@ -406,9 +425,18 @@ appendBuyerTimeline(
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} updated follow-up for ${buyer.name}`
+
+);
+
     res.redirect('/executive/dashboard')
 
 })
+
 
 
 router.get('/matches/:buyerId', async (req, res) => {
@@ -576,9 +604,19 @@ appendBuyerTimeline(
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} updated buyer ${buyer.name}`
+
+);
+
     res.redirect('/executive/dashboard')
 
 })
+
+
 
 router.post('/save', async (req, res) => {
 
