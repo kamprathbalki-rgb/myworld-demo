@@ -15,6 +15,7 @@ const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const {notifyExecutive} = require('../services/notificationService');
 const {mapBuyerExecutives} = require("../services/executiveMappingService");
 const BuyerWorkflowHistory = require("../models/BuyerWorkflowHistory");
+const { appendDailyLog } = require("../services/dailyLogService");
 
 const XLSX = require('xlsx')
 
@@ -79,7 +80,17 @@ appendBuyerTimeline(
 
     buyer.status,
 
+     "Status Changed",
+
     "Deleted"
+
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} : ${buyer.name} : ${previousStatus} → ${req.body.status}`
 
 );
 

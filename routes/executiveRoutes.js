@@ -10,6 +10,8 @@ const Property = require('../models/Property')
 const calculateScore = require('../services/matchService')
 const groupLeadAging = require('../services/leadAgingService');
 
+const { appendDailyLog } = require("../services/dailyLogService");
+
 const calculateWorkingHours =
 require('../services/workingHoursService');
 
@@ -696,6 +698,14 @@ req.session.executiveId = executive._id
 req.session.executiveName = executive.name
 req.session.tenantId = executive.tenantId
 req.session.executiveType = executive.executiveType
+
+appendDailyLog(
+
+    executive.tenantId,
+
+    `${executive.name} logged in`
+
+);
 
 await logActivity({
 
@@ -1829,6 +1839,14 @@ await logActivity({
         req.sessionID
 
 });
+
+const tenantId = req.session.tenantId;
+const executiveName = req.session.executiveName;
+
+appendDailyLog(
+    tenantId,
+    `${executiveName} logged out`
+);
 
 req.session.destroy(err => {
 
