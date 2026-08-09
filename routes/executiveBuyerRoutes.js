@@ -90,7 +90,7 @@ appendDailyLog(
 
     req.session.tenantId,
 
-    `${req.session.executiveName} : ${buyer.name} : ${previousStatus} → ${req.body.status}`
+    `${req.session.executiveName} changed ${buyer.name} from ${previousStatus} to ${req.body.status}`
 
 );
 
@@ -550,20 +550,29 @@ const verifyBuyer = await Buyer.findById(req.params.id);
 const updatedBuyer = await Buyer.findById(req.params.id);
 
 appendBuyerTimeline(
-    buyer,
-    "PreSales",
-    "Status Changed",
-    previousStatus,
-    req.body.status
+buyer,
+confirmedBy,
+"PreSales",
+"Status Changed",
+previousStatus,
+req.body.status
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${confirmedBy} changed ${buyer.name} from ${previousStatus} to ${req.body.status}`
+
 );
 
 appendBuyerTimeline(
-    buyer,
-    confirmedBy,
-    "PreSales",
-    "Final Buyer Value Confirmed",
-    `₹${buyer.buyerValue}`,
-    req.body.status
+buyer,
+confirmedBy,
+"PreSales",
+"Final Buyer Value Confirmed",
+`₹${buyer.buyerValue}`,
+req.body.status
 );
 
     res.redirect('/executive/unqualified');
@@ -716,18 +725,26 @@ changedByRole:
 
 const verifyBuyer = await Buyer.findById(req.params.id);
 
-            appendBuyerTimeline(
-                buyer,
-                req.session.executiveName,
-                "PreSales",
-                "Status Changed",
-                previousStatus,
-                req.body.status
-            );
+appendBuyerTimeline(
+    buyer,
+    req.session.executiveName,
+    "PreSales",
+    "Status Changed",
+    previousStatus,
+    req.body.status
+);
 
-            res.json({
-                success: true
-            });
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} changed ${buyer.name} from ${previousStatus} to ${req.body.status}`
+
+);
+
+res.json({
+    success: true
+});
 
         } catch (err) {
 
@@ -770,6 +787,14 @@ appendBuyerTimeline(
     "Executive Reassigned",
     buyer.preSalesExecutiveName,
     executive.name
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName} reassigned ${buyer.name} from ${buyer.preSalesExecutiveName} to ${executive.name}`
+
 );
 
 await Buyer.findOneAndUpdate(
@@ -1218,6 +1243,14 @@ appendBuyerTimeline(
     previousStatus,
 
     req.body.status
+
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${confirmedBy} : ${buyer.name} : ${previousStatus} → ${req.body.status}`
 
 );
 
