@@ -20,7 +20,7 @@ const builderContactRoles = require('../data/builderContactRoles');
 const multer = require('multer')
 const path = require('path')
 const XLSX = require('xlsx')
-
+const { appendDailyLog } = require("../services/dailyLogService");
 const uploadExcel = multer({
     storage: multer.memoryStorage()
 })
@@ -474,6 +474,14 @@ appendBuyerTimeline(
     "",
 
     property.projectName || property.ownerName
+
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.executiveName || "Admin"} shortlisted ${property.projectName || property.ownerName} for ${buyer.name}`
 
 );
 

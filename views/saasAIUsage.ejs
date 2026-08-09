@@ -1,0 +1,31 @@
+<h2>AI Usage</h2>
+
+<table border="1" cellpadding="6">
+
+<tr>
+<th>Tenant</th>
+<th>Requests</th>
+<th>Prompt</th>
+<th>Completion</th>
+<th>Total</th>
+</tr>
+
+<% usage.forEach(u=>{ %>
+
+<tr>
+
+<td><%= u.tenant.companyName %></td>
+
+<td><%= u.requests %></td>
+
+<td><%= u.promptTokens.toLocaleString() %></td>
+
+<td><%= u.completionTokens.toLocaleString() %></td>
+
+<td><%= u.totalTokens.toLocaleString() %></td>
+
+</tr>
+
+<% }) %>
+
+</table>

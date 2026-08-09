@@ -761,7 +761,6 @@ tr:hover td{
     </a>
 
 
-
     <a
         href="/saas/subscription-history"
         class="nav-item"
@@ -793,6 +792,9 @@ tr:hover td{
         💬 Other Messages
     </a>
 
+    <a href="/saas/ai-usage" class="nav-item">
+        🤖 View AI Usage
+    </a>
 
     <a
         href="/learning-correction/list"
@@ -801,10 +803,14 @@ tr:hover td{
         🧠 AI Corrections
     </a>
 
+<a href="/session-audit"
+class="nav-item">
+
+🔐 Session Audit
+
+</a>
 
 </div>
-
-
 
 <!-- ================================
      PLATFORM OVERVIEW
@@ -991,47 +997,42 @@ tr:hover td{
         </div>
 
 
+     <div class="usage-card">
 
-        <div class="usage-card">
+    <div class="usage-title">
+        🧠 AI & Session Usage
+    </div>
 
+    <div class="usage-stats">
 
-            <div class="usage-title">
+        <div class="usage-stat">
+            <div class="usage-label">AI Requests</div>
+            <div class="usage-value"><%= aiRequests %></div>
+        </div>
 
-                🧠 AI Usage
+        <div class="usage-stat">
+            <div class="usage-label">AI Tokens</div>
+            <div class="usage-value"><%= aiTokens %></div>
+        </div>
 
-            </div>
+        <div class="usage-stat">
+            <div class="usage-label">Today's Logins</div>
+            <div class="usage-value"><%= totalLogins %></div>
+        </div>
 
+        <div class="usage-stat">
+            <div class="usage-label">Today's Logouts</div>
+            <div class="usage-value"><%= totalLogouts %></div>
+        </div>
 
-            <div class="usage-stats">
+        <div class="usage-stat">
+            <div class="usage-label">Session Expired</div>
+            <div class="usage-value"><%= sessionExpired %></div>
+        </div>
 
+    </div>
 
-                <div class="usage-stat">
-
-                    <div class="usage-label">
-                        Requests
-                    </div>
-
-                    <div class="usage-value">
-                        <%= aiRequests %>
-                    </div>
-
-                </div>
-
-
-                <div class="usage-stat">
-
-                    <div class="usage-label">
-                        Tokens
-                    </div>
-
-                    <div class="usage-value">
-                        <%= aiTokens %>
-                    </div>
-
-                </div>
-
-
-            </div>
+</div> 
 
 
         </div>

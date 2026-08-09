@@ -14,20 +14,23 @@ pass:process.env.EMAIL_PASS
 })
 
 async function sendEmail(
-to,
-subject,
-html
+    to,
+    subject,
+    html,
+    attachments = []
 ){
 
 await transporter.sendMail({
 
-from:process.env.EMAIL_USER,
+    from: process.env.EMAIL_USER,
 
-to,
+    to,
 
-subject,
+    subject,
 
-html
+    html,
+
+    attachments
 
 })
 

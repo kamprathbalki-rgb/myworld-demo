@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const Executive = require('../models/Executive');
 const ExecutiveAttendance = require('../models/ExecutiveAttendance');
 
+const { appendDailyLog } = require('../services/dailyLogService');
+
 router.get('/login', (req, res) => {
     res.render('hrLogin');
 });
@@ -45,6 +47,14 @@ if (!valid) {
     req.session.executiveName = hr.name;
     req.session.tenantId = hr.tenantId;
     req.session.executiveType = 'HR';
+
+appendDailyLog(
+
+    hr.tenantId,
+
+    `${hr.name} logged in`
+
+);
 
     return res.redirect('/hr/dashboard');
 });
@@ -101,6 +111,14 @@ router.get('/attendance', (req, res) => {
 
 
 router.get('/logout', (req, res) => {
+
+    appendDailyLog(
+
+        req.session.tenantId,
+
+        `${req.session.executiveName} logged out`
+
+    );
 
     req.session.destroy(err => {
 

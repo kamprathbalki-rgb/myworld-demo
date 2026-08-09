@@ -17,6 +17,8 @@ require("../models/ExecutiveAttendance");
 const { isLoggedIn } =
 require("../middleware/auth");
 
+console.log("dailyreportroutesRoutes.js LOADED");
+
 router.get(
     "/executive/daily-report",
     isLoggedIn,

@@ -19,21 +19,145 @@ const Visit = require('../models/Visit')
 const WhatsappMessage = require('../models/WhatsappMessage')
 const TenantWhatsapp = require('../models/TenantWhatsapp')
 
+const TenantAIUsage = require("../models/TenantAIUsage");
+
+const SessionAudit =
+require("../models/SessionAudit");
+
 const generateTenantCode =
 require('../utils/generateTenantCode')
+
+const {
+    sendDailyBusinessReport
+} = require("../services/sendDailyBusinessReport");
+
+router.get("/saas/ai-usage", async (req, res) => {
+
+    if (
+        !req.session.user ||
+        req.session.user.role !== "saasadmin"
+    ) {
+        return res.redirect("/login");
+    }
+
+    const usage = await TenantAIUsage.aggregate([
+
+        {
+            $group: {
+                _id: "$tenantId",
+                requests: { $sum: 1 },
+                promptTokens: { $sum: "$promptTokens" },
+                completionTokens: { $sum: "$completionTokens" },
+                totalTokens: { $sum: "$totalTokens" }
+            }
+        },
+
+        {
+            $lookup: {
+                from: "tenants",
+                localField: "_id",
+                foreignField: "_id",
+                as: "tenant"
+            }
+        },
+
+        {
+            $unwind: "$tenant"
+        },
+
+        {
+            $sort: {
+                totalTokens: -1
+            }
+        }
+
+    ]);
+
+    res.render("saasAIUsage", {
+        usage
+    });
+
+});
+
+
+router.get(
+"/session-audit",
+async(req,res)=>{
+
+console.log("SESSION =", req.session);
+
+console.log("USER =", req.session.user);
+
+console.log("Session Audit User:", req.session.user);
+
+if (
+    !req.session.user ||
+    req.session.user.role !== "saasadmin"
+) {
+    return res.redirect("/login");
+}
+
+const records =
+await SessionAudit
+.find({})
+.populate(
+"tenantId",
+"name companyName"
+)
+.sort({
+createdAt:-1
+})
+.limit(1000);
+
+res.render(
+"saasSessionAudit",
+{
+session:req.session,
+records
+});
+
+});
+
 
 router.get(
 '/saas/dashboard',
 async (req,res)=>{
 
+console.log("Dashboard User:", req.session.user);
+
+const today = new Date();
+
+today.setHours(0, 0, 0, 0);
+
+const totalLogins =
+await SessionAudit.countDocuments({
+    event: "LOGIN",
+    createdAt: {
+        $gte: today
+    }
+});
+
+const totalLogouts =
+await SessionAudit.countDocuments({
+    event: "LOGOUT",
+    createdAt: {
+        $gte: today
+    }
+});
+
+const sessionExpired =
+await SessionAudit.countDocuments({
+    event: "SESSION_EXPIRED",
+    createdAt: {
+        $gte: today
+    }
+});
+
 if(
     !req.session.user ||
-    req.session.user.role !==
-    'saasadmin'
+    req.session.user.role !== 'saasadmin'
 ){
-    return res.redirect(
-        '/login'
-    )
+    return res.redirect('/login')
 }
 
 const activeCompanies =
@@ -125,11 +249,9 @@ return aDays - bDays
 
 })
 
-const today =
-new Date()
+const currentDate = new Date();
 
-const next30Days =
-new Date()
+const next30Days = new Date();
 
 next30Days.setDate(
     next30Days.getDate() + 30
@@ -142,7 +264,7 @@ tenants.filter(t =>
 
     t.subscriptionEndDate &&
 
-    t.subscriptionEndDate >= today &&
+   t.subscriptionEndDate >= currentDate &&
 
     t.subscriptionEndDate <= next30Days
 
@@ -153,7 +275,7 @@ tenants.filter(t =>
 
     t.subscriptionEndDate &&
 
-    t.subscriptionEndDate < today
+   t.subscriptionEndDate < currentDate
 
 )
 
@@ -203,6 +325,11 @@ aiRequests,
 aiTokens,
         tenants,
 aiTenantStats,
+
+totalLogins,
+totalLogouts,
+sessionExpired,
+
         expiringSoon,
         expiredCompanies,
         activeCompanies,
@@ -985,5 +1112,38 @@ router.get(
 
     }
 )
+
+router.get(
+    "/saas/test-daily-report/:tenantId",
+    async (req, res) => {
+
+        if (
+            !req.session.user ||
+            req.session.user.role !== "saasadmin"
+        ) {
+            return res.redirect("/login");
+        }
+
+        try {
+
+            await sendDailyBusinessReport(
+                req.params.tenantId
+            );
+
+            res.send(
+                "Daily Business Report sent successfully."
+            );
+
+        } catch (err) {
+
+            console.error(err);
+
+            res.status(500).send(err.message);
+
+        }
+
+    }
+);
+
 
 module.exports = router

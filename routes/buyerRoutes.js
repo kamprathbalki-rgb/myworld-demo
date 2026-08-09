@@ -543,6 +543,14 @@ req.body.followUpNotes
 
 );
 
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} updated follow-up for ${buyer.name}`
+
+);
+
 res.redirect('/buyer/page');
 
 });
@@ -581,6 +589,15 @@ oldStatus,
 buyer.status
 
 );
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} changed ${buyer.name} from ${oldStatus} to ${buyer.status}`
+
+);
+
 
 res.redirect('/buyer/page');
 
@@ -1168,6 +1185,14 @@ appendBuyerTimeline(
     '',
 
     `${req.body.visitType} - ${property.projectName}`
+
+);
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.executiveName} scheduled ${req.body.visitType} for ${buyer.name} at ${property.projectName}`
 
 );
 

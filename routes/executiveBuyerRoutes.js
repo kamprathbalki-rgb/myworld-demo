@@ -1250,7 +1250,7 @@ appendDailyLog(
 
     req.session.tenantId,
 
-    `${confirmedBy} : ${buyer.name} : ${previousStatus} → ${req.body.status}`
+    `${req.session.executiveName || req.session.adminName || req.session.user?.name || "System"} : ${buyer.name} : ${previousStatus} → ${status}`
 
 );
 
@@ -1288,6 +1288,8 @@ async (req,res)=>{
 
 const WhatsappBroadcast =
 require('../models/WhatsappBroadcast');
+
+console.log("executiveBuyerRoutes.js LOADED");
 
 const broadcasts =
 await WhatsappBroadcast.find()

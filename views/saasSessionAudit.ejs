@@ -1,0 +1,98 @@
+<div class="container">
+
+<h2>
+Session Audit
+</h2>
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>Date & Time</th>
+
+<th>Company</th>
+
+<th>User</th>
+
+<th>Type</th>
+
+<th>Event</th>
+
+<th>IP</th>
+
+<th>Session</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% records.forEach(r=>{ %>
+
+<tr>
+
+<td>
+
+<%= new Date(r.createdAt).toLocaleString(
+'en-IN',
+{
+timeZone:'Asia/Kolkata'
+}
+) %>
+
+</td>
+
+<td>
+
+<%= r.tenantId?.companyName ||
+r.tenantId?.name ||
+'-' %>
+
+</td>
+
+<td>
+
+<%= r.userName %>
+
+</td>
+
+<td>
+
+<%= r.userType %>
+
+</td>
+
+<td>
+
+<b>
+
+<%= r.event %>
+
+</b>
+
+</td>
+
+<td>
+
+<%= r.ip %>
+
+</td>
+
+<td style="font-size:11px">
+
+<%= r.sessionId %>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
+</table>
+
+</div>

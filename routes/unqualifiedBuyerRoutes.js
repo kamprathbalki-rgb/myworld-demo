@@ -513,6 +513,8 @@ async (req,res)=>{
 const WhatsappBroadcast =
 require('../models/WhatsappBroadcast');
 
+console.log("unqualifiedbuyerRoutes.js LOADED");
+
 const broadcasts =
 await WhatsappBroadcast.find()
 .sort({ createdAt:-1 })

@@ -7,7 +7,14 @@ const User = require('../models/User')
 const Tenant = require('../models/Tenant')
 const ExecutiveAttendance = require('../models/ExecutiveAttendance')
 
+const { auditSession } =
+require("../services/sessionAuditService");
+
 const {sendEmail} = require('../utils/emailService')
+
+const {
+    sendDailyBusinessReport
+} = require("../services/sendDailyBusinessReport");
 
 const client =
 require('../services/whatsapp');
@@ -23,6 +30,8 @@ require('../models/OfficeLocation')
 
 const Executive = require('../models/Executive')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
+
+const { appendDailyLog } = require('../services/dailyLogService');
 
 router.get('/login', (req, res) => {
     res.render('login', {
@@ -128,6 +137,34 @@ return res.send("Wrong password")
 
 req.session.user = user
 
+appendDailyLog(
+
+    user.tenantId,
+
+    `${user.name || user.email} logged in`
+
+);
+
+await auditSession({
+
+    tenantId: user.tenantId,
+
+    userType: "Admin",
+
+    userId: user._id,
+
+    userName: user.name,
+
+    event: "LOGIN",
+
+    ip: req.ip,
+
+    userAgent: req.headers["user-agent"],
+
+    sessionId: req.sessionID
+
+});
+
 // APPLICATION FIX
 if(user.tenantId){
 req.session.tenantId = user.tenantId
@@ -138,20 +175,31 @@ req.session.tenantId = tenant._id
 }
 }
 
-if(user.role === 'saasadmin'){
-res.redirect('/saas/dashboard')
-}
-else if(user.role === 'admin'){
-res.redirect('/dashboard/main')
-}
-else if(user.role === 'executive'){
-res.redirect('/dashboard/executive-page')
-}
-else{
-res.redirect('/property/page')
-}
+req.session.save((err) => {
+
+    if (err) {
+        console.error("Session save failed:", err);
+        return res.redirect("/login");
+    }
+
+    if (user.role === "saasadmin") {
+        return res.redirect("/saas/dashboard");
+    }
+
+    if (user.role === "admin") {
+        return res.redirect("/dashboard/main");
+    }
+
+    if (user.role === "executive") {
+        return res.redirect("/dashboard/executive-page");
+    }
+
+    return res.redirect("/property/page");
+
+});
 
 })
+
 
 router.get('/attendance/admin', async (req, res) => {
 
@@ -553,7 +601,36 @@ router.get('/reports/salary/pdf', async (req, res) => {
 // LOGOUT
 // ================================
 
-router.get('/logout', (req, res) => {
+router.get('/logout', async (req, res) => {
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.user?.email} logged out`
+
+);
+
+await auditSession({
+
+    tenantId: req.session.tenantId,
+
+    userType: "Admin",
+
+    userId: req.session.user?._id,
+
+    userName: req.session.user?.name,
+
+    event: "LOGOUT",
+
+    ip: req.ip,
+
+    userAgent: req.headers["user-agent"],
+
+    sessionId: req.sessionID
+
+});
+
 
     req.session.destroy((err) => {
 

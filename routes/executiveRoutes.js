@@ -25,6 +25,9 @@ const {remapExecutiveTerritory} = require("../services/executiveMappingService")
 
 const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 
+const { auditSession } =
+require("../services/sessionAuditService");
+
 const {
     CONTACT_UNLOCK_TIMEOUT
 } = require('../config/securityConfig')
@@ -425,12 +428,23 @@ appendBuyerTimeline(
 
 );
 
+let activity = `${req.session.executiveName} updated ${buyer.name}`;
+
+if (req.body.nextFollowUp) {
+    activity += ` | Follow-up: ${new Date(req.body.nextFollowUp).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata"
+    })}`;
+}
+
+if (req.body.siteVisitDate) {
+    activity += ` | Site Visit: ${new Date(req.body.siteVisitDate).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata"
+    })}`;
+}
+
 appendDailyLog(
-
     req.session.tenantId,
-
-    `${req.session.executiveName} updated follow-up for ${buyer.name}`
-
+    activity
 );
 
     res.redirect('/executive/dashboard')
@@ -745,31 +759,23 @@ appendDailyLog(
 
 );
 
-await logActivity({
+await auditSession({
 
-    tenantId:
-        executive.tenantId,
+    tenantId: executive.tenantId,
 
-    userType:
-        "Executive",
+    userType: "Executive",
 
-    userId:
-        executive._id,
+    userId: executive._id,
 
-    userName:
-        executive.name,
+    userName: executive.name,
 
-    action:
-        "LOGIN",
+    event: "LOGIN",
 
-    ip:
-        req.ip,
+    ip: req.ip,
 
-    userAgent:
-        req.headers["user-agent"],
+    userAgent: req.headers["user-agent"],
 
-    sessionId:
-        req.sessionID
+    sessionId: req.sessionID
 
 });
 
@@ -1624,6 +1630,25 @@ if (
 
     await record.save()
 
+
+const activityNames = {
+    teaOut: "started Tea Break",
+    teaIn: "ended Tea Break",
+    lunchOut: "started Lunch Break",
+    lunchIn: "ended Lunch Break",
+    meetingOut: "started Meeting",
+    meetingIn: "ended Meeting",
+    siteVisitOut: "started Site Visit",
+    siteVisitIn: "completed Site Visit"
+};
+
+appendDailyLog(
+    req.session.tenantId,
+    `${req.session.executiveName} ${activityNames[type] || type}`
+);
+
+
+
     res.redirect('/executive/dashboard')
 
 })
@@ -1885,6 +1910,26 @@ appendDailyLog(
     tenantId,
     `${executiveName} logged out`
 );
+
+await auditSession({
+
+    tenantId: req.session.tenantId,
+
+    userType: "Executive",
+
+    userId: req.session.executiveId,
+
+    userName: req.session.executiveName,
+
+    event: "LOGOUT",
+
+    ip: req.ip,
+
+    userAgent: req.headers["user-agent"],
+
+    sessionId: req.sessionID
+
+});
 
 req.session.destroy(err => {
 

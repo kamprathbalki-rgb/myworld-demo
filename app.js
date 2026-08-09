@@ -275,3 +275,4 @@ setInterval(async () => {
 
 }, 60000);
 
+require("./services/dailyBusinessReportScheduler");

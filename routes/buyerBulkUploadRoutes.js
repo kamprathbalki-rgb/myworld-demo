@@ -14,7 +14,7 @@ const BuyerProjectVisit = require('../models/BuyerProjectVisit')
 const {appendBuyerTimeline} = require('./buyerTimelineRoutes');
 const {mapBuyerExecutives} = require("../services/executiveMappingService");
 const {notifyExecutive} = require('../services/notificationService');
-
+const { appendDailyLog } = require("../services/dailyLogService");
 
 const XLSX = require('xlsx');
 
@@ -28,6 +28,8 @@ const Tenant = require('../models/Tenant');
 
 const { sendEmail } =
 require('../utils/emailService');
+
+console.log("buyerBulkUploadRoutes.js LOADED");
 
 router.get(
     '/bulk-upload',
@@ -847,7 +849,20 @@ qualifiedBy:
 
             importedCount++;
 
+console.log("BULK UPLOAD LOGGING...");
+
+appendDailyLog(
+
+    req.session.tenantId,
+
+    `${req.session.user?.name || req.session.adminName || "System"} imported buyer ${buyer.name}`
+
+);
+
+
         }
+
+
 
         // =====================================
         // EMAIL - DUPLICATE MOBILES
@@ -933,6 +948,11 @@ ${missingLocationRequests.join('\n')}
         // =====================================
         // RESULT PAGE
         // =====================================
+
+appendDailyLog(
+    req.session.tenantId,
+    `${req.session.user?.name || req.session.adminName || "System"} completed Qualified Buyer Bulk Upload. Imported=${importedCount}, Duplicate=${duplicateCount}, Invalid=${invalidCount}`
+);
 
         res.render(
 
@@ -1310,6 +1330,12 @@ ${missingLocationRequests.join('\n')}
 
 }
 
+appendDailyLog(
+    req.session.tenantId,
+    `${req.session.user?.name || req.session.adminName || "System"} completed Unqualified Buyer Bulk Upload. Imported=${importedCount}, Duplicate=${duplicateCount}, Invalid=${invalidCount}`
+);
+
+
         res.render(
             'buyerBulkUploadResult',
             {
@@ -1574,6 +1600,12 @@ if (isQualified) {
     );
 
 }
+
+appendDailyLog(
+    req.session.tenantId,
+    `${req.session.user?.name || req.session.adminName || "System"} completed Mapped Bulk Upload`
+);
+
 
 return;
 
